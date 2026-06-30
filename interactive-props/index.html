@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DPT Interactive Prop System - User Guide</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0; padding: 40px;
+            font-size: 11pt; line-height: 1.5;
+        }
+        h1, h2, h3 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
+h4{
+    font-size:12pt;
+    color:#93c5fd;
+    margin-top:18px;
+    margin-bottom:8px;
+}
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        .troubleshooting-q {
+            font-weight: bold;
+            color: #bae6fd;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            page-break-after: avoid;
+        }
+        .troubleshooting-a {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+<nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
+    <a href="../index.html" style="color: #38bdf8; margin-right: 15px;">&larr; Back to Hub</a>
+    <span style="color: #64748b;">|</span>
+    <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Core Overview</a>
+    <a href="sound_on_collision.html" style="color: #f8fafc;">Custom Models</a>
+</nav>
+    <h1>DPT Games Interactive Prop System</h1>
+    <p>A complete solution for destructible objects, openable containers, and dynamic loot drops. Plug-and-play for level designers with a full public API for programmers.</p>
+
+    <h3>Features</h3>
+    <ul>
+        <li>Destructible props</li>
+        <li>Openable containers</li>
+        <li>Loot spawning</li>
+        <li>Physics chains</li>
+        <li>UnityEvents</li>
+        <li>Object pooling ready</li>
+        <li>Full public API</li>
+    </ul>
+
+    <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
+        <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
+        <a href="#getting-started" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Getting Started</a>
+        <a href="#inspector-reference" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">2. Inspector Reference</a>
+        <a href="#openable-setup" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">3. Lid / Door Setup</a>
+        <a href="#fracture-physics" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">4. Fracture &amp; Destruction Physics</a>
+        <a href="#kinetic-transfer" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">5. Kinetic Transfer</a>
+        <a href="#loot-configuration" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">6. Dynamic Loot Configuration</a>
+        <a href="#audio-vfx-events" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">7. Audio, VFX &amp; Events</a>
+        <a href="#debug-testing" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">8. Debug &amp; Testing</a>
+        <a href="#api-reference" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">9. API Reference</a>
+        <a href="#example-integration" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">10. Example Integration</a>
+        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">11. Troubleshooting</a>
+        <a href="#prefab-assembly" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">12. Appendix - Prefab Assembly</a>
+        <a href="#support" style="color: #a5f3fc; text-decoration: none;">13. Support &amp; Contract Inquiries</a>
+    </div>
+
+    <h2 id="getting-started">1. Getting Started</h2>
+    <p>Add the <code>DPT_InteractiveProp</code> component to any GameObject, assign the required references in the Inspector, and you are ready to go. The included prefabs are pre-configured; no setup is required to test them immediately.</p>
+
+    <h3>Quick Start - Testing in Play Mode</h3>
+    <ol>
+        <li>Select a prop in your scene that has the <code>DPT_InteractiveProp</code> component.</li>
+        <li>Ensure <strong>Enable Mouse Interaction</strong> is checked at the bottom of the component.</li>
+        <li>Enter Play Mode.</li>
+        <li>Left-click the prop to apply damage (50 per click, or instant break if <strong>Instant Break On Click</strong> is enabled).</li>
+        <li>Right-click to open the prop. Right-click again to close it.</li>
+    </ol>
+
+    <h3>Default Mouse Controls</h3>
+    <table>
+        <thead>
+            <tr><th style="width: 20%;">Input</th><th>Behaviour</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Left-click</strong></td>
+                <td>Damages the prop. If <em>Instant Break On Click</em> is enabled, the prop shatters immediately. Otherwise, each click applies 50 damage.</td>
+            </tr>
+            <tr>
+                <td><strong>Right-click</strong></td>
+                <td>Opens the prop. Right-clicking again closes it, unless the lid has physically detached - in that case, it will not reattach.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Debris Physics Quality Settings</h3>
+    <p>The included prefabs are configured for maximum performance. You can adjust these settings on any debris Rigidbody depending on the visual quality you need.</p>
+    <table>
+        <thead>
+            <tr><th style="width: 30%;">Setting</th><th>Maximum Performance</th><th>Smoother / Cinematic</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Interpolate</strong></td>
+                <td>None</td>
+                <td>Interpolate</td>
+            </tr>
+            <tr>
+                <td><strong>Collision Detection</strong></td>
+                <td>Discrete</td>
+                <td>Continuous Dynamic (recommended for fast-moving shards)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+        <strong>Note:</strong> You can also test without entering Play Mode. Use the Shatter, Open, and Reset buttons in the Inspector - the editor will temporarily simulate physics so you can preview destruction behavior directly in Edit Mode.
+    </div>
+
+    <h2 id="inspector-reference">2. Inspector Reference</h2>
+    <p>The component is organised into logical groups in the Inspector. Each group is described below. The Inspector is fully dynamic—certain fields and entire sub-sections will only become visible once their parent feature is configured or enabled.</p>
+
+    <h3>Core Object Setup</h3>
+    <p>The foundational references that wire your GameObjects into the system. These must be assigned before any other settings become meaningful.</p>
+    <table>
+        <thead>
+            <tr><th style="width: 30%;">Field</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Pristine Meshes</strong></td><td>The intact visual meshes. These are automatically hidden when the prop breaks.</td></tr>
+            <tr><td><strong>Unbroken Collider Roots</strong></td><td>GameObjects containing the colliders used while the prop is intact.</td></tr>
+            <tr><td><strong>Broken Parent</strong></td><td>The parent GameObject holding all fractured debris. Must be disabled in the hierarchy by default. Assigning this field unlocks the <em>Fracture & Explosion Physics</em> category.</td></tr>
+            <tr><td><strong>Linked Props</strong></td><td>Other <code>DPT_InteractiveProp</code> objects that break automatically when this prop breaks. Useful for destruction chains - barricades, supports, grouped structures. Circular references are safe. All parent objects in the list must have the DPT_InteractiveProps component. You can drag objects into the field, or click Add Selected, or Add Children if all the objects are the child of 1 DPT_InteractiveProps object. Clear all empties the list.<div class="note">
+        <strong>Performance & Bulk Assignment Note:</strong> Due to Unity Inspector serialization and layout limitations, dragging and dropping or using <strong>Add Selected</strong> is optimized for batches of up to ~60 objects at a time. For massive destruction chains exceeding this size, organize the target props under a single parent object and use <strong>Add Children</strong> to bypass this threshold efficiently.
+    </div class="note"></td></tr>
+        </tbody>
+    </table>
+
+    <h3>Base Interaction &amp; Health</h3>
+    <p>Core settings that govern how the prop receives damage, responds to input, and manages its physical state before destruction.</p>
+    <table>
+        <thead>
+            <tr><th style="width: 30%;">Field</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Max Health</strong></td><td>Total damage the prop can take before shattering.</td></tr>
+            <tr><td><strong>Instant Break On Click</strong></td><td>Debug toggle. When enabled, a single left-click destroys the prop instantly rather than applying 50 damage per click.</td></tr>
+            <tr><td><strong>Enable Mouse Interaction</strong></td><td>Allows the prop to be tested with direct mouse input. Left-click to damage, right-click to open/close. Disable this when integrating with your own interaction system. Supports both the Legacy Input Manager and the New Input System.</td></tr>
+            <tr><td><strong>Start Non-Kinematic</strong></td><td>If enabled, the intact prop's Rigidbody starts fully simulated from the first frame, allowing gravity and collisions to affect it before destruction.</td></tr>
+            <tr><td><strong>Lock LOD On Open</strong></td><td>Forces the LODGroup to LOD 0 while the prop is open, preventing lower-detail meshes from showing closed geometry.</td></tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+        <em>Once you are ready to connect your own player controller or interaction system, disable <strong>Enable Mouse Interaction</strong> and call the public methods directly. See the API Reference section for details.</em>
+    </div>
+
+    <h3>Impact Damage Trigger</h3>
+    <p>Controls whether physics collisions can directly damage or destroy the prop.</p>
+    <table>
+        <thead>
+            <tr><th style="width: 30%;">Field</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Break On Impact</strong></td><td>Allows physics collisions to trigger damage and destruction.</td></tr>
+            <tr><td><strong>Impact Velocity Threshold</strong></td><td>The minimum collision velocity required to register an impact. Only visible when <em>Break On Impact</em> is enabled.</td></tr>
+        </tbody>
+    </table>
+
+    <h3 id="openable-setup">3. Lid / Door &amp; Openable Setup</h3>
+    <p><strong>Dynamic Visibility - Animation &amp; Physics Settings:</strong> All fields in this section are completely hidden until a Transform is assigned to the <strong>Lid Or Door</strong> slot. Assign a lid or door object first and these settings will appear automatically.</p>
+
+    <table>
+        <thead>
+            <tr><th style="width: 30%;">Field</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Lid Or Door</strong></td><td>The Transform of the lid or door object.</td></tr>
+            <tr><td><strong>Broken Lid Parent</strong></td><td>Optional parent containing fractured lid debris, activated when the lid detaches.</td></tr>
+            <tr><td><strong>Lid Detach Distance</strong></td><td>How far the lid can travel from its origin before being considered permanently detached. Once detached, right-clicking will no longer reattach it.</td></tr>
+            <tr><td><strong>Disable Kinematic On Open</strong></td><td>Disables isKinematic on the main root Rigidbody when opened, turning a heavy static container into a lightweight pushable physics object once opened or looted.</td></tr>
+            <tr><td><strong>Enable Kinematic On Close</strong></td><td>If true, re-enables isKinematic on the main root Rigidbody when the prop is fully closed, turning a pushable object back into an immovable, static world element.</td></tr>
+            <tr><td><strong>Auto Close After Time</strong></td><td>Automatically closes the prop after a set delay.</td></tr>
+            <tr><td><strong>Auto Close Delay</strong></td><td>The delay in seconds before automatic closure. Only applies when <em>Auto Close After Time</em> is enabled.</td></tr>
+            <tr><td><strong>Open Position / Rotation Offset</strong></td><td>The target local position and rotation used when animating the lid open.</td></tr>
+            <tr><td><strong>Open Speed</strong></td><td>How quickly the lid interpolates toward its open position during animation.</td></tr>
+            <tr><td><strong>Lid Always Breaks</strong></td><td>If enabled, the lid always breaks, even if the lid is not near or attached to the parent object.</td></tr>
+            <tr><td><strong>Use Physics On Open</strong></td><td>Ignores animation offsets and instead flings the lid open using physics impulses. Requires a Rigidbody on the lid with appropriate mass, drag, and colliders.</td></tr>
+            <tr><td><strong>Lid Open Upward Force</strong></td><td>Upward impulse force applied to the lid during physics-based opening.</td></tr>
+            <tr><td><strong>Lid Open Forward Force</strong></td><td>Forward impulse force applied to the lid during physics-based opening.</td></tr>
+            <tr><td><strong>Lid Open Sideways Force</strong></td><td>Sideways impulse force applied to the lid during physics-based opening.</td></tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+        ✓ <em>When using physics-based opening, the Rigidbody's mass, drag, angular drag, constraints, and collider shape all directly affect how the lid behaves. Use the Open editor button to preview the result without entering Play Mode.</em>
+    </div>
+
+    <h3 id="fracture-physics">4. Fracture &amp; Explosion Physics</h3>
+    <p>Controls how fractured debris behaves at the moment of destruction.<br>
+    <strong>Dynamic Visibility:</strong> All fields in this category are completely hidden until a prefab is assigned to the <strong>Broken Parent</strong> slot in Core Object Setup.</p>
+    
+    <table>
+        <thead>
+            <tr><th style="width: 30%;">Field</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Broken Base Pieces</strong></td><td>Heavier debris pieces such as crate bottoms or structural supports. These can be locked in place or given reduced force to feel more grounded.</td></tr>
+            <tr><td><strong>Lock Base Piece</strong></td><td>Prevents base pieces from moving on destruction. Useful for anchored structures like barricades.</td></tr>
+            <tr><td><strong>Explosion Force</strong></td><td>The baseline force applied to all debris on destruction.</td></tr>
+            <tr><td><strong>Internal Shatter Radius</strong></td><td>Defines the absolute physical sphere of influence for the internal explosion force when the object breaks.</td></tr>
+            <tr><td><strong>Explosion Y Offset</strong></td><td>Vertically offsets the origin point of the explosion force. Positive values raise the source upward; negative values lower it, allowing you to tune where the blast originates.</td></tr>
+            <tr><td><strong>Base Force Multiplier</strong></td><td>Scales down the explosion force on base pieces so they feel heavier than smaller debris fragments.</td></tr>
+            <tr><td><strong>Use Directional Impact</strong></td><td>If enabled, debris is pushed away from the hit point instead of exploding outward from the prop's center.</td></tr>
+            <tr><td><strong>Directional Impact Force</strong></td><td>Additional force applied in the direction away from the impact point. Only active when <em>Use Directional Impact</em> is enabled.</td></tr>
+            <tr><td><strong>Debris Cleanup</strong></td><td>How long debris remains in the scene before cleanup begins.</td></tr>
+            <tr><td><strong>Time Before Cleanup</strong></td><td>How long debris remains in the scene before cleanup begins.</td></tr>
+            <tr><td><strong>Sink Speed</strong></td><td>How quickly debris sinks into the ground during the cleanup phase.</td></tr>
+            <tr><td><strong>Destroy On Cleanup</strong></td><td>If enabled, the entire prop GameObject is destroyed after cleanup. If disabled, the prop deactivates itself instead (use for object pooling).</td></tr>
+            <tr><td><strong>Despawn Base Piece</strong></td><td>If disabled, assigned base pieces remain in the scene permanently while smaller debris cleans up as normal.</td></tr>
+            <tr><td><strong>Show Explosion Gizmo</strong></td><td>Displays the explosion radius and kinetic transfer radius as wireframe spheres in the Scene view.</td></tr>
+            <tr><td><strong>Explosion Gizmo</strong></td><td><strong>Inner Ring (crimson)</strong>: Driven by <em>Internal Shatter Radius</em>. Marks the physical blast cutoff.<br><br><strong>Outer Disk (translucent orange)</strong>: Scales dynamically with <em>Explosion Force</em> and the mass values.</td></tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+        ✓ <em>When using object pooling, set <strong>Destroy On Cleanup</strong> to disabled and call <code>ResetProp()</code> on the object before returning it to the pool. This fully restores the prop to its pristine state.</em>
+    </div>
+
+    <h3 id="kinetic-transfer">5. Kinetic Transfer (Nearby Objects)</h3>
+    <p>Allows the prop's destruction to push nearby physics objects, adding physical weight and interactivity to explosions.</p>
+    <table>
+        <thead>
+            <tr><th style="width: 30%;">Field</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Transfer Kinetic Energy</strong></td><td>Master toggle for nearby object force transfer.</td></tr>
+            <tr><td><strong>Kinetic Transfer Radius</strong></td><td>Search radius for nearby Rigidbody objects. Visualized as a blue wireframe sphere in the Scene view when <em>Show Explosion Gizmo</em> is enabled.</td></tr>
+            <tr><td><strong>Kinetic Transfer Force</strong></td><td>The strength of the force applied to nearby objects.</td></tr>
+            <tr><td><strong>Kinetic Upward Modifier</strong></td><td>Adds upward lift so nearby objects pop upward rather than only sliding sideways.</td></tr>
+            <tr><td><strong>Max Pushable Mass</strong></td><td>Rigidbodies heavier than this value are ignored, preventing lightweight props from pushing large heavy objects unrealistically.</td></tr>
+        </tbody>
+    </table>
+
+    <div class="warning">
+        <strong>Warning:</strong> Avoid enabling kinetic transfer on large numbers of props simultaneously. Each transfer performs a physics overlap check at destruction time: using it on dozens of props exploding at once will spike CPU cost.
+    </div>
+
+    <h3 id="loot-configuration">6. Dynamic Loot Configuration</h3>
+    <p>These settings determine the core logic for how loot items are managed, chosen, and handled physically when a container opens or breaks.</p>
+    <table>
+        <thead>
+            <tr><th style="width: 30%;">Field</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Loot Mode</strong></td><td>
+                <strong>None</strong> - Disables loot entirely.<br>
+                <strong>PreSpawnHidden</strong> - Instantiates loot on Start(), places it on the floor, and hides it. Best for performance.<br>
+                <strong>BurstOnEvent</strong> - Instantiates and launches the loot at the exact moment the prop opens/breaks.<br>
+                <strong>ManualPlacement</strong> - Allows you to link pre-existing objects in your scene to be hidden on start and revealed upon opening.
+            </td></tr>
+            <tr><td><strong>Drop Loot On Open</strong></td><td>If enabled, loot spawns/reveals when the prop is opened. If disabled, loot only triggers on destruction. Loot can only trigger once per lifecycle regardless (Can be reset in the inspector).</td></tr>
+            <tr><td><strong>Drop Chance Percent</strong></td><td>Probability (0-100) that the loot event will happen at all.</td></tr>
+            <tr><td><strong>Loot Uses Directional Impact</strong></td><td>Enable this setting to dynamically blast loot outward from the exact point of impact (overrides the default burst trajectory).</td></tr>
+        </tbody>
+    </table>
+
+    <h4>Pool Settings (Visible when Loot Mode is set to PreSpawnHidden or BurstOnEvent)</h4>
+    <table>
+        <thead>
+            <tr><th style="width: 30%;">Field</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Loot Pool</strong></td><td>Pool of potential loot items. A random item from this list will be chosen per individual drop attempt.</td></tr>
+            <tr><td><strong>Loot Count</strong></td><td>How many total loot objects should spawn from the selection pool.</td></tr>
+            <tr><td><strong>Custom Loot Spawn Area</strong></td><td>Optional: Assign a BoxCollider (set as IsTrigger) to strictly confine where loot spawns. If left empty, loot spawns near the center of the prop.</td></tr>
+            <tr><td><strong>Release Loot Non-Kinematic</strong></td><td>If true, revealed loot will become non-kinematic and use the physics engine to fall or burst. If false, it remains completely static in the air/on the ground.</td></tr>
+        </tbody>
+    </table>
+
+    <h4>Burst Trajectory (Visible when Loot Mode is set to BurstOnEvent only)</h4>
+    <table>
+        <thead>
+            <tr><th style="width: 30%;">Field</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Burst Direction</strong></td><td>The primary Vector3 direction the loot will be thrown (e.g., Up and Forward for a chest). A yellow line will project this in the Scene View.</td></tr>
+            <tr><td><strong>Burst Spread</strong></td><td>Slider (0 to 1) controlling the scatter arc. 0 creates a straight line. 1 creates a full 360-degree spherical scatter.</td></tr>
+            <tr><td><strong>Loot Burst Power</strong></td><td>The physical force multiplier applied to push the objects outward along the trajectory.</td></tr>
+        </tbody>
+    </table>
+
+    <h4>Manual Placement Setup (Visible when Loot Mode is set to ManualPlacement only)</h4>
+    <table>
+        <thead>
+            <tr><th style="width: 30%;">Field</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Manually Placed Loot</strong></td><td>A list of specific GameObjects currently in your scene hierarchy. The script will automatically hide them at startup and reveal them when the container opens/breaks.</td></tr>
+        </tbody>
+    </table>
+
+    <h4>Loot Quality &amp; Performance Optimization</h4>
+    <p><strong>Pre-Spawn vs Burst Optimization:</strong> Avoid using <code>BurstOnEvent</code> for large numbers of props breaking simultaneously. Instantiating objects and calculating physics forces on the exact same frame causes CPU spikes. For densely packed rooms, set props to <code>PreSpawnHidden</code> to offload the calculations to the scene's startup phase.</p>
+    <table>
+        <thead>
+            <tr><th style="width: 30%;">Field</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Optimize Loot Physics</strong></td><td>If true, automatically sets loot rigidbodies to Interpolate and Continuous collision detection to prevent micro-stuttering and clipping through floors.</td></tr>
+            <tr><td><strong>Cleanup Loot</strong></td><td>If true, spawned loot items will automatically despawn after a set duration to save memory.</td></tr>
+            <tr><td><strong>Loot Time Before Cleanup</strong></td><td>Time in seconds before the spawned loot items begin sinking and despawning.</td></tr>
+            <tr><td><strong>Loot Sink Speed</strong></td><td>Speed at which the loot sinks dynamically through the ground during the cleanup phase.</td></tr>
+        </tbody>
+    </table>
+
+    <h3 id="audio-vfx-events">7. Audio, VFX &amp; Events</h3>
+    <table>
+        <thead>
+            <tr><th style="width: 30%;">Field</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Break Sounds</strong></td><td>An array pool of audio clips. The script randomly selects one to play when the prop shatters.</td></tr>
+            <tr><td><strong>Open Sounds</strong></td><td>An array pool of audio clips. The script randomly selects one to play when the container opens.</td></tr>
+            <tr><td><strong>Close Sounds</strong></td><td>An array pool of audio clips. The script randomly selects one to play when the container closes.</td></tr>
+            <tr><td><strong>Pitch Variance</strong></td><td>Pitch variance applied to all sounds (open, close, break). Higher values create more acoustic variety.</td></tr>
+            <tr><td><strong>Particle Shatter VFX</strong></td><td>Optional particle effect spawned at the prop's position when it breaks.</td></tr>
+            <tr><td><strong>On Break Event</strong></td><td>A standard UnityEvent fired when the prop breaks. Wire up any external gameplay logic here.</td></tr>
+            <tr><td><strong>On Open Event</strong></td><td>A standard UnityEvent fired when the prop opens. Use it in the same way as On Break Event.</td></tr>
+            <tr><td><strong>On Close Event</strong></td><td>A standard UnityEvent fired when the prop closes automatically or via script execution.</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="note">
+        ✓ <em>The On Break Event and On Open Event foldouts are collapsed by default to save screen space. Click the foldout arrow next to each event in the Inspector to expand it and assign listener functions.</em>
+    </div>
+
+    <h2 id="debug-testing">8. Debug &amp; Testing</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 33%;">Shatter Prop</th>
+                <th style="width: 33%;">Open Prop</th>
+                <th style="width: 33%;">Reset Prop</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Breaks the prop instantly. In Edit Mode, physics simulate for approximately 2 seconds so you can preview explosion force, debris movement, and kinetic transfer without entering Play Mode.</td>
+                <td>Triggers the opening sequence. If Use Physics On Open is enabled, physics simulate in Edit Mode for approximately 2 seconds so you can preview lid motion and trajectory.</td>
+                <td>Fully restores the prop to its original pristine state, including mesh visibility, lid positions, all debris transforms, health values, and internal physics state.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+        <em>Use Shatter followed by Reset repeatedly to quickly iterate on explosion force, debris mass, and kinetic transfer settings without touching Play Mode at all.</em>
+    </div>
+
+    <h2 id="api-reference">9. API Reference</h2>
+    <p>All major interactions are exposed as public methods for integration with custom gameplay systems. Disable <strong>Enable Mouse Interaction</strong> and call these from your own scripts.</p>
+
+    <h3>Applying Damage &amp; Breaking</h3>
+    <table>
+        <thead>
+            <tr><th style="width: 40%;">Method</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>TakeDamage(float amount, Vector3 hitPoint)</code></td><td>Applies the specified damage to the prop. If health reaches zero the prop breaks, using the hit point to calculate directional debris force.</td></tr>
+            <tr><td><code>BreakProp()</code></td><td>Instantly shatters the prop with a standard outward explosion from its center.</td></tr>
+            <tr><td><code>BreakProp(Vector3 hitPoint)</code></td><td>Instantly shatters the prop with directional force calculated from the supplied world-space position.</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Openable Interactions</h3>
+    <table>
+        <thead>
+            <tr><th style="width: 40%;">Method</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>OpenProp()</code></td><td>Triggers the full opening sequence including animation or physics impulse, loot spawning if configured, and the On Open UnityEvent.</td></tr>
+            <tr><td><code>CloseProp()</code></td><td>Returns the lid or door to its original position. Has no effect if the lid has permanently detached.</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Utility</h3>
+    <table>
+        <thead>
+            <tr><th style="width: 40%;">Method</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>ResetProp()</code></td><td>Fully restores the prop to its pristine state. Use this for gameplay resets, level restarts, and returning objects to a pool.</td></tr>
+            <tr><td><code>EnsureEditorCache()</code></td><td>Caches original transforms, physics references, and internal component data. Runs automatically on Start and during editor test operations. You do not normally need to call this manually.</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="warning">
+        ■ <em>The system caches its references once during initialization. If you dynamically modify the prop's hierarchy or move debris pieces through code after startup, you will need to call <code>ResetProp()</code> or rebuild the instance manually to restore correct behavior.</em>
+    </div>
+
+    <h2 id="example-integration">10. Example Integration</h2>
+
+    <h3>Programmer Notes</h3>
+    <p>This section summarises the integration design of the system for developers connecting it to custom gameplay code.</p>
+    <table>
+        <thead>
+            <tr><th style="width: 30%;">Area</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Public methods</strong></td><td>All major interactions - damaging, breaking, opening, closing, and resetting - are fully exposed as public methods. No reflection or workarounds are needed.</td></tr>
+            <tr><td><strong>UnityEvents</strong></td><td><em>On Break Event</em> and <em>On Open Event</em> are standard UnityEvents. Wire up any external logic directly in the Inspector without writing additional glue code.</td></tr>
+            <tr><td><strong>Mouse interaction</strong></td><td>The built-in mouse interaction is intended for testing and prototyping only. Disable it before shipping and drive the prop entirely through your own system's calls.</td></tr>
+            <tr><td><strong>Input system</strong></td><td>The mouse interaction code supports both the Legacy Input Manager and the New Input System via Unity preprocessor directives. No manual configuration is required.</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Recommended Methods for External Weapon Systems</h3>
+    <p>When integrating with a custom weapon, ability, or damage system, use these two methods to apply directional force correctly:</p>
+
+<pre><code>// Apply directional damage from a raycast hit
+DPT_InteractiveProp prop = hit.collider.GetComponent&lt;DPT_InteractiveProp&gt;();
+if (prop != null)
+{
+    prop.TakeDamage(weaponDamage, hit.point);
+}
+
+// Open a chest from an interaction prompt
+prop.OpenProp();
+
+// Return to pool after destruction
+prop.ResetProp();
+objectPool.Return(prop.gameObject);
+</code></pre>
+
+    <table>
+        <thead>
+            <tr><th style="width: 40%;">Method</th><th>Use Case</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>TakeDamage(float amount, Vector3 hitPoint)</code></td><td>Use when your system tracks health (e.g., weapons, explosions, traps). The prop handles the health check and breaks automatically when the threshold is reached.</td></tr>
+            <tr><td><code>BreakProp(Vector3 hitPoint)</code></td><td>Use when you want to bypass health entirely and destroy the prop instantly with realistic directional debris (e.g., scripted events, cutscenes, or one-hit kill abilities).</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Compatible Systems</h3>
+    <table>
+        <thead>
+            <tr><th style="width: 35%;">System Type</th><th>Integration Method</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Custom player controllers</strong></td><td>Raycast to find props, call <code>TakeDamage()</code> or <code>OpenProp()</code> directly.</td></tr>
+            <tr><td><strong>Raycast interaction &amp; loot systems</strong></td><td>Call any public method on the <code>DPT_InteractiveProp</code> component returned by the raycast hit.</td></tr>
+            <tr><td><strong>Quest &amp; progression / Inventory</strong></td><td>Subscribe to <em>On Open Event</em> or <em>On Break Event</em> to trigger item pickup, UI updates, or inventory additions.</td></tr>
+            <tr><td><strong>AI</strong></td><td>Use <em>On Break Event</em> to alert nearby AI agents when a prop is destroyed (e.g., heard a noise, investigate position).</td></tr>
+            <tr><td><strong>Object pooling systems</strong></td><td>Set <em>Destroy On Cleanup</em> to disabled, then call <code>ResetProp()</code> before returning the object to the pool.</td></tr>
+        </tbody>
+    </table>
+
+    <h2 id="troubleshooting">11. Troubleshooting</h2>
+
+    <div class="troubleshooting-q">The prop does not respond to clicks</div>
+    <div class="troubleshooting-a">Confirm that <em>Enable Mouse Interaction</em> is checked in the Inspector. Also ensure the prop has a Collider so mouse raycasts can hit it.</div>
+
+    <div class="troubleshooting-q">Debris flies everywhere immediately on scene load</div>
+    <div class="troubleshooting-a">The Broken Parent object has been left enabled in the hierarchy. It must start disabled. Select it in the Hierarchy and uncheck the active checkbox, then use the Reset button to restore the prop's state.</div>
+
+    <div class="troubleshooting-q">Debris pieces fall through the floor at the moment of destruction</div>
+    <div class="troubleshooting-a">Debris Rigidbodies are not starting as kinematic. Every debris piece must have <em>Is Kinematic</em> enabled by default so they stay frozen until destruction is triggered. Select all debris pieces and enable <em>Is Kinematic</em> in their Rigidbody components.</div>
+
+    <div class="troubleshooting-q">The lid does not open or flies off unexpectedly</div>
+    <div class="troubleshooting-a">If using physics-based opening, the lid requires a Rigidbody and valid Collider. Check the mass and drag values - very light objects with no drag will fly off with even small forces. Use the Open editor button to iterate on force values in Edit Mode without entering Play Mode.</div>
+
+    <div class="troubleshooting-q">The prop resets correctly in the Editor but not at runtime</div>
+    <div class="troubleshooting-a">If you are modifying the prop's hierarchy or moving debris through code after Start, the internal cache will be stale. Call <code>ResetProp()</code> after any dynamic hierarchy changes to rebuild the cache.</div>
+
+    <div class="troubleshooting-q">Loot spawns every time regardless of Drop Chance</div>
+    <div class="troubleshooting-a">Check that <em>Drop Chance Percent</em> is not set to 100. A value of 100 means loot always drops. Set it to the desired probability between 0 and 100.</div>
+
+    <div class="troubleshooting-q">Nearby objects are not being pushed on destruction</div>
+    <div class="troubleshooting-a">Ensure <em>Transfer Kinetic Energy</em> is enabled and that the <em>Kinetic Transfer Radius</em> is large enough to reach the objects you want to push. Also check <em>Max Pushable Mass</em> - if nearby objects are heavier than this value, they will be skipped.</div>
+
+    <h2 id="prefab-assembly">12. Appendix - Custom Prefab Assembly</h2>
+    <p>This section is for advanced users building their own props from scratch. If you are using the prefabs included with this pack, everything is already assembled correctly and you do not need to read this. If you are importing your own fractured meshes from Blender or another tool, every layer of the hierarchy must be configured correctly for the caching and reset system to work.</p>
+
+    <h3>Required Hierarchy Structure</h3>
+    <table>
+        <thead>
+            <tr><th style="width: 25%;">Layer</th><th style="width: 30%;">Required Components</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Root GameObject</strong></td>
+                <td><code>DPT_InteractiveProp</code>, AudioSource</td>
+                <td>Add an optional Rigidbody only if the intact prop should physically react before destruction (e.g., tipping barricades, pushable crates). Add an optional LODGroup for LOD-enabled assets.</td>
+            </tr>
+            <tr>
+                <td><strong>Pristine Visuals Container</strong></td>
+                <td>MeshFilter, MeshRenderer on each child mesh</td>
+                <td>All intact visual meshes live here. LOD0, LOD1, and additional LOD meshes belong inside this container. Lids and doors must NOT be placed here.</td>
+            </tr>
+            <tr>
+                <td><strong>Unbroken Colliders Container</strong></td>
+                <td>Collider, Rigidbody</td>
+                <td>If using LODGroups, keep collision geometry separate from visual meshes. For simple props without LODs, the same GameObject can be assigned to both Pristine Meshes and Unbroken Collider Roots.</td>
+            </tr>
+            <tr>
+                <td><strong>Broken Parent Container</strong></td>
+                <td>MeshFilter, MeshRenderer, Rigidbody, Collider on every debris piece</td>
+                <td>Must be disabled in the hierarchy by default. Every debris Rigidbody must start with Is Kinematic enabled. MeshColliders must have Convex enabled - Unity cannot simulate non-convex MeshColliders on dynamic Rigidbodies.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+        ✓ <em>Prefer primitive colliders (BoxCollider, SphereCollider, CapsuleCollider) over convex MeshColliders wherever possible. They simulate faster, produce fewer physics artefacts, and are easier to size correctly.</em>
+    </div>
+
+    <h3>Step-by-Step Assembly</h3>
+    <ol>
+        <li><strong>Build the root.</strong> Create an empty GameObject and attach the <code>DPT_InteractiveProp</code> script and an AudioSource.</li>
+        <li><strong>Add pristine visuals.</strong> Create a child object named <code>Pristine_Visuals</code>. Place all intact meshes inside it and assign it to the Pristine Meshes array.</li>
+        <li><strong>Add intact physics.</strong> Create a child object named <code>Unbroken_Colliders</code>. Add fitted colliders and a Rigidbody, then assign it to the Unbroken Collider Roots array.</li>
+        <li><strong>Add debris.</strong> Create a child object named <code>Broken_Parent</code>. Import fractured meshes inside it. Ensure every piece has a Rigidbody (Is Kinematic on), a valid Collider, and Mesh Filter / MeshRenderer.</li>
+        <li><strong>Assign base pieces.</strong> If any debris pieces should feel heavy or stay anchored, assign them to the Broken Base Pieces array and enable Lock Base Piece if needed.</li>
+        <li><strong>Disable and reference.</strong> Disable the <code>Broken_Parent</code> object in the Hierarchy and assign it to the Broken Parent field in the Inspector.</li>
+        <li><strong>Preview.</strong> Use the Shatter and Reset editor buttons to test and iterate on destruction behavior directly in Edit Mode.</li>
+    </ol>
+
+    <h3>Common Setup Mistakes</h3>
+    <div class="warning" style="margin-top:0;">
+        <ul style="list-style-type: none; padding-left: 0;">
+            <li style="margin-bottom: 8px;">✗ Broken Parent left enabled in the hierarchy.</li>
+            <li style="margin-bottom: 8px;">✗ Debris Rigidbodies not starting with Is Kinematic enabled.</li>
+            <li style="margin-bottom: 8px;">✗ Non-convex MeshColliders used on dynamic Rigidbodies.</li>
+            <li style="margin-bottom: 8px;">✗ Lid or door object placed inside Pristine Meshes instead of as a separate child.</li>
+            <li style="margin-bottom: 8px;">✗ Missing Rigidbody on a lid configured to use physics-based opening.</li>
+            <li style="margin-bottom: 8px;">✗ Gameplay colliders attached directly to visual LOD meshes.</li>
+            <li style="margin-bottom: 8px;">✗ Unbroken Collider Roots array left unassigned.</li>
+            <li style="margin-bottom: 8px;">✗ Extremely thin or tiny colliders causing unstable physics interactions.</li>
+            <li style="margin-bottom: 8px;">✗ Excessive explosion force values applied to lightweight debris.</li>
+        </ul>
+    </div>
+
+    <h3>Performance Recommendations</h3>
+    <div class="note" style="margin-top:0;">
+        <ul style="list-style-type: none; padding-left: 0;">
+            <li style="margin-bottom: 8px;">✓ Keep debris shard counts low on frequently destroyed props.</li>
+            <li style="margin-bottom: 8px;">✓ Prefer primitive colliders over convex MeshColliders.</li>
+            <li style="margin-bottom: 8px;">✓ Use Lock Base Piece for large structural debris that should feel anchored.</li>
+            <li style="margin-bottom: 8px;">✓ Use object pooling (Destroy On Cleanup disabled) for high-action scenes.</li>
+            <li style="margin-bottom: 8px;">✓ Avoid enabling kinetic transfer on large numbers of objects simultaneously.</li>
+            <li style="margin-bottom: 8px;">✓ Only use Continuous Dynamic collision detection when visually necessary.</li>
+        </ul>
+    </div>
+
+    <h2 id="support">13. Support &amp; Custom Pipeline Integration</h2>
+    <p>If your project requires external or custom 3D models to be fully integrated into the DPT ecosystem—including custom vertex-data packing, procedural wood grain mapping, normal array configuration, advanced GPU wind system implementation, or any other bespoke features—freelance technical art services are available. Additionally, availability extends to general 3D asset production, high-to-low poly hard surface modeling, stylized prop creation, and game-ready LOD budgeting built to align cleanly with your specific project constraints.</p>
+    <p>For freelance modeling contract inquiries, tech-art pipeline consulting, or custom asset optimization passes, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Contract Inquiry]</code>.</p>
+
+    <div class="note">
+        <strong>Standard Asset Support:</strong><br>
+        For standard package bug reports, technical asset setup issues, and publisher licensing enquiries, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Support Request]</code>.
+    </div>
+
+</body>
+</html>
