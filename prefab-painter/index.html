@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DPT Prefab Painter - User Guide</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        @page {
+            size: A4;
+            margin: 15mm 15mm;
+            background-color: #0f172a;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            font-size: 11pt;
+            line-height: 1.5;
+        }
+        h1, h2, h3, h4 {
+            color: #38bdf8;
+            margin-bottom: 10px;
+        }
+        h1 {
+            font-size: 26pt;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 10px;
+            margin-top: 0;
+            color: #bae6fd;
+        }
+        h2 {
+            font-size: 16pt;
+            background-color: #1e293b;
+            padding: 8px 12px;
+            border-left: 5px solid #38bdf8;
+            page-break-after: avoid;
+            margin-top: 25px;
+        }
+        h3 {
+            font-size: 13pt;
+            page-break-after: avoid;
+            color: #7dd3fc;
+            margin-top: 20px;
+        }
+        p {
+            margin: 0 0 12px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            page-break-inside: auto;
+        }
+        tr {
+            page-break-inside: avoid;
+        }
+        th, td {
+            border: 1px solid #334155;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #1e293b;
+            color: #7dd3fc;
+            font-weight: bold;
+            font-size: 10.5pt;
+        }
+        td {
+            background-color: #0f172a;
+        }
+        td strong {
+            color: #bae6fd;
+        }
+        ul, ol {
+            margin: 10px 0 15px 0;
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            font-size: 14pt;
+            color: #94a3b8;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+        .note {
+            background-color: #1e293b;
+            border-left: 4px solid #10b981;
+            padding: 12px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+        .warning {
+            background-color: #1e293b;
+            border-left: 4px solid #ef4444;
+            padding: 12px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+        code, pre {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: #020617;
+            color: #a5f3fc;
+            border-radius: 4px;
+            font-size: 10pt;
+        }
+        code {
+            padding: 2px 5px;
+        }
+        pre {
+            padding: 12px;
+            display: block;
+            white-space: pre-wrap;
+            border: 1px solid #1e293b;
+            page-break-inside: avoid;
+        }
+        .troubleshooting-q {
+            font-weight: bold;
+            color: #bae6fd;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            page-break-after: avoid;
+        }
+        .troubleshooting-a {
+            margin-bottom: 15px;
+        }
+        hr.divider {
+            border: none;
+            border-top: 1px solid #334155;
+            margin: 30px 0;
+        }
+        .shortcut-tag {
+            display: inline-block;
+            background-color: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 3px;
+            padding: 1px 6px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 9.5pt;
+            color: #a5f3fc;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>DPT Games Prefab Painter</h1>
+    <p>Paint prefabs directly into your scene with randomized transforms, scale, and per-instance color variation. Everything needed to start painting is included and ready to use out of the box.</p>
+
+    <h3>Features</h3>
+    <ul>
+        <li>Works out of the box (URP Ready)</li>
+        <li>Compact, responsive UI that adapts to different editor window widths</li>
+        <li>Integrated prefab palette with live hover preview cards and thumbnail grid</li>
+        <li>Drag-and-drop prefab setup with marquee multi-selection and drop-to-remove zone</li>
+        <li>Saveable palette presets — swap between biome or prop sets instantly</li>
+        <li>C# script component injection applied dynamically at paint time</li>
+        <li>Paint, Scatter, Line, Grid, and Path placement modes</li>
+        <li>Post-placement rotation for precise object positioning after spawning</li>
+        <li>Smart Clearance to prevent prefab overlap automatically</li>
+        <li>Editor-side physics simulation for natural prop settling</li>
+        <li>Seamless integration with <code>DPT_ShaderVariation</code> for per-instance recoloring with zero extra draw calls</li>
+        <li>Full undo support integrated directly with Unity's history stack</li>
+    </ul>
+
+    <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
+        <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation:</strong>
+        <a href="#getting-started" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Getting Started</a>
+        <a href="#prefab-palette" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Prefab Palette</a>
+        <a href="#painting-controls" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">2. Painting &amp; Controls</a>
+ <a href="#visuals-variation" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">3. Visuals &amp; Variation</a>
+        <a href="#transform-placement" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">4. Transform &amp; Placement</a>
+        <a href="#hierarchy-tags-layers-scripts" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">5. Hierarchy, Tags, Layers &amp; Scripts</a>
+        <a href="#texture-packer" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">6. Texture Channel Packer</a>
+        <a href="#shortcuts" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">7. Shortcuts Reference</a>
+        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">8. Troubleshooting</a>
+        <a href="#support" style="color: #a5f3fc; text-decoration: none;">9. Support</a>
+    </div>
+
+    <h2 id="getting-started">Getting Started</h2>
+    <p>Open the painter and start placing assets in just a few steps.</p>
+
+    <h3>Quick Start</h3>
+    <ol>
+        <li>Open <strong>Tools &rarr; DPT Games &rarr; Prefab Painter</strong> from the Unity menu bar.</li>
+        <li>Drag prefabs or a folder of assets into the palette drop zone.</li>
+        <li>Set <strong>Paintable Layer</strong> to match the layer your terrain or ground surfaces use.</li>
+        <li>Assign a <strong>Parent Object</strong> or click <strong>New</strong> to create a fresh one.</li>
+        <li>Click the green <strong>START PAINTING [']</strong> button.</li>
+        <li>Hold <code>Ctrl + Left Click</code> and drag across scene surfaces to paint prefabs.</li>
+    </ol>
+
+    <div class="note">
+        <strong>Undo:</strong> Every paint stroke, erase, line, grid, and path action is fully registered with Unity's undo system. Use <code>Ctrl + Z</code> and <code>Ctrl + Y</code> freely.
+    </div>
+
+    <h2 id="prefab-palette">1. Prefab Palette</h2>
+    <p>The palette is where you manage which prefabs the painter can place. It supports multiple groups, saveable presets, and several ways to add and remove assets.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Control</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Active Palette File &amp; Save As New</strong></td>
+                <td>Saves your current palette as a reusable project asset. Load different palettes via the object field to switch between prop sets or biome themes instantly.</td>
+            </tr>
+            <tr>
+                <td><strong>Thumbnail Grid</strong></td>
+                <td>Shows icon previews for all loaded prefabs. Hover over any thumbnail to see a larger preview and the asset name. Right-click a thumbnail to open the prefab, create a variant, or toggle its active state in the palette.</td>
+            </tr>
+<tr>
+    <td><strong>Spawn Weight</strong></td>
+    <td>Select one or more prefabs in the palette to reveal the <strong>Selected Item Settings</strong> panel. Use the <strong>Spawn Weight</strong> slider or field to control how frequently that prefab appears relative to others during painting — a value of 2 makes it spawn twice as often as a prefab weighted at 1. A small <strong>w</strong> badge on the thumbnail indicates a non-default weight is active. Weights are saved with the palette file.</td>
+</tr>
+            <tr>
+                <td><strong>Groups</strong></td>
+                <td>The first group acts as your main active palette. Add more groups with <strong>+ Add Group</strong> to organise assets by type, biome, or any other category. Press <span class="shortcut-tag">1</span>–<span class="shortcut-tag">9</span> / <span class="shortcut-tag">0</span> to switch between groups quickly.</td>
+            </tr>
+            <tr>
+                <td><strong>Marquee Selection</strong></td>
+                <td>Click and drag over the thumbnail grid to select multiple prefabs at once. Use this to bulk-move or remove a set of assets.</td>
+            </tr>
+            <tr>
+                <td><strong>Drag to Scene</strong></td>
+                <td>Drag any prefab from the palette directly into the Scene view for manual one-off placement.</td>
+            </tr>
+            <tr>
+                <td><strong>Drop to Remove</strong></td>
+                <td>Drag selected prefabs into this zone to remove them from the palette.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="painting-controls">2. Painting Controls</h2>
+    <p>Switch between <strong>Paint</strong>, <strong>Erase</strong>, and <strong>Recolor</strong> tabs at the top of the panel. Use the large green button to start painting and the red button to stop.</p>
+
+    <h3>Placement Modes</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Mode</th>
+                <th>How It Works</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Paint Mode</strong></td>
+                <td>The default mode. Hold <code>Ctrl + Left Click</code> and drag to continuously paint prefabs onto surfaces within the brush radius. A spawn count estimate (<code>~N</code>) is shown when Scatter Mode is active.</td>
+            </tr>
+            <tr>
+                <td><strong>Scatter Mode [O]</strong></td>
+                <td>Places a large number of prefabs randomly across the full brush area in a single stroke. Ideal for painting dense ground cover like grass or rocks across wide areas. Toggle it on or off with <span class="shortcut-tag">O</span>.</td>
+            </tr>
+            <tr>
+                <td><strong>Line Mode</strong></td>
+                <td>Hold <code>Ctrl + Alt + Drag</code> to paint prefabs in a straight line from your starting point. Useful for fences, walls, or road edges. Displays an estimated placement count while dragging.</td>
+            </tr>
+            <tr>
+                <td><strong>Grid Mode</strong></td>
+                <td>Hold <code>Ctrl + Shift + Drag</code> to paint prefabs snapped to a regular grid pattern. Good for structured layouts like floor tiles, crates, or crops. Shows an estimated placement count while dragging.</td>
+            </tr>
+            <tr>
+                <td><strong>Paint Path [G]</strong></td>
+                <td>Places prefabs along a smooth curved path. Press <span class="shortcut-tag">G</span> to enter path mode, then <code>Ctrl + Left Click</code> to place nodes. Press <span class="shortcut-tag">G</span> again or <span class="shortcut-tag">Enter</span> to finish — the tool will populate the curve with prefabs spaced evenly along it. Shows an estimated placement count before you finish.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Brush Settings</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Setting</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Paintable Layer</strong></td>
+                <td>Only surfaces on this layer will receive prefabs. Make sure your terrain or ground mesh uses a matching layer, otherwise raycasts will pass through and nothing will be placed.</td>
+            </tr>
+            <tr>
+                <td><strong>Brush Shape [C]</strong></td>
+                <td>Switches between Circle and Square brush footprints. Press <span class="shortcut-tag">C</span> to cycle.</td>
+            </tr>
+            <tr>
+                <td><strong>Brush Radius [ [ / ] ]</strong></td>
+                <td>Controls the size of the brush area. Use <span class="shortcut-tag">[</span> to shrink and <span class="shortcut-tag">]</span> to grow the radius interactively in the scene.</td>
+            </tr>
+            <tr>
+                <td><strong>Randomize Scatter [U]</strong></td>
+                <td>When enabled, prefabs are placed at random positions within the brush radius rather than exactly at the cursor. When disabled, all placements land at the cursor position.</td>
+            </tr>
+            <tr>
+                <td><strong>Min Spacing [M / Shift+M]</strong></td>
+                <td>Sets the minimum distance between placed objects. Use <span class="shortcut-tag">M</span> to step the value up and <span class="shortcut-tag">Shift+M</span> to step it down. When Smart Clearance is on, object size is also factored in — see Transform &amp; Hierarchy.</td>
+            </tr>
+            <tr>
+                <td><strong>Spawn Rate [X / Shift+X]</strong></td>
+                <td>Controls how quickly prefabs are placed during a held drag. Lower values place objects faster. Use <span class="shortcut-tag">X</span> to increase the interval and <span class="shortcut-tag">Shift+X</span> to decrease it.</td>
+            </tr>
+            <tr>
+                <td><strong>Brush Handle Color</strong></td>
+                <td>Changes the color of the brush circle in the scene view. Adjust this if the default color is hard to see against your terrain.</td>
+            </tr>
+        </tbody>
+    </table>
+    <h2 id="visuals-variation">3. Visuals &amp; Variation</h2>
+    <p>Per-instance visual variation using the DPT shader pipeline. These options add variety across painted objects without creating extra materials or breaking GPU batching.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Setting</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Randomize Brightness [B]</strong></td>
+                <td>Applies a random brightness offset to each placed prefab via the <code>DPT_ShaderVariation</code> component. Helps break up flat, uniform lighting across repeated assets.</td>
+            </tr>
+            <tr>
+                <td><strong>Apply Color Tint [V]</strong></td>
+                <td>Applies a color tint and optional HSV variance to each placed prefab. Useful for adding natural color variation to foliage, rocks, or any asset using the DPT shader.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+        <strong>Shader Integration:</strong> DPT shaders read per-instance variation values from the GPU Renderer Shader User Value (RSUV) stream. This is fully compatible with Unity 6's GPU Resident Drawer — variation has zero impact on draw call counts. The Color Property Name field is only editable when a standard URP Lit fallback shader is detected. In that case, a Material Property Block is used.
+    </div>
+    <h2 id="transform-placement">4. Transform &amp; Placement</h2>
+    <p>Controls how placed prefabs are oriented, scaled, named, and organised in the scene hierarchy.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Setting</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+   
+            <tr>
+                <td><strong>Align to Ground [N]</strong></td>
+                <td>Rotates each placed prefab so its up axis matches the surface normal it lands on. Useful for objects on slopes or uneven terrain.</td>
+            </tr>
+            <tr>
+                <td><strong>Randomize Y Rotation [Y]</strong></td>
+                <td>Rotates each placed prefab randomly around its vertical axis. Helps break up repetitive silhouettes when painting many of the same asset.</td>
+            </tr>
+            <tr>
+                <td><strong>Randomize Scale [L]</strong></td>
+                <td>Applies a random scale to each placed prefab between a minimum and maximum value you define. When disabled, a single fixed scale slider is shown instead.</td>
+            </tr>
+            <tr>
+                <td><strong>Fixed Scale</strong></td>
+                <td>Active when Randomize Scale is off. Applies a uniform scale to every placed prefab.</td>
+            </tr>
+            <tr>
+                <td><strong>Allow Stacking [K]</strong></td>
+                <td>When enabled, prefabs can be placed on top of previously painted objects — useful for layering props, such as painting moss or debris on top of rocks. When disabled, the painter will not place objects on other painted children of the same parent.</td>
+            </tr>
+            <tr>
+                <td><strong>Place By Collider [P]</strong></td>
+                <td>Positions prefabs based on the bottom of their collider bounds rather than their pivot point. This prevents objects with off-centre pivots from sinking into the ground. For prefabs without colliders, a temporary collider is generated automatically.</td>
+            </tr>
+            <tr>
+                <td><strong>Smart Clearance [I]</strong></td>
+                <td>Automatically accounts for each prefab's physical size when spacing objects. This prevents overlapping even when Min Spacing is set low. Increasing Min Spacing adds extra gap on top of the object's natural footprint.</td>
+            </tr>
+            <tr>
+                <td><strong>Use Physics Fall [H]</strong></td>
+                <td>After placement, runs a short editor-side physics simulation so prefabs fall and settle naturally under gravity. Good for filling uneven terrain, rock piles, or any scene where you want objects to rest realistically rather than float at the surface hit point.</td>
+            </tr>
+            <tr>
+                <td><strong>Post-Placement Rotate [J]</strong></td>
+                <td>After placing a prefab or group (via Scatter, Line, Grid, or Path), the tool pauses and lets you rotate the result by moving your mouse. The rotation pivots around the centre of the placed group and projects grounding onto the surface in real time. Click to confirm.</td>
+            </tr>
+        </tbody>
+    </table>
+
+  <h2 id="hierarchy-tags-layers-scripts">5. Hierarchy, Tags &amp; Scripts</h2>
+<p>Options for organizing painted objects, overriding object settings, and injecting components at paint time.</p>
+
+<table>
+    <thead>
+        <tr>
+            <th style="width:30%;">Setting</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Parent Object &amp; Name</strong></td>
+            <td>All painted prefabs are placed as children of the assigned parent object. Set a name here and click <strong>New</strong> to create a fresh parent. The tool names each placed child sequentially using your chosen naming convention.</td>
+        </tr>
+
+        <tr>
+            <td><strong>Naming Convention</strong></td>
+            <td>Sets the prefix or pattern used when naming each spawned object. Objects are numbered sequentially—for example <code>Rock_001</code>, <code>Rock_002</code>, and so on.</td>
+        </tr>
+
+        <tr>
+            <td><strong>Override Tag &amp; Layer</strong></td>
+            <td>Forces all placed objects to use the tag and layer you specify here, ignoring the values stored on the source prefab. You can also choose whether child objects are included.</td>
+        </tr>
+
+        <tr>
+            <td><strong>Script Component Injection</strong></td>
+            <td>
+                Attach custom C# components automatically as prefabs are painted without creating prefab variants.
+                <ul>
+                    <li><strong>Root</strong> — Attaches the component to the instantiated root object.</li>
+                    <li><strong>Named Child</strong> — Attaches the component to a child object with a matching name (case-sensitive).</li>
+                    <li><strong>Skip If Already Exists</strong> — Prevents duplicate components from being added.</li>
+                </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+    <h2 id="texture-packer">6. Texture Channel Packer</h2>
+    <p>The DPT shader uses a packed texture format that combines metallic, occlusion, detail, and smoothness data into a single file. You can create these using the built-in packer at <strong>Tools &rarr; DPT Games &rarr; Texture Channel Packer</strong>.</p>
+
+    <ol>
+        <li>Assign your source maps to the channel slots:
+            <ul>
+                <li><strong>Red:</strong> Metallic map</li>
+                <li><strong>Green:</strong> Occlusion map</li>
+                <li><strong>Blue:</strong> Detail / mask map</li>
+                <li><strong>Alpha:</strong> Smoothness map</li>
+            </ul>
+        </li>
+        <li>Configure per-channel options:
+            <ul>
+                <li><strong>Invert:</strong> Inverts the value (<code>1.0 - value</code>). Use this to convert a roughness map into a smoothness map.</li>
+                <li><strong>Convert Brightness:</strong> Extracts a grayscale value from an RGB image using average luminance (<code>(R + G + B) / 3</code>). Enable this if your source map is a 24-bit RGB file with no alpha channel.</li>
+            </ul>
+        </li>
+        <li>If a slot is left empty, use the <strong>Empty Value</strong> slider to set a constant fallback for that channel.</li>
+        <li>Click <strong>Pack and Save Texture</strong> to generate the packed map.</li>
+    </ol>
+
+    <h3>Required Unity Import Settings</h3>
+    <p>Before packing, make sure all source textures have these settings in the Unity Inspector:</p>
+    <ul>
+        <li><strong>Read/Write: Enabled</strong> — required so the packer can read pixel data. Without this it will error.</li>
+        <li><strong>sRGB (Color Texture): Disabled</strong> — these are data textures, not color images. Leaving sRGB on will corrupt your metallic, roughness, and AO values.</li>
+        <li><strong>Alpha Is Transparency: Enabled</strong> — ensures the smoothness channel is read correctly across the 0–1 range.</li>
+    </ul>
+
+    <div class="note">
+        <strong>Brightness Conversion:</strong> The <strong>Convert Brightness</strong> option handles the conversion from 24-bit RGB maps to usable scalar data natively in the editor — no external tools needed.
+    </div>
+
+    <h2 id="shortcuts">7. Shortcuts Reference</h2>
+    <p>All shortcuts are active while the painter is open and painting is enabled. They do not interfere with Unity's built-in editor shortcuts.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 25%;">Shortcut</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="shortcut-tag">'</span></td>
+                <td>Toggle painting on / off</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">Ctrl + Left Click</span></td>
+                <td>Paint prefabs (hold and drag to paint continuously)</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">Ctrl + Right Click</span></td>
+                <td>Erase painted objects under the brush</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">Ctrl + Alt + Drag</span></td>
+                <td>Line mode — paint along a straight line</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">Ctrl + Shift + Drag</span></td>
+                <td>Grid mode — paint snapped to a grid</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">G</span></td>
+                <td>Enter / finish Paint Path mode</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">Enter</span></td>
+                <td>Finish and populate the current path</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">[</span> / <span class="shortcut-tag">]</span></td>
+                <td>Decrease / increase brush radius</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">C</span></td>
+                <td>Cycle brush shape (Circle / Square)</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">O</span></td>
+                <td>Toggle Scatter mode</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">U</span></td>
+                <td>Toggle Randomize Scatter</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">M</span> / <span class="shortcut-tag">Shift+M</span></td>
+                <td>Step Min Spacing up / down</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">X</span> / <span class="shortcut-tag">Shift+X</span></td>
+                <td>Step Spawn Rate up / down</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">N</span></td>
+                <td>Toggle Align to Ground</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">Y</span></td>
+                <td>Toggle Randomize Y Rotation</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">L</span></td>
+                <td>Toggle Randomize Scale</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">K</span></td>
+                <td>Toggle Allow Stacking</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">P</span></td>
+                <td>Toggle Place By Collider</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">I</span></td>
+                <td>Toggle Smart Clearance</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">H</span></td>
+                <td>Toggle Use Physics Fall</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">J</span></td>
+                <td>Toggle Post-Placement Rotate</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">B</span></td>
+                <td>Toggle Randomize Brightness</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">V</span></td>
+                <td>Toggle Apply Color Tint</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">1</span>–<span class="shortcut-tag">9</span> / <span class="shortcut-tag">0</span></td>
+                <td>Switch palette group</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="troubleshooting">8. Troubleshooting</h2>
+
+    <div class="troubleshooting-q">Prefabs are not being placed when I paint</div>
+    <div class="troubleshooting-a">The most common cause is a layer mismatch. The painter only places objects on surfaces assigned to the Paintable Layer. Check that your terrain or ground mesh uses the correct layer in its Inspector, and that the Paintable Layer setting in the painter matches. Also confirm painting is active — the button should be red and read <strong>Stop Painting</strong>.</div>
+
+    <div class="troubleshooting-q">Objects are overlapping or clipping into each other</div>
+    <div class="troubleshooting-a">Enable <strong>Smart Clearance [I]</strong> — this automatically uses each prefab's physical size to determine safe spacing. If you want extra gap between objects on top of that, increase <strong>Min Spacing</strong>. Note that spacing is only checked against other children of the same parent object; objects across different parent objects are not checked against each other.</div>
+
+    <div class="troubleshooting-q">Objects are stacking on top of each other in towers</div>
+    <div class="troubleshooting-a">Check that <strong>Allow Stacking [K]</strong> is not enabled unless you specifically want objects to stack. When stacking is off, the painter will not place objects on top of previously painted children of the same parent.</div>
+
+    <div class="troubleshooting-q">All objects look identical / color variation has no effect</div>
+    <div class="troubleshooting-a">Make sure <strong>Randomize Brightness [B]</strong> or <strong>Apply Color Tint [V]</strong> is enabled. Also confirm your prefabs use a DPT shader — standard URP Lit shaders do not support per-instance RSUV variation.</div>
+
+    <div class="troubleshooting-q">I accidentally painted over an area, can I undo?</div>
+    <div class="troubleshooting-a">Yes. Every paint, erase, line, grid, and path action is registered with Unity's undo system. Press <code>Ctrl + Z</code> to undo. You can also switch to Erase mode and use <code>Ctrl + Right Click</code> to remove objects individually.</div>
+
+    <div class="troubleshooting-q">Physics Fall doesn't seem to do anything</div>
+    <div class="troubleshooting-a">Make sure your prefabs have a collider, or enable <strong>Place By Collider [P]</strong> so the tool can interact with the physics system correctly. The simulation runs briefly in editor time — if objects appear to snap back, check that no scripts are overriding their transforms on start.</div>
+
+    <div class="troubleshooting-q">Does randomizing scale and rotation break GPU batching?</div>
+    <div class="troubleshooting-a">No. Unity 6's GPU Resident Drawer and SRP Batcher work with unique per-instance transform matrices. Randomizing scale, rotation, or position has no negative effect on draw call counts.</div>
+
+    <hr class="divider">
+
+    <h2 id="support">9. Support &amp; Custom Pipeline Integration</h2>
+    <p>If your project needs custom integration with the DPT ecosystem — including vertex data packing, normal array setup, GPU wind systems, or bespoke shader features — freelance technical art services are available. This also extends to general asset production: hard surface modelling, stylized prop creation, and game-ready LOD work tailored to your project's constraints.</p>
+    <p>For freelance or consulting enquiries, contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Contract Inquiry]</code>.</p>
+
+    <div class="note">
+        <strong>Standard Support:</strong> For bug reports, setup questions, and licensing enquiries, contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Support Request]</code>.
+    </div>
+
+</body>
+</html>
