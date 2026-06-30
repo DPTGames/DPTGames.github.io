@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DPT Games Play Sound On Collision - Component Guide</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0; padding: 40px;
+            font-size: 11pt; line-height: 1.5;
+        }
+        h1, h2, h3 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 15px; margin-bottom: 5px; page-break-after: avoid; }
+        .troubleshooting-a { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <h1>DPT_PlaySoundOnCollision</h1>
+    <div class="subtitle">Component Reference Guide<br>
+    <span style="font-size: 11pt; font-style: normal;">A standalone, highly optimized utility component designed to handle physics impact audio loops for independent accessories, scattered debris chunks, or high-density loot drops without performance degradation or audio driver clipping.</span></div>
+
+    <h2>1. Inspector Fields</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Field</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Collision Sounds</strong></td>
+                <td>An array pool of <code>AudioClip</code> profiles. The component picks an entry at random on an approved impact frame to prevent mechanical acoustic repetition.</td>
+            </tr>
+            <tr>
+                <td><strong>Pitch Variance</strong></td>
+                <td>The dynamic range window added or subtracted from the default modifier (1.0) on playback execution to smoothly shift tone variance.</td>
+            </tr>
+            <tr>
+                <td><strong>Velocity Threshold</strong></td>
+                <td>The mandatory impact magnitude threshold required to fire a sound. Higher properties stop clips from machine-gunning on soft slides or continuous resting jitters.</td>
+            </tr>
+            <tr>
+                <td><strong>Local Cooldown</strong></td>
+                <td>The enforcement delay buffer (in seconds) tracking the specific instance before it is allowed to call another audio sequence.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>2. Technical Architecture</h2>
+    <ul>
+        <li><strong>Frame-Counter Budgeting:</strong> Uses a rigid global <code>Time.frameCount</code> filter structure to hard-cap the volume of audio execution routines permitted simultaneously during an identical engine frame sweep.</li>
+        <li><strong>Decoupled Implementation:</strong> Operates entirely outside the core interactive prop state logic loop. This allows end-users to drop the component onto any structural mesh payload carrying collision dependencies.</li>
+        <li><strong>Playing Verification:</strong> Leverages active <code>audioSource.isPlaying</code> evaluations to ensure individual items do not clip or interrupt their own sound waves mid-cycle.</li>
+    </ul>
+
+    <h2>3. Physics Layer Optimization (High Density)</h2>
+    <p>When a container shatters or drops large volumes of loose items simultaneously, the physics engine can create dozens of mutual collision contacts on a single frame. While the script fast-escapes audio overhead, the main thread must still process raw physics messages. Implementing proper layer filtering drastically optimizes CPU scaling.</p>
+    
+    <div class="note">
+        <strong>Recommended Optimization Steps:</strong>
+        <ol>
+            <li>Navigate to your project layout settings and create a dedicated User Layer named <code>Debris</code> or <code>Loot</code>.</li>
+            <li>Assign your fractured debris sub-meshes, accessory prefabs, or loose loot rewards to this newly created layer.</li>
+            <li>Open the Unity preferences matrix via <strong>Project Settings > Physics</strong>.</li>
+            <li>Scroll down to the bottom of the inspector window to find the <strong>Layer Collision Matrix</strong> checkbox grid.</li>
+            <li>Locate the intersection point where your custom layer crosses itself (e.g., <code>Debris</code> vs <code>Debris</code>) and <strong>uncheck the box</strong> to disable intra-layer tracking.</li>
+        </ol>
+    </div>
+
+    <p>This configuration ensures that dynamic debris pieces or loose items bypass mutual physical calculations entirely—preventing massive spikes in <code>OnCollisionEnter</code> messaging on the main thread—while still allowing them to drop naturally, bounce off environmental terrain, slide down flooring geometry, or cross trigger filters safely.</p>
+
+    <h2>4. Troubleshooting Notes</h2>
+    <div class="troubleshooting-q">"Audio drops or skips during intensive loot burst explosions"</div>
+    <div class="troubleshooting-a">
+        This is a built-in optimization design path. When multiple physics instances settle on an identical frame boundary, the global frame-gate hard-throttles playback allocations to protect your game audio driver mixer pipeline from overloading.
+    </div>
+
+    <div class="troubleshooting-q">"The object plays sounds rapidly when rolling down a slope"</div>
+    <div class="troubleshooting-a">
+        Increase the <code>Velocity Threshold</code> step boundary to filter out soft friction states, or lengthen the <code>Local Cooldown</code> parameter window to expand the mandatory resting interval.
+    </div>
+<h2>Support</h2>
+
+<div class="note">
+
+    For bug reports, setup issues, and licensing enquiries:<br><br>
+
+    support.dptgames <span style="opacity:0.7;">[at]</span> gmail.com
+
+</div>
+</body>
+</html>
