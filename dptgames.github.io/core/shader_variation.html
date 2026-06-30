@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DPT Shader Variation Script - Reference Guide</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        @page {
+            size: A4;
+            margin: 15mm 15mm;
+            background-color: #0f172a;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            font-size: 11pt;
+            line-height: 1.5;
+        }
+        h1, h2, h3, h4 {
+            color: #38bdf8;
+            margin-bottom: 10px;
+        }
+        h1 {
+            font-size: 26pt;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 10px;
+            margin-top: 0;
+            color: #bae6fd;
+        }
+        h2 {
+            font-size: 16pt;
+            background-color: #1e293b;
+            padding: 8px 12px;
+            border-left: 5px solid #38bdf8;
+            page-break-after: avoid;
+            margin-top: 25px;
+        }
+        h3 {
+            font-size: 13pt;
+            page-break-after: avoid;
+            color: #7dd3fc;
+            margin-top: 20px;
+        }
+        p {
+            margin: 0 0 12px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            page-break-inside: auto;
+        }
+        tr {
+            page-break-inside: avoid;
+        }
+        th, td {
+            border: 1px solid #334155;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #1e293b;
+            color: #7dd3fc;
+            font-weight: bold;
+            font-size: 10.5pt;
+        }
+        td {
+            background-color: #0f172a;
+        }
+        td strong {
+            color: #bae6fd;
+        }
+        ul, ol {
+            margin: 10px 0 15px 0;
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            font-size: 14pt;
+            color: #94a3b8;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+        .note {
+            background-color: #1e293b;
+            border-left: 4px solid #10b981;
+            padding: 12px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+        .warning {
+            background-color: #1e293b;
+            border-left: 4px solid #ef4444;
+            padding: 12px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+        code, pre {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: #020617;
+            color: #a5f3fc;
+            border-radius: 4px;
+            font-size: 10pt;
+        }
+        code {
+            padding: 2px 5px;
+        }
+        pre {
+            padding: 12px;
+            display: block;
+            white-space: pre-wrap;
+            border: 1px solid #1e293b;
+            page-break-inside: avoid;
+        }
+        .troubleshooting-q {
+            font-weight: bold;
+            color: #bae6fd;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            page-break-after: avoid;
+        }
+        .troubleshooting-a {
+            margin-bottom: 15px;
+        }
+        .divider {
+            border: 0;
+            height: 1px;
+            background: #1e293b;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>The DPT_ShaderVariation Component</h1>
+    <p>The <code>DPT_ShaderVariation</code> component manages per-instance color customization paths across your game scene assets. It works automatically when spawned by the DPT Prefab Painter, but can also be manually attached to custom game objects, empty root parents, or modular prefabs to handle low-overhead color manipulation.</p>
+
+    <h2>Core Architecture</h2>
+    <p>The component reads your selected color, normalizes the RGB channels to maintain full 24-bit hue precision, and encodes the remaining 8 bits as an independent luminance scaler. This vector-packing approach natively accommodates peak HDR brightness settings up to a 2.0 multiplier without color distortion. The resulting data structure is compressed into a single unsigned 32-bit integer (<code>uint</code>) and pushed directly to the GPU instancing buffer using the Renderer Shader User Value (RSUV) stream.</p> 
+    
+    <p>Because the variation data is handled entirely by the GPU instance via <code>SetShaderUserValue</code>, your original shared materials are never cloned, duplicated, or modified. This means thousands of heavily varied objects can be processed inside unified hardware draw calls, keeping your project's VRAM footprint entirely clean.</p>
+
+    <h2>Component Inspector Fields</h2>
+    <p>Select any object holding a <code>DPT_ShaderVariation</code> component in the hierarchy to configure its parameters:</p>
+     
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Field</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Instance Color</strong></td>
+                <td>The color tint and brightness modifier pushed to this object's GPU stream. White (1,1,1,1) is default neutral. Darker values dim the object, while values with a high color magnitude lift it into HDR brightness. Driven natively by properties, or tracked dynamically via field analysis.</td>
+            </tr>
+            <tr>
+                <td><strong>Color Property Name</strong></td>
+                <td>The shader variable string targeted for fallback standard materials (e.g., <code>_BaseColor</code> for standard URP shaders). <strong>This property is completely locked and non-enterable if a custom DPT material is detected on the mesh</strong>, as it is only intended for non-DPT fallback scenarios.</td>
+            </tr>
+            <tr>
+                <td><strong>Is Animated</strong></td>
+                <td><strong>Optimization Switch.</strong> Enables or disables the internal per-frame <code>Update()</code> monitoring system. Check this box <em>only</em> for assets driven by an Animator component (such as a burning fuse). Leave unchecked for static world props to eliminate CPU thread overhead entirely.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+        The script can be attached directly to empty root parents. It automatically scans down the hierarchy using its filtered collection system to apply color data across <code>LOD0</code>, <code>LOD1</code>, or nested broken debris meshes simultaneously, making it fully compatible with destructible object systems.
+    </div>
+
+    <h2>Advanced Architecture Features</h2>
+
+    <h3>1. Embedded Animation Support (Is Animated)</h3>
+    <p>When you animate a script field inside the Unity Animator, the animation system directly modifies the serialized backing field (<code>instanceColor</code>). This completely bypasses standard C# public property setters (<code>InstanceColor</code>), which normally prevents scripts from knowing they need to push updates to the GPU.</p>
+
+    <p>To solve this efficiently without killing performance, checking the <strong>Is Animated</strong> toggle activates an internal tracking loop:</p>
+
+<pre><code>void Update()
+{
+    if (instanceColor != lastInstanceColor)
+    {
+        lastInstanceColor = instanceColor;
+        ApplyVariation();
+    }
+}</code></pre>
+
+    <ul>
+        <li><strong>For Animated Props (e.g., Cannon Fuses):</strong> Checking <code>Is Animated</code> keeps the <code>Update()</code> check functional. The component catches field alterations made by the Animator keyframe intervals instantly and pushes the packed values to the GPU on the exact frames they change.</li>
+        <li><strong>For Static Scenery (e.g., Barrels, Rocks):</strong> Unchecking <code>Is Animated</code> causes the component to push the data once during initialization (<code>Start</code>), and then completely deactivate its own <code>Update()</code> loop (<code>enabled = false</code>). This eliminates the common performance issue of Unity-to-Managed lifecycle overhead across thousands of static scene props, leaving a net-zero impact on your CPU frame time.</li>
+    </ul>
+
+    <h3>2. Nested Hierarchy Protection</h3>
+    <p>When managing complex or modular structures (such as a siege cannon prefab containing a custom lit fuse grandchild), standard recursive scans like <code>GetComponentsInChildren&lt;Renderer&gt;()</code> would normally cause a parent script to hijack child renderers, wiping out their individual colors.</p>
+
+    <p>To support nested workflows out of the box, <code>DPT_ShaderVariation</code> implements a bottom-up hierarchy verification filter during its caching state:</p>
+
+<pre><code>if (rend.GetComponentInParent&lt;DPT_ShaderVariation&gt;() == this)
+{
+    filteredRenderers.Add(rend);
+}</code></pre>
+
+    <p>This safety filter ensures that when a parent component scans downward for meshes, it checks whether <em>it</em> is the closest active variation manager. If a closer <code>DPT_ShaderVariation</code> script is found on a sub-object (like the fuse), the parent script gracefully steps aside. This allows independent color control over sub-assemblies (like a burning fuse animating from bright yellow to dark ash) while the main parent continues to manage the structural body colors (like the cannon wood carriage and iron barrel) without conflict.</p>
+
+    <h2>Performance &amp; Optimization Compatibility</h2>
+    <p>The system integrates natively with modern rendering configurations to protect batch boundaries:</p>
+     
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 35%;">Render Path</th>
+                <th style="width: 15%;">Compatible</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>GPU Resident Drawer (Unity 6+)</strong></td>
+                <td>Yes</td>
+                <td><strong>Fully supported and highly recommended.</strong> Objects are submitted to the GPU once and managed completely on the hardware, lowering CPU overhead to near zero.</td>
+            </tr>
+            <tr>
+                <td><strong>SRP Batcher (URP / HDRP)</strong></td>
+                <td>Yes</td>
+                <td>Fully supported. Keeps CPU draw calls unified across shared shader keywords.</td>
+            </tr>
+            <tr>
+                <td><strong>GPU Instancing</strong></td>
+                <td>Yes</td>
+                <td>Fully compatible. Because all instances share one identical material file, standard GPU instancing loops remain active.</td>
+            </tr>
+            <tr>
+                <td><strong>Static Batching</strong></td>
+                <td>No</td>
+                <td>Not compatible with GPU-driven workflows. <strong>Do not mark painted objects as "Batching Static"</strong> in the inspector, as mesh-merging prevents the GPU Resident Drawer from instancing individual props. Use the modern GPU paths instead.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>MaterialPropertyBlock Dynamic Fallback Sequence</h3>
+    <p>If you choose to use standard Unity materials (e.g., URP Default Lit) instead of a custom shader optimized for the <code>unity_RendererUserValue</code> channel, the component automatically executes a fallback pipeline. It unlocks the <code>Color Property Name</code> string field, detects standard material color signatures (like <code>_BaseColor</code> or <code>_Color</code>), and pushes color modifications dynamically on a per-instance basis using a <code>MaterialPropertyBlock</code>. This method bypasses asset duplication paths and preserves memory, though it lacks the raw hardware-level efficiency of the native RSUV stream.</p>
+
+    <h2>Troubleshooting</h2>
+
+    <div class="troubleshooting-q">The color changes in the Inspector but does not update on the mesh</div>
+    <div class="troubleshooting-a">Ensure that the mesh isn't marked as <strong>Batching Static</strong> (which bakes transforms and breaks the per-instance data stream). Additionally, verify that your shader natively supports the <code>unity_RendererUserValue</code> channel, or matches the string designated in the <code>Color Property Name</code> field when using fallback standard materials.</div>
+
+    <div class="troubleshooting-q">An Animator is changing the color property but nothing changes on screen</div>
+    <div class="troubleshooting-a">Check the <strong>Is Animated</strong> toggle in the component inspector. If this is disabled, the script goes to sleep after initialization and will not poll for backing field changes caused by the animation timeline.</div>
+
+    <div class="troubleshooting-q">A parent script is overwriting my sub-object color animations</div>
+    <div class="troubleshooting-a">Ensure that the sub-object has its own <code>DPT_ShaderVariation</code> component attached. The nested hierarchy protection rule relies on the sub-object finding its own script manager during setup queries to cleanly block parent overrides.</div>
+
+    <hr class="divider">
+
+    <h2>Support &amp; Custom Pipeline Integration</h2>
+    <p>For framework technical art passes, custom vertex modifications, shader alterations, or support enquiries regarding package integration, reach out via the primary help channel: <strong>support.dptgames [at] gmail.com</strong>. Specify <code>[Support Request]</code> or <code>[Contract Inquiry]</code> depending on your implementation goals.</p>
+
+</body>
+</html>

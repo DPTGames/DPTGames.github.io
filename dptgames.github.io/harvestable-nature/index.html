@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DPT Games Harvestable Scenery Pack - User Guide</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0; padding: 40px;
+            font-size: 11pt; line-height: 1.5;
+        }
+        h1, h2, h3 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 15px; margin-bottom: 5px; page-break-after: avoid; }
+        .troubleshooting-a { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <h1>DPT Games Harvestable Scenery Pack</h1>
+    <p>This package features a production-ready, highly optimized system built for modern game workflows. It leverages standalone vertex-driven vegetation animation alongside a modular interaction framework for multi-mesh object harvesting.</p>
+
+    <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
+        <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
+        <a href="#setup-dependencies" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Setup & Dependencies</a>
+        <a href="#sandbox-navigation" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">2. Sandbox Navigation</a>
+        <a href="#wind-system" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">3. Vegetation Wind System</a>
+        <a href="#harvestable-system" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">4. HarvestableProps System</a>
+        <a href="#inspector-reference" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">5. Inspector Reference</a>
+        <a href="#tree-fall-guide" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">6. Tree Fall Setup Guide</a>
+        <a href="#resource-presets" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">7. Resource Presets</a>
+        <a href="#custom-prefabs" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">8. Creating Custom Prefabs</a>
+        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">9. Troubleshooting Notes</a>
+        <a href="#support" style="color: #a5f3fc; text-decoration: none;">10. Support & Contracts</a>
+    </div>
+
+    <h2 id="setup-dependencies">1. Setup & Dependencies</h2>
+    
+    <div class="warning">
+        <strong>The Unity Input System:</strong> The included testing sandbox environment relies on Unity's modern <code>UnityEngine.InputSystem</code>. If your project uses the Legacy Input Manager, opening the demonstration environment will generate compiler errors.
+    </div>
+
+    <ul>
+        <li><strong>Installing:</strong> Navigate to Window > Package Manager, select Unity Registry, search for <strong>Input System</strong>, and click Install. If prompted to restart the editor, select "Yes."</li>
+        <li><strong>Opting Out:</strong> If you do not wish to use the new Input System in your project, you can safely delete the <code>Demo_CameraController.cs</code> script. The core runtime scripts, shaders, materials, and 3D assets carry zero external dependencies and will function perfectly without it.</li>
+    </ul>
+
+    <h2 id="sandbox-navigation">2. Sandbox Navigation & Control</h2>
+    <p>A comprehensive demonstration environment is included to let you test the interaction mechanics and wind simulation parameters directly in real-time.</p>
+
+    <h3>Navigation Inputs</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Action</th>
+                <th>Input</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Look Around</strong></td>
+                <td>Hold Right-Click + Mouse (or Gamepad Right Stick)</td>
+            </tr>
+            <tr>
+                <td><strong>Move</strong></td>
+                <td>W, A, S, D (or Gamepad Left Stick)</td>
+            </tr>
+            <tr>
+                <td><strong>Altitude</strong></td>
+                <td>E to fly Up, Q to fly Down</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Speed Controls</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Action</th>
+                <th>Input</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Turbo Speed</strong></td>
+                <td>Hold Left Shift</td>
+            </tr>
+            <tr>
+                <td><strong>Adjust Base Speed</strong></td>
+                <td>Tap the Home / End keys</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Interaction Mechanics</h3>
+    <p><strong>Chop/Break:</strong> Position the crosshair over a compatible tree or rock asset and Left-Click (or press Gamepad West Button) to execute the harvest routine.</p>
+    <div class="note">
+        <strong>Range Safety:</strong> The interaction system verifies bounding radii; you must move within the configured interaction range to update the target asset state.
+    </div>
+
+    <h2 id="wind-system">3. The Vegetation Wind System</h2>
+    <p>The Nature Pack uses a specialized vertex shader displacement pipeline to simulate realistic foliage movement completely standalone. Rather than forcing scene management overhead or running heavy update scripts on the CPU, the animation cycles execute entirely on the GPU using native Unity time inputs.</p>
+
+    <h3>System Architecture & Mechanics:</h3>
+    <ul>
+        <li><strong>Zero Scene Dependencies:</strong> The wind system is entirely self-contained within the shader material. There are no manager prefabs or script components to maintain in your hierarchy, making the assets completely plug-and-play across any scene.</li>
+        <li><strong>Dual-Wave Superposition:</strong> To prevent repetitive, mechanical "pendulum" movements, the shader combines a slow, broad macro-sway with a secondary, rapid micro-flutter phase. These asynchronous waves continuously distort each other to produce organic, non-rhythmic turbulence natively.</li>
+        <li><strong>Procedural Height Anchoring:</strong> Foliage vertex shaders automatically analyze local object space heights using packed negative vertex windows. Vertices sitting at the baseline pivot remain firmly stationary, while the upper canopies and blades scale smoothly into the swaying animation.</li>
+    </ul>
+
+    <h3>Adjusting Wind Behavior:</h3>
+    <ol>
+        <li>Select the target vegetation asset material in your Project window.</li>
+        <li>Ensure that the <strong>Enable Grass Waving</strong> checkbox toggle is active in the inspector.</li>
+        <li>Adjust the <strong>Wind Strength</strong> slider property to dynamically scale the physical bending distance and velocity of the asset.</li>
+    </ol>
+
+    <div class="note">
+        <strong>Optimization Tip:</strong> When the <strong>Enable Grass Waving</strong> checkbox toggle is disabled on a material, Unity drops the compilation path in favor of a static shader variant. The GPU skips all wind nodes and vertex addition evaluations completely, ensuring zero performance penalty on non-vegetation structures.
+    </div>
+
+    <h2 id="harvestable-system">4. The DPT_HarvestableProps System</h2>
+    <p>Resource gathering nodes handle state updates cleanly via the modular <code>DPT_HarvestableProps.cs</code> script layer. This system features dynamic custom inspector interfaces handled via <code>DPT_HarvestablePropsEditor.cs</code> to streamline asset configuration.</p>
+
+    <h3>System Core Architecture:</h3>
+    <ul>
+        <li><strong>Multi-Object Progressive Harvesting:</strong> The system supports an array of harvestable child objects on a single prop. Each interaction randomly selects and removes one object from the remaining pool, allowing resources to deplete incrementally — for example, individual ore deposits on a rock face can be mined one at a time until the rock is fully exhausted.</li>
+        <li><strong>Direct Variable Assignment:</strong> Mesh swapping operates explicitly via referenced GameObject fields inside the inspector slots, bypassing generic string searches or complex hierarchy scans.</li>
+        <li><strong>Dynamic Inspector Formatting:</strong> The inspector interface alters itself contextually based on your configurations. Animation sub-parameters automatically display or hide themselves depending on the selected transition mode to keep workflows clean.</li>
+        <li><strong>Single Material Compatibility:</strong> Audio variance parameters, structural animation mechanics, and particle instantiation routes have been authored to run entirely independent of material manipulation, protecting your SRP batching passes and maintaining maximum drawing performance.</li>
+        <li><strong>Hierarchy-Aware Raycasting:</strong> Click detection uses <code>GetComponentInParent</code> to walk up the collision hierarchy, meaning clicks anywhere on a prop — trunk, canopy, ore nodes, or any child mesh — correctly resolve back to the root harvestable component without requiring a collider specifically on the root object.</li>
+    </ul>
+
+    <h3 id="inspector-reference">5. Inspector Configuration Reference</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 25%;">Property Block</th>
+                <th style="width: 30%;">Field Name</th>
+                <th>Functional Impact</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="3"><strong>Core Settings</strong></td>
+                <td><code>Objects To Disable</code></td>
+                <td>An array of harvestable mesh child objects. Each click randomly selects and removes one from the pool. The prop is fully harvested when all objects in the array have been removed. For single-state props, assign just one entry.</td>
+            </tr>
+            <tr>
+                <td><code>Object To Enable</code></td>
+                <td>The harvested stub, trunk, or empty bush variant to enable once the final object in the array has been removed (Optional).</td>
+            </tr>
+            <tr>
+                <td><code>Disable All At Once</code></td>
+                <td>When enabled, all objects assigned to Objects To Disable are removed simultaneously on the first harvest interaction. When disabled, objects are removed one at a time, allowing progressive depletion of resource nodes such as ore deposits (Optional).</td>
+            </tr>
+            <tr>
+                <td rowspan="2"><strong>Interaction Parameters</strong></td>
+                <td><code>Harvest Range</code></td>
+                <td>Maximum threshold distance permitted between the target object and the player tracking system.</td>
+            </tr>
+            <tr>
+                <td><code>Player Transform</code></td>
+                <td>The target character/camera root reference checked against the range limits. Defaults to Main Camera if unassigned.</td>
+            </tr>
+            <tr>
+                <td rowspan="3"><strong>Audio Configuration</strong></td>
+                <td><code>Harvest Sounds</code></td>
+                <td>An array pool of AudioClips from which the system randomly selects a resource impact audio track upon each individual harvest interaction.</td>
+            </tr>
+            <tr>
+                <td><code>Base Pitch</code></td>
+                <td>The standard playback pitch baseline anchor for the local AudioSource component.</td>
+            </tr>
+            <tr>
+                <td><code>Pitch Variance</code></td>
+                <td>A slider parameter bounding how much the pitch randomly deviates above or below the base pitch to avoid auditory repetition.</td>
+            </tr>
+            <tr>
+                <td rowspan="5"><strong>Visuals & Animation</strong></td>
+                <td><code>Particle Prefab</code></td>
+                <td>Optional ParticleSystem asset spawned at the object location on each individual harvest interaction.</td>
+            </tr>
+            <tr>
+                <td><code>Particle Spawn Target</code></td>
+                <td>Optional game object to set as the spawn location for particle effects.</td>
+            </tr>
+            <tr>
+                <td><code>Particle Tint</code></td>
+                <td>Color data passed down cleanly into the instantiated particle vertex streams at runtime without duplicating materials.</td>
+            </tr>
+            <tr>
+                <td><code>Particle Scale</code></td>
+                <td>Multiplies both the physical size and the explosion velocity of particles to match varied environmental object volumes.</td>
+            </tr>
+            <tr>
+                <td><code>Particle Offset</code></td>
+                <td>Positional coordinate adjustments applied relative to the structural center of the object's physical collider space.</td>
+            </tr>
+            <tr>
+                <td rowspan="3"><strong>Stylized Animation</strong></td>
+                <td><code>Animation Mode</code></td>
+                <td>Transition setting dropdown. Offers <strong>Instant</strong> state switching, <strong>Uniform Scale</strong> reduction, a flattening <strong>Squash and Sink</strong> profile, or the directional <strong>Tree Fall</strong> mode. See Tree Fall Settings below.</td>
+            </tr>
+            <tr>
+                <td><code>Transition Duration</code></td>
+                <td>The lifespan window of the visual movement loop measured in seconds. Hidden if Mode is set to Instant or Tree Fall.</td>
+            </tr>
+            <tr>
+                <td><code>Scale Curve</code></td>
+                <td>An editable AnimationCurve regulating the velocity timeline pacing. Supports elastic overshoots and bouncy pops. Hidden if Mode is Instant or Tree Fall.</td>
+            </tr>
+            <tr>
+                <td rowspan="7"><strong>Tree Fall Settings</strong><br><em>(visible when Animation Mode is set to Tree Fall)</em></td>
+                <td><code>Log Object</code></td>
+                <td>The log mesh GameObject to activate when the tree is felled. The system enables it at runtime and rotates it 90° away from the player to simulate a natural fall. The log should be set up upright in the prefab as an inactive child object — do not pre-position it in its resting state.</td>
+            </tr>
+            <tr>
+                <td><code>Use Physics Fall</code></td>
+                <td>Uses Rigidbody physics to topple the log naturally instead of using the built-in animated fall rotation. Requires a Rigidbody component on the assigned Log Object.</td>
+            </tr>
+            <tr>
+                <td><code>Fall Duration</code></td>
+                <td>How long the fall rotation takes in seconds. Recommended range: 0.5–1.5 seconds.</td>
+            </tr>
+            <tr>
+                <td><code>Fall Curve</code></td>
+                <td>An AnimationCurve controlling the easing of the fall rotation. An ease-in profile produces a natural slow-start, accelerating-fall feel.</td>
+            </tr>
+            <tr>
+                <td><code>Sink After Fall</code></td>
+                <td>If enabled, the log will sink below ground level and deactivate after landing, useful for scenes where log persistence is not required.</td>
+            </tr>
+            <tr>
+                <td><code>Sink Delay</code></td>
+                <td>How long the log rests on the ground before sinking begins. Only visible when Sink After Fall is enabled.</td>
+            </tr>
+            <tr>
+                <td><code>Sink Duration</code></td>
+                <td>How long the sink animation takes to complete. Only visible when Sink After Fall is enabled.</td>
+            </tr>
+            <tr>
+                <td><strong>Callback Events</strong></td>
+                <td><code>On Harvest</code></td>
+                <td>A customizable UnityEvent inspector container that fires when the <em>final</em> object in the array is removed, signalling the prop is fully exhausted. Use this to trigger inventory updates, score additions, or respawn timers.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3 id="tree-fall-guide">6. Tree Fall Mode — Setup Guide</h3>
+    <ol>
+        <li>Set <strong>Animation Mode</strong> to <code>Tree Fall</code> on your tree prefab's <code>DPT_HarvestableProps</code> component.</li>
+        <li>Assign the standing tree mesh(es) into the <strong>Objects To Disable</strong> array as normal.</li>
+        <li>Assign your log mesh GameObject into the <strong>Log Object</strong> slot. It should exist as an <strong>inactive child object</strong> of the prefab, positioned upright near the base of the tree — the same orientation as the standing trunk.</li>
+        <li>Do <strong>not</strong> pre-position the log in its fallen resting state. At runtime, the system activates the log at its current transform and rotates it <strong>90° away from the player</strong> to produce the fall — the fall direction is calculated automatically.</li>
+        <li>Choose whether to use the built-in animated fall system or enable <strong>Use Physics Fall</strong> for Rigidbody-driven falling behaviour.</li>
+        <li>Optionally enable <strong>Sink After Fall</strong> if you want the log to disappear after a delay rather than persist in the scene.</li>
+    </ol>
+
+    <div class="note">
+        <strong>Log Pivot Point:</strong> Ensure the log mesh has its pivot positioned at the <strong>base/stump end</strong> of the mesh in your modelling application, not at the geometric centre. A centred pivot causes the rotation to originate from the middle of the log rather than the cut end, producing an unrealistic spin.
+    </div>
+
+    <div class="note">
+        <strong>Log Collider / Physics Fall:</strong> If <strong>Use Physics Fall</strong> is enabled, the log must contain a <strong>Rigidbody</strong> component in order to respond to physics forces correctly. If no Rigidbody is present, the system will log a warning and skip physics-based motion.
+    </div>
+
+    <h3 id="resource-presets">7. Included Resource Presets</h3>
+    <p>The asset package includes pre-configured resource profiles ready to map into your custom asset overrides:</p>
+    <ul>
+        <li><strong>Mining Profile:</strong> Uses the multi-object array system with individual ore node GameObjects assigned per rock. Each click removes one ore deposit.</li>
+        <li><strong>Foliage Profiles:</strong> Optimized pop setups mapped out for berry picking or twig snapping activities using snappy, vibrant coloration pipelines.</li>
+        <li><strong>Lumber Profile:</strong> Configured to use the <em>Tree Fall</em> animation mode. The standing tree mesh is assigned to Objects To Disable, with the corresponding log mesh assigned to Log Object. Paired with deep tree-falling impact audio.</li>
+    </ul>
+
+    <h3 id="custom-prefabs">8. Creating Custom Harvestable Prefabs:</h3>
+    <ol>
+        <li>Attach the <code>DPT_HarvestableProps</code> component to the root of your target entity prefab. This automatically adds required <code>Collider</code> and <code>AudioSource</code> requirements.</li>
+        <li>Assign your harvestable child mesh objects into the <strong>Objects To Disable</strong> array. For a single-state prop assign one entry; for multi-stage props (e.g. a rock with multiple ore deposits) assign each removable object as a separate array entry.</li>
+        <li>Optionally assign a post-harvest mesh into the <strong>Object To Enable</strong> slot — this activates when the final array entry is removed.</li>
+        <li>Select your preferred transition profile inside the <strong>Animation Mode</strong> dropdown menu.</li>
+        <li>Populate the <strong>Harvest Sounds</strong> array pool with appropriate impact sound clips, and use the <strong>Pitch Variance</strong> slider to configure audio variety.</li>
+        <li>Assign your shared particle effect asset into the <strong>Particle Prefab</strong> slot, adjusting the <strong>Particle Tint</strong> color, <strong>Particle Scale</strong> multiplier, and <strong>Particle Offset</strong> position to perfectly frame the prop's spatial boundaries.</li>
+    </ol>
+
+    <div class="note">
+        <strong>Raycasting Requirement:</strong> The camera must possess an active <code>Physics Raycaster</code> component to translate cursor coordinates to interaction colliders accurately. Click detection resolves through the full GameObject hierarchy — clicking any child mesh, collider, or ore node on a prefab will correctly register against the root <code>DPT_HarvestableProps</code> component.
+    </div>
+
+    <h2 id="troubleshooting">9. Technical Notes & Troubleshooting</h2>
+
+    <div class="troubleshooting-q">"Foliage assets remain completely stationary"</div>
+    <div class="troubleshooting-a">
+        <ul>
+            <li><strong>Material Toggles:</strong> Open your asset material in the inspector and verify that <strong>Enable Grass Waving</strong> is checked.</li>
+            <li><strong>Strength Value:</strong> Check the <strong>Wind Strength</strong> property slider on your material. If this slider is left at exactly <code>0.0</code>, it multiplies the internal wave mathematical calculation by zero, completely neutralizing the movement.</li>
+        </ul>
+    </div>
+
+    <div class="troubleshooting-q">"Nothing happens when I click resource nodes"</div>
+    <div class="troubleshooting-a">
+        <ul>
+            <li><strong>Physics Raycaster:</strong> Confirm your active Main Camera object carries a <code>Physics Raycaster</code> component. Without this, cursor operations cannot evaluate 3D world projections.</li>
+            <li><strong>Collider Verification:</strong> Ensure your resource prefabs contain valid <code>Collider</code> bounds that encase the target interaction geometry. The collider can exist on the root or any child object — the system will resolve upward through the hierarchy automatically.</li>
+            <li><strong>Distance Constraints:</strong> Move your tracking system closer to the target object; the event will fire only if your spatial distance falls below your configured <strong>Harvest Range</strong>.</li>
+            <li><strong>Input System:</strong> Confirm the Input System package is installed via Window > Package Manager. If using the New Input System, ensure Active Input Handling in Project Settings > Player is set to either <strong>Input System Package (New)</strong> or <strong>Both</strong>.</li>
+        </ul>
+    </div>
+
+    <div class="troubleshooting-q">"Only the first click does anything, subsequent clicks are ignored"</div>
+    <div class="troubleshooting-a">
+        <ul>
+            <li><strong>Objects To Disable Array:</strong> Verify that all intended harvestable child objects are assigned into the <strong>Objects To Disable</strong> array in the inspector. The system tracks remaining objects at runtime from this array — entries missing at setup time will not be registered.</li>
+            <li><strong>Animation Blocking:</strong> Clicks are intentionally blocked while a transition animation is playing to prevent state conflicts. If your <strong>Transition Duration</strong> or <strong>Fall Duration</strong> is set very high, wait for the animation to complete before clicking again.</li>
+        </ul>
+    </div>
+
+    <div class="troubleshooting-q">"Tree Fall mode — the log spins in place rather than falling over"</div>
+    <div class="troubleshooting-a">
+        <ul>
+            <li><strong>Log Pivot Point:</strong> Ensure the log mesh has its pivot positioned at the <strong>base/stump end</strong> of the mesh in your modelling application, not at the geometric centre. A centred pivot causes the rotation to originate from the middle of the log rather than the cut end.</li>
+            <li><strong>Player Transform:</strong> The fall direction is calculated away from the player. If <strong>Player Transform</strong> is unassigned and no Main Camera is found, the tree will fall along the prefab's forward axis as a fallback.</li>
+        </ul>
+    </div>
+
+    <div class="troubleshooting-q">"Particles are hidden inside the mesh or underground upon harvest"</div>
+    <div class="troubleshooting-a">
+        <ul>
+            <li><strong>Bounds Centering:</strong> The system automatically shifts spawn roots up to <code>Collider.bounds.center</code> to clear standard ground pivots. Ensure your asset has an accurate collider component setup attached.</li>
+            <li><strong>Offset Constraints:</strong> For tall meshes or wide structures, use the <strong>Particle Offset</strong> property vector inside the inspector to translate the emission node coordinates until they sit outside the asset's structural volume.</li>
+        </ul>
+    </div>
+
+    <div class="troubleshooting-q">"Particles spawn but do not burst outward or appear too tiny"</div>
+    <div class="troubleshooting-a">
+        <ul>
+            <li><strong>Prefab Scaling Mode:</strong> Open your particle system prefab and ensure the <strong>Scaling Mode</strong> dropdown option in the Main module is explicitly configured to <strong>Hierarchy</strong>.</li>
+            <li><strong>Scale Adjustment:</strong> Increase the <strong>Particle Scale</strong> value on the prop's script layer. This dynamically scales up particle sizing parameters and internal structural speed vectors to clear heavy prop boundaries easily.</li>
+        </ul>
+    </div>
+
+    <div class="troubleshooting-q">Compiler Errors regarding Input Layouts</div>
+    <div class="troubleshooting-a">Open the Package Manager, select the Unity Registry view, and confirm that the modern <strong>Input System</strong> package is successfully downloaded and initialized.</div>
+
+    <div class="note" style="border-left-color: #38bdf8;">
+        <strong>Character Controller Integration:</strong> To port this infrastructure to a standard first-person or third-person character rig, transfer the <code>Physics Raycaster</code> to your character's primary camera object. The <code>DPT_HarvestableProps</code> scripts require no modifications; they automatically target the designated <code>MainCamera</code> transform reference for all target distance checks.
+    </div>
+
+    <h2 id="support">10. Support &amp; Custom Pipeline Integration</h2>
+    <p>If your project requires external or custom 3D models to be fully integrated into the DPT ecosystem—including custom vertex-data packing, procedural wood grain mapping, normal array configuration, advanced GPU wind system implementation, or any other bespoke features—freelance technical art services are available.</p>
+    <p>For freelance modeling contract inquiries, tech-art pipeline consulting, or custom asset optimization passes, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Contract Inquiry]</code>.</p>
+
+    <div class="note">
+        <strong>Standard Asset Support:</strong><br>
+        For standard package bug reports, technical asset setup issues, and publisher licensing enquiries, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Support Request]</code>.
+    </div>
+
+</body>
+</html>
