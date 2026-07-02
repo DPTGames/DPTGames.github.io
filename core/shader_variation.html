@@ -168,8 +168,8 @@
                 <td>The shader variable string targeted for fallback standard materials (e.g., <code>_BaseColor</code> for standard URP shaders). <strong>This property is completely locked and non-enterable if a custom DPT material is detected on the mesh</strong>, as it is only intended for non-DPT fallback scenarios.</td>
             </tr>
             <tr>
-                <td><strong>Is Animated</strong></td>
-                <td><strong>Optimization Switch.</strong> Enables or disables the internal per-frame <code>Update()</code> monitoring system. Check this box <em>only</em> for assets driven by an Animator component (such as a burning fuse). Leave unchecked for static world props to eliminate CPU thread overhead entirely.</td>
+                <td><strong>Update Every Frame</strong></td>
+                <td><strong>Performance Warning.</strong> Enables the per-frame <code>Update()</code> loop to track dynamic color changes. Only enable this for assets whose colors change during gameplay (e.g., damage flashing, pulsing). Leave unchecked for standard props to eliminate CPU overhead entirely. <em>(Formerly Is Animated)</em></td>
             </tr>
         </tbody>
     </table>
@@ -180,10 +180,10 @@
 
     <h2>Advanced Architecture Features</h2>
 
-    <h3>1. Embedded Animation Support (Is Animated)</h3>
-    <p>When you animate a script field inside the Unity Animator, the animation system directly modifies the serialized backing field (<code>instanceColor</code>). This completely bypasses standard C# public property setters (<code>InstanceColor</code>), which normally prevents scripts from knowing they need to push updates to the GPU.</p>
+    <h3>1. Dynamic Color Updates (Update Every Frame)</h3>
+    <p>When you animate a script field inside the Unity Animator or alter it via external scripts, the system directly modifies the serialized backing field (<code>instanceColor</code>). This bypasses standard C# public property setters (<code>InstanceColor</code>), which normally prevents scripts from knowing they need to push updates to the GPU.</p>
 
-    <p>To solve this efficiently without killing performance, checking the <strong>Is Animated</strong> toggle activates an internal tracking loop:</p>
+    <p>To solve this efficiently without killing performance, checking the <strong>Update Every Frame</strong> toggle activates an internal tracking loop:</p>
 
 <pre><code>void Update()
 {
@@ -195,21 +195,28 @@
 }</code></pre>
 
     <ul>
-        <li><strong>For Animated Props (e.g., Cannon Fuses):</strong> Checking <code>Is Animated</code> keeps the <code>Update()</code> check functional. The component catches field alterations made by the Animator keyframe intervals instantly and pushes the packed values to the GPU on the exact frames they change.</li>
-        <li><strong>For Static Scenery (e.g., Barrels, Rocks):</strong> Unchecking <code>Is Animated</code> causes the component to push the data once during initialization (<code>Start</code>), and then completely deactivate its own <code>Update()</code> loop (<code>enabled = false</code>). This eliminates the common performance issue of Unity-to-Managed lifecycle overhead across thousands of static scene props, leaving a net-zero impact on your CPU frame time.</li>
+        <li><strong>For Dynamic Props (e.g., Cannon Fuses, Damage Flashes):</strong> Checking <code>Update Every Frame</code> keeps the update loop active. The component catches field alterations made by the Animator or other scripts instantly and pushes the packed values to the GPU on the exact frames they change.</li>
+        <li><strong>For Standard Scenery (e.g., Barrels, Rocks):</strong> Unchecking <code>Update Every Frame</code> causes the component to push the data once during initialization, and then completely deactivate its own logic (<code>enabled = false</code>). This eliminates the common performance issue of Unity-to-Managed lifecycle overhead across thousands of scene props, leaving a net-zero impact on your CPU frame time.</li>
     </ul>
 
-    <h3>2. Nested Hierarchy Protection</h3>
-    <p>When managing complex or modular structures (such as a siege cannon prefab containing a custom lit fuse grandchild), standard recursive scans like <code>GetComponentsInChildren&lt;Renderer&gt;()</code> would normally cause a parent script to hijack child renderers, wiping out their individual colors.</p>
+    <h3>2. Zero-Allocation Initialization</h3>
+    <p>To prevent garbage collection (GC) spikes when instantiating large quantities of customized props at runtime, the component avoids array allocations during its setup phase. By utilizing pre-allocated, non-serialized generic lists (<code>tempRendererList</code> and <code>filteredRenderers</code>), the script scans the hierarchy and builds its internal renderer cache with zero memory allocation overhead.</p>
+
+    <h3>3. Nested Hierarchy Protection</h3>
+    <p>When managing complex or modular structures (such as a siege engine prefab containing a custom lit fuse grandchild), standard recursive scans like <code>GetComponentsInChildren&lt;Renderer&gt;()</code> would normally cause a parent script to hijack child renderers, wiping out their individual colors.</p>
 
     <p>To support nested workflows out of the box, <code>DPT_ShaderVariation</code> implements a bottom-up hierarchy verification filter during its caching state:</p>
 
-<pre><code>if (rend.GetComponentInParent&lt;DPT_ShaderVariation&gt;() == this)
+<pre><code>for (int i = 0; i < tempRendererList.Count; i++)
 {
-    filteredRenderers.Add(rend);
+    Renderer rend = tempRendererList[i];
+    if (rend != null && rend.GetComponentInParent&lt;DPT_ShaderVariation&gt;() == this)
+    {
+        filteredRenderers.Add(rend);
+    }
 }</code></pre>
 
-    <p>This safety filter ensures that when a parent component scans downward for meshes, it checks whether <em>it</em> is the closest active variation manager. If a closer <code>DPT_ShaderVariation</code> script is found on a sub-object (like the fuse), the parent script gracefully steps aside. This allows independent color control over sub-assemblies (like a burning fuse animating from bright yellow to dark ash) while the main parent continues to manage the structural body colors (like the cannon wood carriage and iron barrel) without conflict.</p>
+    <p>This safety filter ensures that when a parent component scans downward for meshes, it checks whether <em>it</em> is the closest active variation manager. If a closer <code>DPT_ShaderVariation</code> script is found on a sub-object (like the fuse), the parent script gracefully steps aside. This allows independent color control over sub-assemblies while the main parent continues to manage the structural body colors without conflict.</p>
 
     <h2>Performance &amp; Optimization Compatibility</h2>
     <p>The system integrates natively with modern rendering configurations to protect batch boundaries:</p>
@@ -223,11 +230,11 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><strong>GPU Resident Drawer (Unity 6+)</strong></td>
-                <td>Yes</td>
-                <td><strong>Fully supported and highly recommended.</strong> Objects are submitted to the GPU once and managed completely on the hardware, lowering CPU overhead to near zero.</td>
-            </tr>
+     <tr>
+    <td><strong>GPU Resident Drawer (Unity 6+)</strong></td>
+    <td><strong>Requires VCCore</strong></td>
+    <td><strong>Fully supported ONLY when using the DPT VCCore material</strong> (or custom RSUV-enabled shaders). If you use standard fallback materials like URP Default Lit, the required Material Property Block will break the object out of the GPU Resident Drawer entirely.</td>
+</tr>
             <tr>
                 <td><strong>SRP Batcher (URP / HDRP)</strong></td>
                 <td>Yes</td>
@@ -246,16 +253,19 @@
         </tbody>
     </table>
 
-    <h3>MaterialPropertyBlock Dynamic Fallback Sequence</h3>
-    <p>If you choose to use standard Unity materials (e.g., URP Default Lit) instead of a custom shader optimized for the <code>unity_RendererUserValue</code> channel, the component automatically executes a fallback pipeline. It unlocks the <code>Color Property Name</code> string field, detects standard material color signatures (like <code>_BaseColor</code> or <code>_Color</code>), and pushes color modifications dynamically on a per-instance basis using a <code>MaterialPropertyBlock</code>. This method bypasses asset duplication paths and preserves memory, though it lacks the raw hardware-level efficiency of the native RSUV stream.</p>
+   <h3>MaterialPropertyBlock Dynamic Fallback Sequence</h3>
+<p>If you choose to use standard Unity materials (e.g., URP Default Lit) instead of the optimized <code>VCCore</code> material, the component automatically executes a fallback pipeline. It unlocks the <code>Color Property Name</code> string field, detects standard material color signatures (like <code>_BaseColor</code> or <code>_Color</code>), and pushes color modifications dynamically on a per-instance basis using a <code>MaterialPropertyBlock</code> (MPB).</p>
 
+<div class="warning">
+    <strong>CRITICAL PIPELINE WARNING:</strong> While the MPB fallback preserves memory by avoiding material duplication, <strong>Material Property Blocks fundamentally break both the GPU Resident Drawer and the SRP Batcher.</strong> If you are building a modern, highly instanced game in Unity 6+, you <em>must</em> use the provided VCCore material to keep your props on the fast path.
+</div>
     <h2>Troubleshooting</h2>
 
     <div class="troubleshooting-q">The color changes in the Inspector but does not update on the mesh</div>
     <div class="troubleshooting-a">Ensure that the mesh isn't marked as <strong>Batching Static</strong> (which bakes transforms and breaks the per-instance data stream). Additionally, verify that your shader natively supports the <code>unity_RendererUserValue</code> channel, or matches the string designated in the <code>Color Property Name</code> field when using fallback standard materials.</div>
 
-    <div class="troubleshooting-q">An Animator is changing the color property but nothing changes on screen</div>
-    <div class="troubleshooting-a">Check the <strong>Is Animated</strong> toggle in the component inspector. If this is disabled, the script goes to sleep after initialization and will not poll for backing field changes caused by the animation timeline.</div>
+    <div class="troubleshooting-q">A script or Animator is changing the color property but nothing changes on screen</div>
+    <div class="troubleshooting-a">Check the <strong>Update Every Frame</strong> toggle in the component inspector. If this is disabled, the script disables itself after initialization and will not poll for backing field changes caused by an animation timeline or external script modifiers.</div>
 
     <div class="troubleshooting-q">A parent script is overwriting my sub-object color animations</div>
     <div class="troubleshooting-a">Ensure that the sub-object has its own <code>DPT_ShaderVariation</code> component attached. The nested hierarchy protection rule relies on the sub-object finding its own script manager during setup queries to cleanly block parent overrides.</div>
