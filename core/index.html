@@ -145,7 +145,7 @@
 
     <p>If a mesh does not use a normal map (vertex alpha of 0), the shader's internal branching dynamically bypasses the normal mapping logic entirely, ensuring zero GPU overhead.</p>
 
-    <h3>Syncing the Normal Array</h3>
+<h3>Syncing the Normal Array</h3>
     <p>When you install a new DPT package that includes normal maps, the shared array needs to be rebuilt to include the new atlas. The Material Inspector handles this automatically:</p>
 
     <ol>
@@ -155,6 +155,13 @@
         <li>If newly installed packages are detected, a warning will appear listing the discovered atlases and their assigned slot numbers.</li>
         <li>Press <strong>Sync Normal Packages</strong> to rebuild and assign the array. The rebuilt asset is saved alongside your Master Material.</li>
     </ol>
+
+    <div class="warning">
+        <strong>Critical Build Warning: Project Hygiene &amp; VRAM</strong><br><br>
+        <p>The Master Normal Array compiles <em>all</em> detected DPT normal maps across your entire project into a single asset. While this makes the editor workflow seamless, Unity will load this entire array into VRAM at runtime if even one object references it.</p>
+        <p>If you have DPT asset packs sitting in your project folder that you are not actively using in your scene, their textures will still be compiled into your final game build, causing unnecessary memory bloat.</p>
+        <p><strong>Before your final build:</strong> Delete any unused DPT packages from your project directory and press <strong>Sync Normal Packages</strong> again to strip the dead weight and protect your memory budget.</p>
+    </div>
 
     <div class="note">
         <strong>Slot Order:</strong><br><br>
