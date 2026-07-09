@@ -18,36 +18,13 @@
         h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
         h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
         p { margin: 0 0 12px 0; }
-        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
-        tr { page-break-inside: avoid; }
-        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
-        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
-        td { background-color: #0f172a; }
-        td strong { color: #bae6fd; }
         ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
         li { margin-bottom: 6px; }
         .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
         .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
         .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        .perf { background-color: #0c1f12; border-left: 4px solid #4ade80; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
         code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
         code { padding: 2px 5px; }
-        .badge {
-            display: inline-block;
-            background-color: #166534;
-            color: #4ade80;
-            font-size: 8.5pt;
-            font-weight: bold;
-            padding: 2px 8px;
-            border-radius: 3px;
-            letter-spacing: 0.05em;
-            vertical-align: middle;
-            margin-left: 6px;
-        }
-        .badge-blue {
-            background-color: #1e3a5f;
-            color: #7dd3fc;
-        }
     </style>
 </head>
 <body>
@@ -63,65 +40,22 @@
 
     <h2>The One Material Philosophy</h2>
     <p>Instead of cluttering your project with dozens of unique materials that break batching and increase draw calls, our assets are designed to share one material. The inspector dynamically adapts to show only the properties relevant to the workflow you are currently using.</p>
-    <p><strong>Important:</strong> The UI Mode does not directly determine shader performance. Runtime cost is determined only by the features actively enabled on the material.</p>
-    
-    <h2>Asset Pack UI Modes</h2>
-    <p>Because a single Master Shader contains the logic for every DPT package, viewing all properties at once can be overwhelming. To solve this, the Material Inspector features an <strong>Asset Pack UI Mode</strong> dropdown. This simply filters the inspector UI to keep your workspace clean; it does not change the underlying shader code.</p>
-
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 22%;">Mode</th>
-                <th>Description</th>
-                <th style="width: 30%;">Best For</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>VCCORE Lite</strong> <span class="badge">STREAMLINED WORKFLOW</span></td>
-                <td>
-                    The simplest and most streamlined workflow configuration. A streamlined interface displaying only the essential Surface Parameters (Metallic, Smoothness, AO). Advanced texture slots and procedural feature controls are hidden by default and remain inactive unless explicitly enabled. <strong>Since inactive features compile out via shader keywords, Lite and VCCORE produce equivalent runtime performance when the same feature set is used.</strong><br><br>
-                </td>
-                <td>Optimized assets that rely primarily on vertex colors and baked mesh data, without requiring advanced surface features.</td>
-            </tr>
-            <tr>
-                <td><strong>VCCORE</strong> <span class="badge badge-blue">FULL FEATURE SET</span></td>
-                <td>The fully unlocked workflow interface. Reveals advanced surface textures, such as per-object Normal Map arrays (currently utilised on LOD1 meshes), Procedural Wood Grain settings and Grass Movement controls. Features are managed via shader keywords and compiled into separate variants. If a feature is not used by an asset (e.g. no valid data is supplied), the shader bypasses that feature path entirely, resulting in no runtime cost from that system.</td>
-                <td>When full control and additional features are required.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="perf">
-        <strong>Performance Note — Lite vs VCCORE:</strong><br><br>
-        VCCORE Lite is a simplified inspector configuration of the same shader system. It does not change the underlying shader, material, or runtime performance model. Both Lite and VCCORE use the same compiled shader, and rendering cost is determined only by which features are enabled on a per-material basis.
-
-        Some assets do not include data for certain VCCORE-exclusive features such as Normal Map arrays or procedural Wood Grain. These assets will render identically in both Lite and VCCORE modes using their base surface properties. Where feature data is not present or not assigned, the shader safely bypasses those systems with no additional runtime cost.
-
-        The primary difference between modes is inspector complexity and feature exposure, not rendering behavior.
-    </div>
+    <p><strong>Important:</strong> Runtime cost is determined only by the features actively enabled on the material. If a feature is not used by an asset (e.g., no valid data is supplied), the shader bypasses that feature path entirely, resulting in no runtime GPU cost from that system.</p>
 
     <h2>Mixing Packages &amp; Best Practices</h2>
     <p>If you are using multiple DPT packages within the same scene (e.g., combining Harvestable Nature with Interactive Props), you will maximize your performance by assigning the exact same Material asset to all of them.</p>
 
     <div class="warning">
         <strong>Important Setup Rule for Mixed Projects:</strong><br><br>
-        <p>If you are using a mix of <strong>VCCORE Lite</strong> and <strong>VCCORE</strong> assets in the same scene, we recommend sharing a single instance of the <code>M_DPT_VCCORE</code> Master Material across all of them to maximize performance and batching efficiency.</p>
-    
-        <p>If you want to use the additional features available in <strong>VCCORE</strong> (such as Normal Map arrays and procedural Wood Grain), you must leave the Asset Pack UI Mode set to <strong>VCCORE</strong>. If you do not require these features, you may set the UI Mode to <strong>VCCORE Lite</strong> to keep your inspector streamlined.</p>
-
-        <ul>
-            <li><strong>Why stay in VCCORE mode?</strong> This ensures that all features remain active and accessible for the interactive props that can use them.</li>
-            <li><strong>How do Lite assets behave in this mode?</strong> Lite-tier assets are designed to be robust; they will continue to render perfectly using their base parameters while simply ignoring the advanced VCCORE-specific data.</li>
-        </ul>
+        <p>We highly recommend sharing a single instance of the <code>M_DPT_VCCORE</code> Master Material across all assets to maximize performance and batching efficiency.</p>
+        <p>Because the shader uses dynamic branching and keyword compilation, standard assets that do not use advanced features (like Normal Map arrays or procedural details) will safely bypass those systems with zero additional runtime cost, even if they share the material with interactive or complex assets that do use them.</p>
     </div>
 
     <h2>Dynamic Interface Features</h2>
     <p>To further reduce clutter, the VCCORE interface is context-aware:</p>
-
     <ul>
         <li><strong>Workflow Setup:</strong> Toggling <em>Use Vertex Colors</em> will automatically hide the standard Base Color and Metallic/AO texture slots, as the shader shifts to reading mesh data.</li>
-        <li><strong>Nested Properties:</strong> Advanced toggles like <em>Use Normal Texture</em> or <em>Wood Grain Toggle</em> will only display their respective strength sliders and texture slots when actively checked.</li>
+        <li><strong>Nested Properties:</strong> Advanced toggles like <em>Use Normal Texture</em> or procedural detail settings will only display their respective strength sliders and texture slots when actively checked.</li>
     </ul>
 
     <h2>Ecosystem Detection &amp; Adaptive UI</h2>
@@ -130,7 +64,7 @@
     <h3>How It Works</h3>
     <p>Each DPT package contains an explicit signature file. When a package is loaded or imported, the editor engine runs a high-performance reflection pass once to update your layout capabilities dynamically:</p>
     <ul>
-        <li><strong>Tailored Workspace:</strong> Advanced property blocks—such as <em>Vegetation Systems</em>, <em>Vertex Procedural Wood Grain</em>, or <em>DPT Package Normals</em>—remain entirely hidden from the UI unless you own a package that explicitly uses them.</li>
+        <li><strong>Tailored Workspace:</strong> Advanced property blocks—such as <em>Vegetation Systems</em>, <em>Procedural Details</em>, or <em>DPT Package Normals</em>—remain entirely hidden from the UI unless you own a package that explicitly uses them.</li>
         <li><strong>Additive Progression:</strong> When you purchase and import an additional DPT package, its built-in signature file is detected immediately. The Inspector unhides the new settings automatically across the project, completely preserved and without disabling or resetting any configurations for assets you already own.</li>
         <li><strong>Independent Core Updating:</strong> Because features are verified strictly by the presence of these signature tags, you can update the Core framework folder at any time without needing to modify or re-download your existing thematic asset expansion packs.</li>
     </ul>
@@ -140,32 +74,36 @@
         This discovery scan executes natively inside Unity during compilation passes. There are no manual serial keys, activation panels, custom preprocessor directives, or complex scripting configuration arrays to manage.
     </div>
 
-    <h2>DPT Package Normal Maps</h2>
-    <p>Normal maps across all DPT packages are managed through a single shared <strong>Texture2D Array</strong>. Each package that includes normal maps contributes one atlas to a numbered slot in this array. The correct slot is selected per-mesh via the vertex color alpha channel — no material changes or additional draw calls are required.</p>
+    <h2>Procedural Details</h2>
+    <p>When the <em>Use Procedural Details</em> toggle is enabled, the Inspector reveals controls for dynamically generating micro-surface details based on the vertex data of the mesh. Rather than relying on unique, memory-heavy textures, these details are calculated mathematically on the GPU.</p>
 
-    <p>If a mesh does not use a normal map (vertex alpha of 0), the shader's internal branching dynamically bypasses the normal mapping logic entirely, ensuring zero GPU overhead.</p>
+    <p>While the exact features available (such as Rock, Leather, or Bark) depend on the DPT packages present in your project, the adjustment sliders share a universal behavior across all types:</p>
+    
+    <ul>
+        <li><strong>Strength:</strong> Controls the intensity of the generated normals. Increasing this value makes the procedural bumps and crevices appear deeper and more pronounced under scene lighting.</li>
+        <li><strong>Width:</strong> Adjusts the scaling of the procedural pattern. <em>Note: Increasing the width slider actually increases the tiling frequency, resulting in visually smaller, denser details across the surface.</em></li>
+        <li><strong>Value (Where applicable):</strong> Certain procedural features include an additional Value slider. This adjusts the base color contrast of the generated detail, allowing you to lighten or darken the procedural overlay against the object's original color.</li>
+    </ul>
 
-<h3>Syncing the Normal Array</h3>
-    <p>When you install a new DPT package that includes normal maps, the shared array needs to be rebuilt to include the new atlas. The Material Inspector handles this automatically:</p>
+    <h2>Procedural Detail Array</h2>
+    <p>To ensure maximum compatibility with the SRP Batcher and GPU Resident Drawer, all procedural surface details (such as Bark, Leather, Rock, and Metallic imperfections) are packed into a single, highly optimized <strong>Texture2D Array</strong>.</p>
 
-    <ol>
-        <li>Select the DPT Master Material in your Project window.</li>
-        <li>In the Inspector, expand the <strong>Normals</strong> section and ensure <em>Use Normal Texture</em> is enabled.</li>
-        <li>Scroll to the <strong>DPT Package Normals</strong> section at the bottom of the Inspector.</li>
-        <li>If newly installed packages are detected, a warning will appear listing the discovered atlases and their assigned slot numbers.</li>
-        <li>Press <strong>Sync Normal Packages</strong> to rebuild and assign the array. The rebuilt asset is saved alongside your Master Material.</li>
-    </ol>
+    <p>This universal array is shared across all DPT packages. The Master Shader dynamically selects the correct texture slice per-mesh via the vertex color alpha channel, meaning no material changes or additional draw calls are ever required.</p>
 
-    <div class="warning">
-        <strong>Critical Build Warning: Project Hygiene &amp; VRAM</strong><br><br>
-        <p>The Master Normal Array compiles <em>all</em> detected DPT normal maps across your entire project into a single asset. While this makes the editor workflow seamless, Unity will load this entire array into VRAM at runtime if even one object references it.</p>
-        <p>If you have DPT asset packs sitting in your project folder that you are not actively using in your scene, their textures will still be compiled into your final game build, causing unnecessary memory bloat.</p>
-        <p><strong>Before your final build:</strong> Delete any unused DPT packages from your project directory and press <strong>Sync Normal Packages</strong> again to strip the dead weight and protect your memory budget.</p>
+    <ul>
+        <li><strong>Zero Setup:</strong> The array is completely pre-configured. When you enable <em>Use Procedural Details</em> on the material, the correct normals and detail data are applied instantly.</li>
+        <li><strong>Memory Efficiency:</strong> To keep VRAM footprints strictly minimized, all procedural detail textures within the array are authored at a highly optimized 512x512 resolution. Because these are tiled micro-details, they maintain crisp visual fidelity without bloating your memory budget.</li>
+        <li><strong>Dynamic Branching:</strong> If a mesh does not use procedural details (or if the detail sliders are set to zero), the shader's internal branching safely bypasses the array sampling logic entirely to ensure zero GPU overhead.</li>
+    </ul>
+
+    <div class="note">
+        <strong>Mobile & Low-Memory Projects:</strong><br><br>
+        While the default detail array is highly optimized at 512x512, a 256x256 variant is also included in the Core folder for strict mobile or VR memory budgets. You can swap this out directly in the Material Inspector under the Procedural Details texture slot.
     </div>
 
     <div class="note">
-        <strong>Slot Order:</strong><br><br>
-        Slots are assigned in numerical order by texture name (<code>DPT_Normal_01</code>, <code>DPT_Normal_02</code>, …). This order is fixed at export time and guaranteed to be consistent across all projects.
+        <strong>Wood Grain Value Map:</strong><br><br>
+        In addition to the normal array, the system uses a single, dedicated packed texture to handle the base color value adjustments for the Procedural Wood Grain. This operates automatically alongside the detail array when Wood features are active.
     </div>
 
     <h2>Color Variation</h2>
@@ -181,20 +119,21 @@
         Because variation data is pushed directly to the GPU instance buffer, your shared material is never cloned, duplicated, or modified — regardless of how many objects carry unique color values. Your batching and GPU Resident Drawer compatibility remain completely intact.
     </div>
 
-<h3>Metallic &amp Non-Metallic Tint Control</h3>
-<p>The Master Material includes separate toggles and intensity sliders for metallic and non-metallic surface regions, giving precise control over how instanced color tinting from <code>DPT_ShaderVariation</code> is applied across different material types on the same mesh.</p>
-<ul>
-    <li><strong>Script Dependency:</strong> These toggles act purely as shader gatekeepers. They have <strong>no effect on their own</strong> and cause no visual changes unless a <code>DPT_ShaderVariation</code> component is actively passing color data to the mesh via the RSUV pipeline.</li>
-    <li><strong>Non-Metallic Tint:</strong> Controls whether diffuse, non-metallic surface regions receive the instanced color tint. When disabled, non-metallic areas are excluded from tinting entirely.</li>
-    <li><strong>Metallic Tint:</strong> Controls whether metallic surface regions participate in tinting. When disabled, metallic areas are isolated from the tint and preserve their physically accurate specular reflection characteristics.</li>
-</ul>
-<h3>Tint Strength Sliders (Range: -2.0 to 1.0)</h3>
-<p>Both sliders share the same asymmetric range, allowing control beyond simple tint blending in either direction:</p>
-<ul>
-    <li><strong>0.0:</strong> No tint is applied to that surface type.</li>
-    <li><strong>1.0:</strong> Full tint intensity is applied uniformly, matching the instance color exactly.</li>
-    <li><strong>Negative values (-2.0 to 0.0):</strong> Inverts the tint direction on that surface type, creating contrast effects between different regions of the same mesh. For example, darkening the wood of a chest while simultaneously making its metal fastenings appear brighter — useful for stylized aesthetics without any additional lights or post-processing.</li>
-</ul>
+    <h3>Metallic &amp; Non-Metallic Tint Control</h3>
+    <p>The Master Material includes separate toggles and intensity sliders for metallic and non-metallic surface regions, giving precise control over how instanced color tinting from <code>DPT_ShaderVariation</code> is applied across different material types on the same mesh.</p>
+    <ul>
+        <li><strong>Script Dependency:</strong> These toggles act purely as shader gatekeepers. They have <strong>no effect on their own</strong> and cause no visual changes unless a <code>DPT_ShaderVariation</code> component is actively passing color data to the mesh via the RSUV pipeline.</li>
+        <li><strong>Non-Metallic Tint:</strong> Controls whether diffuse, non-metallic surface regions receive the instanced color tint. When disabled, non-metallic areas are excluded from tinting entirely.</li>
+        <li><strong>Metallic Tint:</strong> Controls whether metallic surface regions participate in tinting. When disabled, metallic areas are isolated from the tint and preserve their physically accurate specular reflection characteristics.</li>
+    </ul>
+    
+    <h3>Tint Strength Sliders (Range: -2.0 to 1.0)</h3>
+    <p>Both sliders share the same asymmetric range, allowing control beyond simple tint blending in either direction:</p>
+    <ul>
+        <li><strong>0.0:</strong> No tint is applied to that surface type.</li>
+        <li><strong>1.0:</strong> Full tint intensity is applied uniformly, matching the instance color exactly.</li>
+        <li><strong>Negative values (-2.0 to 0.0):</strong> Inverts the tint direction on that surface type, creating contrast effects between different regions of the same mesh. For example, darkening the wood of a chest while simultaneously making its metal fastenings appear brighter — useful for stylized aesthetics without any additional lights or post-processing.</li>
+    </ul>
 
     <p>Full technical documentation for the <code>DPT_ShaderVariation</code> component, including brightness range settings and the HDR tinting system, can be found in the <strong>DPT Prefab Painter User Guide</strong>.</p>
     
