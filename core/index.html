@@ -106,6 +106,26 @@
         In addition to the normal array, the system uses a single, dedicated packed texture to handle the base color value adjustments for the Procedural Wood Grain. This operates automatically alongside the detail array when Wood features are active.
     </div>
 
+    <h2>Emission System</h2>
+    <p>The VCCORE shader includes a highly optimized emission system. When <strong>Enable Emission</strong> is toggled on in the inspector, you can control the glow intensity and color for any designated emissive areas on the mesh.</p>
+
+    <h3>Global vs. Per-Instance Emission</h3>
+    <p>The emission system is designed to work seamlessly with the <strong>One Material Philosophy</strong>, allowing for both global and per-object color control:</p>
+    <ul>
+        <li><strong>Global Material Emission:</strong> The <em>Emissive Color</em> property in the Material Inspector acts as a master tint. Whatever color you set here applies universally to <em>every</em> object in your scene sharing this material.</li>
+        <li><strong>Per-Instance Emission:</strong> The emission system natively hooks into the <code>DPT_ShaderVariation</code> script. If an object has this script attached, the script's <em>Instance Color</em> will multiply against the material's master emissive color, allowing you to recolor the glow on a per-object basis without duplicating the material.</li>
+    </ul>
+
+    <div class="note">
+        <strong>The "White Base" Strategy for Perfect Tinting:</strong><br><br>
+        If you want to use the <code>DPT_ShaderVariation</code> script to dynamically change the glow color of different objects (e.g., a red potion and a blue potion using the exact same material), set the master <strong>Emissive Color in the Material Inspector to pure White</strong>. Because the script uses mathematical multiplication, a white base allows the script's color to dictate 100% of the final glow hue.
+    </div>
+
+    <div class="note">
+        <strong>Advanced Setup: Independent Body & Glow Colors</strong><br><br>
+        Because the <code>DPT_ShaderVariation</code> script passes a single color per <code>MeshRenderer</code>, the object's body tint and emissive glow will share the same hue. If you need an object to have contrasting colors (e.g., a dark blue sword with bright orange glowing runes), the industry-standard best practice is to separate the glowing runes into a "floating decal" child mesh. This allows you to apply one variation script to the sword body, and a separate variation script to the rune mesh, keeping both perfectly batched under the same master material.
+    </div>
+
     <h2>Color Variation</h2>
     <p>Per-instance color and brightness variation is handled by the <code>DPT_ShaderVariation</code> component, which writes variation data directly to Unity's GPU instancing buffer without duplicating or modifying the shared material.</p>
 
