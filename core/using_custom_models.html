@@ -167,20 +167,15 @@
         <li><strong>Normal Strength:</strong> Modulates the directional intensity and apparent depth of the assigned normal map vectors.</li>
     </ul>
 
-    <h2>Vertex Color Configurations</h2>
-    <p>The handling of structural vertex data varies significantly depending on whether you are using official native studio assets or external geometry files.</p>
+<h2>Using Vertex Colors on Custom Models</h2>
+    <p>If you are using your own vertex-colored models instead of standard 2D textures, you can enable the <strong>Use Vertex Colors</strong> toggle in the Workflow Setup. However, because external meshes do not contain the highly specific, proprietary data packed into the UV and vertex streams of official DPT packages, you must disable the procedural detail systems.</p>
 
     <div class="warning">
-        <strong>Mandatory Rule: Leave Vertex Colors Unchecked</strong><br><br>
-        When running standard texture mode setups on external meshes, you must ensure the <strong>Vertex Colors</strong> setting remains unchecked in the shader inspector. The default vertex evaluation module is explicitly calibrated to work with native DPT Games asset architecture. Enabling it on non-native models will cause parsing errors, broken shading arrays, or incorrect rendering.
+        <strong>Mandatory Rule: Disable Procedural Details</strong><br><br>
+        When using custom models, you must ensure the <strong>Use Procedural Details</strong> toggle is disabled. The procedural generation module (handling bark, rock, leather, etc.) relies on an exact vertex-weight mapping pipeline calibrated exclusively for DPT native assets. Leaving this enabled on standard custom models will result in broken shading, distorted normals, and visual artifacts.
     </div>
-
-    <h3>Using Vertex Colors with Textures</h3>
-    <p>If you wish to use your own vertex color models, adjust the core operational mode at the top of the inspector:</p>
-    <ul>
-        <li>Locate the master mode selection field positioned at the very top of the material properties layout.</li>
-        <li>Switch the active rendering setting from <strong>VCCore</strong> over to <strong>VCCore Lite</strong>.</li>
-    </ul>
+    
+    <p>If you want your custom models to utilize the full procedural detail ecosystem, your mesh vertex data must be packed using the proprietary DPT pipeline. See the <em>Support &amp; Custom Pipeline Integration</em> section below for freelance services to handle this integration.</p>
 
     <hr>
 
