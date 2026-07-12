@@ -105,7 +105,39 @@
         <strong>Wood Grain Value Map:</strong><br><br>
         In addition to the normal array, the system uses a single, dedicated packed texture to handle the base color value adjustments for the Procedural Wood Grain. This operates automatically alongside the detail array when Wood features are active.
     </div>
+<h2>Stylized Lighting &amp; Shadow Shaping</h2>
+    <p>The VCCORE shader includes an optional <strong>Stylized Lighting</strong> mode, which replaces the default smooth PBR falloff with an art-directable light/shadow split, plus independent control over shadow color and darkness. When <em>Stylized Lighting</em> is disabled, the material behaves exactly as standard PBR — the system is fully bypassed with no runtime cost.</p>
 
+    <h3>Shadow Terminator &amp; Light Terminator (Range: 0.0 &ndash; 1.0)</h3>
+    <p>These two properties define where, across the surface, the transition from lit to shadowed occurs:</p>
+    <ul>
+        <li><strong>0.0</strong> anchors that edge toward the fully lit result.</li>
+        <li><strong>1.0</strong> anchors that edge toward the fully shadowed (dark) result.</li>
+    </ul>
+    <p>At their defaults (<em>Shadow Terminator</em> = 0, <em>Light Terminator</em> = 1) the transition spans the entire lighting range, producing a soft, natural gradient that follows the surface's angle to the light — similar to standard Lambertian shading.</p>
+    <p>Moving the two terminators closer together tightens and hardens the transition, up to a fully solid, hard-edged shadow line when they overlap. Moving them further apart softens and widens the gradient again.</p>
+
+    <div class="note">
+        <strong>Terminators Cannot Cross:</strong><br><br>
+        <em>Shadow Terminator</em> and <em>Light Terminator</em> are clamped so that one can never pass the other. Dragging one past the other's position will instead drag the second value along with it, preserving their relative order at all times.
+    </div>
+
+    <p>Under the hood, the terminator transition is driven by a half-lambert value — the surface normal's dot product with the light direction, remapped from its native <code>-1&hellip;1</code> range into <code>0&hellip;1</code>. A value of <strong>0</strong> corresponds to surfaces facing directly away from the light, while <strong>1</strong> corresponds to surfaces facing directly toward it. <em>Shadow Terminator</em> and <em>Light Terminator</em> act as the lower and upper thresholds against this value, which is why the default (0 / 1) spans the full range and produces a natural, gradual falloff across the whole surface, while narrowing the range hardens the transition into a sharper line.</p>
+
+    <h3>Shadow Strength (Range: 0.0 &ndash; 1.0)</h3>
+    <p>Controls how strongly the shadowed region is darkened and tinted:</p>
+    <ul>
+        <li><strong>0.0:</strong> The shadow region is left untouched (white), regardless of the <em>Shadow Tint</em> color or the terminator settings.</li>
+        <li><strong>1.0:</strong> The shadow region is fully darkened and takes on the <em>Shadow Tint</em> color at full intensity.</li>
+    </ul>
+
+    <div class="warning">
+        <strong>Shadow Strength Gates the Terminators:</strong><br><br>
+        Because <em>Shadow Strength</em> controls the overall visibility of the shadow effect, leaving it at 0.0 will make <em>Shadow Terminator</em> and <em>Light Terminator</em> appear to have no effect — the shadow shape is still being calculated, but it resolves to white either way. Increase <em>Shadow Strength</em> above 0 to see the terminator shaping take effect.
+    </div>
+
+    <h3>Shadow Tint</h3>
+    <p>Sets the color applied to the shadowed side of the surface. This color is blended in according to <em>Shadow Strength</em>, then multiplied against Base Color before final output — allowing for cool/warm shadow color grading (e.g. blue-tinted shadows on a warm-lit object) without any additional lights or post-processing.</p>
     <h2>Emission System</h2>
     <p>The VCCORE shader includes a highly optimized emission system. When <strong>Enable Emission</strong> is toggled on in the inspector, you can control the glow intensity and color for any designated emissive areas on the mesh.</p>
 
@@ -155,7 +187,7 @@
         <li><strong>Negative values (-2.0 to 0.0):</strong> Inverts the tint direction on that surface type, creating contrast effects between different regions of the same mesh. For example, darkening the wood of a chest while simultaneously making its metal fastenings appear brighter — useful for stylized aesthetics without any additional lights or post-processing.</li>
     </ul>
 
-    <p>Full technical documentation for the <code>DPT_ShaderVariation</code> component, including brightness range settings and the HDR tinting system, can be found in the <strong>DPT Prefab Painter User Guide</strong>.</p>
+    <p>Full technical documentation for the <code>DPT_ShaderVariation</code> component, including brightness range settings and the HDR tinting system, can be found in the <a href="shader_variation.html" style="color: #38bdf8;">Shader Variation</a> guide.</p>
     
     <h2>Support &amp; Custom Pipeline Integration</h2>
     <p>If your project requires external or custom 3D models to be fully integrated into the DPT ecosystem—including custom vertex-data packing, procedural wood grain mapping, normal array configuration, advanced GPU wind system implementation, or any other bespoke features—freelance technical art services are available. Additionally, availability extends to general 3D asset production, high-to-low poly hard surface modeling, stylized prop creation, and game-ready LOD budgeting built to align cleanly with your specific project constraints.</p>
