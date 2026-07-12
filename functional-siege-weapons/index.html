@@ -13,7 +13,7 @@
             margin: 0; padding: 40px;
             font-size: 11pt; line-height: 1.5;
         }
-        h1, h2, h3 { color: #38bdf8; margin-bottom: 10px; }
+        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
         h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
         h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
         h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
@@ -548,7 +548,7 @@ void Update()
         <strong>Seamless Integration:</strong> Both the weapon and projectile shake modules broadcast a static event containing their epicenter and shake parameters. The Receiver handles the rest, ensuring that overlapping shakes smoothly override each other based on intensity and remaining duration.
     </div>
 
-    <h2 id="breakable-props">Breakable Props (DPT_BreakableProp)</h2>
+<h2 id="breakable-props">Breakable Props (DPT_BreakableProp)</h2>
     <p>The <code>DPT_BreakableProp</code> component is a streamlined script designed specifically for static destructible objects like mantlets, barricades, and ammo crates. It utilizes the same fracture physics, manual audio assignment, and automatic cleanup routines as the main Siege Weapon controller, but strips out all aiming and firing state machines for maximum performance on simple props.</p>
 
     <h3>Quick Setup</h3>
@@ -560,15 +560,54 @@ void Update()
     </ol>
 
     <h3>Inspector Reference</h3>
+    
+    <h4>Visuals, Health & Damage</h4>
     <table>
         <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
         <tbody>
-            <tr><td><strong>Pristine Meshes / Broken Parents</strong></td><td>Functions identically to the siege weapon structure: pristine meshes are hidden on break, and broken parents are activated to simulate fracture.</td></tr>
+            <tr><td><strong>Pristine Meshes / Broken Parents</strong></td><td>Pristine meshes are hidden on break, and broken parents are activated to simulate fracture.</td></tr>
             <tr><td><strong>Max Health</strong></td><td>Structural health of the prop. Reaching 0 triggers the destruction sequence.</td></tr>
-            <tr><td><strong>Break On Impact</strong></td><td>If enabled, physical collisions (e.g., from physics objects or vehicles) exceeding the <strong>Impact Velocity Threshold</strong> will apply damage automatically based on relative velocity.</td></tr>
+            <tr><td><strong>Break On Impact</strong></td><td>If enabled, physical collisions exceeding the <strong>Impact Velocity Threshold</strong> will apply damage automatically based on relative velocity.</td></tr>
+            <tr><td><strong>Simulated Ramming Speed</strong></td><td>Simulated speed (m/s) applied when a kinematic vehicle (like a driven ballista) rams this prop.</td></tr>
+            <tr><td><strong>Push Non Prop Objects</strong></td><td>If true, applies an explosion force to ALL nearby rigidbodies on break, not just siege props.</td></tr>
+        </tbody>
+    </table>
+
+    <h4>Offensive Capabilities</h4>
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Apply Damage On Contact</strong></td><td>If true, this prop deals damage to other breakable objects or siege weapons it hits.</td></tr>
+            <tr><td><strong>Contact Damage</strong></td><td>Damage dealt to other objects on impact.</td></tr>
+        </tbody>
+    </table>
+
+    <h4>Destruction Physics & Broken Base</h4>
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
             <tr><td><strong>Explosion Force / Radius</strong></td><td>The radial impulse applied to all debris pieces upon destruction.</td></tr>
+            <tr><td><strong>Explosion Y Offset</strong></td><td>Vertical offset for the internal explosion origin.</td></tr>
+            <tr><td><strong>Momentum Transfer</strong></td><td>How much of the incoming object's velocity is transferred to the flying debris.</td></tr>
+            <tr><td><strong>Broken Base Pieces</strong></td><td>Debris rigidbodies treated as structural 'base' pieces. They receive reduced explosion force and remain in place when the prop breaks.</td></tr>
+            <tr><td><strong>Base Force Multiplier</strong></td><td>Force multiplier applied only to base/structural pieces.</td></tr>
             <tr><td><strong>Time Before Cleanup / Sink Speed</strong></td><td>How long the debris remains in the scene before freezing physics and sinking cleanly into the ground.</td></tr>
-            <tr><td><strong>Audio Source</strong></td><td>The specific AudioSource component used to play the break sounds. Can be dragged in manually to allow custom spatial blending setups on the prefab.</td></tr>
+            <tr><td><strong>Destroy On Cleanup</strong></td><td>If true, the GameObject is fully destroyed after sinking. If false, it is deactivated.</td></tr>
+        </tbody>
+    </table>
+
+    <h4>Audio, VFX & Events</h4>
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Audio Source</strong></td><td>The AudioSource component used to play the break and contact sounds.</td></tr>
+            <tr><td><strong>Particle Destroy VFX</strong></td><td>Particle VFX instantiated at the prop position on destruction.</td></tr>
+            <tr><td><strong>Break Sounds</strong></td><td>Sounds played when the prop is destroyed.</td></tr>
+            <tr><td><strong>Contact Sounds</strong></td><td>Sounds played when this prop deals contact damage to another object.</td></tr>
+            <tr><td><strong>Always Play Contact Sound</strong></td><td>If true, contact sound plays on every collision. If false, it only plays when damage is dealt to a valid target.</td></tr>
+            <tr><td><strong>Pitch Variance</strong></td><td>Random pitch fluctuation applied to audio playback (0 to 0.5).</td></tr>
+            <tr><td><strong>onDamagedEvent</strong></td><td>Fired whenever the prop takes damage.</td></tr>
+            <tr><td><strong>onDestroyedEvent</strong></td><td>Fired when the prop reaches 0 health and breaks.</td></tr>
         </tbody>
     </table>
 
@@ -577,8 +616,8 @@ void Update()
     <table>
         <thead><tr><th style="width:40%;">Method</th><th>Description</th></tr></thead>
         <tbody>
-            <tr><td><code>TakeDamage(float amount, Vector3 hitPoint)</code></td><td>Reduces health. If health reaches 0, the prop shatters, with the explosion centered near the <code>hitPoint</code>.</td></tr>
-            <tr><td><code>DestroyProp()</code></td><td>Bypasses health and shatters the prop immediately from its center.</td></tr>
+            <tr><td><code>TakeDamage(float amount, Vector3 hitPoint, Vector3 hitDirection = default)</code></td><td>Reduces health. If health reaches 0, the prop shatters, with the explosion centered near the <code>hitPoint</code>. <code>hitDirection</code> transfers momentum to debris pieces.</td></tr>
+            <tr><td><code>DestroyProp()</code></td><td>Bypasses health and shatters the prop immediately from its center, accounting for the <code>explosionYOffset</code>.</td></tr>
         </tbody>
     </table>
 
