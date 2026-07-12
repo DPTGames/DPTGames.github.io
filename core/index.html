@@ -58,13 +58,18 @@
         <li><strong>Nested Properties:</strong> Advanced toggles like <em>Use Normal Texture</em> or procedural detail settings will only display their respective strength sliders and texture slots when actively checked.</li>
     </ul>
 
+    <div class="warning">
+        <strong>Vertex Colors Gates More Than Just Textures:</strong><br><br>
+        <em>Use Vertex Colors</em> doesn't just hide the standard texture slots — it also fully hides the <strong>Emission System</strong>, <strong>Wind System</strong>, and <strong>Procedural Details</strong> sections when disabled. These systems rely on the vertex-color-driven pipeline, so if you're working with a standard texture-based workflow, none of these sections will appear in the Inspector, regardless of which packages you own. Re-enable <em>Use Vertex Colors</em> to access them. <em>Stylized Lighting</em> and the Metallic/Non-Metallic Tint controls are not affected by this and remain available either way.
+    </div>
+
     <h2>Ecosystem Detection &amp; Adaptive UI</h2>
     <p>To ensure a completely seamless setup experience across our modular catalog, the Master Material Inspector features an automated <strong>Ecosystem Detection System</strong>. Instead of overwhelming your workspace with settings for packages you do not own, the layout dynamically matches your active project files.</p>
     
     <h3>How It Works</h3>
     <p>Each DPT package contains an explicit signature file. When a package is loaded or imported, the editor engine runs a high-performance reflection pass once to update your layout capabilities dynamically:</p>
     <ul>
-        <li><strong>Tailored Workspace:</strong> Advanced property blocks—such as <em>Vegetation Systems</em>, <em>Procedural Details</em>, or <em>DPT Package Normals</em>—remain entirely hidden from the UI unless you own a package that explicitly uses them.</li>
+        <li><strong>Tailored Workspace:</strong> Advanced property blocks—such as <em>Vegetation Systems</em>, <em>Procedural Details</em>, <em>Emission</em>, or <em>DPT Package Normals</em>—remain entirely hidden from the UI unless you own a package that explicitly uses them.</li>
         <li><strong>Additive Progression:</strong> When you purchase and import an additional DPT package, its built-in signature file is detected immediately. The Inspector unhides the new settings automatically across the project, completely preserved and without disabling or resetting any configurations for assets you already own.</li>
         <li><strong>Independent Core Updating:</strong> Because features are verified strictly by the presence of these signature tags, you can update the Core framework folder at any time without needing to modify or re-download your existing thematic asset expansion packs.</li>
     </ul>
@@ -114,15 +119,19 @@
         <li><strong>0.0</strong> anchors that edge toward the fully lit result.</li>
         <li><strong>1.0</strong> anchors that edge toward the fully shadowed (dark) result.</li>
     </ul>
-    <p>At their defaults (<em>Shadow Terminator</em> = 0, <em>Light Terminator</em> = 1) the transition spans the entire lighting range, producing a soft, natural gradient that follows the surface's angle to the light — similar to standard Lambertian shading.</p>
-    <p>Moving the two terminators closer together tightens and hardens the transition, up to a fully solid, hard-edged shadow line when they overlap. Moving them further apart softens and widens the gradient again.</p>
+    <p>Widening the gap between the two terminators softens and broadens the transition, spreading it out toward a smooth, natural gradient similar to standard Lambertian shading. Narrowing the gap tightens and hardens the transition, up to a fully solid, hard-edged shadow line when they overlap.</p>
+
+    <div class="note">
+        <strong>Default Values:</strong><br><br>
+        Out of the box, <em>Shadow Terminator</em> is set to <strong>0.3</strong> and <em>Light Terminator</em> to <strong>0.5</strong> — a fairly narrow band that produces a crisp, contrasty stylized shadow line rather than a soft gradient. <em>Shadow Tint</em> defaults to black and <em>Shadow Strength</em> defaults to <strong>1.0</strong>, so enabling Stylized Lighting will produce a visible effect immediately without needing to adjust any other settings first.
+    </div>
 
     <div class="note">
         <strong>Terminators Cannot Cross:</strong><br><br>
         <em>Shadow Terminator</em> and <em>Light Terminator</em> are clamped so that one can never pass the other. Dragging one past the other's position will instead drag the second value along with it, preserving their relative order at all times.
     </div>
 
-    <p>Under the hood, the terminator transition is driven by a half-lambert value — the surface normal's dot product with the light direction, remapped from its native <code>-1&hellip;1</code> range into <code>0&hellip;1</code>. A value of <strong>0</strong> corresponds to surfaces facing directly away from the light, while <strong>1</strong> corresponds to surfaces facing directly toward it. <em>Shadow Terminator</em> and <em>Light Terminator</em> act as the lower and upper thresholds against this value, which is why the default (0 / 1) spans the full range and produces a natural, gradual falloff across the whole surface, while narrowing the range hardens the transition into a sharper line.</p>
+    <p>Under the hood, the terminator transition is driven by a half-lambert value — the surface normal's dot product with the light direction, remapped from its native <code>-1&hellip;1</code> range into <code>0&hellip;1</code>. A value of <strong>0</strong> corresponds to surfaces facing directly away from the light, while <strong>1</strong> corresponds to surfaces facing directly toward it. <em>Shadow Terminator</em> and <em>Light Terminator</em> act as the lower and upper thresholds against this value, which is why spreading them toward 0 and 1 produces a full-range, gradual falloff across the whole surface, while narrowing the range hardens the transition into a sharper line.</p>
 
     <h3>Shadow Strength (Range: 0.0 &ndash; 1.0)</h3>
     <p>Controls how strongly the shadowed region is darkened and tinted:</p>
@@ -135,11 +144,34 @@
         <strong>Shadow Strength Gates the Terminators:</strong><br><br>
         Because <em>Shadow Strength</em> controls the overall visibility of the shadow effect, leaving it at 0.0 will make <em>Shadow Terminator</em> and <em>Light Terminator</em> appear to have no effect — the shadow shape is still being calculated, but it resolves to white either way. Increase <em>Shadow Strength</em> above 0 to see the terminator shaping take effect.
     </div>
-
-    <h3>Shadow Tint</h3>
+<h3>Shadow Tint</h3>
     <p>Sets the color applied to the shadowed side of the surface. This color is blended in according to <em>Shadow Strength</em>, then multiplied against Base Color before final output — allowing for cool/warm shadow color grading (e.g. blue-tinted shadows on a warm-lit object) without any additional lights or post-processing.</p>
+
+    <h3>Scene Shadow Helpers (URP Only)</h3>
+    <p>Because <em>Shadow Terminator</em>, <em>Light Terminator</em>, <em>Shadow Tint</em>, and <em>Shadow Strength</em> are all self-shading effects baked into this material, they're entirely separate from Unity's own real-time cast shadows and scene color grading. Two optional buttons appear beneath the Stylized Lighting controls to help bring the rest of the scene in line — both require the Universal Render Pipeline and only run when explicitly clicked.</p>
+
+    <ul>
+        <li><strong>Apply Recommended Shadow Settings (URP Asset):</strong> Adjusts the active Universal Render Pipeline Asset's shadow distance, cascade count, and main light shadowmap resolution to complement a stylized look. Resolution scales with <em>Shadow Strength</em> — a subtler effect uses a lower-resolution shadowmap, since the extra detail wouldn't be very visible anyway. This only touches those three shadow-related fields; nothing else on the URP Asset is modified.</li>
+        <li><strong>Sync Shadow Tint to Scene Color Grading (Advanced):</strong> Looks for a Global Volume in the currently open scene and, if found, creates a copy of its profile (leaving the original untouched for any other scene using it), assigns the copy to that scene's Global Volume, and writes <em>Shadow Tint</em> into the Shadows channel of a Shadows/Midtones/Highlights override — adding that override if it isn't already present. Midtones and Highlights are never touched.</li>
+    </ul>
+
+    <div class="note">
+        <strong>Scene-Dependent, Not Material-Dependent:</strong><br><br>
+        Both buttons only ever act on whichever scene(s) are currently open in the Editor — Unity has no way to look up every scene that references a given material, so if you're editing this material with an unrelated scene open, these buttons won't find the right Global Volume or apply project settings intended for a different context.
+    </div>
+
+    <div class="warning">
+        <strong>Main Light Shadows Must Be Enabled Manually:</strong><br><br>
+        The <em>Apply Recommended Shadow Settings</em> button cannot toggle the URP Asset's <strong>Main Light &gt; Cast Shadows</strong> setting on your behalf — Unity does not expose a way to change this from outside the Editor Inspector. If directional shadows are currently disabled on your URP Asset, enable that checkbox manually before or after using this button.
+    </div>
+
     <h2>Emission System</h2>
     <p>The VCCORE shader includes a highly optimized emission system. When <strong>Enable Emission</strong> is toggled on in the inspector, you can control the glow intensity and color for any designated emissive areas on the mesh.</p>
+
+    <div class="note">
+        <strong>Requires the Emission Package Signature:</strong><br><br>
+        Like Procedural Details, the Emission System is part of the <strong>Ecosystem Detection System</strong> — the entire section is hidden from the Inspector unless you own a DPT package that includes the Emission signature file. It also requires <em>Use Vertex Colors</em> to be enabled, as it does not appear in texture-based workflows.
+    </div>
 
     <h3>Global vs. Per-Instance Emission</h3>
     <p>The emission system is designed to work seamlessly with the <strong>One Material Philosophy</strong>, allowing for both global and per-object color control:</p>
@@ -155,7 +187,7 @@
 
     <div class="note">
         <strong>Advanced Setup: Independent Body & Glow Colors</strong><br><br>
-        Because the <code>DPT_ShaderVariation</code> script passes a single color per <code>MeshRenderer</code>, the object's body tint and emissive glow will share the same hue. If you need an object to have contrasting colors (e.g., a dark blue sword with bright orange glowing runes), the industry-standard best practice is to separate the glowing runes into a "floating decal" child mesh. This allows you to apply one variation script to the sword body, and a separate variation script to the rune mesh, keeping both perfectly batched under the same master material.
+        Because the <code>DPT_ShaderVariation</code> script passes a single color per <code>MeshRenderer</code>, the object's body tint and emissive glow will share the same hue. If you need an object to have contrasting colors (e.g., a dark blue sword with bright orange glowing runes), the industry-standard best practice is to separate the glowing runes into a floating decal child mesh. This allows you to apply one variation script to the sword body, and a separate variation script to the rune mesh, keeping both perfectly batched under the same master material.
     </div>
 
     <h2>Color Variation</h2>
