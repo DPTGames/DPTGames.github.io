@@ -148,22 +148,7 @@
     <p>Sets the color applied to the shadowed side of the surface. This color is blended in according to <em>Shadow Strength</em>, then multiplied against Base Color before final output — allowing for cool/warm shadow color grading (e.g. blue-tinted shadows on a warm-lit object) without any additional lights or post-processing.</p>
 
     <h3>Scene Shadow Helpers (URP Only)</h3>
-    <p>Because <em>Shadow Terminator</em>, <em>Light Terminator</em>, <em>Shadow Tint</em>, and <em>Shadow Strength</em> are all self-shading effects baked into this material, they're entirely separate from Unity's own real-time cast shadows and scene color grading. Two optional buttons appear beneath the Stylized Lighting controls to help bring the rest of the scene in line — both require the Universal Render Pipeline and only run when explicitly clicked.</p>
-
-    <ul>
-        <li><strong>Apply Recommended Shadow Settings (URP Asset):</strong> Adjusts the active Universal Render Pipeline Asset's shadow distance, cascade count, and main light shadowmap resolution to complement a stylized look. Resolution scales with <em>Shadow Strength</em> — a subtler effect uses a lower-resolution shadowmap, since the extra detail wouldn't be very visible anyway. This only touches those three shadow-related fields; nothing else on the URP Asset is modified.</li>
-        <li><strong>Sync Shadow Tint to Scene Color Grading (Advanced):</strong> Looks for a Global Volume in the currently open scene and, if found, creates a copy of its profile (leaving the original untouched for any other scene using it), assigns the copy to that scene's Global Volume, and writes <em>Shadow Tint</em> into the Shadows channel of a Shadows/Midtones/Highlights override — adding that override if it isn't already present. Midtones and Highlights are never touched.</li>
-    </ul>
-
-    <div class="note">
-        <strong>Scene-Dependent, Not Material-Dependent:</strong><br><br>
-        Both buttons only ever act on whichever scene(s) are currently open in the Editor — Unity has no way to look up every scene that references a given material, so if you're editing this material with an unrelated scene open, these buttons won't find the right Global Volume or apply project settings intended for a different context.
-    </div>
-
-    <div class="warning">
-        <strong>Main Light Shadows Must Be Enabled Manually:</strong><br><br>
-        The <em>Apply Recommended Shadow Settings</em> button cannot toggle the URP Asset's <strong>Main Light &gt; Cast Shadows</strong> setting on your behalf — Unity does not expose a way to change this from outside the Editor Inspector. If directional shadows are currently disabled on your URP Asset, enable that checkbox manually before or after using this button.
-    </div>
+    <p>Because <em>Shadow Terminator</em>, <em>Light Terminator</em>, <em>Shadow Tint</em>, and <em>Shadow Strength</em> are all self-shading effects baked into this material, they're entirely separate from Unity's own real-time cast shadows and scene color grading. You may wish to adjust your shadow settings in your URP asset and volume profile to match the shadow settings of the objects.</p>
 
     <h2>Emission System</h2>
     <p>The VCCORE shader includes a highly optimized emission system. When <strong>Enable Emission</strong> is toggled on in the inspector, you can control the glow intensity and color for any designated emissive areas on the mesh.</p>
