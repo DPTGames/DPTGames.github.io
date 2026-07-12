@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DPT Siege Weapons Procedural Mechanical Drive - Component Guide</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0; padding: 40px;
+            font-size: 11pt; line-height: 1.5;
+        }
+        h1, h2, h3 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 15px; margin-bottom: 5px; page-break-after: avoid; }
+        .troubleshooting-a { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <h1>DPT_ProceduralMechanicalDrive</h1>
+    <div class="subtitle">Component Reference Guide<br>
+    <span style="font-size: 11pt; font-style: normal;">A generic, data-driven companion component designed to mathematically translate, rotate, scale, and apply gravity-aligned pendulum physics to cosmetic secondary sub-assemblies in perfect synchronization with a weapon's core tracking state.</span></div>
+
+    <h2>1. Inspector Property Configuration Tables</h2>
+    
+    <h3>Mechanical Asset Elements Array</h3>
+    <p>Processes an array of <code>MechanicalElement</code> blocks targeting distinct cosmetic sub-mesh objects within the prefab hierarchy.</p>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Element Label</strong></td>
+                <td>A descriptive text string used to organize and name array entries within the Unity Inspector layout for easy modification.</td>
+            </tr>
+            <tr>
+                <td><strong>Target Transform</strong></td>
+                <td>The scene reference to the moving sub-mesh geometry container (e.g., a gear, crank, worm screw, bellows, or counterweight arm).</td>
+            </tr>
+            <tr>
+                <td><strong>Tracking Source</strong></td>
+                <td>Determines whether the element responds directly to the weapon's vertical pitch (<code>Elevation</code>) or horizontal yaw (<code>Traverse</code>).</td>
+            </tr>
+            <tr>
+                <td><strong>Drive Mode</strong></td>
+                <td>
+                    The mathematical behavior calculation type applied to this asset:
+                    <ul>
+                        <li><code>ContinuousRotation</code>: Spins infinitely matching pitch shifts times a gear ratio value. Ideal for handwheels and winding drums.</li>
+                        <li><code>MappedRotation</code>: Smoothly lerps between a baseline and a maximum angle boundary. Ideal for torsion limbs or lever linkages.</li>
+                        <li><code>MappedTranslation</code>: Shifts lineally down a local axis vector using spatial interpolation. Ideal for telescopic elevation screws or piston rods.</li>
+                        <li><code>MappedScale</code>: Rescales geometry continuously along a selected local axis vector. Ideal for mechanical tension springs, ropes, or leather air bellows.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Local Axis</strong></td>
+                <td>The local direction vector (directional mask) along or around which transformation modifications are processed.</td>
+            </tr>
+            <tr>
+                <td><strong>Multiplier</strong></td>
+                <td>The physical scaling factor. Serves as a gear ratio multiplier for rotations (in degrees), indicates the maximum travel displacement window for translations (in meters), or maps dimensional extension ratios for geometric scaling.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Gravity Aligned Elements (Pendulums)</h3>
+    <p>Calculates dynamic physics-based sway and downward alignment for objects that must hang freely (counterweights, slings, lanterns).</p>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Label</strong></td>
+                <td>A string used to identify this specific pendulum. Critical for targeting this element via Unity Events or Animation Events using <code>PausePendulumByLabel</code>.</td>
+            </tr>
+            <tr>
+                <td><strong>Target Transform</strong></td>
+                <td>The hanging object that will be driven by the procedural gravity alignment. Should typically be an empty parent transform.</td>
+            </tr>
+            <tr>
+                <td><strong>Sway Sensitivity</strong></td>
+                <td>How aggressively the weight swings in reaction to world-space movement. Use negative values to invert the momentum direction.</td>
+            </tr>
+            <tr>
+                <td><strong>Gravity Tension & Damping</strong></td>
+                <td>Tension controls how powerfully the object is pulled back toward true downward resting alignment. Damping dictates how quickly the oscillating swing settles to a complete stop.</td>
+            </tr>
+            <tr>
+                <td><strong>Swing Clamps & Locks</strong></td>
+                <td><code>Max Swing Angle X/Z</code> bounds the oscillation limits to prevent clipping through frames. <code>Disable Z Rotation</code> restricts movement entirely to a 2D planar pitch.</td>
+            </tr>
+            <tr>
+                <td><strong>Animated Child</strong></td>
+                <td>If the Animator drives a child object (e.g., visual ropes) while this script drives the un-animated parent pivot, assign the child here. Enables perfect positional handoffs when transitioning from pre-baked animations back to procedural physics.</td>
+            </tr>
+            <tr>
+                <td><strong>Recovery Duration</strong></td>
+                <td>The duration in seconds used to perform a smooth spherical interpolation (Slerp) from the Animator's final frame back into the procedural downward gravity state, eliminating visual popping.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Wheel Configurations</h3>
+    <p>Manages automated wheel rotations for mobile platforms, integrating both straight translation metrics and rotational spot-turn deltas.</p>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Left Wheels</strong></td>
+                <td>An array of transforms representing all wheels assigned to the left track side of the chassis frame structure.</td>
+            </tr>
+            <tr>
+                <td><strong>Right Wheels</strong></td>
+                <td>An array of transforms representing all wheels assigned to the right track side of the chassis frame structure.</td>
+            </tr>
+            <tr>
+                <td><strong>Wheel Diameter</strong></td>
+                <td>The literal bounding distance of the wheel meshes in meters. This is critical for exact algebraic wheel rolling translations without visual ground slippage.</td>
+            </tr>
+            <tr>
+                <td><strong>Track Width</strong></td>
+                <td>The lateral distance measured between the left and right wheel sets. Controls the differential velocity calculations during stationary spot turns.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Locomotion Audio Dynamic Settings</h3>
+    <p>Controls the integrated real-time dynamic locomotion loop channel. Audio functions independently of weapon actions to prevent audio cut-offs or clip context overwriting bugs.</p>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Loop Source</strong></td>
+                <td>Explicit inspector assignment slot for the secondary <code>AudioSource</code> dedicated to structural movement. Populating this ensures that the core weapon script does not overwrite the travel loop during firing sequence calls. If left unassigned, fallback logic hooks an existing secondary source or appends a new one dynamically.</td>
+            </tr>
+            <tr>
+                <td><strong>Locomotion Loop</strong></td>
+                <td>The seamless audio asset clip representing continuous chassis translation friction (heavy wood creaking, iron rim grinding, structural straining).</td>
+            </tr>
+            <tr>
+                <td><strong>Max Audio Speed</strong></td>
+                <td>The true travel velocity threshold (m/s) at which the looping channel reaches its maximum volume and pitch parameters. Default: 4 m/s.</td>
+            </tr>
+            <tr>
+                <td><strong>Audio Volume Smoothing</strong></td>
+                <td>The interpolation factor governing how rapidly the audio's volume and pitch values respond to abrupt velocity adjustments or sudden braking stamps. Default: 5.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Mechanical Aim Audio Setup</h3>
+    <p>Manages the continuous operational tracking soundscape for turret traversal and barrel elevation adjustments, isolating aiming feedback from discrete action triggers.</p>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Aim Source</strong></td>
+                <td>Explicit inspector assignment slot for the dedicated aiming <code>AudioSource</code> component. Isolating continuous rotation audio on this channel prevents tracking modifications from disrupting or cutting off primary actions like weapon fire and reloading triggers. If unassigned, an independent instance is generated automatically on initialization.</td>
+            </tr>
+            <tr>
+                <td><strong>Aim Loop</strong></td>
+                <td>The seamless looping audio asset clip representing mechanical friction, internal gear grinding, iron crank strain, or structural pressure during active weapon adjustments.</td>
+            </tr>
+            <tr>
+                <td><strong>Aim Audio Smoothing</strong></td>
+                <td>The interpolation smoothing speed controlling how dynamically the audio loop scales its volume and pitch envelopes between active tracking and full stops. Prevents sudden audio pops or abrupt cuts. Default: 8.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>2. Technical Architecture</h2>
+    <ul>
+        <li><strong>Composition via Companion Scripting:</strong> Decouples purely aesthetic mechanical mesh logic from gameplay tracking engines (firing arrays, health loops, input listeners). It sits on the same object layer as a companion add-on, eliminating code modifications when creating unique visual styles.</li>
+        <li><strong>Procedural Gravity & Animation Handoffs (The Baton Pass):</strong> Solves the notorious "Double Gravity" conflict where an Animator and script fight for transform control. Using <code>PausePendulumByLabel</code> instantly wipes the script's gravity calculation and resets the parent transform to its clean prefab state, allowing the Animator to execute Firing sequences completely unimpeded on the child object.</li>
+        <li><strong>Seamless Slerp Recovery:</strong> Upon triggering <code>ResumePendulumByLabel</code>, the script isolates the exact world rotation of the animated child mesh on the final frame of the animation clip. It then applies a SmoothStep spherical lerp over the defined <code>Recovery Duration</code>, melting the pre-baked animation follow-through flawlessly back into dynamic gravity.</li>
+        <li><strong>Drift Elimination Matrix:</strong> Securely caches structural anchors (<code>initialLocalPosition</code>, <code>initialLocalRotation</code>, and <code>initialLocalScale</code>) on initialization. This ensures calculations are always bound back to baseline spatial matrices, preventing compounding precision drift errors caused by delta float updates.</li>
+        <li><strong>Differential Tracking Engine:</strong> Uses a <code>Vector3.Dot</code> operation against the transform's forward vector to track linear distance traveled, combined with a <code>Mathf.DeltaAngle</code> calculation to determine angular turning offsets. This merges track vectors into an accurate, non-slip rolling sequence.</li>
+        <li><strong>Fixed-Angle Launcher Fallback Matrix:</strong> Features an automated operational loop when evaluating an elevation tracking target source. If the parent weapon lacks an explicit <code>elevationPivot</code> reference but uses variable launch speeds, the script switches calculations to map the element's rotation to a flat 360-degree sweep scaled by the active power factor calculation profile (<code>t * 360f</code>). This handles crank-handle rotations accurately on fixed-chassis artillery like trebuchets or mortars where winding power scales distance.</li>
+        <li><strong>Real-Time Kinematic Audio Pipeline:</strong> Samples world space positional translations every frame to calculate accurate velocity independent of input event calls. Volume envelopes scale from 0 to 1 based on velocity relative to <code>maxAudioSpeed</code>, while pitch curves bend dynamically (from 0.75× up to 1.25×) to mimic weight changes before dampening to full silence when stationary.</li>
+        <li><strong>Isolated Multi-Channel Audio Orchestration:</strong> Establishes separate, dedicated <code>AudioSource</code> components for translation wheels and targeting gear loops. By pulling continuous tracking sound updates completely out of the core weapon logic, this architecture guarantees that ongoing manual adjustments never prematurely clip or clobber discrete gameplay audio states like firing explosions or reloading clips.</li>
+        <li><strong>Teleportation Clamp Safeguard:</strong> Monitors step deltas inside the tracking loops. If a coordinate movement exceeds a squared magnitude boundary of <code>25f</code> (such as when a weapon system fires a <code>ResetWeapon()</code> execution layout), calculations temporarily suspend to freeze the wheels and mute audio, eliminating instantaneous hyper-spin visual glitches or auditory bursts.</li>
+        <li><strong>Automatic Destruction Gate:</strong> Continuously checks the main component status state loop. Updates automatically sleep if the tracking system switches into a <code>Destroyed</code> state, turning off looping audio immediately so separate debris fragment rigidbodies can fall and shatter naturally.</li>
+    </ul>
+
+    <h2>3. Practical Assembly Configurations</h2>
+    <p>Because the mechanical driver relies on a single generic script, you can easily replicate distinct ancient weapon physics setups natively in the Inspector without creating unique C# dependencies.</p>
+     
+    <div class="note">
+        <strong>Mobile Cannon Setup Example:</strong>
+        <ol>
+            <li>Attach the script to your cannon prefab alongside the main <code>DPT_SiegeWeapon</code> script component.</li>
+            <li>Assign your chassis hubs to the <strong>Left Wheels</strong> and <strong>Right Wheels</strong> arrays, setting your exact asset metrics for <strong>Wheel Diameter</strong> and <strong>Track Width</strong>.</li>
+            <li>Explicitly assign secondary audio source components to both the <strong>Loop Source</strong> and <strong>Aim Source</strong> property slots.</li>
+            <li>Provide your seamless wood-creaking loop clip to the <strong>Locomotion Loop</strong> slot, and assign a gear grinding or crank tension loop to the <strong>Aim Loop</strong> property slot.</li>
+            <li>Add an element block for the <strong>Handwheel</strong>: Set Drive Mode to <code>ContinuousRotation</code>, Local Axis to <code>1, 0, 0</code> (Local Right), and Multiplier to <code>5</code>. This spins the wheel rapidly to match subtle muzzle tracking adjustments.</li>
+            <li>Add an element block for the underlying <strong>Worm Screw Support</strong>: Set Drive Mode to <code>MappedTranslation</code>, Local Axis to <code>0, 1, 0</code> (Local Up), and Multiplier to <code>0.25</code>. This causes the block to extend and slide upward exactly as the cannon barrel depresses downward into lower pitch angles.</li>
+        </ol>
+    </div>
+
+    <div class="note">
+        <strong>Torsion Catapult Setup Example:</strong>
+        <ol>
+            <li>Add an array slot for the main <strong>Throwing Arm Tensioner Ropes</strong>: Set Drive Mode to <code>MappedScale</code>, Local Axis to <code>0, 0, 1</code> (Local Forward), and Multiplier to <code>0.3</code>. This stretches the visual coil meshes along their axis as target range increases, indicating rope torsion.</li>
+            <li>Add an array slot for the side <strong>Winch Crank Wheel</strong>: Set Drive Mode to <code>ContinuousRotation</code>, Local Axis to <code>-1, 0, 0</code> (Inverted Local Left), and Multiplier to <code>6</code>. This handles spinning opposite mechanical fixtures smoothly.</li>
+            <li>Assign an operational wood-strain friction audio loop into the <strong>Aim Loop</strong> parameter field to output accurate acoustic creaks as the winch cranks the arm backwards into its firing position.</li>
+        </ol>
+    </div>
+
+    <div class="note">
+        <strong>Trebuchet Sling (Gravity + Animator) Setup Example:</strong>
+        <ol>
+            <li>Ensure a layered hierarchy: <code>Arm</code> -> <code>Sling_Pivot</code> (Empty) -> <code>Sling_Ropes</code> (Animated Visuals).</li>
+            <li>In the Pendulums array, assign <code>Sling_Pivot</code> to the <strong>Target Transform</strong>, and <code>Sling_Ropes</code> to the <strong>Animated Child</strong>. Set Recovery Duration to <code>0.25</code>.</li>
+            <li>In the weapon's Unity Events, link the <code>onFireEvent</code> to <code>PausePendulumByLabel</code>, passing your sling's string label.</li>
+            <li>Link the <code>onFireCompleteEvent</code> (or onIdle/onReload) to <code>ResumePendulumByLabel</code>, passing the same label.</li>
+            <li>In your Animator, ensure the Transition Duration returning to Idle from Firing is set to exactly <code>0</code> seconds.</li>
+        </ol>
+    </div>
+
+    <h2>4. Troubleshooting Notes</h2>
+    
+    <div class="troubleshooting-q">"My sling mesh points backward or has 'double rotation' applied when the script is on."</div>
+    <div class="troubleshooting-a">
+        This is "Double Gravity". The script is pointing the parent downward, and your idle animation is simultaneously pointing the child downward, causing the rotations to stack. Remove rotation keyframes from the child during the Idle/Loaded animations, or set them strictly to <code>0,0,0</code>. The script will handle the downward gravity on the parent.
+    </div>
+
+    <div class="troubleshooting-q">"The pendulum violently snaps or jumps when transitioning from the Firing animation back to Idle."</div>
+    <div class="troubleshooting-a">
+        Ensure you have populated the <strong>Animated Child</strong> slot so the script knows where the mesh ended its swing. Verify your <strong>Recovery Duration</strong> is greater than zero, and most importantly, check the Unity Animator to ensure the Transition Duration leaving the Firing state is set to <code>0</code> seconds. The physics script must handle the visual smoothing, not the Animator.
+    </div>
+
+    <div class="troubleshooting-q">"Handwheels are turning in the wrong direction during pitch shifts"</div>
+    <div class="troubleshooting-a">
+        Invert the sign of your <code>Multiplier</code> property (e.g., change <code>5</code> to <code>-5</code>) or flip the alignment values of your <code>Local Axis</code> property input fields inside the Inspector window.
+    </div>
+
+    <div class="troubleshooting-q">"Chassis wheels are rolling backward when the platform travels forward"</div>
+    <div class="troubleshooting-a">
+        By default, the script rotates wheel components along their local relative <code>Vector3.right</code> axis. Ensure your individual wheel meshes are modeled with their pivot forwards facing the exact same direction as the main vehicle chassis parent structure.
+    </div>
+
+    <div class="troubleshooting-q">"Chassis wheels slip or spin too fast during tight turns"</div>
+    <div class="troubleshooting-a">
+        Increase the value within your <code>Track Width</code> input field. If this value is too narrow relative to your physical asset layout, turn deltas overwrite linear vectors too aggressively, inducing visual slip.
+    </div>
+
+    <div class="troubleshooting-q">"Locomotion or aiming audio cuts off or pops instantly when the weapon fires or finishes reloading"</div>
+    <div class="troubleshooting-a">
+        Verify that you have explicit, separate components assigned to both the <strong>Loop Source</strong> and <strong>Aim Source</strong> slots. If left empty and the script automatically falls back to sharing a channel with the main weapon script, structural action cues will overwrite continuous mechanical looping feedback.
+    </div>
+
+    <div class="troubleshooting-q">"Elevation screws or scale objects are jumping out of alignment or clipping through frames"</div>
+    <div class="troubleshooting-a">
+        Ensure your target components have their initial pivot locations set cleanly in your modeling software. The script uses the starting layout location inside your Unity scene view as baseline coordinate anchors, meaning offsetting child groups manually can skew linear movement paths.
+    </div>
+
+    <div class="troubleshooting-q">"A component isn't moving at all when changing power parameters on fixed artillery"</div>
+    <div class="troubleshooting-a">
+        Verify that your parent weapon has its power options configured correctly. If <code>minLaunchSpeed</code> and <code>maxLaunchSpeed</code> possess identical metrics on a weapon without a physical elevation pivot, your interpolation fallback ratio cannot resolve and returns a flat value of zero.
+    </div>
+
+    <h2>Support</h2>
+    <div class="note">
+        For bug reports, setup issues, and licensing enquiries:<br><br>
+        support.dptgames <span style="opacity:0.7;">[at]</span> gmail.com
+    </div>
+</body>
+</html>

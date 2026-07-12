@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DPT Siege Weapons Gravity Alignment - Component Guide</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0; padding: 40px;
+            font-size: 11pt; line-height: 1.5;
+        }
+        h1, h2, h3 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 15px; margin-bottom: 5px; page-break-after: avoid; }
+        .troubleshooting-a { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <h1>DPT_GravityAlignment</h1>
+    <div class="subtitle">Component Reference Guide<br>
+    <span style="font-size: 11pt; font-style: normal;">A procedural simulated pendulum utility designed to bypass rigid animation locking. It forces hanging objects (like counterweights or lanterns) to maintain gravity alignment while dynamically swaying in reaction to positional deltas using mathematical spring tension.</span></div>
+
+    <h2>1. Inspector Property Configuration Tables</h2>
+    
+    <h3>Gravity Aligned Elements Array</h3>
+    <p>Processes an array of <code>Pendulum</code> blocks targeting hanging geometric structures within the prefab hierarchy.</p>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Label</strong></td>
+                <td>A descriptive text string used to organize and name array entries within the Unity Inspector layout for easy modification.</td>
+            </tr>
+            <tr>
+                <td><strong>Target Transform</strong></td>
+                <td>The scene reference to the hanging object. The pivot point of this assigned mesh must sit exactly at the visual hinge connection point, not the center of mass.</td>
+            </tr>
+            <tr>
+                <td><strong>Sway Sensitivity</strong></td>
+                <td>Determines how aggressively the geometric weight reacts to movement. You can input negative float values to invert the rocking direction if the object tilts incorrectly relative to its modeled orientation.</td>
+            </tr>
+            <tr>
+                <td><strong>Gravity Tension</strong></td>
+                <td>The internal mathematical spring constant (Hooke's Law). Higher values pull the object back to a perfectly level state much faster, simulating a heavier, denser weight.</td>
+            </tr>
+            <tr>
+                <td><strong>Damping</strong></td>
+                <td>The friction coefficient applied to the angular velocity. Higher values cause the rocking motion to settle rapidly, preventing infinite swinging loops.</td>
+            </tr>
+            <tr>
+                <td><strong>Max Swing Angle X</strong></td>
+                <td>A hard clamp applied to the local X (Pitch) rotation angle. Limits how far forward or backward the object can swing before hitting physical resistance.</td>
+            </tr>
+            <tr>
+                <td><strong>Max Swing Angle Z</strong></td>
+                <td>A hard clamp applied to the local Z (Roll) rotation angle. Limits how far side-to-side the object can sway. Often set lower than the X axis to simulate restricted hinge connections.</td>
+            </tr>
+            <tr>
+                <td><strong>Disable Z Rotation</strong></td>
+                <td>A boolean toggle that completely disables all side-to-side (Roll) momentum. Useful for heavy, rigid axle connections where lateral swaying is physically impossible.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>2. Technical Architecture</h2>
+    <ul>
+        <li><strong>Procedural Simulated Physics:</strong> Eliminates the requirement for complex Unity <code>Rigidbody</code> component configurations, which often break commercial asset prefabs due to missing layer or physics matrix setup by end-users. All movement is faked procedurally.</li>
+        <li><strong>Independent Execution Loop:</strong> Operates entirely decoupled from primary weapon tracking scripts. Evaluates exclusively within its own <code>LateUpdate</code> loop, measuring positional deltas after the Unity Animator has moved the parent structures.</li>
+        <li><strong>Chassis Yaw Inheritance:</strong> While the X (Pitch) and Z (Roll) angles are mathematically overwritten to simulate gravity, the logic natively preserves the parent's Y (Yaw) rotation. This allows counterweights to swing freely while still turning left and right properly as the vehicle traverses.</li>
+    </ul>
+
+    <h2>3. Practical Assembly Configurations</h2>
+    <p>Because the logic operates independently, it can be applied to any sub-mesh that requires reactive hanging physics without the overhead of the Unity physics engine.</p>
+     
+    <div class="note">
+        <strong>Trebuchet Counterweight Setup Example:</strong>
+        <ol>
+            <li>Attach the script to your trebuchet root prefab alongside your main mechanical drive component.</li>
+            <li>Add an element block to the <strong>Gravity Aligned Elements</strong> array.</li>
+            <li>Assign your hanging counterweight box to the <strong>Target Transform</strong> slot. Ensure the 3D model's pivot point is placed exactly at the top hinge rod, not the center of the wooden box.</li>
+            <li>Set <strong>Sway Sensitivity</strong> to <code>50</code>, <strong>Gravity Tension</strong> to <code>20</code>, and <strong>Damping</strong> to <code>3</code> to simulate a massively heavy box of rocks that swings slightly when the arm drops but settles quickly into a resting state.</li>
+        </ol>
+    </div>
+
+    <h2>4. Troubleshooting Notes</h2>
+    <div class="troubleshooting-q">"The counterweight is swinging in the opposite direction of the movement."</div>
+    <div class="troubleshooting-a">
+        Invert the sign of your <code>Sway Sensitivity</code> property (e.g., change <code>50</code> to <code>-50</code>). Directional swing logic depends heavily on the default modeled orientation of your local transform axes.
+    </div>
+
+    <div class="troubleshooting-q">"The counterweight starts violently shaking or spinning out of control."</div>
+    <div class="troubleshooting-a">
+        This indicates a feedback loop caused by an incorrect pivot point. Ensure the assigned mesh has its origin point modeled precisely at the hinge connection point. If the pivot is at the center of mass, the script rotation will mathematically shift the hinge, creating a false movement delta every frame.
+    </div>
+
+    <h2>Support</h2>
+    <div class="note">
+        For bug reports, setup issues, and licensing enquiries:<br><br>
+        support.dptgames <span style="opacity:0.7;">[at]</span> gmail.com
+    </div>
+</body>
+</html>
