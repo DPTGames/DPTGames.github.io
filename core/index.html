@@ -48,7 +48,7 @@
     <div class="warning">
         <strong>Important Setup Rule for Mixed Projects:</strong><br><br>
         <p>We highly recommend sharing a single instance of the <code>M_DPT_VCCORE</code> Master Material across all assets to maximize performance and batching efficiency.</p>
-        <p>Because the shader uses dynamic branching and keyword compilation, standard assets that do not use advanced features (like Normal Map arrays or procedural details) will safely bypass those systems with zero additional runtime cost, even if they share the material with interactive or complex assets that do use them.</p>
+        <p>Because the shader uses dynamic branching and keyword compilation, standard assets that do not use advanced features (like Normal Map arrays or procedural details) will safely bypass those systems with minimal additional runtime cost, even if they share the material with interactive or complex assets that do use them.</p>
     </div>
 
     <h2>Dynamic Interface Features</h2>
@@ -67,7 +67,7 @@
     <p>To ensure a completely seamless setup experience across our modular catalog, the Master Material Inspector features an automated <strong>Ecosystem Detection System</strong>. Instead of overwhelming your workspace with settings for packages you do not own, the layout dynamically matches your active project files.</p>
     
     <h3>How It Works</h3>
-    <p>Each DPT package contains an explicit signature file. When a package is loaded or imported, the editor engine runs a high-performance reflection pass once to update your layout capabilities dynamically:</p>
+    <p>Each DPT package contains an explicit signature file. When a package is loaded or imported, the editor performs a lightweight project scan once to update your layout capabilities dynamically:</p>
     <ul>
         <li><strong>Tailored Workspace:</strong> Advanced property blocks—such as <em>Vegetation Systems</em>, <em>Procedural Details</em>, <em>Emission</em>, or <em>DPT Package Normals</em>—remain entirely hidden from the UI unless you own a package that explicitly uses them.</li>
         <li><strong>Additive Progression:</strong> When you purchase and import an additional DPT package, its built-in signature file is detected immediately. The Inspector unhides the new settings automatically across the project, completely preserved and without disabling or resetting any configurations for assets you already own.</li>
@@ -75,7 +75,7 @@
     </ul>
 
     <div class="note">
-        <strong>Zero Manual Setup:</strong><br><br>
+        <strong>No Manual Setup:</strong><br><br>
         This discovery scan executes natively inside Unity during compilation passes. There are no manual serial keys, activation panels, custom preprocessor directives, or complex scripting configuration arrays to manage.
     </div>
 
@@ -96,9 +96,9 @@
     <p>This universal array is shared across all DPT packages. The Master Shader dynamically selects the correct texture slice per-mesh via the vertex color alpha channel, meaning no material changes or additional draw calls are ever required.</p>
 
     <ul>
-        <li><strong>Zero Setup:</strong> The array is completely pre-configured. When you enable <em>Use Procedural Details</em> on the material, the correct normals and detail data are applied instantly.</li>
+        <li><strong>No Setup:</strong> The array is completely pre-configured. When you enable <em>Use Procedural Details</em> on the material, the correct normals and detail data are applied instantly.</li>
         <li><strong>Memory Efficiency:</strong> To keep VRAM footprints strictly minimized, all procedural detail textures within the array are authored at a highly optimized 512x512 resolution. Because these are tiled micro-details, they maintain crisp visual fidelity without bloating your memory budget.</li>
-        <li><strong>Dynamic Branching:</strong> If a mesh does not use procedural details (or if the detail sliders are set to zero), the shader's internal branching safely bypasses the array sampling logic entirely to ensure zero GPU overhead.</li>
+        <li><strong>Dynamic Branching:</strong> If a mesh does not use procedural details (or if the detail sliders are set to zero), the shader's internal branching safely bypasses the array sampling logic entirely to ensure minimal GPU overhead.</li>
     </ul>
 
     <div class="note">
