@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DPT Games Functional Siege Weapons - User Guide</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0; padding: 40px;
+            font-size: 11pt; line-height: 1.5;
+        }
+        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        td code { font-size: 9.5pt; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .perf { background-color: #0c1f12; border-left: 4px solid #4ade80; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .tip { background-color: #1a1a2e; border-left: 4px solid #a78bfa; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        pre { padding: 12px; margin: 10px 0; overflow-x: auto; line-height: 1.6; }
+        .badge {
+            display: inline-block;
+            background-color: #166534;
+            color: #4ade80;
+            font-size: 8.5pt;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 3px;
+            letter-spacing: 0.05em;
+            vertical-align: middle;
+            margin-left: 6px;
+        }
+        .badge-blue { background-color: #1e3a5f; color: #7dd3fc; }
+        .badge-orange { background-color: #431407; color: #fb923c; }
+        .badge-purple { background-color: #2e1065; color: #c4b5fd; }
+        .state-arrow { color: #38bdf8; font-weight: bold; margin: 0 4px; }
+        .state-label {
+            display: inline-block;
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            color: #bae6fd;
+            font-family: 'Consolas', monospace;
+            font-size: 9.5pt;
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+        .divider { border: none; border-top: 1px solid #1e293b; margin: 30px 0; }
+    </style>
+</head>
+<body>
+<nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
+    <a href="../index.html" style="color: #38bdf8; margin-right: 15px;">&larr; Back to Hub</a>
+    <span style="color: #64748b;">|</span>
+    <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Functional Siege Weapons</a>
+    <a href="projectiles.html" style="color: #f8fafc; margin-right: 15px;">Projectiles System</a>
+    <a href="procedural_mechanical_drive.html.html" style="color: #f8fafc;">Procedural Mechanical Drive</a>
+</nav>
+    <h1>DPT Games Functional Siege Weapons</h1>
+    <div class="subtitle">Component User Guide<br>
+    <span style="font-size: 11pt; font-style: normal;">
+        The <code>DPT_SiegeWeapon</code> component provides a complete state-machine-driven weapon controller for trebuchets, catapults, ballistae, cannons, and any other projectile weapon. It shares the same destruction, audio, and debris systems as <code>DPT_InteractiveProp</code>, and exposes a full UnityEvent API so your Animator and AI can respond to every stage of the weapon loop without writing any additional code.
+    </span></div>
+
+    <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
+        <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
+        <a href="#setup-checklist" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Quick Setup Checklist</a>
+        <a href="#state-machine" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">2. Weapon State Machine</a>
+        <a href="#inspector-reference" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">3. Inspector Reference</a>
+        <a href="#fracture-destruction" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">4. Fracture & Destruction</a>
+        <a href="#kinetic-transfer" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">5. Kinetic Transfer</a>
+        <a href="#audio-vfx-effects" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">6. Audio, VFX & Effects</a>
+        <a href="#unity-events" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">7. Unity Events & Animator</a>
+        <a href="#scripting-api" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">8. Scripting API</a>
+        <a href="#scene-gizmos" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">9. Scene View Gizmos</a>
+        <a href="#editor-tools" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">10. Editor Testing Tools</a>
+        <a href="#player-controller" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">11. Demo Player Controller</a>
+        <a href="#screen-shake" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">12. Camera & Screen Shake</a>
+        <a href="#breakable-props" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">13. Breakable Props</a>
+        <a href="#compatibility" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">14. Compatibility & Integration</a>
+        <a href="#support" style="color: #a5f3fc; text-decoration: none;">15. Support</a>
+    </div>
+
+    <h2 id="setup-checklist">Quick Setup Checklist</h2>
+    <ol>
+        <li>Add <code>DPT_SiegeWeapon</code> to the root GameObject of your weapon prefab. An <code>AudioSource</code> is added automatically if one is not already present.</li>
+        <li>Under <strong>Core Object Setup</strong>, assign your intact mesh GameObjects to <strong>Pristine Meshes</strong>. These are hidden when the weapon is destroyed.</li>
+        <li>Under <strong>Animated Parts &amp; Launch Setup</strong>, assign the Transforms that your Animator will drive: **Firing Arm**, **Traverse Pivot**, **Elevation Pivot**, and **Launch Point**. Assign the sling or ammo visual to **Ammo Visual** — it is shown while loaded and hidden when the weapon fires.</li>
+        <li>For cannon-style weapons with a lit fuse, assign **Fuse Point** to the empty Transform at the touch-hole. Parent your spark mesh and fuse <code>ParticleSystem</code> under this Transform in the prefab, then assign the <code>ParticleSystem</code> to **Fuse Effect**. The fuse activates automatically when the weapon enters the Loaded state and stops the moment it fires.</li>
+        <li>Optionally assign a **Projectile Prefab** under **Combat &amp; Firing**. Leave it empty for animation-only mode.</li>
+        <li>Set **Fire Duration** to match your fire animation clip length and **Reload Duration** to match your reload clip length.</li>
+        <li>Expand the **Expanded Unity Events** foldout and wire <code>onFireEvent</code> and <code>onReloadStartEvent</code> to the corresponding <code>Animator.SetTrigger</code> calls.</li>
+        <li>(Optional) Assign a **Broken Parent** to enable the full fracture destruction system — see the <em>Fracture &amp; Destruction</em> section below.</li>
+        <li>(Optional) For mobile wheeled weapons or models with moving mechanical elements, add the <code>DPT_ProceduralMechanicalDrive</code> companion script. (Refer to the separate *Procedural Mechanical Drive Guide* to configure its dedicated wheel audio loop settings).</li>
+        <li>Press **Reset Weapon** in the Inspector toolbar to confirm all references are clean before entering Play Mode.</li>
+    </ol>
+
+    <h2 id="state-machine">The Weapon State Machine</h2>
+    <p>The weapon is always in exactly one of the following states. Transitions happen automatically as part of the firing loop, or can be triggered externally via the scripting API.</p>
+
+    <div style="background-color:#1e293b; border:1px solid #334155; padding:16px; margin:15px 0; border-radius:4px; font-size:10pt; line-height:2;">
+        <span class="state-label">Idle</span>
+        <span class="state-arrow">→</span>
+        <span class="state-label">Moving</span> / <span class="state-label">Aiming</span>
+        <span class="state-arrow">→</span>
+        <span class="state-label">Loaded</span>
+        <span class="state-arrow">→</span>
+        <span class="state-label">Firing</span>
+        <span class="state-arrow">→</span>
+        <span class="state-label">Reloading</span>
+        <span class="state-arrow">→</span>
+        <span class="state-label">Loaded</span>
+        <span class="state-arrow">→ ...</span>
+        <br>
+        <span style="color:#94a3b8; font-size:9.5pt;">Any state</span>
+        <span class="state-arrow">→</span>
+        <span class="state-line" style="border-color:#ef4444; color:#fca5a5;">Destroyed</span>
+        <span style="color:#94a3b8; font-size:9.5pt; margin-left:8px;">(on <code>TakeDamage</code> or <code>DestroyWeapon</code>)</span>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:16%;">State</th>
+                <th>Description</th>
+                <th style="width:32%;">Exit Condition</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Idle</strong></td>
+                <td>Default resting state. No active input or sequence running.</td>
+                <td>Call <code>Move()</code>, <code>AimAt()</code>, or load when <code>startLoaded</code> is true.</td>
+            </tr>
+            <tr>
+                <td><strong>Moving</strong></td>
+                <td>The whole weapon is being repositioned via <code>Move()</code>. Purely positional translation; physical chassis audio logic is deferred to satellite modules.</td>
+                <td>Call <code>StopMoving()</code>. Returns to Loaded or Idle depending on <code>startLoaded</code>.</td>
+            </tr>
+            <tr>
+                <td><strong>Aiming</strong></td>
+                <td>Traverse or elevation input is being applied.</td>
+                <td>Call <code>StopAiming()</code>. Returns to Loaded or Idle.</td>
+            </tr>
+            <tr>
+                <td><strong>Loaded</strong></td>
+                <td>Weapon is armed and ready. Ammo visual is shown. Fuse Effect begins playing (if assigned). <code>CanFire</code> returns <code>true</code>.</td>
+                <td>Call <code>Fire()</code>, or automatically if <code>autoFire</code> is enabled.</td>
+            </tr>
+            <tr>
+                <td><strong>Firing</strong></td>
+                <td>Fire animation is playing. Fuse Effect is stopped. Projectile spawns at 20% through <code>fireDuration</code>. Ammo visual is hidden.</td>
+                <td>Automatically transitions to Reloading after <code>fireDuration</code> seconds.</td>
+            </tr>
+            <tr>
+                <td><strong>Reloading</strong></td>
+                <td>Reload sequence is running. Reload audio plays.</td>
+                <td>Automatically transitions to Loaded after <code>reloadDuration</code> seconds.</td>
+            </tr>
+            <tr>
+                <td><strong>Destroyed</strong></td>
+                <td>Weapon has been broken. All coroutines stop. Fuse Effect is stopped and cleared. Debris physics begin. Terminal — use <code>ResetWeapon()</code> to recover.</td>
+                <td>N/A. Call <code>ResetWeapon()</code> to restore (e.g. for object pooling).</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+       <strong>Projectile Spawn Delay:</strong><br><br>
+        The projectile prefab is instantiated after this delay through <code>fireDuration</code> by default, giving the illusion that it leaves mid-swing or mid-throw rather than at the very first frame of the animation. <code>onProjectileLaunchEvent</code> fires at the same moment, which is the correct place to trigger any launch VFX or camera shake.
+    </div>
+
+    <h2 id="inspector-reference">Inspector Reference</h2>
+
+    <h3>Core Object Setup</h3>
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Pristine Meshes</strong></td><td>The mesh GameObjects shown while the weapon is intact. These are hidden when the weapon is destroyed and the broken parent is shown in their place.</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Animated Parts &amp; Launch Setup</h3>
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Firing Arm</strong></td><td>The throwing arm, barrel, or any Transform that your Animator drives during the fire cycle. Not moved by the script directly — assign it so external tools can find it.</td></tr>
+            <tr><td><strong>Counterweight</strong></td><td>Optional. The counterweight or tensioner on trebuchet-style weapons, typically animated in opposition to the firing arm.</td></tr>
+            <tr><td><strong>Traverse Pivot</strong></td><td>The Transform rotated left/right when <code>Traverse()</code> is called. When assigned, the Scene view gizmo draws the permitted arc in green. The inspector also reveals traverse speed and angle limits.</td></tr>
+            <tr><td><strong>Elevation Pivot</strong></td><td>The Transform rotated up/down when <code>Elevate()</code> is called. When assigned, the inspector reveals elevation speed and angle limits. The angle of the Elevation Pivot affects the launch speed when the weapon is fired.</td></tr>
+            <tr><td><strong>Ammo Visual</strong></td><td>A GameObject (boulder, loaded bolt, cannonball) that is enabled when the weapon enters Loaded state and disabled the instant <code>Fire()</code> is called.</td></tr>
+            <tr><td><strong>Broken Ammo Visual</strong></td><td>The broken parent of the ammoVisual object for if the Siege Weapon breaks when loaded.</td></tr>
+            <tr><td><strong>Launch Point</strong></td><td>The Transform from which the projectile prefab is spawned and from which Fire VFX is instantiated. The Scene view gizmo draws a yellow ray showing the launch direction, scaled by launch speed. If unassigned, the weapon root is used.</td></tr>
+            <tr><td><strong>Fuse Point</strong></td><td>An empty Transform positioned at the touch-hole or fuse tip on cannon-style weapons. Parent your spark mesh and fuse <code>ParticleSystem</code> here. The entire Fuse Point GameObject is toggled on when the weapon enters Loaded state and off when it fires or is destroyed, so all fuse visuals activate and deactivate together with a single call.</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Combat &amp; Firing</h3>
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Projectile Prefab</strong></td><td>The GameObject instantiated at the Launch Point when the weapon fires. Leave empty for animation-only mode — all events still fire.</td></tr>
+            <tr><td><strong>Launch Speed</strong></td><td>The speed in m/s applied to the projectile's Rigidbody on spawn. Clamped at runtime by Min and Max Launch Speed. Controlled by the Elevation angle at launch.</td></tr>
+            <tr><td><strong>Min Launch Speed</strong></td><td>Lower clamp on Launch Speed. <code>AdjustLaunchSpeed()</code> will never reduce speed below this value. Default: 5 m/s.</td></tr>
+            <tr><td><strong>Max Launch Speed</strong></td><td>Upper clamp on Launch Speed. <code>AdjustLaunchSpeed()</code> and <code>AimAt()</code>'s ballistic solver will never exceed this value. Default: 60 m/s.</td></tr>
+            <tr><td><strong>Launch Direction</strong></td><td>Local-space direction of the launch force, relative to the Launch Point Transform. Default is <code>Vector3.forward</code>.</td></tr>
+            <tr><td><strong>Fire Timing Mode</strong></td><td>Determines whether the duration of the firing state is controlled by a hardcoded duration or calculated directly from an animation asset. Options: <code>Manual Timer</code> or <code>Animation Clip</code>.</td></tr>
+            <tr><td><strong>Fire Duration</strong></td><td>How many seconds the weapon stays in the Firing state. Contextually displayed and active only when <strong>Fire Timing Mode</strong> is configured to <em>Manual Timer</em>. Default: 1.2s.</td></tr>
+            <tr><td><strong>Fire Animation Clip</strong></td><td>The specific animation clip used to dynamically resolve accurate mechanical duration for the firing state sequence. Contextually displayed and active only when <strong>Fire Timing Mode</strong> is configured to <em>Animation Clip</em>.</td></tr>
+            <tr><td><strong>Reload Timing Mode</strong></td><td>Determines whether the duration of the reloading state sequence is controlled by a hardcoded duration or calculated directly from an animation asset. Options: <code>Manual Timer</code> or <code>Animation Clip</code>.</td></tr>
+            <tr><td><strong>Reload Duration</strong></td><td>How many seconds the reload sequence takes before the weapon returns to Loaded. Contextually displayed and active only when <strong>Reload Timing Mode</strong> is configured to <em>Manual Timer</em>. Default: 3s.</td></tr>
+            <tr><td><strong>Reload Animation Clip</strong></td><td>The specific animation clip used to dynamically resolve accurate mechanical duration for the reload state sequence. Contextually displayed and active only when <strong>Reload Timing Mode</strong> is configured to <em>Animation Clip</em>.</td></tr>
+            <tr><td><strong>Ignore Projectile Collisions</strong></td><td>When enabled, the physics engine is instructed to ignore collisions between the weapon and any projectile it spawns. Recommended for most setups. For optimal physics performance, using dedicated Project Layers to isolate weapon and projectile collision matrices is preferred.</td></tr>
+            <tr><td><strong>Start Loaded</strong></td><td>If enabled, the weapon begins Play Mode in the Loaded state rather than Idle.</td></tr>
+            <tr><td><strong>Auto Fire</strong></td><td>If enabled, the weapon fires automatically every time it reaches the Loaded state, waiting <strong>Auto Fire Interval</strong> seconds before each shot.</td></tr>
+            <tr><td><strong>Auto Fire Interval</strong></td><td>Extra pause in seconds added after each reload before auto-firing again. Visible only when Auto Fire is enabled.</td></tr>
+            <tr><td><strong>Auto Reload</strong></td><td>If enabled, the weapon begins reloading immediately after the fire sequence completes. Disable to require a manual <code>Reload()</code> call.</td></tr>
+        </tbody>
+    </table>
+
+<h3>Movement &amp; Aiming</h3>
+    <div class="note">
+        <strong>Traverse and elevation sub-sections only appear in the Inspector when their respective pivot Transforms are assigned.</strong> If you are building a fixed weapon (a wall-mounted ballista, for example) simply leave these fields unassigned to keep the Inspector clean.
+    </div>
+
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Traverse Speed</strong></td><td>Degrees per second the weapon rotates left or right when <code>Traverse()</code> is called with a normalised input delta.</td></tr>
+            <tr><td><strong>Min / Max Traverse</strong></td><td>Angular limits in degrees relative to the weapon's initial forward direction. The Scene view gizmo draws this arc in the horizontal plane.</td></tr>
+            <tr><td><strong>Elevation Speed</strong></td><td>Degrees per second the weapon pitches up or down when <code>Elevate()</code> is called.</td></tr>
+            <tr><td><strong>Min / Max Elevation</strong></td><td>Angular clamp on the elevation pivot. Negative minimum allows the weapon to depress below horizontal.</td></tr>
+            <tr><td><strong>Move Speed</strong></td><td>World-space movement speed in m/s applied by <code>Move()</code>. Used for chassis-based repositioning transformations.</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Health &amp; Impact Damage</h3>
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Max Health</strong></td><td>Total structural health of the weapon. The public <code>HealthNormalised</code> property returns this as a 0–1 value for driving health bars or material effects.</td></tr>
+            <tr><td><strong>Break On Impact</strong></td><td>If enabled, physical collisions with other Rigidbodies can trigger destruction automatically.</td></tr>
+            <tr><td><strong>Impact Velocity Threshold</strong></td><td>The minimum relative collision speed (m/s) required to deal damage. Visible only when Break On Impact is enabled.</td></tr>
+        </tbody>
+    </table>
+
+    <h2 id="fracture-destruction">Fracture &amp; Destruction</h2>
+    <p>The destruction system is a direct port of the <code>DPT_InteractiveProp</code> fracture pipeline. When a <strong>Broken Parent</strong> is assigned, the weapon gains full debris explosion physics, directional impact forces, kinetic transfer to nearby objects, and the automatic sink-and-cleanup routine.</p>
+
+    <div class="tip">
+        <strong>Broken Parent is optional.</strong> If you leave it unassigned, the weapon can still take damage and fire <code>onDestroyedEvent</code> — it simply will not display a fracture. This is useful for weapons you want to disable narratively without a visual shatter effect.
+    </div>
+
+    <h3>Hierarchy Setup</h3>
+    <p>The Broken Parent should have a single root GameObject containing all debris Rigidbodies as direct or nested children. This root is deactivated by default and activated only when the weapon breaks. The script caches all Rigidbody positions and rotations at startup so <code>ResetWeapon()</code> can restore them cleanly.</p>
+    <p>For modular weapons with shared components such as axles, levers, or winding mechanisms that exist as separate prefabs, use <strong>Attached Debris Pieces</strong> to link their broken base transforms without needing to unpack or reparent them in the hierarchy. These pieces are reparented at runtime to the first Broken Base Piece on destruction and restored to their original parents on reset.</p>
+
+    <h3>Fracture Physics Properties</h3>
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Broken Parent</strong></td><td>Root of the debris hierarchy. Activating this field unlocks all fracture properties below.</td></tr>
+            <tr><td><strong>Broken Base Pieces</strong></td><td>Rigidbodies treated as primary structural members (the main frame, chassis, or base). These receive a heavily reduced explosion force (<code>baseForceMultiplier</code>) to keep them grounded while smaller debris scatters.</td></tr>
+            <tr><td><strong>Attached Debris Pieces</strong></td><td>Broken base transforms belonging to modular attached objects — axles, levers, winding mechanisms — that should follow the primary broken base piece when the weapon is destroyed. These transforms are reparented to <code>Broken Base Pieces[0]</code> at the moment of fracture and restored to their original parents when <code>ResetWeapon()</code> is called. This allows modular components to remain as intact prefabs in the hierarchy while still having their debris stay physically anchored to the broken frame. If a modular component has no broken variant — such as a wheel that should remain attached to the wreckage — assign its root transform here directly and it will move with the broken base.</td></tr>
+            <tr><td><strong>Explosion Force</strong></td><td>The radial impulse applied to all non-base debris pieces at the moment of fracture.</td></tr>
+            <tr><td><strong>Internal Shatter Radius</strong></td><td>The radius of the internal shatter explosion. Pieces further away than this receive proportionally less force. Visualised as a red disc gizmo.</td></tr>
+            <tr><td><strong>Explosion Y Offset</strong></td><td>Vertical offset of the explosion origin relative to the weapon root. Raising this slightly above the base distributes force more evenly across tall structures like trebuchets.</td></tr>
+            <tr><td><strong>Base Force Multiplier</strong></td><td>Scales the explosion force applied to pieces listed in Broken Base Pieces. Keeping this very low (default: 0.08) means the base stays roughly in place while upper pieces fly.</td></tr>
+            <tr><td><strong>Use Directional Impact</strong></td><td>When enabled, the direction of the hit is factored into debris trajectories — pieces on the far side of the weapon fly away from the impact. Pairs well with projectile-triggered destruction calls.</td></tr>
+            <tr><td><strong>Directional Impact Force</strong></td><td>Additional impulse added to non-base debris in the direction of the incoming hit. Visible only when Use Directional Impact is enabled.</td></tr>
+            <tr><td><strong>Show Explosion Gizmo</strong></td><td>Toggles the explosion radius and force-scale gizmos in the Scene view while the weapon is selected.</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Debris Cleanup</h3>
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Time Before Cleanup</strong></td><td>Seconds after destruction before debris physics are frozen and the sink routine begins.</td></tr>
+            <tr><td><strong>Sink Speed</strong></td><td>Speed in m/s at which all debris sinks into the ground during cleanup. This masks the object disappearing without a jarring pop.</td></tr>
+            <tr><td><strong>Sink Duration</strong></td><td>How many seconds the sinking animation lasts before the object is destroyed/deactivated.</td></tr>
+            <tr><td><strong>Destroy On Cleanup</strong></td><td>If true, the entire weapon GameObject is destroyed via <code>Destroy()</code> at the end of the sink. If false, it is deactivated instead — useful for object pooling.</td></tr>
+            <tr><td><strong>Despawn Base Piece</strong></td><td>If disabled, the base pieces listed in Broken Base Pieces are detached from the cleanup routine and left in the scene permanently. Useful when the weapon base should remain as terrain geometry.</td></tr>
+        </tbody>
+    </table>
+
+    <h2 id="kinetic-transfer">Kinetic Transfer</h2>
+    <p>On destruction, the weapon can radially push nearby lightweight Rigidbodies, simulating the shockwave of a large structure collapsing. Only objects with a mass at or below <strong>Max Pushable Mass</strong> are affected, preventing artillery from launching siege towers.</p>
+
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Transfer Kinetic Energy</strong></td><td>Master toggle. When disabled all sub-properties are hidden.</td></tr>
+            <tr><td><strong>Kinetic Transfer Radius</strong></td><td>Radius of the overlap sphere that identifies nearby Rigidbodies. Visualised as a blue wire sphere gizmo.</td></tr>
+            <tr><td><strong>Kinetic Transfer Force</strong></td><td>Explosion force applied to each affected Rigidbody.</td></tr>
+            <tr><td><strong>Kinetic Upward Modifier</strong></td><td>Upward bias added to the explosion force direction. Increasing this gives nearby objects a slight vertical lift.</td></tr>
+            <tr><td><strong>Max Pushable Mass</strong></td><td>Rigidbodies heavier than this value are ignored entirely and will not be pushed.</td></tr>
+        </tbody>
+    </table>
+
+   <h2 id="audio-vfx-effects">Audio, VFX &amp; Effects</h2>
+    <p>To prevent audio cutoff and allow natural reverb tails, operational asset audio cues are routed through dedicated <code>AudioSource</code> components. Each event slot accepts multiple clips — one is selected at random each time that event fires.</p>
+
+    <h3>Dedicated Audio Sources</h3>
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Fire Source</strong></td><td>Uses <code>PlayOneShot</code> to allow rapid overlapping muzzle blasts without terminating the previous blast.</td></tr>
+            <tr><td><strong>Reload Source</strong></td><td>Uses standard playback for the mechanical winding loop, allowing it to fade out smoothly. Also plays the final mechanical "Loaded" click.</td></tr>
+            <tr><td><strong>Loaded Source</strong></td><td>Dedicated to looping tension sounds (e.g., creaking ropes, strained wood) while the weapon sits armed. Automatically stops when the weapon fires or breaks.</td></tr>
+            <tr><td><strong>Break Source</strong></td><td>Plays the destruction sounds using a frame-accordion system to prevent clipping and audio blow-out when multiple weapons shatter simultaneously.</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Audio Clips</h3>
+    <table>
+        <thead><tr><th style="width:22%;">Clip Array</th><th>When It Plays</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Fire Sounds</strong></td><td>At the start of the Firing state, before the projectile spawns.</td></tr>
+            <tr><td><strong>Reload Sounds</strong></td><td>When the Reloading state begins, cleanly cutting off any lingering operational loops.</td></tr>
+            <tr><td><strong>Loaded Sounds</strong></td><td>When the weapon transitions into the Loaded state (winding click, chain lock, etc.).</td></tr>
+                        <tr><td><strong>Break Sounds</strong></td><td>On weapon destruction. Uses the same frame-accordion system as Interactive Props: if multiple weapons break on the same frame, later ones are played at reduced volume to prevent audio clipping.</td></tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+        <strong>The Dual-Layer Audio Paradigm: Projectiles vs. Surface Materials</strong><br><br>
+        To protect runtime memory and eliminate channel masking conflicts, weapon impacts are split away from the chassis:
+        <ul>
+            <li><strong>Core Kinetic Mass Thuds</strong> are populated within the <code>impactSounds</code> array inside the core projectile scripts, spawning out in world space exactly where the strike occurs.</li>
+            <li><strong>Contextual Surface Splintering</strong> (e.g., stone fracturing, dirt dispersion, timber cracking) is offloaded to the <code>DPT_ProjectileSurfaceImpact</code> component based on targeting physics layers.</li>
+        </ul>
+    </div>
+
+    <h3>Audio Settings</h3>
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Pitch Variance</strong></td><td>Each sound is played at a pitch offset randomly sampled from ±this value. At 0.15 (the default), pitch varies between 0.85× and 1.15×, preventing identical sounds from feeling mechanical.</td></tr>
+        </tbody>
+    </table>
+
+    <h3>VFX</h3>
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Fuse Effect</strong></td><td>A <code>ParticleSystem</code> representing the burning fuse, typically parented under <strong>Fuse Point</strong>. Played when the weapon enters the Loaded state and stopped (with <code>Clear()</code>) when the weapon fires, is destroyed, or is reset. Play On Awake should be disabled on the assigned <code>ParticleSystem</code> as the script manages playback directly.</td></tr>
+            <tr><td><strong>Fire VFX</strong></td><td>A particle system prefab instantiated at the <strong>Launch Point</strong> when the projectile spawns (20% into Fire Duration). Use this for muzzle flash, dust kick, or similar one-shot fire effects. Automatically destroyed after 5 seconds.</td></tr>
+            <tr><td><strong>Reload VFX</strong></td><td>A particle system prefab instantiated at the weapon root when the reload sequence completes. Automatically destroyed after 5 seconds.</td></tr>
+            <tr><td><strong>Particle Destroy VFX</strong></td><td>A particle system prefab instantiated at the weapon position when it is destroyed. Automatically cleaned up after <code>timeBeforeCleanup</code> seconds.</td></tr>
+        </tbody>
+    </table>
+
+    <div class="tip">
+        <strong>Fuse Point setup:</strong> Create an empty child GameObject on the cannon prefab and position it at the touch-hole, then assign it to **Fuse Point**. Parent both your animated spark mesh and your fuse <code>ParticleSystem</code> under this GameObject. The script toggles the entire Fuse Point active state, so the spark mesh, particle emitter, and any fuse smoke all activate and deactivate together with one call — no animation keying required. The spark mesh itself can rotate and pulse continuously via a simple script or Animation component while the GameObject is active.
+    </div>
+
+    <h2 id="unity-events">Unity Events &amp; Animator Integration</h2>
+    <p>Every stage of the weapon loop exposes a <code>UnityEvent</code> in the Inspector. The primary use case is wiring these directly to <code>Animator.SetTrigger()</code> calls — no intermediate scripts required.</p>
+
+    <h3>Recommended Animator Wiring</h3>
+    <table>
+        <thead><tr><th style="width:30%;">UnityEvent</th><th>Recommended Animator Call</th><th>Notes</th></tr></thead>
+        <tbody>
+            <tr><td><strong>onFireEvent</strong></td><td><code>Animator.SetTrigger("Fire")</code></td><td>Fires at the start of the Firing state, before the projectile spawns.</td></tr>
+            <tr><td><strong>onProjectileLaunchEvent</strong></td><td>Camera shake / launch VFX trigger</td><td>Fires at the moment the projectile is instantiated, 20% into Fire Duration.</td></tr>
+            <tr><td><strong>onReloadStartEvent</strong></td><td><code>Animator.SetTrigger("Reload")</code></td><td>Fires at the start of Reloading.</td></tr>
+            <tr><td><strong>onReloadCompleteEvent</strong></td><td><code>Animator.SetTrigger("Loaded")</code></td><td>Fires when reload finishes and the weapon is armed again.</td></tr>
+            <tr><td><strong>onLoadedEvent</strong></td><td><code>Animator.SetBool("Loaded", true)</code></td><td>Also fires at startup if Start Loaded is enabled.</td></tr>
+            <tr><td><strong>onMoveStartEvent</strong></td><td><code>Animator.SetBool("Moving", true)</code></td><td>Fires once when movement begins. Pairs with separate wheel rolling animation parameters.</td></tr>
+            <tr><td><strong>onMoveStopEvent</strong></td><td><code>Animator.SetBool("Moving", false)</code></td><td>Fires once when <code>StopMoving()</code> is called.</td></tr>
+            <tr><td><strong>onDestroyedEvent</strong></td><td><code>Animator.SetTrigger("Destroy")</code></td><td>Fires before debris physics begin — wire any death animation trigger here.</td></tr>
+        </tbody>
+    </table>
+
+    <div class="perf">
+        <strong>Full Event List:</strong><br><br>
+        <strong>Idle &amp; Movement:</strong> <code>onIdleEvent</code>, <code>onMoveStartEvent</code>, <code>onMoveStopEvent</code><br>
+        <strong>Aiming:</strong> <code>onAimStartEvent</code>, <code>onAimStopEvent</code><br>
+        <strong>Weapon Loop:</strong> <code>onLoadedEvent</code>, <code>onFireEvent</code>, <code>onProjectileLaunchEvent</code>, <code>onReloadStartEvent</code>, <code>onReloadCompleteEvent</code><br>
+        <strong>Damage &amp; Destruction:</strong> <code>onDamagedEvent</code>, <code>onDestroyedEvent</code>
+    </div>
+
+    <h2 id="scripting-api">Scripting API</h2>
+    <p>The following public methods are safe to call from any external script, NavMeshAgent, or AI controller.</p>
+
+    <h3>Weapon Control</h3>
+    <table>
+        <thead><tr><th style="width:40%;">Method / Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><code>Fire()</code></td><td>Begins the fire sequence. Only executes if the weapon is currently in the <code>Loaded</code> state.</td></tr>
+            <tr><td><code>Reload()</code></td><td>Begins the reload sequence. Has no effect if the weapon is already Loaded or Destroyed.</td></tr>
+            <tr><td><code>Traverse(float degrees)</code></td><td>Rotates the traverse pivot by <code>degrees × traverseSpeed × Time.deltaTime</code> per frame. Pass a normalised axis value (−1 to 1) from your input system.</td></tr>
+            <tr><td><code>Elevate(float degrees)</code></td><td>Pitches the elevation pivot. Same delta convention as <code>Traverse</code>.</td></tr>
+            <tr><td><code>AimAt(Vector3 worldPos)</code></td><td>Instantly solves and applies the traverse and elevation angles needed to face a world-space point. For weapons without an elevation pivot, the ballistic solver adjusts <code>launchSpeed</code> to reach the target, clamped to <code>minLaunchSpeed</code> and <code>maxLaunchSpeed</code>. Suitable for AI targeting.</td></tr>
+            <tr><td><code>StopAiming()</code></td><td>Marks aiming as complete and fires <code>onAimStopEvent</code>.</td></tr>
+            <tr><td><code>Move(Vector3 worldDelta)</code></td><td>Translates the whole weapon position by <code>worldDelta × moveSpeed × Time.deltaTime</code>. Fires <code>onMoveStartEvent</code> on the first call after being stopped.</td></tr>
+            <tr><td><code>StopMoving()</code></td><td>Fires <code>onMoveStopEvent</code> and returns the weapon to Idle or Loaded.</td></tr>
+            <tr><td><code>AdjustLaunchSpeed(float delta)</code></td><td>Adds <code>delta</code> to the current launch speed and clamps the result between <code>minLaunchSpeed</code> and <code>maxLaunchSpeed</code>. This is the correct method to call from a player controller when adjusting power — the weapon owns its own clamping logic and no external limits are needed.</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Damage &amp; Destruction</h3>
+    <table>
+        <thead><tr><th style="width:40%;">Method</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><code>TakeDamage(float amount, Vector3 hitPoint)</code></td><td>Reduces health by <code>amount</code>. Triggers destruction if health reaches zero. <code>hitPoint</code> is used to bias the debris explosion direction.</td></tr>
+            <tr><td><code>DestroyWeapon()</code></td><td>Destroys the weapon immediately with a non-directional explosion.</td></tr>
+            <tr><td><code>DestroyWeapon(Vector3 hitPoint)</code></td><td>Destroys the weapon with a directional explosion originating from <code>hitPoint</code>.</td></tr>
+            <tr><td><code>ResetWeapon()</code></td><td>Fully restores the weapon to its initial state: health, position, Rigidbody poses, pristine meshes, fuse state, satellite component fields, and state machine. Safe to call for object pooling.</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Read-Only State Properties</h3>
+    <table>
+        <thead><tr><th style="width:40%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><code>WeaponState State</code></td><td>The current <code>WeaponState</code> enum value. Poll this from an external Animator driver or UI health system.</td></tr>
+            <tr><td><code>float HealthNormalised</code></td><td>Current health as a 0–1 value. Suitable for driving a health bar slider directly.</td></tr>
+            <tr><td><code>bool CanFire</code></td><td>Returns <code>true</code> only when the weapon is in the <code>Loaded</code> state.</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Example: AI Fire Controller</h3>
+    <pre>
+// Fire at the player when within range and weapon is ready
+void Update()
+{
+    if (!weapon.CanFire) return;
+
+    float dist = Vector3.Distance(transform.position, player.position);
+    if (dist &lt; attackRange)
+    {
+        weapon.AimAt(player.position);
+        weapon.Fire();
+    }
+}
+    </pre>
+
+    <h3>Example: Adjusting Launch Power from a Custom Controller</h3>
+    <pre>
+// Call AdjustLaunchSpeed rather than setting launchSpeed directly.
+// The weapon enforces its own min/max clamp internally.
+void Update()
+{
+    float mouseY = Input.GetAxis("Mouse Y");
+    weapon.AdjustLaunchSpeed(mouseY * powerAdjustmentSpeed * Time.deltaTime);
+}
+    </pre>
+
+    <h2 id="scene-gizmos">Scene View Gizmos</h2>
+    <p>Select any GameObject carrying a <code>DPT_SiegeWeapon</code> component to see the following gizmos:</p>
+
+    <table>
+        <thead><tr><th style="width:22%;">Gizmo</th><th style="width:14%;">Colour</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Explosion Origin</strong></td><td>Red dot</td><td>The world position from which the internal fracture explosion originates, offset by Explosion Y Offset.</td></tr>
+            <tr><td><strong>Shatter Radius</strong></td><td>Red disc</td><td>The inner explosion radius. Debris within this disc receives maximum force.</td></tr>
+            <tr><td><strong>Force Scale Ring</strong></td><td>Orange disc</td><td>The outer ring showing approximate force reach, scaled by Explosion Force and Directional Impact Force.</td></tr>
+            <tr><td><strong>Kinetic Transfer</strong></td><td>Blue sphere</td><td>The radius within which nearby Rigidbodies will be pushed on destruction. Only shown when Transfer Kinetic Energy is enabled.</td></tr>
+            <tr><td><strong>Traverse Arc</strong></td><td>Green arc</td><td>The permitted horizontal rotation range. Only shown when a Traverse Pivot is assigned.</td></tr>
+            <tr><td><strong>Launch Direction</strong></td><td>Yellow ray</td><td>A ray from the Launch Point showing the projectile launch direction, scaled by Launch Speed. Only shown when a Launch Point is assigned.</td></tr>
+        </tbody>
+    </table>
+
+    <h2 id="editor-tools">Editor Testing Tools</h2>
+    <p>The <code>DPT_SiegeWeaponEditor</code> toolbar appears at the top of the Inspector whenever a Siege Weapon is selected. All buttons work in both Edit Mode and Play Mode.</p>
+
+    <table>
+        <thead><tr><th style="width:26%;">Button</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Destroy Weapon</strong></td><td>Calls <code>DestroyWeapon()</code> and runs 2.5 seconds of script-mode physics simulation so debris scatters visibly in the Scene view without entering Play Mode.</td></tr>
+            <tr><td><strong>Fire Weapon</strong></td><td>Calls <code>Fire()</code>. Useful for testing event wiring and projectile spawn without Play Mode.</td></tr>
+            <tr><td><strong>Reset Weapon</strong></td><td>Calls <code>ResetWeapon()</code> and marks the object dirty for serialisation. Use this to undo a test destruction in the Scene.</td></tr>
+            <tr><td><strong>Reload</strong></td><td>Calls <code>Reload()</code> to manually step the weapon back to its Loaded state.</td></tr>
+            <tr><td><strong>Take Damage (50)</strong></td><td>Applies 50 points of damage at the weapon's position. Useful for verifying health thresholds and testing partial-health behaviour.</td></tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+        <strong>Automatic Scene Reset on Play:</strong><br><br>
+        <code>DPT_SiegeWeaponEditor</code> hooks into <code>EditorApplication.playModeStateChanged</code>. Every time you enter Play Mode, all <code>DPT_SiegeWeapon</code> instances in the scene — including inactive ones — are automatically reset to their initial state. This prevents debris from accidentally carrying over from an Edit Mode test into a Play Mode run.
+    </div>
+
+<h2 id="player-controller">DPT_SiegeWeaponController — Demo Player Controller</h2>
+    <p><code>DPT_SiegeWeaponController</code> is a ready-to-use first-person controller that lets a player walk up to any siege weapon, press <kbd>E</kbd> to take control of it, aim and fire, then press <kbd>E</kbd> again to disengage. It is included as a functional starting point and demonstration of the <code>DPT_SiegeWeapon</code> API — you are expected to replace or extend it for your own project.</p>
+
+    <div class="tip">
+        <strong>This is a demo script.</strong> It drives the weapon entirely through the public API (<code>Traverse()</code>, <code>Elevate()</code>, <code>Fire()</code>, <code>AdjustLaunchSpeed()</code>) and contains no weapon logic of its own. Swap it for your own controller at any time without modifying <code>DPT_SiegeWeapon</code>.
+    </div>
+
+    <h3>Inspector Fields</h3>
+    <p>The controller natively utilizes the modern Unity Input System via <code>InputActionReference</code> variables, completely decoupling the package from hardcoded keys. You must map your action asset into the corresponding inspector slots and ensure a <code>PlayerInput</code> component is active in your scene to drive the inputs.</p>
+    
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Input Actions</strong></td><td>The required action maps for <code>Interact</code>, <code>Move</code> (Vector2), <code>Look</code> (Vector2), <code>Fire</code>, <code>Reload</code>, <code>Zoom</code>, <code>Toggle Auto-Reload</code>, and <code>Toggle Auto-Fire</code>.</td></tr>
+            <tr><td><strong>Player Camera</strong></td><td>The camera used for the possession raycast and for snapping to the weapon seat on possession. Defaults to <code>Camera.main</code> if left unassigned.</td></tr>
+            <tr><td><strong>Interaction Distance</strong></td><td>Maximum range (m) at which the player can look at and possess a weapon. Default: 5 m.</td></tr>
+            <tr><td><strong>Allow Chassis Movement</strong></td><td>If enabled, the movement vector moves the entire weapon chassis (for wheeled weapons).</td></tr>
+            <tr><td><strong>Chassis Rotation Speed</strong></td><td>Degrees per second the chassis rotates on horizontal input, for weapons without a traverse pivot. Default: 45°/s.</td></tr>
+            <tr><td><strong>Mouse Sensitivity</strong></td><td>Multiplier applied to look delta before it is passed to <code>Traverse()</code> and <code>Elevate()</code>.</td></tr>
+            <tr><td><strong>Power Adjustment Speed</strong></td><td>Scales how fast vertical look movement changes launch power on fixed-angle weapons (those without an elevation pivot). Weapon speed limits are enforced by <code>minLaunchSpeed</code> and <code>maxLaunchSpeed</code> on the weapon itself.</td></tr>
+            <tr><td><strong>Zoomed FOV</strong></td><td>Target Field of View applied to the camera while the Zoom action is held.</td></tr>
+            <tr><td><strong>Zoom Speed</strong></td><td>How fast the camera transitions between the default FOV and the Zoomed FOV.</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Camera Interface Integration (IControllableCamera)</h3>
+    <p>To cleanly decouple the siege weapon framework from your specific character controller, the possession system relies on the <code>IControllableCamera</code> interface. Simply add this interface to your custom player camera script (e.g., <code>public class MyCharacter : MonoBehaviour, IControllableCamera</code>) and implement the <code>SetEnabled(bool state)</code> method to freeze your character's movement. The siege weapon will automatically find it and manage the transition without slow reflection queries.</p>
+
+    <h2 id="screen-shake">Camera &amp; Screen Shake Modules</h2>
+    <p>To add visceral impact to your siege weapons, the package includes modular screen shake components. These are completely decoupled from the main weapon controller, relying on the public UnityEvents to trigger.</p>
+
+    <h3>Weapon Fire Screen Shake</h3>
+    <p>The <code>DPT_WeaponFireScreenShake</code> component listens to the weapon's <code>onProjectileLaunchEvent</code> to trigger an environmental camera shake whenever the weapon fires.</p>
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Shake Magnitude</strong></td><td>The raw intensity/distance of the camera displacement.</td></tr>
+            <tr><td><strong>Shake Duration</strong></td><td>How long the shake effect lasts in seconds.</td></tr>
+            <tr><td><strong>Shake Radius</strong></td><td>The maximum distance from the weapon that the shake can be felt. The intensity falls off linearly towards the edge of this radius.</td></tr>
+            <tr><td><strong>Is Possessed</strong></td><td>If true, the environmental shake is muted. Toggle this via your player controller possession logic so the player doesn't experience extreme screen shake when they are the one operating the weapon.</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Camera Shake Receiver</h3>
+    <p>For the shake to actually move the player's view, attach the <code>DPT_CameraShakeReceiver</code> component directly to your Player Camera. This singleton-style listener automatically subscribes to both weapon firing events (<code>DPT_WeaponFireScreenShake</code>) and projectile impact events (<code>DPT_ProjectileScreenShake</code>), calculates distance attenuation, and applies the local position offset.</p>
+    
+    <div class="note">
+        <strong>Seamless Integration:</strong> Both the weapon and projectile shake modules broadcast a static event containing their epicenter and shake parameters. The Receiver handles the rest, ensuring that overlapping shakes smoothly override each other based on intensity and remaining duration.
+    </div>
+
+<h2 id="breakable-props">Breakable Props (DPT_BreakableProp)</h2>
+    <p>The <code>DPT_BreakableProp</code> component is a streamlined script designed specifically for static destructible objects like mantlets, barricades, and ammo crates. It utilizes the same fracture physics, manual audio assignment, and automatic cleanup routines as the main Siege Weapon controller, but strips out all aiming and firing state machines for maximum performance on simple props.</p>
+
+    <h3>Quick Setup</h3>
+    <ol>
+        <li>Attach the <code>DPT_BreakableProp</code> script to the root of your prop prefab. Make sure the root object has a Collider.</li>
+        <li>Assign your intact meshes to <strong>Pristine Meshes</strong> and your broken debris root to <strong>Broken Parents</strong>.</li>
+        <li>Under <strong>Audio &amp; VFX</strong>, manually assign an <code>AudioSource</code> (configured for 3D spatial blending) and populate the <strong>Break Sounds</strong> array.</li>
+        <li>Adjust <strong>Max Health</strong>, <strong>Explosion Force</strong>, and <strong>Time Before Cleanup</strong> to suit the material of the prop.</li>
+    </ol>
+
+    <h3>Inspector Reference</h3>
+    
+    <h4>Visuals, Health & Damage</h4>
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Pristine Meshes / Broken Parents</strong></td><td>Pristine meshes are hidden on break, and broken parents are activated to simulate fracture.</td></tr>
+            <tr><td><strong>Max Health</strong></td><td>Structural health of the prop. Reaching 0 triggers the destruction sequence.</td></tr>
+            <tr><td><strong>Break On Impact</strong></td><td>If enabled, physical collisions exceeding the <strong>Impact Velocity Threshold</strong> will apply damage automatically based on relative velocity.</td></tr>
+            <tr><td><strong>Simulated Ramming Speed</strong></td><td>Simulated speed (m/s) applied when a kinematic vehicle (like a driven ballista) rams this prop.</td></tr>
+            <tr><td><strong>Push Non Prop Objects</strong></td><td>If true, applies an explosion force to ALL nearby rigidbodies on break, not just siege props.</td></tr>
+        </tbody>
+    </table>
+
+    <h4>Offensive Capabilities</h4>
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Apply Damage On Contact</strong></td><td>If true, this prop deals damage to other breakable objects or siege weapons it hits.</td></tr>
+            <tr><td><strong>Contact Damage</strong></td><td>Damage dealt to other objects on impact.</td></tr>
+        </tbody>
+    </table>
+
+    <h4>Destruction Physics & Broken Base</h4>
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Explosion Force / Radius</strong></td><td>The radial impulse applied to all debris pieces upon destruction.</td></tr>
+            <tr><td><strong>Explosion Y Offset</strong></td><td>Vertical offset for the internal explosion origin.</td></tr>
+            <tr><td><strong>Momentum Transfer</strong></td><td>How much of the incoming object's velocity is transferred to the flying debris.</td></tr>
+            <tr><td><strong>Broken Base Pieces</strong></td><td>Debris rigidbodies treated as structural 'base' pieces. They receive reduced explosion force and remain in place when the prop breaks.</td></tr>
+            <tr><td><strong>Base Force Multiplier</strong></td><td>Force multiplier applied only to base/structural pieces.</td></tr>
+            <tr><td><strong>Time Before Cleanup / Sink Speed</strong></td><td>How long the debris remains in the scene before freezing physics and sinking cleanly into the ground.</td></tr>
+            <tr><td><strong>Destroy On Cleanup</strong></td><td>If true, the GameObject is fully destroyed after sinking. If false, it is deactivated.</td></tr>
+        </tbody>
+    </table>
+
+    <h4>Audio, VFX & Events</h4>
+    <table>
+        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Audio Source</strong></td><td>The AudioSource component used to play the break and contact sounds.</td></tr>
+            <tr><td><strong>Particle Destroy VFX</strong></td><td>Particle VFX instantiated at the prop position on destruction.</td></tr>
+            <tr><td><strong>Break Sounds</strong></td><td>Sounds played when the prop is destroyed.</td></tr>
+            <tr><td><strong>Contact Sounds</strong></td><td>Sounds played when this prop deals contact damage to another object.</td></tr>
+            <tr><td><strong>Always Play Contact Sound</strong></td><td>If true, contact sound plays on every collision. If false, it only plays when damage is dealt to a valid target.</td></tr>
+            <tr><td><strong>Pitch Variance</strong></td><td>Random pitch fluctuation applied to audio playback (0 to 0.5).</td></tr>
+            <tr><td><strong>onDamagedEvent</strong></td><td>Fired whenever the prop takes damage.</td></tr>
+            <tr><td><strong>onDestroyedEvent</strong></td><td>Fired when the prop reaches 0 health and breaks.</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Scripting API</h3>
+    <p>Interfacing with the Breakable Prop from your custom projectile or player scripts is straightforward:</p>
+    <table>
+        <thead><tr><th style="width:40%;">Method</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><code>TakeDamage(float amount, Vector3 hitPoint, Vector3 hitDirection = default)</code></td><td>Reduces health. If health reaches 0, the prop shatters, with the explosion centered near the <code>hitPoint</code>. <code>hitDirection</code> transfers momentum to debris pieces.</td></tr>
+            <tr><td><code>DestroyProp()</code></td><td>Bypasses health and shatters the prop immediately from its center, accounting for the <code>explosionYOffset</code>.</td></tr>
+        </tbody>
+    </table>
+
+    <h2 id="compatibility">Compatibility &amp; Integration</h2>
+
+    <h3>Shared Infrastructure with Interactive Props</h3>
+    <p>The destruction pipeline in <code>DPT_SiegeWeapon</code> is a direct port of the one used in <code>DPT_InteractiveProp</code>. Both systems use identical fracture force application, kinetic transfer, debris cleanup, and audio accordion logic. A weapon placed alongside interactive props in the same scene will behave consistently — debris forces, cleanup timing, and audio ducting all follow the same rules.</p>
+
+    <h3>Input System Compatibility</h3>
+    <p> <code>DPT_SiegeWeaponController</code> compiles correctly against the legacy <code>UnityEngine.Input</code> API and the new <code>UnityEngine.InputSystem</code> package. The correct path is selected automatically at compile time via <code>#if ENABLE_INPUT_SYSTEM</code>. In production, disable <code>enableDirectInput</code> and drive the weapon API from your own controller.</p>
+
+<h3>Object Pooling (Safe Debris Recall)</h3>
+    <p><code>ResetWeapon()</code> is strictly pool-safe. It restores all mesh visibility, Rigidbody poses, collider states, health, angle offsets, fuse state, satellite arrays, and the state machine. Crucially, the base class automatically caches the original local hierarchy data of every shattered piece. When reset, the weapon instantly vacuums up its unparented debris fragments, snaps them back to their original zero coordinates, and freezes their physics. Set <strong>Destroy On Cleanup</strong> to false to deactivate rather than destroy the GameObject at the end of its cleanup routine.</p>
+
+    <hr class="divider">
+
+    <h2 id="support">Support & Custom Pipeline Integration</h2>
+    <p>If your project requires external or custom 3D models to be fully integrated into the DPT ecosystem—including custom vertex-data packing, procedural wood grain mapping, normal array configuration, advanced GPU wind system implementation, or any other bespoke features—freelance technical art services are available. Additionally, availability extends to general 3D asset production, high-to-low poly hard surface modeling, stylized prop creation, and game-ready LOD budgeting built to align cleanly with your specific project constraints.</p>
+    <p>For freelance modeling contract inquiries, tech-art pipeline consulting, or custom asset optimization passes, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Contract Inquiry]</code>.</p>
+
+    <div class="note">
+        <strong>Standard Asset Support:</strong><br>
+        For standard package bug reports, technical asset setup issues, and publisher licensing enquiries, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Support Request]</code>.
+    </div>
+
+</body>
+</html>
