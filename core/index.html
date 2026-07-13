@@ -164,9 +164,9 @@
         <li><strong>Global Material Emission:</strong> The <em>Emissive Color</em> and baseline <em>Emission Strength</em> properties in the Material Inspector act as a master setting. Whatever color and intensity you set here applies universally to <em>every</em> object in your scene sharing this material.</li>
         <li><strong>Per-Instance Emission:</strong> The emission system natively hooks into the <code>DPT_ShaderVariation</code> script. If an object has this script attached, the script's <em>Instance Color</em> (and Alpha channel) will multiply against the material's master emissive settings, allowing you to recolor the glow and adjust its intensity on a per-object basis without duplicating the material.</li>
     </ul>
-    <div class="warning">
+<div class="warning">
         <strong>The Metallic Object Exception:</strong><br><br>
-        Due to how the shader processes specular reflection data, <strong>metallic objects cannot have their emission color changed per-instance via the script</strong>. A metallic object's emission color is strictly locked to the global property set in the Material Inspector. However, you <em>can</em> still use the <code>DPT_ShaderVariation</code> script (via the Alpha channel) to control the <strong>emission strength</strong> of metallic objects on a per-instance basis.
+        Due to how the shader processes specular reflection data, <strong>metallic objects cannot have their emission color changed per-instance via the script</strong>. Instead, metallic emission is driven by a forged orange base hue inside the shader, which is then multiplied by the global <em>Emissive Color</em> property in the Material Inspector. (For example, leaving the material color white results in a pure orange glow, while tinting it will blend with the orange). However, you <em>can</em> still use the <code>DPT_ShaderVariation</code> script (via the Alpha channel) to control the <strong>emission strength</strong> of these metallic objects on a per-instance basis.
     </div>
     <div class="note">
         <strong>The "White Base" Strategy for Perfect Tinting:</strong><br><br>
