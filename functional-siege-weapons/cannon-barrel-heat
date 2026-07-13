@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DPT Siege Weapons Cannon Barrel Heat - Component Guide</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0; padding: 40px;
+            font-size: 11pt; line-height: 1.5;
+        }
+        h1, h2, h3 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 15px; margin-bottom: 5px; page-break-after: avoid; }
+        .troubleshooting-a { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <h1>DPT_CannonBarrelHeat</h1>
+    <div class="subtitle">Component Reference Guide<br>
+    <span style="font-size: 11pt; font-style: normal;">A lightweight, event-driven utility designed to manage the emissive cooldown of weapon barrels over time, entirely decoupling visual heat decay from strict Animator clip durations.</span></div>
+
+    <h2>1. Inspector Property Configuration</h2>
+    
+    <h3>Dependencies & Heat Settings</h3>
+    <p>Configures the baseline emission strength and the rate at which the material returns to its resting state.</p>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Shader Variation</strong></td>
+                <td>The scene reference to the <code>DPT_ShaderVariation</code> component managing the barrel's material. The script pushes calculated alpha values directly to this target to control emission intensity.</td>
+            </tr>
+            <tr>
+                <td><strong>Cooling Duration</strong></td>
+                <td>The time (in seconds) it takes for the barrel to cool down from its maximum heat back to a dark (zero alpha) state.</td>
+            </tr>
+            <tr>
+                <td><strong>Max Heat Alpha</strong></td>
+                <td>The peak emission strength applied to the material the exact moment the weapon is fired. Values above 1.0 will push the shader into HDR ranges for intense bloom effects.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>2. Technical Architecture</h2>
+    <ul>
+        <li><strong>Animator Decoupling:</strong> Because weapon firing animations are often extremely short, tying emission directly to an animation curve forces the glow to end prematurely. This script intercepts a single trigger and handles the mathematical decay smoothly over time, spanning seamlessly across idle or reload states.</li>
+        <li><strong>Event-Driven Trigger:</strong> The script sits entirely dormant with zero <code>Update</code> overhead until the public <code>FireCannonHeat()</code> method is called. This is designed to be triggered via an <strong>Animation Event</strong> on the exact frame the projectile leaves the barrel, or directly via your C# weapon firing logic.</li>
+        <li><strong>Cross-Assembly Integration:</strong> Operates natively with the <code>DPT.Core</code> assembly. By modifying the <code>InstanceColor.a</code> property of the variation script, it pushes variables straight to the optimized GPU instancing stream without breaking batching or allocating new material instances.</li>
+    </ul>
+
+    <h2>3. Troubleshooting Notes</h2>
+    <div class="troubleshooting-q">"The cannon fires and the event triggers, but the barrel doesn't glow"</div>
+    <div class="troubleshooting-a">Ensure that the <strong>Update Every Frame</strong> toggle is checked on the targeted <code>DPT_ShaderVariation</code> component. If it is disabled, the variation script will put itself to sleep on start and
