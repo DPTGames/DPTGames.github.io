@@ -302,6 +302,13 @@ public class MortarShellProjectile : DPT_Projectile
     <h2 id="ballista">4. DPT_BallistaBolt — Specialized Piercing Bolt</h2>
     <p><code>DPT_BallistaBolt</code> delivers specialized features for heavy piercing ammunition assets. It continuously slerps its physical rigidbody alignment to look directly into its velocity vector during flight, processes advanced multi-axis aerodynamic cosmetic vibrations, handles penetration pinning depth, and includes a structural snap mechanic that separates the tail fletching from the embedded tip on structural clipping.</p>
 
+    <div class="note">
+        <strong>Embed On Impact & Break On Impact Are Prefab Defaults, Not Fixed Behavior:</strong><br><br>
+        Unlike earlier internal builds, <code>DPT_BallistaBolt</code> no longer forces the inherited <strong>Embed On Impact</strong> and <strong>Break On Impact</strong> fields at runtime. Whatever you configure on the prefab's Inspector is respected as-is, so the same script can be repurposed for non-embedding ammunition (foam darts, blunt bolts, practice rounds) simply by unchecking <strong>Embed On Impact</strong> — no code changes required.<br><br>
+        The recommended factory defaults for a standard piercing bolt are <strong>Embed On Impact = true</strong> and <strong>Break On Impact = false</strong>, authored directly on the prefab.<br><br>
+        The tail-snap mechanic (<strong>Snap Trigger Collider</strong>, <strong>Snapped Visual</strong>) is only armed when the bolt has actually embedded. If <strong>Embed On Impact</strong> is disabled on a given prefab, the snap system automatically stays dormant rather than throwing errors — so it's safe to toggle off for non-piercing ammo variants.
+    </div>
+
     <h3>Inspector Property Fields</h3>
     <table>
         <thead>
@@ -472,14 +479,24 @@ public class MortarShellProjectile : DPT_Projectile
                     <ul>
                         <li><strong>Vfx Prefab & Tint:</strong> The matched directional particle explosion block, alongside an optional Color Tint to seamlessly blend dust particles with the environment.</li>
                         <li><strong>Surface Marks:</strong> An array of physical vertex-mesh prefabs (cracks, molehills). Includes toggles for random 360-degree rotation (cracks) or 180-degree flipping for directional meshes (molehills/trenches).</li>
-                        <li><strong>Supports Rolling Trenches:</strong> If enabled, this layer permits continuous tracking and spawning of directional trench meshes during a boulder's rolling phase.</li>
+                        <li><strong>Scale To Fit Surface:</strong> If enabled, the spawned mark's footprint is compared against the collider bounds of the object it struck and shrunk down proportionally when the surface is smaller than the mark's authored size. Leave this off for marks that should only ever be used on large, planar surfaces like ground gouges or trenches — for those, an author-side decision to place them on a small object is the user's call, not something this component silently corrects.</li>
+                        <li><strong>Min Fit Scale Threshold:</strong> Only used when <strong>Scale To Fit Surface</strong> is enabled. If the required fit ratio falls below this value (0–1), the mark is skipped entirely rather than spawning as a barely-visible sliver. A value of <code>0</code> disables the skip and always spawns something.</li>
+                        <li><strong>Supports Rolling Trenches:</strong> If enabled, this layer permits continuous tracking and spawning of directional trench meshes during a boulder's rolling phase, with spacing automatically derived from the mark's own length (see <strong>Trench Overlap Fraction</strong> below).</li>
                         <li><strong>Surface Audio Clips:</strong> The precise audio pool assigned to simulate structural degradation for that material type.</li>
                     </ul>
                 </td>
             </tr>
             <tr>
                 <td><strong>Surface Marks Settings</strong></td>
-                <td>Controls the dynamic scaling of the spawned physical marks. Marks automatically scale down linearly between the <strong>Max Scale Velocity</strong> and the <strong>Min Scale Multiplier</strong> depending on the kinetic speed of the impact. The <strong>Scale Variance</strong> injects a randomized percentage offset to prevent identical repeating shapes.</td>
+                <td>Controls the dynamic scaling of the spawned physical marks. Marks automatically scale down linearly between the <strong>Max Scale Velocity</strong> and the <strong>Min Scale Multiplier</strong> depending on the kinetic speed of the impact. The <strong>Scale Variance</strong> injects a randomized percentage offset to prevent identical repeating shapes. When <strong>Scale To Fit Surface</strong> is active on a given layer, the fit-based scale is multiplied on top of this speed-based scale.</td>
+            </tr>
+            <tr>
+                <td><strong>Trench Spacing</strong></td>
+                <td>Fallback distance (in meters) used only when a rolling-trench layer has no measurable mesh bounds to derive spacing from (e.g. an empty Surface Marks array). Under normal use, spacing is calculated automatically from the trench mark's own length rather than this fixed value.</td>
+            </tr>
+            <tr>
+                <td><strong>Trench Overlap Fraction</strong></td>
+                <td>Controls how much consecutive rolling trench marks bite into one another so the trail reads as one continuous groove instead of a stop-start sequence of stamps. A value of <code>0</code> places marks edge-to-edge; <code>0.2</code> (default) overlaps each new mark by 20% of its own length into the previous one. Spacing is recalculated per-impact using the mark's current speed-scaled size, so slow rolls and fast rolls both produce continuous, evenly-overlapped trenches rather than gapping at low speed or over-spawning at high speed.</td>
             </tr>
             <tr>
                 <td><strong>Cleanup Settings</strong></td>
@@ -490,7 +507,8 @@ public class MortarShellProjectile : DPT_Projectile
 
     <div class="warning">
         <strong>VFX & Surface Mark Orientation Rules:</strong><br><br>
-        The module extracts the exact face normal vector from the structural contact matrix. To ensure your impact particles spray outward correctly and your directional molehills align with the travel path, <strong>ensure that the primary directional flow of your prefab travels down its local positive Z-Axis (Forward)</strong>.
+        The module extracts the exact face normal vector from the structural contact matrix. To ensure your impact particles spray outward correctly and your directional molehills align with the travel path, <strong>ensure that the primary directional flow of your prefab travels down its local positive Z-Axis (Forward)</strong>.<br><br>
+        This orientation also matters for rolling trenches specifically: the automatic spacing calculation measures each trench mark's length along its local Z-axis to determine overlap. A trench mesh authored sideways (long axis on X) will produce inaccurate spacing.
     </div>
     <hr>
 
