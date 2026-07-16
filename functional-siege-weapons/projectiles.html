@@ -120,6 +120,14 @@
                 <td>A percentage multiplier (0.0 to 1.0) dictating how much kinetic speed is retained after successfully punching through a target. A value of 1 ignores all structural resistance.</td>
             </tr>
             <tr>
+                <td><strong>Embed On Impact</strong></td>
+                <td>If true, the projectile will embed itself into the hit object and freeze its physics in place. It utilizes matrix-free tracking to remain stuck to moving targets (like rolling siege towers) without being disrupted by hierarchy changes.</td>
+            </tr>
+            <tr>
+                <td><strong>Embed Depth</strong></td>
+                <td>How far forward (in meters) the projectile should sink into the target geometry upon impact to simulate a pierced surface.</td>
+            </tr>
+            <tr>
                 <td><strong>On Despawn Requested</strong></td>
                 <td>An exposed C# Action delegate hook. External object pool managers can subscribe to this event to intercept the despawn cycle and prevent the object from being destroyed by the engine.</td>
             </tr>
@@ -352,10 +360,6 @@ public class MortarShellProjectile : DPT_Projectile
                 <td>The maximum angular deviation in degrees for the local X-axis wobble.</td>
             </tr>
             <tr>
-                <td><strong>Penetration Depth</strong></td>
-                <td>The physical distance forward (in meters) the bolt head sinks into hit geometry to simulate an embedded pin look.</td>
-            </tr>
-            <tr>
                 <td><strong>Impact Force Multiplier</strong></td>
                 <td>A scaling factor applied against the bolt's mass and velocity matrices when delivering a direct kinetic impulse force to hit rigidbodies.</td>
             </tr>
@@ -381,8 +385,8 @@ public class MortarShellProjectile : DPT_Projectile
     <h3>Mechanical Profile</h3>
     <ul>
         <li><strong>Inaccuracy Integration:</strong> Integrates natively with the base class aerodynamic drift mechanics. If Perlin noise acceleration forces push the rigidbody sideways through the air, the bolt's look-alignment logic automatically curves the visual container mesh to point directly into its newly modified flight heading.</li>
-        <li><strong>Matrix-Free Target Tracking:</strong> Bypasses standard Unity <code>transform.SetParent</code> workflows on impact. Instead, it records its exact relative position and rotation offsets using inverse transform mapping. This completely immunizes the bolt mesh from non-uniform scaling stretching or skewing distortions present on target structures, and handles scene parent deletions cleanly.</li>
-        <li><strong>Debris Reparenting Fallback:</strong> If the target object the bolt is pinned into gets broken or fractured, the bolt searches the parent weapon assembly's <code>brokenParents</code> arrays, finds the closest active debris piece piece, and updates its tracking anchors to tumble realistically with the wreckage. If no piece is found, it reactivates gravity and drops out of kinematic mode.</li>
+        <li><strong>Matrix-Free Target Tracking:</strong> Utilizes the base class's native embedding architecture to bypass standard Unity <code>transform.SetParent</code> workflows on impact. By recording its exact relative position and rotation offsets using inverse transform mapping, it completely immunizes the bolt mesh from non-uniform scaling, stretching, or skewing distortions present on target structures.</li>
+        <li><strong>Debris Reparenting Fallback:</strong> Overrides the base class's standard unstick routine. If the target object the bolt is pinned into gets broken or fractured, the bolt searches the parent weapon assembly's <code>brokenParents</code> arrays, finds the closest active debris piece, and updates its tracking anchors to tumble realistically with the wreckage rather than just falling out.</li>
     </ul>
 
     <hr>
