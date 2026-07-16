@@ -18,6 +18,11 @@
         h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
         h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
         p { margin: 0 0 12px 0; }
+        hr {
+        border: 0;
+        border-top: 1px solid #1e293b;
+        margin: 20px 0;
+        }
         table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
         tr { page-break-inside: avoid; }
         th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
@@ -196,12 +201,12 @@ public class MortarShellProjectile : DPT_Projectile
         Every projectile retains an explicit reference to the siege weapon assembly that initialized it via the public <code>Launcher</code> property, configured automatically on spawn. You can invoke <code>Launcher.ImpactEffect(contactPoint)</code> inside your custom overrides to trigger the parent weapon's specialized impact audio behaviors at the hit coordinate.
     </div>
 <div class="note">
-        <strong>Advanced Architecture: Object Pooling Compatibility</strong><br><br>
-        To support massive scale sieges and strict hardware performance limits, the <code>DPT_Projectile</code> framework is built to be strictly <strong>Pool-Ready</strong>. 
+        <strong>Advanced Architecture: Object Pooling Compatibility & Caching</strong><br><br>
+        To support massive scale sieges and strict hardware performance limits, the <code>DPT_Projectile</code> framework is strictly <strong>Pool-Ready</strong> and designed for zero runtime allocation. 
         <br><br>
-        When a projectile shatters, it safely unparents its debris rigidbodies to prevent them from inheriting the tumbling momentum of moving targets. However, the base class automatically caches the original local hierarchy data of every shattered piece.
+        During <code>Awake()</code>, the projectile permanently caches all internal <code>Rigidbody</code> and <code>Collider</code> arrays. When a projectile shatters, it safely unparents its debris rigidbodies to prevent them from inheriting the tumbling momentum of moving targets.
         <br><br>
-        To implement an Object Pool, you do not need to rewrite any internal methods. Simply subscribe your pool manager to the projectile's <code>OnDespawnRequested</code> Action delegate. The projectile will hand itself over to your script instead of calling <code>Destroy()</code>. When you are ready to fire it again, call <code>ResetForPooling()</code> to instantly vacuum up its broken debris fragments, freeze their physics, and make the ammunition pristine and ready to fire again.
+        To implement an Object Pool, subscribe your pool manager to the projectile's <code>OnDespawnRequested</code> Action delegate. The projectile will hand itself over to your script instead of calling <code>Destroy()</code>. When you are ready to fire it again, call <code>ResetForPooling()</code> to instantly vacuum up its broken debris fragments, freeze their physics, and re-enable the root colliders, making the ammunition pristine without triggering Garbage Collection spikes.
     </div>
     <hr>
 
@@ -419,7 +424,7 @@ public class MortarShellProjectile : DPT_Projectile
         <li><strong>Hooking into Your Camera System:</strong> This module does not manipulate cameras directly; it broadcasts coordinates to the global <code>OnProjectileImpactShake</code> static event to remain completely decoupled. To listen to this data instantly without manual scripting, drop the companion <code>DPT_CameraShakeReceiver</code> utility component directly onto your camera setup (see section below).</li>
     </ol>
 
-    <hr style="border: 0; border-top: 1px solid #1e293b; margin: 20px 0;">
+    <hr>
 
     <h3 id="camerashakereceiver-setup">B. DPT_CameraShakeReceiver (Utility)</h3>
     <p>A zero-configuration, production-ready utility script designed to serve as the native receiver for your ballistic screen shake systems. It automatically tracks the impact broadcast channel, runs fast proximity distance checks, and applies linear spatial dampening to ensure close-range impacts feel appropriately devastating while distant rumbles drop smoothly to zero.</p>
@@ -435,10 +440,10 @@ public class MortarShellProjectile : DPT_Projectile
         <li><strong>Cinematic Rigs & Nested Compatibility:</strong> The component manipulates <code>transform.localPosition</code> rather than world space coordinates. This guarantees it can be applied safely to cameras nested inside complex player tracking assemblies, third-person spring arms, or cutscene rigs without breaking their structural pathing.</li>
     </ol>
 
-    <hr style="border: 0; border-top: 1px solid #1e293b; margin: 20px 0;">
+   <hr>
 
-    <h3 id="surfaceimpact-setup">C. DPT_ProjectileSurfaceImpact</h3>
-    <p>Provides robust, contextual material variations by analyzing the exact physics layers involved in the collision. This enables ammunition types to dynamically map dirt, stone, wood, or water elements to distinct visual and audio arrays, automatically falling back to generalized default profiles if an unmapped layer interaction is met.</p>
+<h3 id="surfaceimpact-setup">C. DPT_ProjectileSurfaceImpact</h3>
+    <p>Provides robust, contextual material variations by analyzing the exact physics layers involved in the collision. This enables ammunition types to dynamically map dirt, stone, wood, or water elements to distinct visual effects, audio arrays, and physical vertex-mesh surface marks (cracks, molehills, or trenches).</p>
 
     <h4>Component Properties</h4>
     <table>
@@ -451,29 +456,66 @@ public class MortarShellProjectile : DPT_Projectile
         <tbody>
             <tr>
                 <td><strong>Default Break VFX Prefab</strong></td>
-                <td>The base fallback visual effect or particle container instantiated at the point of impact if the targeted physics layer does not match an entry in the specific layer effects list.</td>
+                <td>The base fallback visual effect instantiated at the point of impact if the targeted physics layer does not match an entry in the specific layer effects list.</td>
             </tr>
             <tr>
                 <td><strong>Default Impact Audio Clips</strong></td>
-                <td>The fallback pool of <strong>surface impact clips</strong> (high-frequency sweeteners) used if the hit physics layer does not match any custom layer configurations specified in your arrays.</td>
-            </tr>
-            <tr>
-                <td><strong>Pitch Variance / Velocity Threshold</strong></td>
-                <td>Standardization tracking values mirrors the base class mechanics, handling high-precision dynamic frequency bending and filtering out low-speed sliding micro-grazes.</td>
+                <td>The fallback pool of high-frequency surface impact clips used if the hit physics layer does not match any custom layer configurations.</td>
             </tr>
             <tr>
                 <td><strong>Layer Specific Effects</strong></td>
-                <td>An extensible serialization array structure linking dynamic game layers (e.g., <code>Layer 8: Stone_Wall</code>, <code>Layer 9: Terrain_Dirt</code>) directly to contextual cosmetic feedback modules:
+                <td>An extensible array linking dynamic game layers directly to contextual cosmetic feedback modules:
                     <ul>
-                        <li><strong>Layer Mask:</strong> The dynamic tracking layer target filter.</li>
-                        <li><strong>Vfx Prefab:</strong> The matched directional visual particle explosion block.</li>
-                        <li><strong>Surface Audio Clips:</strong> The precise audio pool assigned to simulate structural degradation for that material type (e.g., gravel grinding for stone layers, splinter snaps for wood layers).</li>
+                        <li><strong>Vfx Prefab & Tint:</strong> The matched directional particle explosion block, alongside an optional Color Tint to seamlessly blend dust particles with the environment.</li>
+                        <li><strong>Surface Marks:</strong> An array of physical vertex-mesh prefabs (cracks, molehills). Includes toggles for random 360-degree rotation (cracks) or 180-degree flipping for directional meshes (molehills/trenches).</li>
+                        <li><strong>Supports Rolling Trenches:</strong> If enabled, this layer permits continuous tracking and spawning of directional trench meshes during a boulder's rolling phase.</li>
+                        <li><strong>Surface Audio Clips:</strong> The precise audio pool assigned to simulate structural degradation for that material type.</li>
                     </ul>
                 </td>
+            </tr>
+            <tr>
+                <td><strong>Surface Marks Settings</strong></td>
+                <td>Controls the dynamic scaling of the spawned physical marks. Marks automatically scale down linearly between the <strong>Max Scale Velocity</strong> and the <strong>Min Scale Multiplier</strong> depending on the kinetic speed of the impact. The <strong>Scale Variance</strong> injects a randomized percentage offset to prevent identical repeating shapes.</td>
+            </tr>
+            <tr>
+                <td><strong>Cleanup Settings</strong></td>
+                <td>If enabled, automatically attaches a standalone <code>DPT_SurfaceMarkCleanup</code> component to every spawned surface mark, handling memory management independently of the projectile object pool.</td>
             </tr>
         </tbody>
     </table>
 
+    <div class="warning">
+        <strong>VFX & Surface Mark Orientation Rules:</strong><br><br>
+        The module extracts the exact face normal vector from the structural contact matrix. To ensure your impact particles spray outward correctly and your directional molehills align with the travel path, <strong>ensure that the primary directional flow of your prefab travels down its local positive Z-Axis (Forward)</strong>.
+    </div>
+    <hr>
+
+    <h3 id="surfacemarkcleanup-setup">D. DPT_SurfaceMarkCleanup (Utility)</h3>
+    <p>A self-contained lifecycle manager dynamically attached to surface marks (cracks, divots, trenches) upon instantiation. It ensures the battlefield remains clear of excessive geometry over time without relying on expensive shader alpha-clipping or tying up the projectile object pool.</p>
+
+    <h4>Component Properties</h4>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 28%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Lifetime</strong></td>
+                <td>The total time (in seconds) the surface mark remains fully visible and stationary before the cleanup transition begins.</td>
+            </tr>
+            <tr>
+                <td><strong>Method</strong></td>
+                <td>The visual transition style used to hide the mesh. <strong>Shrink</strong> scales the mesh down to zero. <strong>Sink</strong> physically pushes the mesh one unit downward along the global Y-axis, ideal for hiding flat ground decals.</td>
+            </tr>
+            <tr>
+                <td><strong>Transition Duration</strong></td>
+                <td>The length of time (in seconds) it takes to execute the selected shrinking or sinking animation before calling <code>Destroy()</code> on the GameObject.</td>
+            </tr>
+        </tbody>
+    </table>
     <h4>Setup & Integration Workflow</h4>
     <ol>
         <li><strong>Attach Component:</strong> Mount the <code>DPT_ProjectileSurfaceImpact</code> component to the root layer of your projectile prefab alongside your core collision modules.</li>
