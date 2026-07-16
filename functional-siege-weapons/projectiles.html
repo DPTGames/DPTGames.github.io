@@ -442,7 +442,7 @@ public class MortarShellProjectile : DPT_Projectile
 
     <h4>Component Properties</h4>
     <div class="note">
-        <strong>Zero-Configuration Workflow:</strong> This script contains no exposed serialized inspector fields. It calculates all positional offsets dynamically based on the camera's baseline transform state at runtime, allowing a true drop-in implementation.
+        <strong>No-Configuration Workflow:</strong> This script contains no exposed serialized inspector fields. It calculates all positional offsets dynamically based on the camera's baseline transform state at runtime, allowing a true drop-in implementation.
     </div>
 
     <h4>Setup & Integration Workflow</h4>
@@ -474,9 +474,26 @@ public class MortarShellProjectile : DPT_Projectile
                 <td>The fallback pool of high-frequency surface impact clips used if the hit physics layer does not match any custom layer configurations.</td>
             </tr>
             <tr>
+                <td><strong>Impact VFX Settings</strong></td>
+                <td>Parameters controlling dynamic visual behavior based on the projectile's velocity matrix:
+                    <ul>
+                        <li><strong>Scale VFX With Speed:</strong> Dynamically scales the spawned particles based on the kinetic impact speed.</li>
+                        <li><strong>VFX Scale Multiplier:</strong> Base scale modifier applied to the instantiated VFX.</li>
+                        <li><strong>Align VFX With Velocity:</strong> Rotates the particle system to align with the projectile's velocity (flattened against the hit surface).</li>
+                        <li><strong>Fire VFX Backwards:</strong> Reverses the velocity alignment so dust and debris spray opposite to the travel direction.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Horizontal Dot Threshold</strong></td>
+                <td>Defines the slope cutoff for Horizontal vs Vertical surfaces used by the layer orientation filters. A value of <code>0.707</code> represents exactly a 45-degree angle.</td>
+            </tr>
+            <tr>
                 <td><strong>Layer Specific Effects</strong></td>
                 <td>An extensible array linking dynamic game layers directly to contextual cosmetic feedback modules:
                     <ul>
+                        <li><strong>LayerMask:</strong> The specific physics layer this effect applies to.</li>
+                        <li><strong>Orientation Filter:</strong> Filters this effect by surface angle (Any, Horizontal Only, Vertical Only). For optimal performance and control, it is highly recommended to use Layer Masks, but this filter allows surface effects to function out-of-the-box in demo scenes without configuring project layers.</li>
                         <li><strong>Vfx Prefab & Tint:</strong> The matched directional particle explosion block, alongside an optional Color Tint to seamlessly blend dust particles with the environment.</li>
                         <li><strong>Surface Marks:</strong> An array of physical vertex-mesh prefabs (cracks, molehills). Includes toggles for random 360-degree rotation (cracks) or 180-degree flipping for directional meshes (molehills/trenches).</li>
                         <li><strong>Scale To Fit Surface:</strong> If enabled, the spawned mark's footprint is compared against the collider bounds of the object it struck and shrunk down proportionally when the surface is smaller than the mark's authored size. Leave this off for marks that should only ever be used on large, planar surfaces like ground gouges or trenches — for those, an author-side decision to place them on a small object is the user's call, not something this component silently corrects.</li>
@@ -539,12 +556,13 @@ public class MortarShellProjectile : DPT_Projectile
         </tbody>
     </table>
     <h4>Setup & Integration Workflow</h4>
-    <ol>
+<ol>
         <li><strong>Attach Component:</strong> Mount the <code>DPT_ProjectileSurfaceImpact</code> component to the root layer of your projectile prefab alongside your core collision modules.</li>
         <li><strong>Assign Fallback Assets:</strong> Provide generic assets into both the <code>Default Break VFX Prefab</code> and <code>Default Impact Audio Clips</code> slots. This guarantees that even if a projectile hits an unassigned layer or untagged custom terrain, a proper impact visual and acoustic reaction still executes safely.</li>
         <li><strong>Populate Layer Specific Maps:</strong> Expand the list array. Add unique elements for each distinct surface target archetype:
             <ul>
-                <li><strong>LayerMask:</strong> Select your target material layer (e.g., <code>Layer 10: Environment_Wood</code>).</li>
+                <li><strong>LayerMask:</strong> Select your target material layer (e.g., <code>Layer 10: Environment_Wood</code>) or leave as <code>Default</code> if relying strictly on surface orientation.</li>
+                <li><strong>Orientation Filter:</strong> Choose whether this effect should only trigger on flat ground (Horizontal Only), sheer walls (Vertical Only), or Any surface.</li>
                 <li><strong>Vfx Prefab:</strong> Assign your customized debris particle spray prefab.</li>
                 <li><strong>Surface Audio Clips:</strong> Assign your specialized high-frequency material splinter or impact sounds. When the projectile hits this layer, it will combine your core baseline weapon projectile thud with these material-specific debris sounds.</li>
             </ul>
