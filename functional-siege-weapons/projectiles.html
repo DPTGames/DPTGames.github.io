@@ -479,15 +479,33 @@ public class MortarShellProjectile : DPT_Projectile
                     <ul>
                         <li><strong>Scale VFX With Speed:</strong> Dynamically scales the spawned particles based on the kinetic impact speed.</li>
                         <li><strong>VFX Scale Multiplier:</strong> Base scale modifier applied to the instantiated VFX.</li>
+                        <li><strong>Max Scale Velocity:</strong> The velocity at which the VFX reaches its maximum scale. Slower impacts will spawn smaller particle bursts.</li>
+                        <li><strong>Min Scale Multiplier:</strong> The baseline scale multiplier applied to the VFX even at very low collision speeds.</li>
                         <li><strong>Align VFX With Velocity:</strong> Rotates the particle system to align with the projectile's velocity (flattened against the hit surface).</li>
                         <li><strong>Fire VFX Backwards:</strong> Reverses the velocity alignment so dust and debris spray opposite to the travel direction.</li>
                     </ul>
                 </td>
             </tr>
             <tr>
+    <td><strong>Pitch Variance</strong></td>
+    <td>Controls the randomized frequency shift added or subtracted from the surface impact sounds to prevent audio repetition. Default: ±0.15.</td>
+</tr>
+<tr>
+    <td><strong>Velocity Threshold</strong></td>
+    <td>The minimum collision speed (m/s) required to trigger the specialized surface impact logic and visual effects. Low-speed grazes are ignored. Default: 2 m/s.</td>
+</tr>
+            <tr>
                 <td><strong>Horizontal Dot Threshold</strong></td>
                 <td>Defines the slope cutoff for Horizontal vs Vertical surfaces used by the layer orientation filters. A value of <code>0.707</code> represents exactly a 45-degree angle.</td>
             </tr>
+            <tr>
+    <td><strong>Ground Check Radius</strong></td>
+    <td>The radius of the physics SphereCast used to catch the ground. Prevents visual gaps in the rolling trench trail if a heavy boulder slightly bounces off uneven terrain. Default: 0.5.</td>
+</tr>
+<tr>
+    <td><strong>Ground Check Distance</strong></td>
+    <td>The downward travel distance the SphereCast evaluates to confirm continuous ground contact during a roll. Default: 0.6.</td>
+</tr>
             <tr>
                 <td><strong>Layer Specific Effects</strong></td>
                 <td>An extensible array linking dynamic game layers directly to contextual cosmetic feedback modules:
@@ -496,6 +514,7 @@ public class MortarShellProjectile : DPT_Projectile
                         <li><strong>Orientation Filter:</strong> Filters this effect by surface angle (Any, Horizontal Only, Vertical Only). For optimal performance and control, it is highly recommended to use Layer Masks, but this filter allows surface effects to function out-of-the-box in demo scenes without configuring project layers.</li>
                         <li><strong>Vfx Prefab & Tint:</strong> The matched directional particle explosion block, alongside an optional Color Tint to seamlessly blend dust particles with the environment.</li>
                         <li><strong>Surface Marks:</strong> An array of physical vertex-mesh prefabs (cracks, molehills). Includes toggles for random 360-degree rotation (cracks) or 180-degree flipping for directional meshes (molehills/trenches).</li>
+                        <li><strong>Preserve Depth Scale:</strong> If enabled, scaling down a mark at low speeds only affects its footprint (X and Z axes). The depth/thickness remains at 1.0, preventing shallow impact marks from clipping entirely under the terrain mesh.</li>
                         <li><strong>Scale To Fit Surface:</strong> If enabled, the spawned mark's footprint is compared against the collider bounds of the object it struck and shrunk down proportionally when the surface is smaller than the mark's authored size. Leave this off for marks that should only ever be used on large, planar surfaces like ground gouges or trenches — for those, an author-side decision to place them on a small object is the user's call, not something this component silently corrects.</li>
                         <li><strong>Min Fit Scale Threshold:</strong> Only used when <strong>Scale To Fit Surface</strong> is enabled. If the required fit ratio falls below this value (0–1), the mark is skipped entirely rather than spawning as a barely-visible sliver. A value of <code>0</code> disables the skip and always spawns something.</li>
                         <li><strong>Supports Rolling Trenches:</strong> If enabled, this layer permits continuous tracking and spawning of directional trench meshes during a boulder's rolling phase, with spacing automatically derived from the mark's own length (see <strong>Trench Overlap Fraction</strong> below).</li>
@@ -563,6 +582,7 @@ public class MortarShellProjectile : DPT_Projectile
             <ul>
                 <li><strong>LayerMask:</strong> Select your target material layer (e.g., <code>Layer 10: Environment_Wood</code>) or leave as <code>Default</code> if relying strictly on surface orientation.</li>
                 <li><strong>Orientation Filter:</strong> Choose whether this effect should only trigger on flat ground (Horizontal Only), sheer walls (Vertical Only), or Any surface.</li>
+                <li><strong>Mark Type:</strong> Determines the rendering approach for the footprint. Options are <code>VertexMesh</code> (physical geometry like molehills) or <code>URPDecal</code> (flat projection materials).</li>
                 <li><strong>Vfx Prefab:</strong> Assign your customized debris particle spray prefab.</li>
                 <li><strong>Surface Audio Clips:</strong> Assign your specialized high-frequency material splinter or impact sounds. When the projectile hits this layer, it will combine your core baseline weapon projectile thud with these material-specific debris sounds.</li>
             </ul>
