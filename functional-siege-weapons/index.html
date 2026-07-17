@@ -69,6 +69,7 @@
     <a href="../index.html" style="color: #38bdf8; margin-right: 15px;">&larr; Back to Hub</a>
     <span style="color: #64748b;">|</span>
     <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Functional Siege Weapons</a>
+    <a href="breakable_props.html" style="color: #f8fafc; margin-right: 15px;">Breakable Props</a>
     <a href="projectiles.html" style="color: #f8fafc; margin-right: 15px;">Projectiles System</a>
     <a href="procedural_mechanical_drive.html.html" style="color: #f8fafc;">Procedural Mechanical Drive</a>
     <a href="cannon_barrel_heat.html.html" style="color: #f8fafc;">Cannon Barrel Heat</a>
@@ -94,9 +95,8 @@
         <a href="#editor-tools" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">10. Editor Testing Tools</a>
         <a href="#player-controller" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">11. Demo Player Controller</a>
         <a href="#screen-shake" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">12. Camera & Screen Shake</a>
-        <a href="#breakable-props" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">13. Breakable Props</a>
-        <a href="#compatibility" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">14. Compatibility & Integration</a>
-        <a href="#support" style="color: #a5f3fc; text-decoration: none;">15. Support</a>
+        <a href="#compatibility" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">13. Compatibility & Integration</a>
+        <a href="#support" style="color: #a5f3fc; text-decoration: none;">14. Support</a>
     </div>
 
     <h2 id="setup-checklist">Quick Setup Checklist</h2>
@@ -549,79 +549,6 @@ void Update()
     <div class="note">
         <strong>Seamless Integration:</strong> Both the weapon and projectile shake modules broadcast a static event containing their epicenter and shake parameters. The Receiver handles the rest, ensuring that overlapping shakes smoothly override each other based on intensity and remaining duration.
     </div>
-
-<h2 id="breakable-props">Breakable Props (DPT_BreakableProp)</h2>
-    <p>The <code>DPT_BreakableProp</code> component is a streamlined script designed specifically for static destructible objects like mantlets, barricades, and ammo crates. It utilizes the same fracture physics, manual audio assignment, and automatic cleanup routines as the main Siege Weapon controller, but strips out all aiming and firing state machines for maximum performance on simple props.</p>
-
-    <h3>Quick Setup</h3>
-    <ol>
-        <li>Attach the <code>DPT_BreakableProp</code> script to the root of your prop prefab. Make sure the root object has a Collider.</li>
-        <li>Assign your intact meshes to <strong>Pristine Meshes</strong> and your broken debris root to <strong>Broken Parents</strong>.</li>
-        <li>Under <strong>Audio &amp; VFX</strong>, manually assign an <code>AudioSource</code> (configured for 3D spatial blending) and populate the <strong>Break Sounds</strong> array.</li>
-        <li>Adjust <strong>Max Health</strong>, <strong>Explosion Force</strong>, and <strong>Time Before Cleanup</strong> to suit the material of the prop.</li>
-    </ol>
-
-    <h3>Inspector Reference</h3>
-    
-    <h4>Visuals, Health & Damage</h4>
-    <table>
-        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><strong>Pristine Meshes / Broken Parents</strong></td><td>Pristine meshes are hidden on break, and broken parents are activated to simulate fracture.</td></tr>
-            <tr><td><strong>Max Health</strong></td><td>Structural health of the prop. Reaching 0 triggers the destruction sequence.</td></tr>
-            <tr><td><strong>Break On Impact</strong></td><td>If enabled, physical collisions exceeding the <strong>Impact Velocity Threshold</strong> will apply damage automatically based on relative velocity.</td></tr>
-            <tr><td><strong>Simulated Ramming Speed</strong></td><td>Simulated speed (m/s) applied when a kinematic vehicle (like a driven ballista) rams this prop.</td></tr>
-            <tr><td><strong>Push Non Prop Objects</strong></td><td>If true, applies an explosion force to ALL nearby rigidbodies on break, not just siege props.</td></tr>
-        </tbody>
-    </table>
-
-    <h4>Offensive Capabilities</h4>
-    <table>
-        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><strong>Apply Damage On Contact</strong></td><td>If true, this prop deals damage to other breakable objects or siege weapons it hits.</td></tr>
-            <tr><td><strong>Contact Damage</strong></td><td>Damage dealt to other objects on impact.</td></tr>
-        </tbody>
-    </table>
-
-    <h4>Destruction Physics & Broken Base</h4>
-    <table>
-        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><strong>Explosion Force / Radius</strong></td><td>The radial impulse applied to all debris pieces upon destruction.</td></tr>
-            <tr><td><strong>Explosion Y Offset</strong></td><td>Vertical offset for the internal explosion origin.</td></tr>
-            <tr><td><strong>Momentum Transfer</strong></td><td>How much of the incoming object's velocity is transferred to the flying debris.</td></tr>
-            <tr><td><strong>Broken Base Pieces</strong></td><td>Debris rigidbodies treated as structural 'base' pieces. They receive reduced explosion force and remain in place when the prop breaks.</td></tr>
-            <tr><td><strong>Base Force Multiplier</strong></td><td>Force multiplier applied only to base/structural pieces.</td></tr>
-            <tr><td><strong>Time Before Cleanup / Sink Speed</strong></td><td>How long the debris remains in the scene before freezing physics and sinking cleanly into the ground.</td></tr>
-            <tr><td><strong>Destroy On Cleanup</strong></td><td>If true, the GameObject is fully destroyed after sinking. If false, it is deactivated.</td></tr>
-        </tbody>
-    </table>
-
-    <h4>Audio, VFX & Events</h4>
-    <table>
-        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><strong>Audio Source</strong></td><td>The AudioSource component used to play the break and contact sounds.</td></tr>
-            <tr><td><strong>Particle Destroy VFX</strong></td><td>Particle VFX instantiated at the prop position on destruction.</td></tr>
-            <tr><td><strong>Break Sounds</strong></td><td>Sounds played when the prop is destroyed.</td></tr>
-            <tr><td><strong>Contact Sounds</strong></td><td>Sounds played when this prop deals contact damage to another object.</td></tr>
-            <tr><td><strong>Always Play Contact Sound</strong></td><td>If true, contact sound plays on every collision. If false, it only plays when damage is dealt to a valid target.</td></tr>
-            <tr><td><strong>Pitch Variance</strong></td><td>Random pitch fluctuation applied to audio playback (0 to 0.5).</td></tr>
-            <tr><td><strong>onDamagedEvent</strong></td><td>Fired whenever the prop takes damage.</td></tr>
-            <tr><td><strong>onDestroyedEvent</strong></td><td>Fired when the prop reaches 0 health and breaks.</td></tr>
-        </tbody>
-    </table>
-
-    <h3>Scripting API</h3>
-    <p>Interfacing with the Breakable Prop from your custom projectile or player scripts is straightforward:</p>
-    <table>
-        <thead><tr><th style="width:40%;">Method</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><code>TakeDamage(float amount, Vector3 hitPoint, Vector3 hitDirection = default)</code></td><td>Reduces health. If health reaches 0, the prop shatters, with the explosion centered near the <code>hitPoint</code>. <code>hitDirection</code> transfers momentum to debris pieces.</td></tr>
-            <tr><td><code>DestroyProp()</code></td><td>Bypasses health and shatters the prop immediately from its center, accounting for the <code>explosionYOffset</code>.</td></tr>
-        </tbody>
-    </table>
 
     <h2 id="compatibility">Compatibility &amp; Integration</h2>
 
