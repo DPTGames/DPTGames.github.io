@@ -63,6 +63,7 @@
         <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
         <tbody>
             <tr><td><strong>Pristine Meshes / Broken Parents</strong></td><td>Pristine meshes are hidden on break, and broken parents are activated to simulate fracture.</td></tr>
+            <tr><td><strong>Freeze Constraints On Start</strong></td><td>If true, freezes all Rigidbody position and rotation constraints on Start.</td></tr>
             <tr><td><strong>Max Health</strong></td><td>Structural health of the prop. Reaching 0 triggers the destruction sequence.</td></tr>
             <tr><td><strong>Break On Impact</strong></td><td>If enabled, physical collisions exceeding the <strong>Impact Velocity Threshold</strong> will apply damage automatically based on relative velocity.</td></tr>
             <tr><td><strong>Simulated Ramming Speed</strong></td><td>Simulated speed (m/s) applied when a kinematic vehicle (like a driven ballista) rams this prop.</td></tr>
