@@ -91,20 +91,28 @@
                 <td>The minimum relative collision speed (m/s) required to trip the impact sequence[cite: 9]. Low-speed grazes or minor rolling interactions are ignored[cite: 9]. Default: 2 m/s[cite: 9].</td>
             </tr>
              <tr>
-                <td><strong>Base Damage</strong></td>
-                <td>The baseline damage value delivered directly to a <code>DPT_SiegeWeapon</code> script assembly caught within the collision path.</td>
+                <td><strong>Min Damage</strong></td>
+                <td>The minimum damage this projectile will always deal on a valid impact, delivered directly to a <code>DPT_SiegeWeapon</code> or <code>DPT_BreakableProp</code> caught within the collision path — regardless of impact speed.</td>
             </tr>
             <tr>
                 <td><strong>Scale Damage With Velocity</strong></td>
-                <td>If true, multiplies base damage by <code>speed / 20</code> at the exact moment of structural contact, heavily rewarding high-velocity shots.</td>
+                <td>If true, damage scales between <strong>Min Damage</strong> and <strong>Max Damage</strong> based on impact speed relative to <strong>Damage Scaling Reference Speed</strong>. Impacts at or below the reference speed always deal exactly Min Damage — they never fall below it. Impacts above the reference speed scale upward, capped at Max Damage. If false, every valid impact deals a flat Min Damage.</td>
             </tr>
             <tr>
                 <td><strong>Max Damage</strong></td>
                 <td>The maximum damage this projectile can deal when scaling with velocity. This safely caps the upper limit so unexpected physics glitches or extreme collision speeds do not instantly bypass target health pools.</td>
             </tr>
             <tr>
+                <td><strong>Damage Scaling Reference Speed</strong></td>
+                <td>The impact speed (m/s) at which damage equals exactly <strong>Min Damage</strong>. Below this speed, damage is clamped to Min Damage; above it, damage scales up toward Max Damage. Default: 20 m/s.</td>
+            </tr>
+            <tr>
                 <td><strong>Break On Impact</strong></td>
                 <td>If enabled, instantly shatters the projectile structure into discrete debris fragments upon impact. If disabled, defaults to terminal despawn settings.</td>
+            </tr>
+            <tr>
+                <td><strong>Impacts Before Break</strong></td>
+                <td>The number of valid impacts the projectile survives — punching through and retaining momentum per the Penetration settings below — before it breaks apart on the next one. A value of <code>0</code> breaks on the very first impact; a value of <code>1</code> survives one impact and breaks on the second; and so on. Only relevant when <strong>Break On Impact</strong> is enabled.</td>
             </tr>
             <tr>
                 <td><strong>Transfer Velocity To Debris</strong></td>
