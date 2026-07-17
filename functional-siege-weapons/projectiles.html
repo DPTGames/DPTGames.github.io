@@ -90,21 +90,25 @@
                 <td><strong>Velocity Threshold</strong></td>
                 <td>The minimum relative collision speed (m/s) required to trip the impact sequence[cite: 9]. Low-speed grazes or minor rolling interactions are ignored[cite: 9]. Default: 2 m/s[cite: 9].</td>
             </tr>
-            <tr>
+             <tr>
                 <td><strong>Base Damage</strong></td>
-                <td>The baseline damage value delivered directly to a <code>DPT_SiegeWeapon</code> script assembly caught within the collision path[cite: 9].</td>
+                <td>The baseline damage value delivered directly to a <code>DPT_SiegeWeapon</code> script assembly caught within the collision path.</td>
             </tr>
             <tr>
                 <td><strong>Scale Damage With Velocity</strong></td>
-                <td>If true, multiplies base damage by <code>speed / 20</code> at the exact moment of structural contact, heavily rewarding high-velocity shots[cite: 9].</td>
+                <td>If true, multiplies base damage by <code>speed / 20</code> at the exact moment of structural contact, heavily rewarding high-velocity shots.</td>
+            </tr>
+            <tr>
+                <td><strong>Max Damage</strong></td>
+                <td>The maximum damage this projectile can deal when scaling with velocity. This safely caps the upper limit so unexpected physics glitches or extreme collision speeds do not instantly bypass target health pools.</td>
             </tr>
             <tr>
                 <td><strong>Break On Impact</strong></td>
-                <td>If enabled, instantly shatters the projectile structure into discrete debris fragments upon impact[cite: 9]. If disabled, defaults to terminal despawn settings[cite: 9].</td>
+                <td>If enabled, instantly shatters the projectile structure into discrete debris fragments upon impact. If disabled, defaults to terminal despawn settings.</td>
             </tr>
             <tr>
                 <td><strong>Transfer Velocity To Debris</strong></td>
-                <td>If true, fractured debris chunks inherit 50% of the parent projectile's lingering linear velocity matrix before scatter impulses are processed[cite: 9].</td>
+                <td>If true, fractured debris chunks inherit 50% of the parent projectile's lingering linear velocity matrix before scatter impulses are processed.</td>
             </tr>
             <tr>
                 <td><strong>Debris Scatter Force</strong></td>
