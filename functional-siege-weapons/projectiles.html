@@ -69,7 +69,7 @@
         <a href="#support" style="color: #a5f3fc; text-decoration: none;">Support</a>
     </div>
 
-    <h2 id="base-projectile">1. Projectile Base Class (Abstract)</h2>
+    <h2 id="base-projectile">Projectile Base Class (Abstract)</h2>
     <p><code>DPT_Projectile</code> is an abstract <code>MonoBehaviour</code> that governs all ammunition lifecycle routines once spawned into world space. It encapsulates collision detection filtering, dynamic damage scaling, frame-throttled impact audio compilation, debris fracture separation, and structural cleanup. Custom projectile archetypes inherit directly from this script and override the <code>OnImpact()</code> routine to append distinct behaviors.</p>
     <p>The base script requires a <code>Rigidbody</code> and a minimum of two <code>AudioSource</code> components on the root object layer. The primary audio source handles frame-gated impact sounds; the secondary audio source executes looping aerodynamic properties (e.g., wind displacement whistling).</p>
 
@@ -81,7 +81,10 @@
             <li><strong>The Surface Impact Audio Slot (Modular Extension Component):</strong> Handled contextually by the <code>DPT_ProjectileSurfaceImpact</code> companion component. This represents the high-frequency debris layer or environmental reaction (e.g., splintering wood fibers, shattering rock shards, or loose dirt explosions) mapped exclusively to specific target physics layers.</li>
         </ul>
     </div>
-
+<div class="note">
+        <strong>Surface-Driven Behavior Overrides:</strong><br><br>
+        While the base <code>DPT_Projectile</code> handles its own baseline penetration and shattering logic, it natively supports <strong>Behavior Overrides</strong> triggered by the <code>DPT_ProjectileSurfaceImpact</code> companion component. If the surface script dictates a specific layer should instantly shatter or force a penetration punch-through, it will bypass the projectile's internal impact counters and enforce the structural reaction. This keeps layer-specific physics logic decoupled from the projectile's core mass properties.
+    </div>
     <h3>Inspector Property Fields</h3>
     <table>
         <thead>
