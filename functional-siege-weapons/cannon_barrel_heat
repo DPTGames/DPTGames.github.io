@@ -83,10 +83,10 @@
 
     <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
         <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
-        <a href="#inspector-configuration" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Inspector Configuration</a>
-        <a href="#technical-architecture" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">2. Technical Architecture</a>
-        <a href="#troubleshooting" style="color: #a5f3fc; text-decoration: none;">3. Troubleshooting Notes</a>
-        <a href="#support" style="color: #a5f3fc; text-decoration: none;">4. Support</a>
+        <a href="#inspector-configuration" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Inspector Configuration</a>
+        <a href="#technical-architecture" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Technical Architecture</a>
+        <a href="#troubleshooting" style="color: #a5f3fc; text-decoration: none;">Troubleshooting Notes</a>
+        <a href="#support" style="color: #a5f3fc; text-decoration: none;">Support</a>
     </div>
 
     <h2 id="inspector-configuration">Inspector Property Configuration</h2>
