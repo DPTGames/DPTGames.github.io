@@ -50,8 +50,15 @@
     <h1>DPT_ProceduralMechanicalDrive</h1>
     <div class="subtitle">Component Reference Guide<br>
     <span style="font-size: 11pt; font-style: normal;">A generic, data-driven companion component designed to mathematically translate, rotate, scale, and apply gravity-aligned pendulum physics to cosmetic secondary sub-assemblies in perfect synchronization with a weapon's core tracking state.</span></div>
-
-    <h2>Inspector Property Configuration Tables</h2>
+<div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
+        <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
+        <a href="#inspector-config" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Inspector Properties</a>
+        <a href="#tech-architecture" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Technical Architecture</a>
+        <a href="#practical-assembly" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Assembly Configurations</a>
+        <a href="#troubleshooting" style="color: #a5f3fc; text-decoration: none;">Troubleshooting</a>
+        <a href="#support" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Support</a>
+    </div>
+    <h2 id="inspector-config">Inspector Property Configuration Tables</h2>
     
     <h3>Mechanical Asset Elements Array</h3>
     <p>Processes an array of <code>MechanicalElement</code> blocks targeting distinct cosmetic sub-mesh objects within the prefab hierarchy.</p>
@@ -222,7 +229,7 @@
         </tbody>
     </table>
 
-    <h2>Technical Architecture</h2>
+    <h2 id="tech-architecture">Technical Architecture</h2>
     <ul>
         <li><strong>Composition via Companion Scripting:</strong> Decouples purely aesthetic mechanical mesh logic from gameplay tracking engines (firing arrays, health loops, input listeners). It sits on the same object layer as a companion add-on, eliminating code modifications when creating unique visual styles.</li>
         <li><strong>Procedural Gravity & Animation Handoffs (The Baton Pass):</strong> Solves the notorious "Double Gravity" conflict where an Animator and script fight for transform control. Using <code>PausePendulumByLabel</code> instantly wipes the script's gravity calculation and resets the parent transform to its clean prefab state, allowing the Animator to execute Firing sequences completely unimpeded on the child object.</li>
@@ -236,7 +243,7 @@
         <li><strong>Automatic Destruction Gate:</strong> Continuously checks the main component status state loop. Updates automatically sleep if the tracking system switches into a <code>Destroyed</code> state, turning off looping audio immediately so separate debris fragment rigidbodies can fall and shatter naturally.</li>
     </ul>
 
-    <h2>Practical Assembly Configurations</h2>
+    <h2 id="practical-assembly">Practical Assembly Configurations</h2>
     <p>Because the mechanical driver relies on a single generic script, you can easily replicate distinct ancient weapon physics setups natively in the Inspector without creating unique C# dependencies.</p>
      
     <div class="note">
@@ -271,7 +278,7 @@
         </ol>
     </div>
 
-    <h2>Troubleshooting Notes</h2>
+    <h2 id="troubleshooting">Troubleshooting Notes</h2>
     
     <div class="troubleshooting-q">"My sling mesh points backward or has 'double rotation' applied when the script is on."</div>
     <div class="troubleshooting-a">
