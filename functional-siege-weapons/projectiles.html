@@ -19,9 +19,9 @@
         h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
         p { margin: 0 0 12px 0; }
         hr {
-        border: 0;
-        border-top: 1px solid #1e293b;
-        margin: 20px 0;
+            border: 0;
+            border-top: 1px solid #1e293b;
+            margin: 20px 0;
         }
         table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
         tr { page-break-inside: avoid; }
@@ -38,6 +38,7 @@
         code { padding: 2px 5px; }
         .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 15px; margin-bottom: 5px; page-break-after: avoid; }
         .troubleshooting-a { margin-bottom: 15px; }
+        .divider { border: none; border-top: 1px solid #1e293b; margin: 30px 0; }
     </style>
 </head>
 <body>
@@ -47,10 +48,12 @@
     <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Functional Siege Weapons</a>
     <a href="breakable_props.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Breakable Props</a>
     <a href="projectiles.html" style="color: #f8fafc; margin-right: 15px;">Projectiles System</a>
+    <a href="projectile_surface_impact.html" style="color: #f8fafc; margin-right: 15px;">Projectile Surface Impact</a>
     <a href="procedural_mechanical_drive.html.html" style="color: #f8fafc;">Procedural Mechanical Drive</a>
      <a href="rope_anchor.html.html" style="color: #f8fafc;">Rope Anchor</a>
      <a href="cannon_barrel_heat.html.html" style="color: #f8fafc;">Cannon Barrel Heat</a>
 </nav>
+
     <h1>DPT_Projectile Framework</h1>
     <div class="subtitle">Ammunition & Kinetic Impact Reference Guide<br>
     <span style="font-size: 11pt; font-style: normal;">An extensible, production-ready ballistic architecture that handles real-time rendering slerp orientation, matrix-free target locking tracking, continuous Perlin noise aerodynamic drift, and modular sub-mesh fragmentation cleanup.</span></div>
@@ -61,22 +64,21 @@
         <a href="#cannonball" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Cannonball Spec</a>
         <a href="#boulder" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Boulder Spec</a>
         <a href="#ballista" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Ballista Bolt Spec</a>
-        <a href="#modular-components" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Screen Shake & Surface Modules</a>
-        <a href="#troubleshooting" style="color: #a5f3fc; text-decoration: none;">Troubleshooting</a>
+        <a href="#modular-components" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Screen Shake Modules</a>
+        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Troubleshooting</a>
         <a href="#support" style="color: #a5f3fc; text-decoration: none;">Support</a>
-
     </div>
 
     <h2 id="base-projectile">1. Projectile Base Class (Abstract)</h2>
-    <p><code>DPT_Projectile</code> is an abstract <code>MonoBehaviour</code> that governs all ammunition lifecycle routines once spawned into world space[cite: 9]. It encapsulates collision detection filtering, dynamic damage scaling, frame-throttled impact audio compilation, debris fracture separation, and structural cleanup[cite: 9]. Custom projectile archetypes inherit directly from this script and override the <code>OnImpact()</code> routine to append distinct behaviors[cite: 9].</p>
-    <p>The base script requires a <code>Rigidbody</code> and a minimum of two <code>AudioSource</code> components on the root object layer[cite: 9]. The primary audio source handles frame-gated impact sounds; the secondary audio source executes looping aerodynamic properties (e.g., wind displacement whistling)[cite: 9].</p>
+    <p><code>DPT_Projectile</code> is an abstract <code>MonoBehaviour</code> that governs all ammunition lifecycle routines once spawned into world space. It encapsulates collision detection filtering, dynamic damage scaling, frame-throttled impact audio compilation, debris fracture separation, and structural cleanup. Custom projectile archetypes inherit directly from this script and override the <code>OnImpact()</code> routine to append distinct behaviors.</p>
+    <p>The base script requires a <code>Rigidbody</code> and a minimum of two <code>AudioSource</code> components on the root object layer. The primary audio source handles frame-gated impact sounds; the secondary audio source executes looping aerodynamic properties (e.g., wind displacement whistling).</p>
 
     <div class="note">
         <strong>The Dual-Layer Audio Paradigm: Core Projectile Sounds vs. Surface Sweeteners</strong><br><br>
-        To preserve memory and streamline assembly configurations, impact audio is divided into two operational segments[cite: 9]:
+        To preserve memory and streamline assembly configurations, impact audio is divided into two operational segments:
         <ul>
-            <li><strong>The Projectile Audio Slot (Base Class):</strong> Located on the core projectile prefabs (Boulder, Cannonball, Ballista Bolt)[cite: 9]. This pool represents the <strong>universal kinetic energy, mass, and weight of the projectile itself</strong> (e.g., a heavy sub-bass thud or metallic displacement crack)[cite: 9]. This profile remains constant regardless of what object is hit because the mass of the projectile does not change[cite: 9].</li>
-            <li><strong>The Surface Impact Audio Slot (Modular Extension Component):</strong> Handled contextually by the <code>DPT_ProjectileSurfaceImpact</code> companion component[cite: 9]. This represents the high-frequency debris layer or environmental reaction (e.g., splintering wood fibers, shattering rock shards, or loose dirt explosions) mapped exclusively to specific target physics layers[cite: 9].</li>
+            <li><strong>The Projectile Audio Slot (Base Class):</strong> Located on the core projectile prefabs (Boulder, Cannonball, Ballista Bolt). This pool represents the <strong>universal kinetic energy, mass, and weight of the projectile itself</strong> (e.g., a heavy sub-bass thud or metallic displacement crack). This profile remains constant regardless of what object is hit because the mass of the projectile does not change.</li>
+            <li><strong>The Surface Impact Audio Slot (Modular Extension Component):</strong> Handled contextually by the <code>DPT_ProjectileSurfaceImpact</code> companion component. This represents the high-frequency debris layer or environmental reaction (e.g., splintering wood fibers, shattering rock shards, or loose dirt explosions) mapped exclusively to specific target physics layers.</li>
         </ul>
     </div>
 
@@ -91,15 +93,15 @@
         <tbody>
             <tr>
                 <td><strong>Impact Sounds</strong></td>
-                <td>An array pool of <code>AudioClip</code> assets representing the <strong>universal projectile sound</strong> (the core kinetic mass weight or baseline "thud")[cite: 9]. One is selected at random upon a valid collision[cite: 9]. Volume levels scale dynamically relative to the projectile's velocity magnitude on impact[cite: 9]. <em>Note: Leave this array empty if you prefer 100% of the impact audio tracking handled contextually by the companion surface script module[cite: 9].</em></td>
+                <td>An array pool of <code>AudioClip</code> assets representing the <strong>universal projectile sound</strong> (the core kinetic mass weight or baseline "thud"). One is selected at random upon a valid collision. Volume levels scale dynamically relative to the projectile's velocity magnitude on impact. <em>Note: Leave this array empty if you prefer 100% of the impact audio tracking handled contextually by the companion surface script module.</em></td>
             </tr>
             <tr>
                 <td><strong>Pitch Variance</strong></td>
-                <td>The randomized frequency shift added or subtracted from the baseline audio player modifier (1.0) during collision execution[cite: 9]. Default: ±0.15[cite: 9].</td>
+                <td>The randomized frequency shift added or subtracted from the baseline audio player modifier (1.0) during collision execution. Default: ±0.15.</td>
             </tr>
             <tr>
                 <td><strong>Velocity Threshold</strong></td>
-                <td>The minimum relative collision speed (m/s) required to trip the impact sequence[cite: 9]. Low-speed grazes or minor rolling interactions are ignored[cite: 9]. Default: 2 m/s[cite: 9].</td>
+                <td>The minimum relative collision speed (m/s) required to trip the impact sequence. Low-speed grazes or minor rolling interactions are ignored. Default: 2 m/s.</td>
             </tr>
              <tr>
                 <td><strong>Min Damage</strong></td>
@@ -131,89 +133,89 @@
             </tr>
             <tr>
                 <td><strong>Debris Scatter Force</strong></td>
-                <td>The outward explosion impulse magnitude applied to child debris rigidbodies at the contact epicenter upon structural fracturing[cite: 9].</td>
+                <td>The outward explosion impulse magnitude applied to child debris rigidbodies at the contact epicenter upon structural fracturing.</td>
             </tr>
             <tr>
                 <td><strong>Enable Penetration</strong></td>
-                <td>If true, the projectile actively restores its momentum after a non-breaking impact, allowing it to physically punch through destructible geometry[cite: 9].</td>
+                <td>If true, the projectile actively restores its momentum after a non-breaking impact, allowing it to physically punch through destructible geometry.</td>
             </tr>
             <tr>
                 <td><strong>Velocity Retention</strong></td>
-                <td>A percentage multiplier (0.0 to 1.0) dictating how much kinetic speed is retained after successfully punching through a target[cite: 9]. A value of 1 ignores all structural resistance[cite: 9].</td>
+                <td>A percentage multiplier (0.0 to 1.0) dictating how much kinetic speed is retained after successfully punching through a target. A value of 1 ignores all structural resistance.</td>
             </tr>
             <tr>
                 <td><strong>Embed On Impact</strong></td>
-                <td>If true, the projectile will embed itself into the hit object and freeze its physics in place[cite: 9]. It utilizes matrix-free tracking to remain stuck to moving targets (like rolling siege towers) without being disrupted by hierarchy changes[cite: 9].</td>
+                <td>If true, the projectile will embed itself into the hit object and freeze its physics in place. It utilizes matrix-free tracking to remain stuck to moving targets (like rolling siege towers) without being disrupted by hierarchy changes.</td>
             </tr>
             <tr>
                 <td><strong>Embed Depth</strong></td>
-                <td>How far forward (in meters) the projectile should sink into the target geometry upon impact to simulate a pierced surface[cite: 9].</td>
+                <td>How far forward (in meters) the projectile should sink into the target geometry upon impact to simulate a pierced surface.</td>
             </tr>
             <tr>
                 <td><strong>On Despawn Requested</strong></td>
-                <td>An exposed C# Action delegate hook[cite: 9]. External object pool managers can subscribe to this event to intercept the despawn cycle and prevent the object from being destroyed by the engine[cite: 9].</td>
+                <td>An exposed C# Action delegate hook. External object pool managers can subscribe to this event to intercept the despawn cycle and prevent the object from being destroyed by the engine.</td>
             </tr>
             <tr>
                 <td><strong>Should Despawn</strong></td>
-                <td>If enabled, triggers the terminal cleanup cycle once the flight or impact sequence concludes[cite: 9]. By default, this calls <code>Destroy()</code>, but advanced developers can override the <code>Despawn()</code> method to intercept this call and return the projectile to a custom Object Pool instead[cite: 9].</td>
+                <td>If enabled, triggers the terminal cleanup cycle once the flight or impact sequence concludes. By default, this calls <code>Destroy()</code>, but advanced developers can override the <code>Despawn()</code> method to intercept this call and return the projectile to a custom Object Pool instead.</td>
             </tr>
             <tr>
                 <td><strong>Despawn Delay</strong></td>
-                <td>The tracking timeframe buffer (in seconds) to wait after an impact before completely deleting the object tree from memory, allowing audio trailing or VFX particle systems to complete natively[cite: 9].</td>
+                <td>The tracking timeframe buffer (in seconds) to wait after an impact before completely deleting the object tree from memory, allowing audio trailing or VFX particle systems to complete natively.</td>
             </tr>
             <tr>
                 <td><strong>Enable Inaccuracy</strong></td>
-                <td>If true, injects both a randomized launch spread angle transformation and a continuous aerodynamic side-drift physics update using Perlin noise loops[cite: 9].</td>
+                <td>If true, injects both a randomized launch spread angle transformation and a continuous aerodynamic side-drift physics update using Perlin noise loops.</td>
             </tr>
             <tr>
                 <td><strong>Initial Spread Angle</strong></td>
-                <td>The maximum angular deviation window in degrees applied as a structural roll/yaw rotation offset at the point of initialization[cite: 9].</td>
+                <td>The maximum angular deviation window in degrees applied as a structural roll/yaw rotation offset at the point of initialization.</td>
             </tr>
             <tr>
                 <td><strong>Continuous Drift Force</strong></td>
-                <td>The lateral acceleration force scalar applied continuously to push the projectile off-course, simulating micro-shifting crosswinds[cite: 9].</td>
+                <td>The lateral acceleration force scalar applied continuously to push the projectile off-course, simulating micro-shifting crosswinds.</td>
             </tr>
             <tr>
                 <td><strong>Drift Fluctuation Speed</strong></td>
-                <td>The frequency multiplier governing how rapidly the continuous side-drift alters its directional vector heading through three-dimensional space[cite: 9].</td>
+                <td>The frequency multiplier governing how rapidly the continuous side-drift alters its directional vector heading through three-dimensional space.</td>
             </tr>
             <tr>
                 <td><strong>Unbroken Ammo Object</strong></td>
-                <td>The child GameObject containing the intact flying model container and its main physics colliders[cite: 9]. Hidden immediately upon collision[cite: 9].</td>
+                <td>The child GameObject containing the intact flying model container and its main physics colliders. Hidden immediately upon collision.</td>
             </tr>
             <tr>
                 <td><strong>Embedded Debris Root</strong></td>
-                <td>A pre-fractured child container asset model configured with loose individual rigidbodies[cite: 9]. Activated, unparented, and thrown into root world space on impact[cite: 9]. Should be deactivated by default in the prefab[cite: 9].</td>
+                <td>A pre-fractured child container asset model configured with loose individual rigidbodies. Activated, unparented, and thrown into root world space on impact. Should be deactivated by default in the prefab.</td>
             </tr>
             <tr>
                 <td><strong>Enable Flight Spin</strong></td>
-                <td>If true, forces continuous tracking rotation along a specified axis vector while traveling through the air[cite: 9].</td>
+                <td>If true, forces continuous tracking rotation along a specified axis vector while traveling through the air.</td>
             </tr>
             <tr>
                 <td><strong>Local Spin Axis</strong></td>
-                <td>The local forward, right, or up vector around which continuous spin transformations are applied (e.g., 0,0,1 for bolt rifling stability)[cite: 9].</td>
+                <td>The local forward, right, or up vector around which continuous spin transformations are applied (e.g., 0,0,1 for bolt rifling stability).</td>
             </tr>
             <tr>
                 <td><strong>Randomize Spin Axis Signs</strong></td>
-                <td>If enabled, randomly flips the positive or negative signs of each axis component on launch (e.g., an axis configuration of 1,1,1 can organically convert to -1,1,-1), introducing variations in rotational directions[cite: 9].</td>
+                <td>If enabled, randomly flips the positive or negative signs of each axis component on launch (e.g., an axis configuration of 1,1,1 can organically convert to -1,1,-1), introducing variations in rotational directions.</td>
             </tr>
             <tr>
                 <td><strong>Spin Speed</strong></td>
-                <td>The constant tracking rotation velocity calculated in degrees per second[cite: 9].</td>
+                <td>The constant tracking rotation velocity calculated in degrees per second.</td>
             </tr>
             <tr>
                 <td><strong>Spin Visuals Only</strong></td>
-                <td>If true, rotates only the visual child mesh container (Unbroken Ammo Object), ensuring root rigidbodies and main physics colliders stay perfectly stable during physics ticks[cite: 9].</td>
+                <td>If true, rotates only the visual child mesh container (Unbroken Ammo Object), ensuring root rigidbodies and main physics colliders stay perfectly stable during physics ticks.</td>
             </tr>
             <tr>
                 <td><strong>Local Cooldown</strong></td>
-                <td>Per-projectile minimum time buffer (in seconds) enforced between impact registrations to protect against false double-collision events[cite: 9]. Default: 0.3s[cite: 9].</td>
+                <td>Per-projectile minimum time buffer (in seconds) enforced between impact registrations to protect against false double-collision events. Default: 0.3s.</td>
             </tr>
         </tbody>
     </table>
 
     <h3>Extending the Framework</h3>
-    <p>To implement alternative ammunition varieties, author a child script that inherits directly from <code>DPT_Projectile</code> and override the <code>OnImpact(Collision collision, float speed)</code> routine[cite: 9]. The underlying engine automatically handles structural damage, frame-gated sound mixers, and debris fracturing before executing your custom override logic[cite: 9].</p>
+    <p>To implement alternative ammunition varieties, author a child script that inherits directly from <code>DPT_Projectile</code> and override the <code>OnImpact(Collision collision, float speed)</code> routine. The underlying engine automatically handles structural damage, frame-gated sound mixers, and debris fracturing before executing your custom override logic.</p>
 
 <pre><code>using UnityEngine;
 using DPT.SiegeWeapons;
@@ -229,20 +231,20 @@ public class MortarShellProjectile : DPT_Projectile
 
     <div class="note">
         <strong>Linking Communication Back to Weapons:</strong><br><br>
-        Every projectile retains an explicit reference to the siege weapon assembly that initialized it via the public <code>Launcher</code> property, configured automatically on spawn[cite: 9]. You can invoke <code>Launcher.ImpactEffect(contactPoint)</code> inside your custom overrides to trigger the parent weapon's specialized impact audio behaviors at the hit coordinate[cite: 9].
+        Every projectile retains an explicit reference to the siege weapon assembly that initialized it via the public <code>Launcher</code> property, configured automatically on spawn. You can invoke <code>Launcher.ImpactEffect(contactPoint)</code> inside your custom overrides to trigger the parent weapon's specialized impact audio behaviors at the hit coordinate.
     </div>
     <div class="note">
         <strong>Advanced Architecture: Object Pooling Compatibility & Caching</strong><br><br>
-        To support massive scale sieges and strict hardware performance limits, the <code>DPT_Projectile</code> framework is strictly <strong>Pool-Ready</strong> and designed for zero runtime allocation[cite: 9]. 
+        To support massive scale sieges and strict hardware performance limits, the <code>DPT_Projectile</code> framework is strictly <strong>Pool-Ready</strong> and designed for zero runtime allocation. 
         <br><br>
-        During <code>Awake()</code>, the projectile permanently caches all internal <code>Rigidbody</code> and <code>Collider</code> arrays[cite: 9]. When a projectile shatters, it safely unparents its debris rigidbodies to prevent them from inheriting the tumbling momentum of moving targets[cite: 9].
+        During <code>Awake()</code>, the projectile permanently caches all internal <code>Rigidbody</code> and <code>Collider</code> arrays. When a projectile shatters, it safely unparents its debris rigidbodies to prevent them from inheriting the tumbling momentum of moving targets.
         <br><br>
-        To implement an Object Pool, subscribe your pool manager to the projectile's <code>OnDespawnRequested</code> Action delegate[cite: 9]. The projectile will hand itself over to your script instead of calling <code>Destroy()</code>[cite: 9]. When you are ready to fire it again, call <code>ResetForPooling()</code> to instantly vacuum up its broken debris fragments, freeze their physics, and re-enable the root colliders, making the ammunition pristine without triggering Garbage Collection spikes[cite: 9].
+        To implement an Object Pool, subscribe your pool manager to the projectile's <code>OnDespawnRequested</code> Action delegate. The projectile will hand itself over to your script instead of calling <code>Destroy()</code>. When you are ready to fire it again, call <code>ResetForPooling()</code> to instantly vacuum up its broken debris fragments, freeze their physics, and re-enable the root colliders, making the ammunition pristine without triggering Garbage Collection spikes.
     </div>
     <hr>
 
     <h2 id="cannonball">DPT_Cannonball — Standard Ballistic Ammunition</h2>
-    <p><code>DPT_Cannonball</code> is a specialized extension designed for heavy, high-velocity projectile assets[cite: 9]. It tracks high-speed ballistic pathways, layering a custom high-frequency pitch modification over the secondary looping audio source to simulate rapid air displacement[cite: 9]. This looping wind shear volume seamlessly moves towards an audible zero upon hitting geometry to cleanly blend into the base impact framework[cite: 9].</p>
+    <p><code>DPT_Cannonball</code> is a specialized extension designed for heavy, high-velocity projectile assets. It tracks high-speed ballistic pathways, layering a custom high-frequency pitch modification over the secondary looping audio source to simulate rapid air displacement. This looping wind shear volume seamlessly moves towards an audible zero upon hitting geometry to cleanly blend into the base impact framework.</p>
 
     <h3>Inspector Property Fields</h3>
     <table>
@@ -255,15 +257,15 @@ public class MortarShellProjectile : DPT_Projectile
         <tbody>
             <tr>
                 <td><strong>Flight Whistle</strong></td>
-                <td>Audio asset clip loaded into the looping audio player to simulate rapid air displacement or whistling during travel[cite: 9].</td>
+                <td>Audio asset clip loaded into the looping audio player to simulate rapid air displacement or whistling during travel.</td>
             </tr>
             <tr>
                 <td><strong>Flight Whistle Pitch</strong></td>
-                <td>Modulates the base playback frequency pitch of your flight whistle loop to simulate dense projectile speeds[cite: 9]. Default: 1.4[cite: 9].</td>
+                <td>Modulates the base playback frequency pitch of your flight whistle loop to simulate dense projectile speeds. Default: 1.4.</td>
             </tr>
             <tr>
                 <td><strong>Flight Fade Speed</strong></td>
-                <td>The speed multiplier at which the looping air displacement track dampens down to zero upon structural contact, smoothing the audio crossover[cite: 9]. Default: 6[cite: 9].</td>
+                <td>The speed multiplier at which the looping air displacement track dampens down to zero upon structural contact, smoothing the audio crossover. Default: 6.</td>
             </tr>
         </tbody>
     </table>
@@ -271,7 +273,7 @@ public class MortarShellProjectile : DPT_Projectile
     <hr>
 
     <h2 id="boulder">DPT_Boulder — Kinetic Rolling Projectile</h2>
-   <p><code>DPT_Boulder</code> alters conventional projectile lifecycle mechanics by transitioning seamlessly from a free-flying air tracking object into a grounded physics asset[cite: 9]. Rather than relying on heavy <code>OnCollisionStay</code> loops, it utilizes a highly performant collision contact-counter to track its grounded state[cite: 9]. This prevents micro-bouncing audio artifacts and dynamically shifts audio priorities from flying wind whistles into heavy ground friction rumbling loops that match the boulder's active velocity magnitude[cite: 9].</p>
+   <p><code>DPT_Boulder</code> alters conventional projectile lifecycle mechanics by transitioning seamlessly from a free-flying air tracking object into a grounded physics asset. Rather than relying on heavy <code>OnCollisionStay</code> loops, it utilizes a highly performant collision contact-counter to track its grounded state. This prevents micro-bouncing audio artifacts and dynamically shifts audio priorities from flying wind whistles into heavy ground friction rumbling loops that match the boulder's active velocity magnitude.</p>
 
     <h3>Inspector Property Fields</h3>
     <table>
@@ -284,52 +286,52 @@ public class MortarShellProjectile : DPT_Projectile
         <tbody>
             <tr>
                 <td><strong>Rolling Loop</strong></td>
-                <td>Sustained audio asset clip representing grinding friction, rocky crushing, or heavy rolling momentum loops[cite: 9].</td>
+                <td>Sustained audio asset clip representing grinding friction, rocky crushing, or heavy rolling momentum loops.</td>
             </tr>
             <tr>
                 <td><strong>Roll Volume Smoothing</strong></td>
-                <td>The interpolation factor governing how smoothly the rolling sound loop adjusts to sudden changes in velocity or unexpected terrain drop-offs[cite: 9]. Default: 3[cite: 9].</td>
+                <td>The interpolation factor governing how smoothly the rolling sound loop adjusts to sudden changes in velocity or unexpected terrain drop-offs. Default: 3.</td>
             </tr>
             <tr>
                 <td><strong>Max Roll Speed</strong></td>
-                <td>The velocity threshold (m/s) at which the ground rolling audio loop reaches its maximum pitch shift and volume scaling boundaries[cite: 9]. Default: 15 m/s[cite: 9].</td>
+                <td>The velocity threshold (m/s) at which the ground rolling audio loop reaches its maximum pitch shift and volume scaling boundaries. Default: 15 m/s.</td>
             </tr>
             <tr>
                 <td><strong>Settled Threshold</strong></td>
-                <td>The physics velocity floor below which the boulder is considered fully stationary post-impact, terminating its rolling phase[cite: 9]. Default: 0.2 m/s[cite: 9].</td>
+                <td>The physics velocity floor below which the boulder is considered fully stationary post-impact, terminating its rolling phase. Default: 0.2 m/s.</td>
             </tr>
             <tr>
                 <td><strong>On Settled</strong></td>
-                <td>A <code>UnityEvent</code> triggered the exact frame the rolling boulder falls below the settled threshold, ideal for spawning permanent environment craters or shifting navigation meshes[cite: 9].</td>
+                <td>A <code>UnityEvent</code> triggered the exact frame the rolling boulder falls below the settled threshold, ideal for spawning permanent environment craters or shifting navigation meshes.</td>
             </tr>
             <tr>
                 <td><strong>Rolling VFX</strong></td>
-                <td>The dust particle system driven during the rolling phase[cite: 9]. Its emission rate is dynamically linked to the boulder's physical speed multiplier[cite: 9].</td>
+                <td>The dust particle system driven during the rolling phase. Its emission rate is dynamically linked to the boulder's physical speed multiplier.</td>
             </tr>
             <tr>
                 <td><strong>Max Emission Rate</strong></td>
-                <td>The maximum number of particles to emit per second when the boulder is traveling at or above the maximum roll speed threshold[cite: 9]. Default: 20[cite: 9].</td>
+                <td>The maximum number of particles to emit per second when the boulder is traveling at or above the maximum roll speed threshold. Default: 20.</td>
             </tr>
         </tbody>
     </table>
 
     <h3>Mechanical Profile</h3>
     <ul>
-        <li><strong>Lifecycle Extension:</strong> Unhooks completely from early base class despawning chains inside <code>Awake()</code>[cite: 9]. It explicitly forces its internal <code>shouldDespawn</code> state to false on initialization, ensuring the lifespan cleanup counters do not begin processing until the rock completely finishes its rolling phase and comes to a full stop[cite: 9].</li>
-        <li><strong>Dynamic Pitch Calculations:</strong> Linearly interpolates the rolling loop audio player's pitch shifting baseline between <code>0.8f</code> and <code>1.2f</code> based on its current kinetic velocity tracking data[cite: 9].</li>
-        <li><strong>Audio-Visual Velocity Sync:</strong> The script shares a single calculated multiplier (0.0 to 1.0) derived from the Rigidbody's velocity magnitude to drive both the looping friction audio and the dust particle emission rate simultaneously[cite: 9]. This guarantees that visual dust trails smoothly taper off to zero precisely as the heavy rumbling audio fades out, preventing abrupt particle cutoffs before the boulder has fully settled[cite: 9].</li>
+        <li><strong>Lifecycle Extension:</strong> Unhooks completely from early base class despawning chains inside <code>Awake()</code>. It explicitly forces its internal <code>shouldDespawn</code> state to false on initialization, ensuring the lifespan cleanup counters do not begin processing until the rock completely finishes its rolling phase and comes to a full stop.</li>
+        <li><strong>Dynamic Pitch Calculations:</strong> Linearly interpolates the rolling loop audio player's pitch shifting baseline between <code>0.8f</code> and <code>1.2f</code> based on its current kinetic velocity tracking data.</li>
+        <li><strong>Audio-Visual Velocity Sync:</strong> The script shares a single calculated multiplier (0.0 to 1.0) derived from the Rigidbody's velocity magnitude to drive both the looping friction audio and the dust particle emission rate simultaneously. This guarantees that visual dust trails smoothly taper off to zero precisely as the heavy rumbling audio fades out, preventing abrupt particle cutoffs before the boulder has fully settled.</li>
     </ul>
 
     <hr>
 
     <h2 id="ballista">DPT_BallistaBolt — Specialized Piercing Bolt</h2>
-    <p><code>DPT_BallistaBolt</code> delivers specialized features for heavy piercing ammunition assets[cite: 9]. It continuously slerps its physical rigidbody alignment to look directly into its velocity vector during flight, processes advanced multi-axis aerodynamic cosmetic vibrations, handles penetration pinning depth, and includes a structural snap mechanic that separates the tail fletching from the embedded tip on structural clipping[cite: 9].</p>
+    <p><code>DPT_BallistaBolt</code> delivers specialized features for heavy piercing ammunition assets. It continuously slerps its physical rigidbody alignment to look directly into its velocity vector during flight, processes advanced multi-axis aerodynamic cosmetic vibrations, handles penetration pinning depth, and includes a structural snap mechanic that separates the tail fletching from the embedded tip on structural clipping.</p>
 
     <div class="note">
         <strong>Embed On Impact & Break On Impact Are Prefab Defaults, Not Fixed Behavior:</strong><br><br>
-        Unlike earlier internal builds, <code>DPT_BallistaBolt</code> no longer forces the inherited <strong>Embed On Impact</strong> and <strong>Break On Impact</strong> fields at runtime[cite: 9]. Whatever you configure on the prefab's Inspector is respected as-is, so the same script can be repurposed for non-embedding ammunition (foam darts, blunt bolts, practice rounds) simply by unchecking <strong>Embed On Impact</strong> — no code changes required[cite: 9].<br><br>
-        The recommended factory defaults for a standard piercing bolt are <strong>Embed On Impact = true</strong> and <strong>Break On Impact = false</strong>, authored directly on the prefab[cite: 9].<br><br>
-        The tail-snap mechanic (<strong>Snap Trigger Collider</strong>, <strong>Snapped Visual</strong>) is only armed when the bolt has actually embedded[cite: 9]. If <strong>Embed On Impact</strong> is disabled on a given prefab, the snap system automatically stays dormant rather than throwing errors — so it's safe to toggle off for non-piercing ammo variants[cite: 9].
+        Unlike earlier internal builds, <code>DPT_BallistaBolt</code> no longer forces the inherited <strong>Embed On Impact</strong> and <strong>Break On Impact</strong> fields at runtime. Whatever you configure on the prefab's Inspector is respected as-is, so the same script can be repurposed for non-embedding ammunition (foam darts, blunt bolts, practice rounds) simply by unchecking <strong>Embed On Impact</strong> — no code changes required.<br><br>
+        The recommended factory defaults for a standard piercing bolt are <strong>Embed On Impact = true</strong> and <strong>Break On Impact = false</strong>, authored directly on the prefab.<br><br>
+        The tail-snap mechanic (<strong>Snap Trigger Collider</strong>, <strong>Snapped Visual</strong>) is only armed when the bolt has actually embedded. If <strong>Embed On Impact</strong> is disabled on a given prefab, the snap system automatically stays dormant rather than throwing errors — so it's safe to toggle off for non-piercing ammo variants.
     </div>
 
     <h3>Inspector Property Fields</h3>
@@ -343,89 +345,94 @@ public class MortarShellProjectile : DPT_Projectile
         <tbody>
             <tr>
                 <td><strong>Flight Whistle</strong></td>
-                <td>Audio asset clip loaded into the secondary loop player to execute heavy wind shearing behaviors[cite: 9].</td>
+                <td>Audio asset clip loaded into the secondary loop player to execute heavy wind shearing behaviors.</td>
             </tr>
             <tr>
                 <td><strong>Alignment Speed</strong></td>
-                <td>The interpolation speed multiplier at which the physical rigidbody slerps its forward look matrix to align with its directional velocity path[cite: 9].</td>
+                <td>The interpolation speed multiplier at which the physical rigidbody slerps its forward look matrix to align with its directional velocity path.</td>
             </tr>
             <tr>
                 <td><strong>Flight Fade Speed</strong></td>
-                <td>The dampening rate at which the looping flight source volume drops to zero upon registering a valid target contact[cite: 9].</td>
+                <td>The dampening rate at which the looping flight source volume drops to zero upon registering a valid target contact.</td>
             </tr>
             <tr>
                 <td><strong>Randomize Initial Rotation</strong></td>
-                <td>If true, the bolt applies a completely randomized visual roll orientation twist strictly tracked along its local spin axis upon scene generation[cite: 9].</td>
+                <td>If true, the bolt applies a completely randomized visual roll orientation twist strictly tracked along its local spin axis upon scene generation.</td>
             </tr>
             <tr>
                 <td><strong>Enable Wobble</strong></td>
-                <td>Toggles a complex, dynamic vibrational multi-axis shake on the perpendicular axes of the bolt during travel[cite: 9].</td>
+                <td>Toggles a complex, dynamic vibrational multi-axis shake on the perpendicular axes of the bolt during travel.</td>
             </tr>
             <tr>
                 <td><strong>Wobble Frequency</strong></td>
-                <td>How rapidly the bolt mesh framework vibrates back and forth during advanced multi-axis wobble processing[cite: 9].</td>
+                <td>How rapidly the bolt mesh framework vibrates back and forth during advanced multi-axis wobble processing.</td>
             </tr>
             <tr>
                 <td><strong>Wobble Amplitude</strong></td>
-                <td>The maximum angular deviation range in degrees allowed for the multi-axis vibration window[cite: 9].</td>
+                <td>The maximum angular deviation range in degrees allowed for the multi-axis vibration window.</td>
             </tr>
             <tr>
                 <td><strong>Decay Wobble</strong></td>
-                <td>If enabled, the multi-axis vibration automatically stabilizes and dampens out smoothly over the duration of its flight path[cite: 9].</td>
+                <td>If enabled, the multi-axis vibration automatically stabilizes and dampens out smoothly over the duration of its flight path.</td>
             </tr>
             <tr>
                 <td><strong>Wobble Decay Speed</strong></td>
-                <td>The multiplier rate at which the advanced flight wobble window decreases over time[cite: 9].</td>
+                <td>The multiplier rate at which the advanced flight wobble window decreases over time.</td>
             </tr>
             <tr>
                 <td><strong>Enable X Axis Wobble</strong></td>
-                <td>Toggles a clean, harmonic back-and-forth rotational vibration strictly focused along the local X-axis[cite: 9]. Works alongside spin and advanced wobble parameters[cite: 9].</td>
+                <td>Toggles a clean, harmonic back-and-forth rotational vibration strictly focused along the local X-axis. Works alongside spin and advanced wobble parameters.</td>
             </tr>
             <tr>
                 <td><strong>X Wobble Frequency</strong></td>
-                <td>The rapid cycle frequency for the dedicated local X-axis wobble effect[cite: 9].</td>
+                <td>The rapid cycle frequency for the dedicated local X-axis wobble effect.</td>
             </tr>
             <tr>
                 <td><strong>X Wobble Amplitude</strong></td>
-                <td>The maximum angular deviation in degrees for the local X-axis wobble[cite: 9].</td>
+                <td>The maximum angular deviation in degrees for the local X-axis wobble.</td>
             </tr>
             <tr>
                 <td><strong>Impact Force Multiplier</strong></td>
-                <td>A scaling factor applied against the bolt's mass and velocity matrices when delivering a direct kinetic impulse force to hit rigidbodies[cite: 9].</td>
+                <td>A scaling factor applied against the bolt's mass and velocity matrices when delivering a direct kinetic impulse force to hit rigidbodies.</td>
             </tr>
             <tr>
                 <td><strong>Broken Root</strong></td>
-                <td>The child GameObject container representing the tip and front shaft model parts that remain permanently pinned into targets when a snap occurs[cite: 9].</td>
+                <td>The child GameObject container representing the tip and front shaft model parts that remain permanently pinned into targets when a snap occurs.</td>
             </tr>
             <tr>
                 <td><strong>Snapped Visual</strong></td>
-                <td>The child GameObject container representing the fletching and tail segment that breaks free and tumbles into world space when a snap occurs[cite: 9]. Given an independent physics body on break[cite: 9].</td>
+                <td>The child GameObject container representing the fletching and tail segment that breaks free and tumbles into world space when a snap occurs. Given an independent physics body on break.</td>
             </tr>
             <tr>
                 <td><strong>Snap Trigger Collider</strong></td>
-                <td>A dedicated trigger collider tracking the fletching asset area, enabled post-impact to detect moving actors or clearing elements that should clip the tail off[cite: 9].</td>
+                <td>A dedicated trigger collider tracking the fletching asset area, enabled post-impact to detect moving actors or clearing elements that should clip the tail off.</td>
             </tr>
             <tr>
                 <td><strong>Snap Break Force</strong></td>
-                <td>The outward physics impulse force applied to kick the snapped tail visual away from its embedded pinning coordinates[cite: 9].</td>
+                <td>The outward physics impulse force applied to kick the snapped tail visual away from its embedded pinning coordinates.</td>
             </tr>
         </tbody>
     </table>
 
     <h3>Mechanical Profile</h3>
     <ul>
-        <li><strong>Inaccuracy Integration:</strong> Integrates natively with the base class aerodynamic drift mechanics[cite: 9]. If Perlin noise acceleration forces push the rigidbody sideways through the air, the bolt's look-alignment logic automatically curves the visual container mesh to point directly into its newly modified flight heading[cite: 9].</li>
-        <li><strong>Matrix-Free Target Tracking:</strong> Utilizes the base class's native embedding architecture to bypass standard Unity <code>transform.SetParent</code> workflows on impact[cite: 9]. By recording its exact relative position and rotation offsets using inverse transform mapping, it completely immunizes the bolt mesh from non-uniform scaling, stretching, or skewing distortions present on target structures[cite: 9].</li>
-        <li><strong>Debris Reparenting Fallback:</strong> Overrides the base class's standard unstick routine[cite: 9]. If the target object the bolt is pinned into gets broken or fractured, the bolt searches the parent weapon assembly's <code>brokenParents</code> arrays, finds the closest active debris piece, and updates its tracking anchors to tumble realistically with the wreckage rather than just falling out[cite: 9].</li>
+        <li><strong>Inaccuracy Integration:</strong> Integrates natively with the base class aerodynamic drift mechanics. If Perlin noise acceleration forces push the rigidbody sideways through the air, the bolt's look-alignment logic automatically curves the visual container mesh to point directly into its newly modified flight heading.</li>
+        <li><strong>Matrix-Free Target Tracking:</strong> Utilizes the base class's native embedding architecture to bypass standard Unity <code>transform.SetParent</code> workflows on impact. By recording its exact relative position and rotation offsets using inverse transform mapping, it completely immunizes the bolt mesh from non-uniform scaling, stretching, or skewing distortions present on target structures.</li>
+        <li><strong>Debris Reparenting Fallback:</strong> Overrides the base class's standard unstick routine. If the target object the bolt is pinned into gets broken or fractured, the bolt searches the parent weapon assembly's <code>brokenParents</code> arrays, finds the closest active debris piece, and updates its tracking anchors to tumble realistically with the wreckage rather than just falling out.</li>
     </ul>
 
     <hr>
 
-<h2 id="modular-components">Modular Ballistic Extension Components</h2>
-    <p>To preserve maximum performance optimization and maintain a highly scannable workflow, modular behaviors like environment visual matching and camera shaking are separated into independent, optional satellite scripts[cite: 9]. To implement these behaviors, drop these components onto any projectile prefab alongside the main baseline <code>DPT_Projectile</code> component tree[cite: 9].</p>
+    <h2 id="modular-components">Modular Ballistic Extension Components</h2>
+    <p>To preserve maximum performance optimization and maintain a highly scannable workflow, modular behaviors like environment visual matching and camera shaking are separated into independent, optional satellite scripts. To implement these behaviors, drop these components onto any projectile prefab alongside the main baseline <code>DPT_Projectile</code> component tree.</p>
+
+    <div class="note">
+        <strong>Surface Impact & Cleanup Mapping</strong><br><br>
+        For details on configuring contextual layer-based particle effects, procedural surface marks (cracks, trenches), and automated footprint mesh cleanup utilities, please see the dedicated <a href="projectile_surface_impact.html" style="color: #38bdf8;">Projectile Surface Impact Guide</a>.
+    </div>
 
     <h3 id="screenshake-setup">A. DPT_ProjectileScreenShake</h3>
-    <p>Triggers a decoupled, system-wide broadcast of camera shockwave metrics upon a valid ammunition impact[cite: 9]. Instead of scanning scene physics matrices using high-overhead loop parameters or heavy overlap sphere allocation checks, it handles registration through a modern, high-performance static C# event handler model[cite: 9].</p>
+    <p>Triggers a decoupled, system-wide broadcast of camera shockwave metrics upon a valid ammunition impact. Instead of scanning scene physics matrices using high-overhead loop parameters or heavy overlap sphere allocation checks, it handles registration through a modern, high-performance static C# event handler model.</p>
 
     <h4>Component Properties</h4>
     <table>
@@ -438,213 +445,53 @@ public class MortarShellProjectile : DPT_Projectile
         <tbody>
             <tr>
                 <td><strong>Shake Magnitude</strong></td>
-                <td>The peak intensity and baseline movement strength multiplier applied to listening camera rigs at the moment of impact[cite: 9].</td>
+                <td>The peak intensity and baseline movement strength multiplier applied to listening camera rigs at the moment of impact.</td>
             </tr>
             <tr>
                 <td><strong>Shake Duration</strong></td>
-                <td>The total lifespan runtime window (in seconds) over which the camera shaking displacement operates before returning to rest[cite: 9].</td>
+                <td>The total lifespan runtime window (in seconds) over which the camera shaking displacement operates before returning to rest.</td>
             </tr>
             <tr>
                 <td><strong>Shake Radius</strong></td>
-                <td>The maximum calculation distance outward from the impact epicenter where a player's viewport can be located to register the physical rumble attenuation[cite: 9].</td>
+                <td>The maximum calculation distance outward from the impact epicenter where a player's viewport can be located to register the physical rumble attenuation.</td>
             </tr>
         </tbody>
     </table>
 
     <h4>Setup & Integration Workflow</h4>
     <ol>
-        <li><strong>Attach to Prefab:</strong> Drag and drop the <code>DPT_ProjectileScreenShake</code> script onto the root GameObject of your projectile prefab[cite: 9]. Because of the <code>[RequireComponent]</code> attribute, it will safely verify or automatically append the base projectile logic[cite: 9].</li>
-        <li><strong>Configure Metrics:</strong> Set the baseline spatial parameters in the inspector fields[cite: 9]. For example, a heavy catapult boulder might use a magnitude of <code>1.2</code>, a duration of <code>0.5s</code>, and a radius of <code>25m</code>, whereas a light ballista bolt may drop to <code>0.3</code> magnitude and an <code>8m</code> radius[cite: 9].</li>
-        <li><strong>Hooking into Your Camera System:</strong> This module does not manipulate cameras directly; it broadcasts coordinates to the global <code>OnProjectileImpactShake</code> static event to remain completely decoupled[cite: 9]. To listen to this data instantly without manual scripting, drop the companion <code>DPT_CameraShakeReceiver</code> utility component directly onto your camera setup (see section below)[cite: 9].</li>
+        <li><strong>Attach to Prefab:</strong> Drag and drop the <code>DPT_ProjectileScreenShake</code> script onto the root GameObject of your projectile prefab. Because of the <code>[RequireComponent]</code> attribute, it will safely verify or automatically append the base projectile logic.</li>
+        <li><strong>Configure Metrics:</strong> Set the baseline spatial parameters in the inspector fields. For example, a heavy catapult boulder might use a magnitude of <code>1.2</code>, a duration of <code>0.5s</code>, and a radius of <code>25m</code>, whereas a light ballista bolt may drop to <code>0.3</code> magnitude and an <code>8m</code> radius.</li>
+        <li><strong>Hooking into Your Camera System:</strong> This module does not manipulate cameras directly; it broadcasts coordinates to the global <code>OnProjectileImpactShake</code> static event to remain completely decoupled. To listen to this data instantly without manual scripting, drop the companion <code>DPT_CameraShakeReceiver</code> utility component directly onto your camera setup (see section below).</li>
     </ol>
 
     <hr>
 
     <h3 id="camerashakereceiver-setup">B. DPT_CameraShakeReceiver (Utility)</h3>
-    <p>A zero-configuration, production-ready utility script designed to serve as the native receiver for your ballistic screen shake systems[cite: 9]. It automatically tracks the impact broadcast channel, runs fast proximity distance checks, and applies linear spatial dampening to ensure close-range impacts feel appropriately devastating while distant rumbles drop smoothly to zero[cite: 9].</p>
+    <p>A zero-configuration, production-ready utility script designed to serve as the native receiver for your ballistic screen shake systems. It automatically tracks the impact broadcast channel, runs fast proximity distance checks, and applies linear spatial dampening to ensure close-range impacts feel appropriately devastating while distant rumbles drop smoothly to zero.</p>
 
     <h4>Component Properties</h4>
     <div class="note">
-        <strong>No-Configuration Workflow:</strong> This script contains no exposed serialized inspector fields[cite: 9]. It calculates all positional offsets dynamically based on the camera's baseline transform state at runtime, allowing a true drop-in implementation[cite: 9].
+        <strong>No-Configuration Workflow:</strong> This script contains no exposed serialized inspector fields. It calculates all positional offsets dynamically based on the camera's baseline transform state at runtime, allowing a true drop-in implementation.
     </div>
 
     <h4>Setup & Integration Workflow</h4>
     <ol>
-        <li><strong>Attach to Camera:</strong> Drag and drop the <code>DPT_CameraShakeReceiver</code> script directly onto your active Unity <code>Camera</code> GameObject[cite: 9].</li>
-        <li><strong>Cinematic Rigs & Nested Compatibility:</strong> The component manipulates <code>transform.localPosition</code> rather than world space coordinates[cite: 9]. This guarantees it can be applied safely to cameras nested inside complex player tracking assemblies, third-person spring arms, or cutscene rigs without breaking their structural pathing[cite: 9].</li>
+        <li><strong>Attach to Camera:</strong> Drag and drop the <code>DPT_CameraShakeReceiver</code> script directly onto your active Unity <code>Camera</code> GameObject.</li>
+        <li><strong>Cinematic Rigs & Nested Compatibility:</strong> The component manipulates <code>transform.localPosition</code> rather than world space coordinates. This guarantees it can be applied safely to cameras nested inside complex player tracking assemblies, third-person spring arms, or cutscene rigs without breaking their structural pathing.</li>
     </ol>
 
-   <hr>
+    <hr class="divider">
 
-<h3 id="surfaceimpact-setup">C. DPT_ProjectileSurfaceImpact</h3>
-    <p>Provides robust, contextual material variations by analyzing the exact physics layers involved in the collision[cite: 9]. This enables ammunition types to dynamically map dirt, stone, wood, or water elements to distinct visual effects, audio arrays, and physical vertex-mesh surface marks (cracks, molehills, or trenches)[cite: 9].</p>
-
-    <h4>Component Properties</h4>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 28%;">Property</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Default Break VFX Prefab</strong></td>
-                <td>The base fallback visual effect instantiated at the point of impact if the targeted physics layer does not match an entry in the specific layer effects list[cite: 9].</td>
-            </tr>
-            <tr>
-                <td><strong>Default Impact Audio Clips</strong></td>
-                <td>The fallback pool of high-frequency surface impact clips used if the hit physics layer does not match any custom layer configurations[cite: 9].</td>
-            </tr>
-            <tr>
-                <td><strong>Impact VFX Settings</strong></td>
-                <td>Parameters controlling dynamic visual behavior based on the projectile's velocity matrix[cite: 9]:
-                    <ul>
-                        <li><strong>Scale VFX With Speed:</strong> Dynamically scales the spawned particles based on the kinetic impact speed[cite: 9].</li>
-                        <li><strong>VFX Scale Multiplier:</strong> Base scale modifier applied to the instantiated VFX[cite: 9].</li>
-                        <li><strong>Max Scale Velocity:</strong> The velocity at which the VFX reaches its maximum scale[cite: 9]. Slower impacts will spawn smaller particle bursts[cite: 9].</li>
-                        <li><strong>Min Scale Multiplier:</strong> The baseline scale multiplier applied to the VFX even at very low collision speeds[cite: 9].</li>
-                        <li><strong>Align VFX With Velocity:</strong> Rotates the particle system to align with the projectile's velocity (flattened against the hit surface)[cite: 9].</li>
-                        <li><strong>Fire VFX Backwards:</strong> Reverses the velocity alignment so dust and debris spray opposite to the travel direction[cite: 9].</li>
-                    </ul>
-                </td>
-            </tr>
-            <tr>
-                <td><strong>Pitch Variance</strong></td>
-                <td>Controls the randomized frequency shift added or subtracted from the surface impact sounds to prevent audio repetition[cite: 9]. Default: ±0.15[cite: 9].</td>
-            </tr>
-            <tr>
-                <td><strong>Velocity Threshold</strong></td>
-                <td>The minimum collision speed (m/s) required to trigger the specialized surface impact logic and visual effects[cite: 9]. Low-speed grazes are ignored[cite: 9]. Default: 2 m/s[cite: 9].</td>
-            </tr>
-            <tr>
-                <td><strong>Horizontal Dot Threshold</strong></td>
-                <td>Defines the slope cutoff for Horizontal vs Vertical surfaces used by the layer orientation filters[cite: 9]. A value of <code>0.707</code> represents exactly a 45-degree angle[cite: 9].</td>
-            </tr>
-            <tr>
-                <td><strong>Ground Check Radius</strong></td>
-                <td>The radius of the physics SphereCast used to catch the ground[cite: 9]. Prevents visual gaps in the rolling trench trail if a heavy boulder slightly bounces off uneven terrain[cite: 9]. Default: 0.5[cite: 9].</td>
-            </tr>
-            <tr>
-                <td><strong>Ground Check Distance</strong></td>
-                <td>The downward travel distance the SphereCast evaluates to confirm continuous ground contact during a roll[cite: 9]. Default: 0.6[cite: 9].</td>
-            </tr>
-            <tr>
-                <td><strong>Max Rolling Velocity</strong></td>
-                <td>Maximum speed at which continuous rolling trenches will spawn[cite: 8]. Prevents gappy trenches during high-speed bouncing[cite: 8].</td>
-            </tr>
-            <tr>
-                <td><strong>Layer Specific Effects</strong></td>
-                <td>An extensible array linking dynamic game layers directly to contextual cosmetic feedback modules[cite: 9]:
-                    <ul>
-                        <li><strong>LayerMask:</strong> The specific physics layer this effect applies to[cite: 9].</li>
-                        <li><strong>Orientation Filter:</strong> Filters this effect by surface angle (Any, Horizontal Only, Vertical Only)[cite: 9]. For optimal performance and control, it is highly recommended to use Layer Masks, but this filter allows surface effects to function out-of-the-box in demo scenes without configuring project layers[cite: 9].</li>
-                        <li><strong>VFX Prefab & Tint:</strong> The matched directional particle explosion block (<code>vfxPrefab</code>), alongside an optional Color Tint (<code>vfxTint</code>) to seamlessly blend dust particles with the environment[cite: 8, 9].</li>
-                        <li><strong>Mark Type:</strong> Determines the rendering approach for the footprint[cite: 9]. Options are <code>VertexMesh</code> (physical geometry like molehills) or <code>URPDecal</code> (flat projection materials)[cite: 9].</li>
-                        <li><strong>Surface Marks:</strong> An array of physical vertex-mesh prefabs (cracks, molehills)[cite: 9]. Includes toggles for random 360-degree rotation (cracks) or 180-degree flipping for directional meshes (molehills/trenches)[cite: 9].</li>
-                        <li><strong>Preserve Depth Scale:</strong> If enabled, scaling down a mark at low speeds only affects its footprint (X and Z axes)[cite: 9]. The depth/thickness remains at 1.0, preventing shallow impact marks from clipping entirely under the terrain mesh[cite: 9].</li>
-                        <li><strong>Scale To Fit Surface:</strong> If enabled, the spawned mark's footprint is compared against the collider bounds of the object it struck and shrunk down proportionally when the surface is smaller than the mark's authored size[cite: 9]. Leave this off for marks that should only ever be used on large, planar surfaces like ground gouges or trenches — for those, an author-side decision to place them on a small object is the user's call, not something this component silently corrects[cite: 9].</li>
-                        <li><strong>Min Fit Scale Threshold:</strong> Only used when <strong>Scale To Fit Surface</strong> is enabled[cite: 9]. If the required fit ratio falls below this value (0–1), the mark is skipped entirely rather than spawning as a barely-visible sliver[cite: 9]. A value of <code>0</code> disables the skip and always spawns something[cite: 9].</li>
-                        <li><strong>Supports Rolling Trenches:</strong> If enabled, this layer permits continuous tracking and spawning of directional trench meshes during a boulder's rolling phase, with spacing automatically derived from the mark's own length (see <strong>Trench Overlap Fraction</strong> below)[cite: 9].</li>
-                        <li><strong>Surface Audio Clips:</strong> The precise audio pool assigned to simulate structural degradation for that material type[cite: 9].</li>
-                    </ul>
-                </td>
-            </tr>
-            <tr>
-                <td><strong>Scaling Behavior</strong></td>
-                <td>Parameters controlling the dynamic scaling of the spawned physical marks[cite: 8]:
-                    <ul>
-                        <li><strong>Mark Scale Multiplier:</strong> Base scale multiplier for the impact marks[cite: 8].</li>
-                        <li><strong>Max Scale Velocity:</strong> Velocity at which the mark reaches its full scale[cite: 8]. Slower impacts will spawn smaller marks[cite: 8].</li>
-                        <li><strong>Min Scale Multiplier:</strong> The minimum scale multiplier applied even at very low speeds[cite: 8].</li>
-                        <li><strong>Scale Variance:</strong> Adds a random percentage variance to the final scale (+/- this value)[cite: 8]. 0.15 = 15% variance[cite: 8].</li>
-                    </ul>
-                    When <strong>Scale To Fit Surface</strong> is active on a given layer, the fit-based scale is multiplied on top of this speed-based scale[cite: 9].
-                </td>
-            </tr>
-            <tr>
-                <td><strong>Trench Spacing</strong></td>
-                <td>Fallback distance (in meters) used only when a rolling-trench layer has no measurable mesh bounds to derive spacing from (e.g. an empty Surface Marks array)[cite: 9]. Under normal use, spacing is calculated automatically from the trench mark's own length rather than this fixed value[cite: 9].</td>
-            </tr>
-            <tr>
-                <td><strong>Trench Overlap Fraction</strong></td>
-                <td>Controls how much consecutive rolling trench marks bite into one another so the trail reads as one continuous groove instead of a stop-start sequence of stamps[cite: 9]. A value of <code>0</code> places marks edge-to-edge; <code>0.2</code> (default) overlaps each new mark by 20% of its own length into the previous one[cite: 9]. Spacing is recalculated per-impact using the mark's current speed-scaled size, so slow rolls and fast rolls both produce continuous, evenly-overlapped trenches rather than gapping at low speed or over-spawning at high speed[cite: 9].</td>
-            </tr>
-            <tr>
-                <td><strong>Cleanup Settings</strong></td>
-                <td>If enabled, automatically attaches a standalone <code>DPT_SurfaceMarkCleanup</code> component to every spawned surface mark, handling memory management independently of the projectile object pool[cite: 9]. It exposes the following specific overrides:
-                    <ul>
-                        <li><strong>Auto Cleanup Marks:</strong> Toggles the cleanup system on or off for this specific layer[cite: 8].</li>
-                        <li><strong>Mark Lifetime:</strong> The time (in seconds) the mark remains fully visible before cleanup begins[cite: 8].</li>
-                        <li><strong>Cleanup Method:</strong> The visual transition style (Shrink or Sink) used to hide the mesh[cite: 8].</li>
-                        <li><strong>Cleanup Transition Duration:</strong> The length of time the shrinking or sinking animation lasts[cite: 8].</li>
-                    </ul>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="warning">
-        <strong>VFX & Surface Mark Orientation Rules:</strong><br><br>
-        The module extracts the exact face normal vector from the structural contact matrix[cite: 9]. To ensure your impact particles spray outward correctly and your directional molehills align with the travel path, <strong>ensure that the primary directional flow of your prefab travels down its local positive Z-Axis (Forward)</strong>[cite: 9].<br><br>
-        This orientation also matters for rolling trenches specifically: the automatic spacing calculation measures each trench mark's length along its local Z-axis to determine overlap[cite: 9]. A trench mesh authored sideways (long axis on X) will produce inaccurate spacing[cite: 9].
-    </div>
-    <hr>
-
-    <h3 id="surfacemarkcleanup-setup">D. DPT_SurfaceMarkCleanup (Utility)</h3>
-    <p>A self-contained lifecycle manager dynamically attached to surface marks (cracks, divots, trenches) upon instantiation[cite: 9]. It ensures the battlefield remains clear of excessive geometry over time without relying on expensive shader alpha-clipping or tying up the projectile object pool[cite: 9].</p>
-
-    <h4>Component Properties</h4>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 28%;">Property</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Lifetime</strong></td>
-                <td>The total time (in seconds) the surface mark remains fully visible and stationary before the cleanup transition begins[cite: 9].</td>
-            </tr>
-            <tr>
-                <td><strong>Method</strong></td>
-                <td>The visual transition style used to hide the mesh[cite: 9]. <strong>Shrink</strong> scales the mesh down to zero[cite: 9]. <strong>Sink</strong> physically pushes the mesh one unit downward along the global Y-axis, ideal for hiding flat ground decals[cite: 9].</td>
-            </tr>
-            <tr>
-                <td><strong>Transition Duration</strong></td>
-                <td>The length of time (in seconds) it takes to execute the selected shrinking or sinking animation before calling <code>Destroy()</code> on the GameObject[cite: 9].</td>
-            </tr>
-        </tbody>
-    </table>
-    <h4>Setup & Integration Workflow</h4>
-<ol>
-        <li><strong>Attach Component:</strong> Mount the <code>DPT_ProjectileSurfaceImpact</code> component to the root layer of your projectile prefab alongside your core collision modules[cite: 9].</li>
-        <li><strong>Assign Fallback Assets:</strong> Provide generic assets into both the <code>Default Break VFX Prefab</code> and <code>Default Impact Audio Clips</code> slots[cite: 9]. This guarantees that even if a projectile hits an unassigned layer or untagged custom terrain, a proper impact visual and acoustic reaction still executes safely[cite: 9].</li>
-        <li><strong>Populate Layer Specific Maps:</strong> Expand the list array[cite: 9]. Add unique elements for each distinct surface target archetype[cite: 9]:
-            <ul>
-                <li><strong>LayerMask:</strong> Select your target material layer (e.g., <code>Layer 10: Environment_Wood</code>) or leave as <code>Default</code> if relying strictly on surface orientation[cite: 9].</li>
-                <li><strong>Orientation Filter:</strong> Choose whether this effect should only trigger on flat ground (Horizontal Only), sheer walls (Vertical Only), or Any surface[cite: 9].</li>
-                <li><strong>Vfx Prefab:</strong> Assign your customized debris particle spray prefab[cite: 9].</li>
-                <li><strong>Surface Audio Clips:</strong> Assign your specialized high-frequency material splinter or impact sounds[cite: 9]. When the projectile hits this layer, it will combine your core baseline weapon projectile thud with these material-specific debris sounds[cite: 9].</li>
-            </ul>
-        </li>
-    </ol>
-
-    <div class="warning">
-        <strong>VFX Orientation & Prefab Setup Rules:</strong><br><br>
-        The module extracts the exact face normal vector from the structural contact matrix using <code>collision.GetContact(0).normal</code> and builds a dynamic forward look rotation via <code>Quaternion.LookRotation</code>[cite: 9].<br><br>
-        To ensure your impact particles spray outward correctly away from walls and floors rather than clipping directly into the solid collision geometry, <strong>ensure that the primary directional burst of your particle prefab travels down its local positive Z-Axis (Forward)</strong>[cite: 9].
-    </div>
     <h2 id="troubleshooting">Troubleshooting Notes</h2>
     <div class="troubleshooting-q">"Projectiles and broken environmental blocks are flying off too far upon impact"</div>
     <div class="troubleshooting-a">
-        This is a mass balancing issue[cite: 9]. By default, Unity initializes new rigidbodies with a mass of 1 (1 kg)[cite: 9]. Ensure your destructible blocks or brick assets have realistic masses configured (e.g., 25 to 75), and increase their <strong>Linear Drag</strong> properties to <code>0.5</code> or <code>1.0</code> to introduce realistic friction and air resistance[cite: 9].
+        This is a mass balancing issue. By default, Unity initializes new rigidbodies with a mass of 1 (1 kg). Ensure your destructible blocks or brick assets have realistic masses configured (e.g., 25 to 75), and increase their <strong>Linear Drag</strong> properties to <code>0.5</code> or <code>1.0</code> to introduce realistic friction and air resistance.
     </div>
 
     <div class="troubleshooting-q">"Ballista bolts stretch or skew into weird proportions when pinning into walls"</div>
     <div class="troubleshooting-a">
-        This occurs if an object in your scene uses non-uniform scaling values (e.g., <code>Scale X: 3, Y: 0.5, Z: 1</code>)[cite: 9]. Ensure your bolt prefabs utilize matrix-free tracking (using <code>InverseTransformPoint</code> and <code>InverseTransformDirection</code> parameters) to calculate coordinate offsets manually instead of physically parenting via the engine hierarchy tree[cite: 9].
+        This occurs if an object in your scene uses non-uniform scaling values (e.g., <code>Scale X: 3, Y: 0.5, Z: 1</code>). Ensure your bolt prefabs utilize matrix-free tracking (using <code>InverseTransformPoint</code> and <code>InverseTransformDirection</code> parameters) to calculate coordinate offsets manually instead of physically parenting via the engine hierarchy tree.
     </div>
 
    <hr class="divider">
