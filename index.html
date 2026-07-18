@@ -58,6 +58,42 @@
             margin: 0;
         }
 
+        /* Store Card Styling (Differentiates from Doc cards) */
+        .store-card {
+            border-left: 5px solid #10b981; /* A green accent to denote the storefront */
+        }
+        .store-card:hover {
+            border-color: #10b981;
+            background-color: #064e3b;
+        }
+        .store-card h2 {
+            color: #34d399;
+        }
+
+        /* Coming Soon Card Styling */
+        .coming-soon-card {
+            border-left: 5px solid #fb923c;
+            opacity: 0.8;
+            cursor: default;
+        }
+        .coming-soon-card:hover {
+            transform: none;
+            border-color: #fb923c;
+            background-color: #1e293b;
+        }
+        .coming-soon-card h2 {
+            color: #fdba74;
+        }
+
+        .section-header {
+            font-size: 18pt; 
+            color: #bae6fd; 
+            border-bottom: 1px solid #1e293b; 
+            padding-bottom: 10px; 
+            margin-top: 60px; 
+            margin-bottom: 10px;
+        }
+
         .footer {
             margin-top: 60px;
             text-align: center;
@@ -78,8 +114,9 @@
         <h1>Documentation Hub</h1>
         <p class="subtitle">Official technical guides and API references for DPT Games frameworks.</p>
 
+        <!-- Documentation Links -->
         <div class="grid">
-              <a href="core/index.html" class="card">
+            <a href="core/index.html" class="card">
                 <h2>Core</h2>
                 <p>Shader &amp; Material System</p>
             </a>
@@ -87,17 +124,33 @@
                 <h2>Stylized Harvestable Nature</h2>
                 <p>Harvestable Nature System.</p>
             </a>
-
             <a href="interactive-props/index.html" class="card">
                 <h2>Stylized Interactive Props</h2>
                 <p>Break, Open & Loot. Technical guides for configuring kinetic transfer, debris cleanup, and inventory drops.</p>
             </a>
-
             <a href="prefab-painter/index.html" class="card">
                 <h2>Prefab Painter</h2>
                 <p>Documentation for the standalone placement utility, variation tools, and GPU wind system optimization.</p>
             </a>
-
+        </div>
+        <h2 class="section-header">Unity Asset Store</h2>
+        <div class="grid">
+            <a href="https://assetstore.unity.com/packages/tools/level-design/prefab-painter-placement-variation-tool-387782" target="_blank" class="card store-card">
+                <h2>Prefab Painter</h2>
+                <p>View on the Unity Asset Store ↗</p>
+            </a>
+            <a href="https://assetstore.unity.com/packages/3d/environments/stylized-harvestable-nature-forest-assets-prefab-painter-370686" target="_blank" class="card store-card">
+                <h2>Stylized Harvestable Nature</h2>
+                <p>View on the Unity Asset Store ↗</p>
+            </a>
+            <a href="https://assetstore.unity.com/packages/3d/props/stylized-interactive-prop-system-break-open-loot-381308" target="_blank" class="card store-card">
+                <h2>Stylized Interactive Props</h2>
+                <p>View on the Unity Asset Store ↗</p>
+            </a>
+            <div class="card coming-soon-card">
+                <h2>Functional Siege Weapons</h2>
+                <p>Coming Soon...</p>
+            </div>
         </div>
 
         <div class="footer">
