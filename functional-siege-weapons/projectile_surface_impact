@@ -246,9 +246,9 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
+<tr>
                 <td><strong>VFX Prefab &amp; Tint</strong></td>
-                <td>The matched directional particle explosion block, alongside an optional Color Tint to seamlessly blend dust particles with the environment[cite: 14].</td>
+                <td>The matched directional particle explosion block, alongside an optional Color Tint to seamlessly blend both the spawned dust particles and the physical surface marks (cracks, trenches) with the environment.</td>
             </tr>
             <tr>
                 <td><strong>VFX Size Multiplier</strong></td>
