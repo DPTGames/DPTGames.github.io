@@ -198,11 +198,15 @@
         <tbody>
             <tr>
                 <td><strong>Behavior Override</strong></td>
-                <td>Overrides the base projectile's physical reaction when hitting this specific layer. Options include <code>None</code> (default projectile settings), <code>ForceShatter</code>, <code>ForcePenetrate</code>, and <code>ForceStop</code>.</td>
+                <td>Overrides the base projectile's physical reaction when hitting this specific layer[cite: 6]. Options include <code>None</code> (default projectile settings), <code>ForceShatter</code>, <code>ForcePenetrate</code>, <code>ForceStop</code>, <code>ForceEmbed</code>, and <code>PreventEmbed</code>[cite: 6].</td>
             </tr>
             <tr>
                 <td><strong>Override Velocity Retention</strong></td>
-                <td>Only used if <strong>Force Penetrate</strong> is selected. Overrides the projectile's default velocity retention multiplier (0.0 to 1.0).</td>
+                <td>Only used if <strong>Force Penetrate</strong> is selected[cite: 6]. Overrides the projectile's default velocity retention multiplier (0.0 to 1.0)[cite: 6].</td>
+            </tr>
+            <tr>
+                <td><strong>Override Embed Depth</strong></td>
+                <td>Only used if <strong>Force Embed</strong> is selected. Overrides how deep the projectile sinks into this specific layer.</td>
             </tr>
         </tbody>
     </table>
