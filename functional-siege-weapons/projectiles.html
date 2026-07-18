@@ -57,12 +57,12 @@
 
     <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155;">
         <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
-        <a href="#base-projectile" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Core Projectile Settings</a>
-        <a href="#cannonball" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">2. Cannonball Spec</a>
-        <a href="#boulder" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">3. Boulder Spec</a>
-        <a href="#ballista" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">4. Ballista Bolt Spec</a>
-        <a href="#modular-components" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">5. Screen Shake & Surface Modules</a>
-        <a href="#troubleshooting" style="color: #a5f3fc; text-decoration: none;">6. Troubleshooting</a>
+        <a href="#base-projectile" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Core Projectile Settings</a>
+        <a href="#cannonball" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Cannonball Spec</a>
+        <a href="#boulder" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Boulder Spec</a>
+        <a href="#ballista" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Ballista Bolt Spec</a>
+        <a href="#modular-components" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Screen Shake & Surface Modules</a>
+        <a href="#troubleshooting" style="color: #a5f3fc; text-decoration: none;">Troubleshooting</a>
         <a href="#support" style="color: #a5f3fc; text-decoration: none;">Support</a>
 
     </div>
@@ -241,7 +241,7 @@ public class MortarShellProjectile : DPT_Projectile
     </div>
     <hr>
 
-    <h2 id="cannonball">2. DPT_Cannonball — Standard Ballistic Ammunition</h2>
+    <h2 id="cannonball">DPT_Cannonball — Standard Ballistic Ammunition</h2>
     <p><code>DPT_Cannonball</code> is a specialized extension designed for heavy, high-velocity projectile assets[cite: 9]. It tracks high-speed ballistic pathways, layering a custom high-frequency pitch modification over the secondary looping audio source to simulate rapid air displacement[cite: 9]. This looping wind shear volume seamlessly moves towards an audible zero upon hitting geometry to cleanly blend into the base impact framework[cite: 9].</p>
 
     <h3>Inspector Property Fields</h3>
@@ -270,7 +270,7 @@ public class MortarShellProjectile : DPT_Projectile
 
     <hr>
 
-    <h2 id="boulder">3. DPT_Boulder — Kinetic Rolling Projectile</h2>
+    <h2 id="boulder">DPT_Boulder — Kinetic Rolling Projectile</h2>
    <p><code>DPT_Boulder</code> alters conventional projectile lifecycle mechanics by transitioning seamlessly from a free-flying air tracking object into a grounded physics asset[cite: 9]. Rather than relying on heavy <code>OnCollisionStay</code> loops, it utilizes a highly performant collision contact-counter to track its grounded state[cite: 9]. This prevents micro-bouncing audio artifacts and dynamically shifts audio priorities from flying wind whistles into heavy ground friction rumbling loops that match the boulder's active velocity magnitude[cite: 9].</p>
 
     <h3>Inspector Property Fields</h3>
@@ -322,7 +322,7 @@ public class MortarShellProjectile : DPT_Projectile
 
     <hr>
 
-    <h2 id="ballista">4. DPT_BallistaBolt — Specialized Piercing Bolt</h2>
+    <h2 id="ballista">DPT_BallistaBolt — Specialized Piercing Bolt</h2>
     <p><code>DPT_BallistaBolt</code> delivers specialized features for heavy piercing ammunition assets[cite: 9]. It continuously slerps its physical rigidbody alignment to look directly into its velocity vector during flight, processes advanced multi-axis aerodynamic cosmetic vibrations, handles penetration pinning depth, and includes a structural snap mechanic that separates the tail fletching from the embedded tip on structural clipping[cite: 9].</p>
 
     <div class="note">
@@ -421,7 +421,7 @@ public class MortarShellProjectile : DPT_Projectile
 
     <hr>
 
-<h2 id="modular-components">5. Modular Ballistic Extension Components</h2>
+<h2 id="modular-components">Modular Ballistic Extension Components</h2>
     <p>To preserve maximum performance optimization and maintain a highly scannable workflow, modular behaviors like environment visual matching and camera shaking are separated into independent, optional satellite scripts[cite: 9]. To implement these behaviors, drop these components onto any projectile prefab alongside the main baseline <code>DPT_Projectile</code> component tree[cite: 9].</p>
 
     <h3 id="screenshake-setup">A. DPT_ProjectileScreenShake</h3>
@@ -636,7 +636,7 @@ public class MortarShellProjectile : DPT_Projectile
         The module extracts the exact face normal vector from the structural contact matrix using <code>collision.GetContact(0).normal</code> and builds a dynamic forward look rotation via <code>Quaternion.LookRotation</code>[cite: 9].<br><br>
         To ensure your impact particles spray outward correctly away from walls and floors rather than clipping directly into the solid collision geometry, <strong>ensure that the primary directional burst of your particle prefab travels down its local positive Z-Axis (Forward)</strong>[cite: 9].
     </div>
-    <h2 id="troubleshooting">6. Troubleshooting Notes</h2>
+    <h2 id="troubleshooting">Troubleshooting Notes</h2>
     <div class="troubleshooting-q">"Projectiles and broken environmental blocks are flying off too far upon impact"</div>
     <div class="troubleshooting-a">
         This is a mass balancing issue[cite: 9]. By default, Unity initializes new rigidbodies with a mass of 1 (1 kg)[cite: 9]. Ensure your destructible blocks or brick assets have realistic masses configured (e.g., 25 to 75), and increase their <strong>Linear Drag</strong> properties to <code>0.5</code> or <code>1.0</code> to introduce realistic friction and air resistance[cite: 9].
