@@ -89,7 +89,7 @@
         <a href="#support" style="color: #a5f3fc; text-decoration: none;">4. Support</a>
     </div>
 
-    <h2 id="inspector-configuration">1. Inspector Property Configuration</h2>
+    <h2 id="inspector-configuration">Inspector Property Configuration</h2>
     
     <h3>Dependencies &amp; Heat Settings</h3>
     <p>Configures the baseline emission strength and the rate at which the material returns to its resting state.</p>
@@ -116,14 +116,14 @@
         </tbody>
     </table>
 
-    <h2 id="technical-architecture">2. Technical Architecture</h2>
+    <h2 id="technical-architecture">Technical Architecture</h2>
     <ul>
         <li><strong>Animator Decoupling:</strong> Because weapon firing animations are often extremely short, tying emission directly to an animation curve forces the glow to end prematurely. This script intercepts a single trigger and handles the mathematical decay smoothly over time, spanning seamlessly across idle or reload states.</li>
         <li><strong>Event-Driven Trigger:</strong> The script sits entirely dormant with zero <code>Update</code> overhead until the public <code>FireCannonHeat()</code> method is called. This is designed to be triggered via an <strong>Animation Event</strong> on the exact frame the projectile leaves the barrel, or directly via your C# weapon firing logic.</li>
         <li><strong>Cross-Assembly Integration:</strong> Operates natively with the <code>DPT.Core</code> assembly. By modifying the <code>InstanceColor.a</code> property of the variation script, it pushes variables straight to the optimized GPU instancing stream without breaking batching or allocating new material instances.</li>
     </ul>
 
-    <h2 id="troubleshooting">3. Troubleshooting Notes</h2>
+    <h2 id="troubleshooting">Troubleshooting Notes</h2>
     <div class="troubleshooting-q">"The cannon fires and the event triggers, but the barrel doesn't glow"</div>
     <div class="troubleshooting-a">Ensure that the <strong>Update Every Frame</strong> toggle is checked on the targeted <code>DPT_ShaderVariation</code> component. If it is disabled, the variation script will put itself to sleep on start and will not pass the updated alpha values to the shader.</div>
  <hr class="divider">
