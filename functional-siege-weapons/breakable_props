@@ -35,20 +35,27 @@
 </head>
 <body>
 <nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
-    <a href="../index.html" style="color: #38bdf8; margin-right: 15px;">&larr; Back to Hub</a>
+    <a href="https://dptgames.github.io/" style="color: #38bdf8; margin-right: 15px;">&larr; DPT Games Homepage</a>
     <span style="color: #64748b;">|</span>
     <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Functional Siege Weapons</a>
-    <a href="breakable_props.html" style="color: #38bdf8; margin-right: 15px;">Breakable Props</a>
+    <a href="breakable_props.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Breakable Props</a>
     <a href="projectiles.html" style="color: #f8fafc; margin-right: 15px;">Projectiles System</a>
+    <a href="procedural_mechanical_drive.html.html" style="color: #f8fafc;">Procedural Mechanical Drive</a>
+     <a href="rope_anchor.html.html" style="color: #f8fafc;">Rope Anchor</a>
+     <a href="cannon_barrel_heat.html.html" style="color: #f8fafc;">Cannon Barrel Heat</a>
 </nav>
-
+ <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
+        <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
+        <a href="#setup-checklist" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Quick Setup Checklist</a>
+        <a href="#setup-checklist" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Quick Setup Checklist</a>
+    </div>
     <h1>Breakable Props (DPT_BreakableProp)</h1>
     <div class="subtitle">Component User Guide<br>
     <span style="font-size: 11pt; font-style: normal;">
         The <code>DPT_BreakableProp</code> component is a streamlined script designed specifically for static destructible objects like mantlets, barricades, and ammo crates. It utilizes the same fracture physics, manual audio assignment, and automatic cleanup routines as the main Siege Weapon controller, but strips out all aiming and firing state machines for maximum performance on simple props.
     </span></div>
 
-    <h3>Quick Setup</h3>
+    <h2 id="setup-checklist">Quick Setup Checklist</h2>
     <ol>
         <li>Attach the <code>DPT_BreakableProp</code> script to the root of your prop prefab. Make sure the root object has a Collider.</li>
         <li>Assign your intact meshes to <strong>Pristine Meshes</strong> and your broken debris root to <strong>Broken Parents</strong>.</li>
@@ -120,6 +127,15 @@
             <tr><td><code>DestroyProp()</code></td><td>Bypasses health and shatters the prop immediately from its center, accounting for the <code>explosionYOffset</code>.</td></tr>
         </tbody>
     </table>
+   <hr class="divider">
 
+    <h2 id="support">Support & Custom Pipeline Integration</h2>
+    <p>If your project requires external or custom 3D models to be fully integrated into the DPT ecosystem—including custom vertex-data packing, procedural wood grain mapping, normal array configuration, advanced GPU wind system implementation, or any other bespoke features—freelance technical art services are available. Additionally, availability extends to general 3D asset production, high-to-low poly hard surface modeling, stylized prop creation, and game-ready LOD budgeting built to align cleanly with your specific project constraints.</p>
+    <p>For freelance modeling contract inquiries, tech-art pipeline consulting, or custom asset optimization passes, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Contract Inquiry]</code>.</p>
+
+    <div class="note">
+        <strong>Standard Asset Support:</strong><br>
+        For standard package bug reports, technical asset setup issues, and publisher licensing enquiries, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Support Request]</code>.
+    </div>
 </body>
 </html>
