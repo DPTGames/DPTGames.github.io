@@ -40,102 +40,106 @@
     <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Functional Siege Weapons</a>
     <a href="breakable_props.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Breakable Props</a>
     <a href="projectiles.html" style="color: #f8fafc; margin-right: 15px;">Projectiles System</a>
-    <a href="procedural_mechanical_drive.html.html" style="color: #f8fafc;">Procedural Mechanical Drive</a>
-     <a href="rope_anchor.html.html" style="color: #f8fafc;">Rope Anchor</a>
-     <a href="cannon_barrel_heat.html.html" style="color: #f8fafc;">Cannon Barrel Heat</a>
+    <a href="procedural_mechanical_drive.html" style="color: #f8fafc;">Procedural Mechanical Drive</a>
+    <a href="rope_anchor.html" style="color: #f8fafc;">Rope Anchor</a>
+    <a href="cannon_barrel_heat.html" style="color: #f8fafc;">Cannon Barrel Heat</a>
 </nav>
- <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
-        <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
-        <a href="#setup-checklist" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Quick Setup Checklist</a>
-        <a href="#setup-checklist" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Quick Setup Checklist</a>
-    </div>
-    <h1>Breakable Props (DPT_BreakableProp)</h1>
-    <div class="subtitle">Component User Guide<br>
+
+<div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
+    <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
+    <a href="#setup-checklist" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Quick Setup Checklist</a>
+    <a href="#inspector-reference" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Inspector Reference</a>
+    <a href="#scripting-api" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Scripting API</a>
+    <a href="#support" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Support</a>
+</div>
+
+<h1>Breakable Props (DPT_BreakableProp)</h1>
+<div class="subtitle">Component User Guide<br>
     <span style="font-size: 11pt; font-style: normal;">
         The <code>DPT_BreakableProp</code> component is a streamlined script designed specifically for static destructible objects like mantlets, barricades, and ammo crates. It utilizes the same fracture physics, manual audio assignment, and automatic cleanup routines as the main Siege Weapon controller, but strips out all aiming and firing state machines for maximum performance on simple props.
     </span></div>
 
-    <h2 id="setup-checklist">Quick Setup Checklist</h2>
-    <ol>
-        <li>Attach the <code>DPT_BreakableProp</code> script to the root of your prop prefab. Make sure the root object has a Collider.</li>
-        <li>Assign your intact meshes to <strong>Pristine Meshes</strong> and your broken debris root to <strong>Broken Parents</strong>.</li>
-        <li>Under <strong>Audio &amp; VFX</strong>, manually assign an <code>AudioSource</code> (configured for 3D spatial blending) and populate the <strong>Break Sounds</strong> array.</li>
-        <li>Adjust <strong>Max Health</strong>, <strong>Explosion Force</strong>, and <strong>Time Before Cleanup</strong> to suit the material of the prop.</li>
-    </ol>
+<h2 id="setup-checklist">Quick Setup Checklist</h2>
+<ol>
+    <li>Attach the <code>DPT_BreakableProp</code> script to the root of your prop prefab. Make sure the root object has a Collider.</li>
+    <li>Assign your intact meshes to <strong>Pristine Meshes</strong> and your broken debris root to <strong>Broken Parents</strong>.</li>
+    <li>Under <strong>Audio &amp; VFX</strong>, manually assign an <code>AudioSource</code> (configured for 3D spatial blending) and populate the <strong>Break Sounds</strong> array.</li>
+    <li>Adjust <strong>Max Health</strong>, <strong>Explosion Force</strong>, and <strong>Time Before Cleanup</strong> to suit the material of the prop.</li>
+</ol>
 
-    <h2>Inspector Reference</h2>
-    
-    <h4>Visuals, Health & Damage</h4>
-    <table>
-        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><strong>Pristine Meshes / Broken Parents</strong></td><td>Pristine meshes are hidden on break, and broken parents are activated to simulate fracture.</td></tr>
-            <tr><td><strong>Freeze Constraints On Start</strong></td><td>If true, freezes all Rigidbody position and rotation constraints on Start.</td></tr>
-            <tr><td><strong>Max Health</strong></td><td>Structural health of the prop. Reaching 0 triggers the destruction sequence.</td></tr>
-            <tr><td><strong>Break On Impact</strong></td><td>If enabled, physical collisions exceeding the <strong>Impact Velocity Threshold</strong> will apply damage automatically based on relative velocity.</td></tr>
-            <tr><td><strong>Simulated Ramming Speed</strong></td><td>Simulated speed (m/s) applied when a kinematic vehicle (like a driven ballista) rams this prop.</td></tr>
-            <tr><td><strong>Push Non Prop Objects</strong></td><td>If true, applies an explosion force to ALL nearby rigidbodies on break, not just siege props.</td></tr>
-        </tbody>
-    </table>
+<h2 id="inspector-reference">Inspector Reference</h2>
 
-    <h4>Offensive Capabilities</h4>
-    <table>
-        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><strong>Apply Damage On Contact</strong></td><td>If true, this prop deals damage to other breakable objects or siege weapons it hits.</td></tr>
-            <tr><td><strong>Require Velocity For Contact Damage</strong></td><td>If true, contact damage is only applied if the collision relative velocity is high enough.</td></tr>
-            <tr><td><strong>Min Velocity For Contact Damage</strong></td><td>Minimum relative velocity required to deal contact damage.</td></tr>
-            <tr><td><strong>Contact Damage</strong></td><td>Damage dealt to other objects on impact.</td></tr>
-        </tbody>
-    </table>
+<h4>Visuals, Health & Damage</h4>
+<table>
+    <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+    <tbody>
+        <tr><td><strong>Pristine Meshes / Broken Parents</strong></td><td>Pristine meshes are hidden on break, and broken parents are activated to simulate fracture.</td></tr>
+        <tr><td><strong>Freeze Constraints On Start</strong></td><td>If true, freezes all Rigidbody position and rotation constraints on Start.</td></tr>
+        <tr><td><strong>Max Health</strong></td><td>Structural health of the prop. Reaching 0 triggers the destruction sequence.</td></tr>
+        <tr><td><strong>Break On Impact</strong></td><td>If enabled, physical collisions exceeding the <strong>Impact Velocity Threshold</strong> will apply damage automatically based on relative velocity.</td></tr>
+        <tr><td><strong>Simulated Ramming Speed</strong></td><td>Simulated speed (m/s) applied when a kinematic vehicle (like a driven ballista) rams this prop.</td></tr>
+        <tr><td><strong>Push Non Prop Objects</strong></td><td>If true, applies an explosion force to ALL nearby rigidbodies on break, not just siege props.</td></tr>
+    </tbody>
+</table>
 
-    <h4>Destruction Physics & Broken Base</h4>
-    <table>
-        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><strong>Explosion Force / Radius</strong></td><td>The radial impulse applied to all debris pieces upon destruction.</td></tr>
-            <tr><td><strong>Explosion Y Offset</strong></td><td>Vertical offset for the internal explosion origin.</td></tr>
-            <tr><td><strong>Momentum Transfer</strong></td><td>How much of the incoming object's velocity is transferred to the flying debris.</td></tr>
-            <tr><td><strong>Broken Base Pieces</strong></td><td>Debris rigidbodies treated as structural 'base' pieces. They receive reduced explosion force and remain in place when the prop breaks.</td></tr>
-            <tr><td><strong>Base Force Multiplier</strong></td><td>Force multiplier applied only to base/structural pieces.</td></tr>
-            <tr><td><strong>Time Before Cleanup / Sink Speed</strong></td><td>How long the debris remains in the scene before freezing physics and sinking cleanly into the ground.</td></tr>
-            <tr><td><strong>Destroy On Cleanup</strong></td><td>If true, the GameObject is fully destroyed after sinking. If false, it is deactivated.</td></tr>
-        </tbody>
-    </table>
+<h4>Offensive Capabilities</h4>
+<table>
+    <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+    <tbody>
+        <tr><td><strong>Apply Damage On Contact</strong></td><td>If true, this prop deals damage to other breakable objects or siege weapons it hits.</td></tr>
+        <tr><td><strong>Require Velocity For Contact Damage</strong></td><td>If true, contact damage is only applied if the collision relative velocity is high enough.</td></tr>
+        <tr><td><strong>Min Velocity For Contact Damage</strong></td><td>Minimum relative velocity required to deal contact damage.</td></tr>
+        <tr><td><strong>Contact Damage</strong></td><td>Damage dealt to other objects on impact.</td></tr>
+    </tbody>
+</table>
 
-    <h4>Audio, VFX & Events</h4>
-    <table>
-        <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><strong>Audio Source</strong></td><td>The AudioSource component used to play the break and contact sounds.</td></tr>
-            <tr><td><strong>Particle Destroy VFX</strong></td><td>Particle VFX instantiated at the prop position on destruction.</td></tr>
-            <tr><td><strong>Break Sounds</strong></td><td>Sounds played when the prop is destroyed.</td></tr>
-            <tr><td><strong>Contact Sounds</strong></td><td>Sounds played when this prop deals contact damage to another object.</td></tr>
-            <tr><td><strong>Always Play Contact Sound</strong></td><td>If true, contact sound plays on every collision. If false, it only plays when damage is dealt to a valid target.</td></tr>
-            <tr><td><strong>Pitch Variance</strong></td><td>Random pitch fluctuation applied to audio playback (0 to 0.5).</td></tr>
-            <tr><td><strong>onDamagedEvent</strong></td><td>Fired whenever the prop takes damage.</td></tr>
-            <tr><td><strong>onDestroyedEvent</strong></td><td>Fired when the prop reaches 0 health and breaks.</td></tr>
-        </tbody>
-    </table>
+<h4>Destruction Physics & Broken Base</h4>
+<table>
+    <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+    <tbody>
+        <tr><td><strong>Explosion Force / Radius</strong></td><td>The radial impulse applied to all debris pieces upon destruction.</td></tr>
+        <tr><td><strong>Explosion Y Offset</strong></td><td>Vertical offset for the internal explosion origin.</td></tr>
+        <tr><td><strong>Momentum Transfer</strong></td><td>How much of the incoming object's velocity is transferred to the flying debris.</td></tr>
+        <tr><td><strong>Broken Base Pieces</strong></td><td>Debris rigidbodies treated as structural 'base' pieces. They receive reduced explosion force and remain in place when the prop breaks.</td></tr>
+        <tr><td><strong>Base Force Multiplier</strong></td><td>Force multiplier applied only to base/structural pieces.</td></tr>
+        <tr><td><strong>Time Before Cleanup / Sink Speed</strong></td><td>How long the debris remains in the scene before freezing physics and sinking cleanly into the ground.</td></tr>
+        <tr><td><strong>Destroy On Cleanup</strong></td><td>If true, the GameObject is fully destroyed after sinking. If false, it is deactivated.</td></tr>
+    </tbody>
+</table>
 
-    <h2>Scripting API</h2>
-    <p>Interfacing with the Breakable Prop from your custom projectile or player scripts is straightforward:</p>
-    <table>
-        <thead><tr><th style="width:40%;">Method</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><code>TakeDamage(float amount, Vector3 hitPoint, Vector3 hitDirection = default)</code></td><td>Reduces health. If health reaches 0, the prop shatters, with the explosion centered near the <code>hitPoint</code>. <code>hitDirection</code> transfers momentum to debris pieces.</td></tr>
-            <tr><td><code>DestroyProp()</code></td><td>Bypasses health and shatters the prop immediately from its center, accounting for the <code>explosionYOffset</code>.</td></tr>
-        </tbody>
-    </table>
-   <hr class="divider">
+<h4>Audio, VFX & Events</h4>
+<table>
+    <thead><tr><th style="width:26%;">Property</th><th>Description</th></tr></thead>
+    <tbody>
+        <tr><td><strong>Audio Source</strong></td><td>The AudioSource component used to play the break and contact sounds.</td></tr>
+        <tr><td><strong>Particle Destroy VFX</strong></td><td>Particle VFX instantiated at the prop position on destruction.</td></tr>
+        <tr><td><strong>Break Sounds</strong></td><td>Sounds played when the prop is destroyed.</td></tr>
+        <tr><td><strong>Contact Sounds</strong></td><td>Sounds played when this prop deals contact damage to another object.</td></tr>
+        <tr><td><strong>Always Play Contact Sound</strong></td><td>If true, contact sound plays on every collision. If false, it only plays when damage is dealt to a valid target.</td></tr>
+        <tr><td><strong>Pitch Variance</strong></td><td>Random pitch fluctuation applied to audio playback (0 to 0.5).</td></tr>
+        <tr><td><strong>onDamagedEvent</strong></td><td>Fired whenever the prop takes damage.</td></tr>
+        <tr><td><strong>onDestroyedEvent</strong></td><td>Fired when the prop reaches 0 health and breaks.</td></tr>
+    </tbody>
+</table>
 
-    <h2 id="support">Support & Custom Pipeline Integration</h2>
-    <p>If your project requires external or custom 3D models to be fully integrated into the DPT ecosystem—including custom vertex-data packing, procedural wood grain mapping, normal array configuration, advanced GPU wind system implementation, or any other bespoke features—freelance technical art services are available. Additionally, availability extends to general 3D asset production, high-to-low poly hard surface modeling, stylized prop creation, and game-ready LOD budgeting built to align cleanly with your specific project constraints.</p>
-    <p>For freelance modeling contract inquiries, tech-art pipeline consulting, or custom asset optimization passes, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Contract Inquiry]</code>.</p>
+<h2 id="scripting-api">Scripting API</h2>
+<p>Interfacing with the Breakable Prop from your custom projectile or player scripts is straightforward:</p>
+<table>
+    <thead><tr><th style="width:40%;">Method</th><th>Description</th></tr></thead>
+    <tbody>
+        <tr><td><code>TakeDamage(float amount, Vector3 hitPoint, Vector3 hitDirection = default)</code></td><td>Reduces health. If health reaches 0, the prop shatters, with the explosion centered near the <code>hitPoint</code>. <code>hitDirection</code> transfers momentum to debris pieces.</td></tr>
+        <tr><td><code>DestroyProp()</code></td><td>Bypasses health and shatters the prop immediately from its center, accounting for the <code>explosionYOffset</code>.</td></tr>
+    </tbody>
+</table>
+<hr class="divider">
 
-    <div class="note">
-        <strong>Standard Asset Support:</strong><br>
-        For standard package bug reports, technical asset setup issues, and publisher licensing enquiries, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Support Request]</code>.
-    </div>
+<h2 id="support">Support & Custom Pipeline Integration</h2>
+<p>If your project requires external or custom 3D models to be fully integrated into the DPT ecosystem—including custom vertex-data packing, procedural wood grain mapping, normal array configuration, advanced GPU wind system implementation, or any other bespoke features—freelance technical art services are available. Additionally, availability extends to general 3D asset production, high-to-low poly hard surface modeling, stylized prop creation, and game-ready LOD budgeting built to align cleanly with your specific project constraints.</p>
+<p>For freelance modeling contract inquiries, tech-art pipeline consulting, or custom asset optimization passes, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Contract Inquiry]</code>.</p>
+
+<div class="note">
+    <strong>Standard Asset Support:</strong><br>
+    For standard package bug reports, technical asset setup issues, and publisher licensing enquiries, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Support Request]</code>.
+</div>
 </body>
 </html>
