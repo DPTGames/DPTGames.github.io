@@ -362,37 +362,29 @@ public class MortarShellProjectile : DPT_Projectile
                 <td><strong>Randomize Initial Rotation</strong></td>
                 <td>If true, the bolt applies a completely randomized visual roll orientation twist strictly tracked along its local spin axis upon scene generation.</td>
             </tr>
-            <tr>
+             <tr>
                 <td><strong>Enable Wobble</strong></td>
                 <td>Toggles a complex, dynamic vibrational multi-axis shake on the perpendicular axes of the bolt during travel.</td>
             </tr>
             <tr>
+                <td><strong>Restrict Wobble To X Axis</strong></td>
+                <td>If true, restricts the wobble to only the X-axis (up/down pitch) instead of a complex multi-axis flutter.</td>
+            </tr>
+            <tr>
                 <td><strong>Wobble Frequency</strong></td>
-                <td>How rapidly the bolt mesh framework vibrates back and forth during advanced multi-axis wobble processing.</td>
+                <td>How rapidly the bolt mesh framework vibrates back and forth during advanced wobble processing.</td>
             </tr>
             <tr>
                 <td><strong>Wobble Amplitude</strong></td>
-                <td>The maximum angular deviation range in degrees allowed for the multi-axis vibration window.</td>
+                <td>The maximum angular deviation in degrees for the vibration window.</td>
             </tr>
             <tr>
                 <td><strong>Decay Wobble</strong></td>
-                <td>If enabled, the multi-axis vibration automatically stabilizes and dampens out smoothly over the duration of its flight path.</td>
+                <td>If enabled, the vibration automatically stabilizes and dampens out smoothly over the duration of its flight path.</td>
             </tr>
             <tr>
                 <td><strong>Wobble Decay Speed</strong></td>
                 <td>The multiplier rate at which the advanced flight wobble window decreases over time.</td>
-            </tr>
-            <tr>
-                <td><strong>Enable X Axis Wobble</strong></td>
-                <td>Toggles a clean, harmonic back-and-forth rotational vibration strictly focused along the local X-axis. Works alongside spin and advanced wobble parameters.</td>
-            </tr>
-            <tr>
-                <td><strong>X Wobble Frequency</strong></td>
-                <td>The rapid cycle frequency for the dedicated local X-axis wobble effect.</td>
-            </tr>
-            <tr>
-                <td><strong>X Wobble Amplitude</strong></td>
-                <td>The maximum angular deviation in degrees for the local X-axis wobble.</td>
             </tr>
             <tr>
                 <td><strong>Impact Force Multiplier</strong></td>
