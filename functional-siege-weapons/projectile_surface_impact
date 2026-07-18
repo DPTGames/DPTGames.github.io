@@ -115,6 +115,10 @@
                 <td>The downward travel distance the SphereCast evaluates to confirm continuous ground contact during a roll (Default: 0.6).</td>
             </tr>
             <tr>
+                <td><strong>Min Roll Distance To Trench</strong></td>
+                <td>Minimum continuous distance the projectile must roll on the ground before it begins carving a trench. Helps prevent trenches from spawning during erratic skipping.</td>
+            </tr>
+            <tr>
                 <td><strong>Max Rolling Velocity</strong></td>
                 <td>Maximum speed at which continuous rolling trenches will spawn, preventing gappy trenches during high-speed bouncing.</td>
             </tr>
