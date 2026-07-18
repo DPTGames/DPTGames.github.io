@@ -187,7 +187,25 @@
             </tr>
         </tbody>
     </table>
-
+<h3>Reaction Overrides</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Behavior Override</strong></td>
+                <td>Overrides the base projectile's physical reaction when hitting this specific layer. Options include <code>None</code> (default projectile settings), <code>ForceShatter</code>, <code>ForcePenetrate</code>, and <code>ForceStop</code>.</td>
+            </tr>
+            <tr>
+                <td><strong>Override Velocity Retention</strong></td>
+                <td>Only used if <strong>Force Penetrate</strong> is selected. Overrides the projectile's default velocity retention multiplier (0.0 to 1.0).</td>
+            </tr>
+        </tbody>
+    </table>
     <h3>Cosmetics &amp; Surface Marks</h3>
     <table>
         <thead>
