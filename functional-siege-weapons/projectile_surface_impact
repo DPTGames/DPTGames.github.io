@@ -237,7 +237,7 @@
             </tr>
         </tbody>
     </table>
-    <h3>Cosmetics &amp; Surface Marks</h3>
+<h3>Cosmetics &amp; Surface Marks</h3>
     <table>
         <thead>
             <tr>
@@ -248,27 +248,31 @@
         <tbody>
             <tr>
                 <td><strong>VFX Prefab &amp; Tint</strong></td>
-                <td>The matched directional particle explosion block, alongside an optional Color Tint to seamlessly blend dust particles with the environment.</td>
+                <td>The matched directional particle explosion block, alongside an optional Color Tint to seamlessly blend dust particles with the environment[cite: 14].</td>
+            </tr>
+            <tr>
+                <td><strong>VFX Size Multiplier</strong></td>
+                <td>A local size multiplier applied specifically to this layer's VFX to match its visual weight.</td>
             </tr>
             <tr>
                 <td><strong>Mark Type</strong></td>
-                <td>Determines the rendering approach for the footprint. Options are <code>VertexMesh</code> (physical geometry like molehills) or <code>URPDecal</code> (flat projection materials).</td>
+                <td>Determines the rendering approach for the footprint[cite: 14]. Options are <code>VertexMesh</code> (physical geometry like molehills) or <code>URPDecal</code> (flat projection materials)[cite: 14].</td>
             </tr>
             <tr>
                 <td><strong>Surface Marks</strong></td>
-                <td>An array of physical vertex-mesh prefabs (cracks, molehills). Includes toggles for random 360-degree rotation (cracks) or 180-degree flipping for directional meshes (molehills/trenches).</td>
+                <td>An array of physical vertex-mesh prefabs (cracks, molehills)[cite: 14]. Includes toggles for random 360-degree rotation (cracks) or 180-degree flipping for directional meshes (molehills/trenches)[cite: 14].</td>
             </tr>
             <tr>
                 <td><strong>Preserve Depth Scale</strong></td>
-                <td>If enabled, scaling down a mark at low speeds only affects its footprint (X and Z axes). The depth/thickness remains at 1.0, preventing shallow impact marks from clipping entirely under the terrain mesh.</td>
+                <td>If enabled, scaling down a mark at low speeds only affects its footprint (X and Z axes)[cite: 14]. The depth/thickness remains at 1.0, preventing shallow impact marks from clipping entirely under the terrain mesh[cite: 14].</td>
             </tr>
             <tr>
                 <td><strong>Scale To Fit Surface</strong></td>
-                <td>If enabled, the spawned mark's footprint is compared against the collider bounds of the object it struck and shrunk down proportionally when the surface is smaller than the mark's authored size. Leave this off for marks that should only ever be used on large, planar surfaces like ground gouges or trenches.</td>
+                <td>If enabled, the spawned mark's footprint is compared against the collider bounds of the object it struck and shrunk down proportionally when the surface is smaller than the mark's authored size[cite: 14]. Leave this off for marks that should only ever be used on large, planar surfaces like ground gouges or trenches[cite: 14].</td>
             </tr>
             <tr>
                 <td><strong>Min Fit Scale Threshold</strong></td>
-                <td>Only used when <strong>Scale To Fit Surface</strong> is enabled. If the required fit ratio falls below this value (0–1), the mark is skipped entirely rather than spawning as a barely-visible sliver. A value of <code>0</code> disables the skip and always spawns something.</td>
+                <td>Only used when <strong>Scale To Fit Surface</strong> is enabled[cite: 14]. If the required fit ratio falls below this value (0–1), the mark is skipped entirely rather than spawning as a barely-visible sliver[cite: 14]. A value of <code>0</code> disables the skip and always spawns something[cite: 14].</td>
             </tr>
         </tbody>
     </table>
