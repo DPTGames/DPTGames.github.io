@@ -56,7 +56,7 @@
 
     <h1>DPT_ProjectileSurfaceImpact</h1>
     <div class="subtitle">Modular Surface Reaction &amp; VFX Cleanup Utility<br>
-    <span style="font-size: 11pt; font-style: normal;">Provides robust, contextual material variations by analyzing the exact physics layers involved in the collision. This enables ammunition types to dynamically map dirt, stone, wood, or water elements to distinct visual effects, audio arrays, and physical vertex-mesh surface marks (cracks, molehills, or trenches)[cite: 22].</span></div>
+    <span style="font-size: 11pt; font-style: normal;">Provides robust, contextual material variations by analyzing the exact physics layers involved in the collision. This enables ammunition types to dynamically map dirt, stone, wood, or water elements to distinct visual effects, audio arrays, and physical vertex-mesh surface marks (cracks, molehills, or trenches).</span></div>
 
     <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
         <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
@@ -69,10 +69,10 @@
 
     <div class="note">
         <strong>The Dual-Layer Audio Paradigm: Core Projectile Sounds vs. Surface Sweeteners</strong><br><br>
-        To preserve memory and streamline assembly configurations, impact audio is divided into two operational segments[cite: 22]:
+        To preserve memory and streamline assembly configurations, impact audio is divided into two operational segments:
         <br><br>
-        <strong>1. The Projectile Audio Slot (Base Class):</strong> Located on the core projectile prefabs (Boulder, Cannonball, Ballista Bolt)[cite: 22]. This pool represents the universal kinetic energy, mass, and weight of the projectile itself (e.g., a heavy sub-bass thud or metallic displacement crack)[cite: 22]. This profile remains constant regardless of what object is hit because the mass of the projectile does not change[cite: 22].<br>
-        <strong>2. The Surface Impact Audio Slot (This Module):</strong> Handled contextually by the <code>DPT_ProjectileSurfaceImpact</code> companion component[cite: 22]. This represents the high-frequency debris layer or environmental reaction (e.g., splintering wood fibers, shattering rock shards, or loose dirt explosions) mapped exclusively to specific target physics layers[cite: 22].
+        <strong>1. The Projectile Audio Slot (Base Class):</strong> Located on the core projectile prefabs (Boulder, Cannonball, Ballista Bolt). This pool represents the universal kinetic energy, mass, and weight of the projectile itself (e.g., a heavy sub-bass thud or metallic displacement crack). This profile remains constant regardless of what object is hit because the mass of the projectile does not change.<br>
+        <strong>2. The Surface Impact Audio Slot (This Module):</strong> Handled contextually by the <code>DPT_ProjectileSurfaceImpact</code> companion component. This represents the high-frequency debris layer or environmental reaction (e.g., splintering wood fibers, shattering rock shards, or loose dirt explosions) mapped exclusively to specific target physics layers.
     </div>
 
     <h2 id="core-properties">1. Core Properties</h2>
@@ -88,35 +88,35 @@
         <tbody>
             <tr>
                 <td><strong>Default Break VFX Prefab</strong></td>
-                <td>The base fallback visual effect instantiated at the point of impact if the targeted physics layer does not match an entry in the specific layer effects list[cite: 22].</td>
+                <td>The base fallback visual effect instantiated at the point of impact if the targeted physics layer does not match an entry in the specific layer effects list.</td>
             </tr>
             <tr>
                 <td><strong>Default Impact Audio Clips</strong></td>
-                <td>The fallback pool of high-frequency surface impact clips used if the hit physics layer does not match any custom layer configurations[cite: 22].</td>
+                <td>The fallback pool of high-frequency surface impact clips used if the hit physics layer does not match any custom layer configurations.</td>
             </tr>
             <tr>
                 <td><strong>Pitch Variance</strong></td>
-                <td>Controls the randomized frequency shift added or subtracted from the surface impact sounds to prevent audio repetition (Default: ±0.15)[cite: 22].</td>
+                <td>Controls the randomized frequency shift added or subtracted from the surface impact sounds to prevent audio repetition (Default: ±0.15).</td>
             </tr>
             <tr>
                 <td><strong>Velocity Threshold</strong></td>
-                <td>The minimum collision speed (m/s) required to trigger the specialized surface impact logic and visual effects[cite: 22]. Low-speed grazes are ignored (Default: 2 m/s)[cite: 22].</td>
+                <td>The minimum collision speed (m/s) required to trigger the specialized surface impact logic and visual effects. Low-speed grazes are ignored (Default: 2 m/s).</td>
             </tr>
             <tr>
                 <td><strong>Horizontal Dot Threshold</strong></td>
-                <td>Defines the slope cutoff for Horizontal vs Vertical surfaces used by the layer orientation filters[cite: 22]. A value of <code>0.707</code> represents exactly a 45-degree angle[cite: 22].</td>
+                <td>Defines the slope cutoff for Horizontal vs Vertical surfaces used by the layer orientation filters. A value of <code>0.707</code> represents exactly a 45-degree angle.</td>
             </tr>
             <tr>
                 <td><strong>Ground Check Radius</strong></td>
-                <td>The radius of the physics SphereCast used to catch the ground[cite: 22]. Prevents visual gaps in the rolling trench trail if a heavy boulder slightly bounces off uneven terrain (Default: 0.5)[cite: 22].</td>
+                <td>The radius of the physics SphereCast used to catch the ground. Prevents visual gaps in the rolling trench trail if a heavy boulder slightly bounces off uneven terrain (Default: 0.5).</td>
             </tr>
             <tr>
                 <td><strong>Ground Check Distance</strong></td>
-                <td>The downward travel distance the SphereCast evaluates to confirm continuous ground contact during a roll (Default: 0.6)[cite: 22].</td>
+                <td>The downward travel distance the SphereCast evaluates to confirm continuous ground contact during a roll (Default: 0.6).</td>
             </tr>
             <tr>
                 <td><strong>Max Rolling Velocity</strong></td>
-                <td>Maximum speed at which continuous rolling trenches will spawn, preventing gappy trenches during high-speed bouncing[cite: 22].</td>
+                <td>Maximum speed at which continuous rolling trenches will spawn, preventing gappy trenches during high-speed bouncing.</td>
             </tr>
         </tbody>
     </table>
@@ -132,33 +132,33 @@
         <tbody>
             <tr>
                 <td><strong>Scale VFX With Speed</strong></td>
-                <td>Dynamically scales the spawned particles based on the kinetic impact speed[cite: 22].</td>
+                <td>Dynamically scales the spawned particles based on the kinetic impact speed.</td>
             </tr>
             <tr>
                 <td><strong>VFX Scale Multiplier</strong></td>
-                <td>Base scale modifier applied to the instantiated VFX[cite: 22].</td>
+                <td>Base scale modifier applied to the instantiated VFX.</td>
             </tr>
             <tr>
                 <td><strong>Max Scale Velocity</strong></td>
-                <td>The velocity at which the VFX reaches its maximum scale[cite: 22]. Slower impacts will spawn smaller particle bursts[cite: 22].</td>
+                <td>The velocity at which the VFX reaches its maximum scale. Slower impacts will spawn smaller particle bursts.</td>
             </tr>
             <tr>
                 <td><strong>Min Scale Multiplier</strong></td>
-                <td>The baseline scale multiplier applied to the VFX even at very low collision speeds[cite: 22].</td>
+                <td>The baseline scale multiplier applied to the VFX even at very low collision speeds.</td>
             </tr>
             <tr>
                 <td><strong>Align VFX With Velocity</strong></td>
-                <td>Rotates the particle system to align with the projectile's velocity (flattened against the hit surface)[cite: 22].</td>
+                <td>Rotates the particle system to align with the projectile's velocity (flattened against the hit surface).</td>
             </tr>
             <tr>
                 <td><strong>Fire VFX Backwards</strong></td>
-                <td>Reverses the velocity alignment so dust and debris spray opposite to the travel direction[cite: 22].</td>
+                <td>Reverses the velocity alignment so dust and debris spray opposite to the travel direction.</td>
             </tr>
         </tbody>
     </table>
 
     <h2 id="layer-effects">2. Layer Specific Effects</h2>
-    <p>An extensible array linking dynamic game layers directly to contextual cosmetic feedback modules[cite: 22].</p>
+    <p>An extensible array linking dynamic game layers directly to contextual cosmetic feedback modules.</p>
 
     <h3>Target Identification</h3>
     <table>
@@ -171,15 +171,15 @@
         <tbody>
             <tr>
                 <td><strong>LayerMask</strong></td>
-                <td>The specific physics layer this effect applies to[cite: 22].</td>
+                <td>The specific physics layer this effect applies to.</td>
             </tr>
             <tr>
                 <td><strong>Orientation Filter</strong></td>
-                <td>Filters this effect by surface angle (Any, Horizontal Only, Vertical Only)[cite: 22]. For optimal performance and control, it is highly recommended to use Layer Masks, but this filter allows surface effects to function out-of-the-box in demo scenes without configuring project layers[cite: 22].</td>
+                <td>Filters this effect by surface angle (Any, Horizontal Only, Vertical Only). For optimal performance and control, it is highly recommended to use Layer Masks, but this filter allows surface effects to function out-of-the-box in demo scenes without configuring project layers.</td>
             </tr>
             <tr>
                 <td><strong>Surface Audio Clips</strong></td>
-                <td>The precise audio pool assigned to simulate structural degradation for that material type[cite: 22].</td>
+                <td>The precise audio pool assigned to simulate structural degradation for that material type.</td>
             </tr>
         </tbody>
     </table>
@@ -195,27 +195,47 @@
         <tbody>
             <tr>
                 <td><strong>VFX Prefab &amp; Tint</strong></td>
-                <td>The matched directional particle explosion block, alongside an optional Color Tint to seamlessly blend dust particles with the environment[cite: 22].</td>
+                <td>The matched directional particle explosion block, alongside an optional Color Tint to seamlessly blend dust particles with the environment.</td>
             </tr>
             <tr>
                 <td><strong>Mark Type</strong></td>
-                <td>Determines the rendering approach for the footprint[cite: 22]. Options are <code>VertexMesh</code> (physical geometry like molehills) or <code>URPDecal</code> (flat projection materials)[cite: 22].</td>
+                <td>Determines the rendering approach for the footprint. Options are <code>VertexMesh</code> (physical geometry like molehills) or <code>URPDecal</code> (flat projection materials).</td>
             </tr>
             <tr>
                 <td><strong>Surface Marks</strong></td>
-                <td>An array of physical vertex-mesh prefabs (cracks, molehills)[cite: 22]. Includes toggles for random 360-degree rotation (cracks) or 180-degree flipping for directional meshes (molehills/trenches)[cite: 22].</td>
+                <td>An array of physical vertex-mesh prefabs (cracks, molehills). Includes toggles for random 360-degree rotation (cracks) or 180-degree flipping for directional meshes (molehills/trenches).</td>
             </tr>
             <tr>
                 <td><strong>Preserve Depth Scale</strong></td>
-                <td>If enabled, scaling down a mark at low speeds only affects its footprint (X and Z axes)[cite: 22]. The depth/thickness remains at 1.0, preventing shallow impact marks from clipping entirely under the terrain mesh[cite: 22].</td>
+                <td>If enabled, scaling down a mark at low speeds only affects its footprint (X and Z axes). The depth/thickness remains at 1.0, preventing shallow impact marks from clipping entirely under the terrain mesh.</td>
             </tr>
             <tr>
                 <td><strong>Scale To Fit Surface</strong></td>
-                <td>If enabled, the spawned mark's footprint is compared against the collider bounds of the object it struck and shrunk down proportionally when the surface is smaller than the mark's authored size[cite: 22]. Leave this off for marks that should only ever be used on large, planar surfaces like ground gouges or trenches[cite: 22].</td>
+                <td>If enabled, the spawned mark's footprint is compared against the collider bounds of the object it struck and shrunk down proportionally when the surface is smaller than the mark's authored size. Leave this off for marks that should only ever be used on large, planar surfaces like ground gouges or trenches.</td>
             </tr>
             <tr>
                 <td><strong>Min Fit Scale Threshold</strong></td>
-                <td>Only used when <strong>Scale To Fit Surface</strong> is enabled[cite: 22]. If the required fit ratio falls below this value (0–1), the mark is skipped entirely rather than spawning as a barely-visible sliver[cite: 22]. A value of <code>0</code> disables the skip and always spawns something[cite: 22].</td>
+                <td>Only used when <strong>Scale To Fit Surface</strong> is enabled. If the required fit ratio falls below this value (0–1), the mark is skipped entirely rather than spawning as a barely-visible sliver. A value of <code>0</code> disables the skip and always spawns something.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Spawn Animation</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Animate Scale On Spawn</strong></td>
+                <td>If enabled, the mark will scale up from 10% to its final size over a short duration to hide the visual pop-in.</td>
+            </tr>
+            <tr>
+                <td><strong>Scale Animation Duration</strong></td>
+                <td>How long it takes for the mark to reach its full size. Usually 0.1 to 0.2 seconds is best.</td>
             </tr>
         </tbody>
     </table>
@@ -231,37 +251,37 @@
         <tbody>
             <tr>
                 <td><strong>Mark Scale Multiplier</strong></td>
-                <td>Base scale multiplier for the impact marks[cite: 22].</td>
+                <td>Base scale multiplier for the impact marks.</td>
             </tr>
             <tr>
                 <td><strong>Max Scale Velocity</strong></td>
-                <td>Velocity at which the mark reaches its full scale[cite: 22]. Slower impacts will spawn smaller marks[cite: 22].</td>
+                <td>Velocity at which the mark reaches its full scale. Slower impacts will spawn smaller marks.</td>
             </tr>
             <tr>
                 <td><strong>Min Scale Multiplier</strong></td>
-                <td>The minimum scale multiplier applied even at very low speeds[cite: 22].</td>
+                <td>The minimum scale multiplier applied even at very low speeds.</td>
             </tr>
             <tr>
                 <td><strong>Scale Variance</strong></td>
-                <td>Adds a random percentage variance to the final scale (+/- this value)[cite: 22]. 0.15 = 15% variance[cite: 22].</td>
+                <td>Adds a random percentage variance to the final scale (+/- this value). 0.15 = 15% variance.</td>
             </tr>
             <tr>
                 <td><strong>Supports Rolling Trenches</strong></td>
-                <td>If enabled, this layer permits continuous tracking and spawning of directional trench meshes during a boulder's rolling phase[cite: 22].</td>
+                <td>If enabled, this layer permits continuous tracking and spawning of directional trench meshes during a boulder's rolling phase.</td>
             </tr>
             <tr>
                 <td><strong>Trench Spacing</strong></td>
-                <td>Fallback distance (in meters) used only when a rolling-trench layer has no measurable mesh bounds to derive spacing from (e.g. an empty Surface Marks array)[cite: 22].</td>
+                <td>Fallback distance (in meters) used only when a rolling-trench layer has no measurable mesh bounds to derive spacing from (e.g. an empty Surface Marks array).</td>
             </tr>
             <tr>
                 <td><strong>Trench Overlap Fraction</strong></td>
-                <td>Controls how much consecutive rolling trench marks bite into one another so the trail reads as one continuous groove instead of a stop-start sequence of stamps[cite: 22]. A value of <code>0</code> places marks edge-to-edge; <code>0.2</code> overlaps each new mark by 20% of its own length into the previous one[cite: 22].</td>
+                <td>Controls how much consecutive rolling trench marks bite into one another so the trail reads as one continuous groove instead of a stop-start sequence of stamps. A value of <code>0</code> places marks edge-to-edge; <code>0.2</code> overlaps each new mark by 20% of its own length into the previous one.</td>
             </tr>
         </tbody>
     </table>
 
     <h2 id="cleanup-utility">3. Surface Mark Cleanup Utility (DPT_SurfaceMarkCleanup)</h2>
-    <p>A self-contained lifecycle manager dynamically attached to surface marks (cracks, divots, trenches) upon instantiation[cite: 22]. It ensures the battlefield remains clear of excessive geometry over time without relying on expensive shader alpha-clipping or tying up the projectile object pool[cite: 22].</p>
+    <p>A self-contained lifecycle manager dynamically attached to surface marks (cracks, divots, trenches) upon instantiation. It ensures the battlefield remains clear of excessive geometry over time without relying on expensive shader alpha-clipping or tying up the projectile object pool.</p>
 
     <table>
         <thead>
@@ -273,35 +293,35 @@
         <tbody>
             <tr>
                 <td><strong>Auto Cleanup Marks</strong></td>
-                <td>Toggles the cleanup system on or off for this specific layer configuration[cite: 22].</td>
+                <td>Toggles the cleanup system on or off for this specific layer configuration.</td>
             </tr>
             <tr>
                 <td><strong>Lifetime</strong></td>
-                <td>The total time (in seconds) the surface mark remains fully visible and stationary before the cleanup transition begins[cite: 22].</td>
+                <td>The total time (in seconds) the surface mark remains fully visible and stationary before the cleanup transition begins.</td>
             </tr>
             <tr>
                 <td><strong>Method</strong></td>
-                <td>The visual transition style used to hide the mesh[cite: 22]. <strong>Shrink</strong> scales the mesh down to zero[cite: 22]. <strong>Sink</strong> physically pushes the mesh one unit downward along the global Y-axis, ideal for hiding flat ground decals[cite: 22].</td>
+                <td>The visual transition style used to hide the mesh. <strong>Shrink</strong> scales the mesh down to zero. <strong>Sink</strong> physically pushes the mesh one unit downward along the global Y-axis, ideal for hiding flat ground decals.</td>
             </tr>
             <tr>
                 <td><strong>Transition Duration</strong></td>
-                <td>The length of time (in seconds) it takes to execute the selected shrinking or sinking animation before calling <code>Destroy()</code> on the GameObject[cite: 22].</td>
+                <td>The length of time (in seconds) it takes to execute the selected shrinking or sinking animation before calling <code>Destroy()</code> on the GameObject.</td>
             </tr>
         </tbody>
     </table>
 
     <h2 id="workflow">4. Setup &amp; Integration Workflow</h2>
     <ol>
-        <li>Mount the <code>DPT_ProjectileSurfaceImpact</code> component to the root layer of your projectile prefab alongside your core collision modules[cite: 22].</li>
-        <li>Provide generic assets into both the <code>Default Break VFX Prefab</code> and <code>Default Impact Audio Clips</code> slots[cite: 22]. This guarantees that even if a projectile hits an unassigned layer or untagged custom terrain, a proper impact visual and acoustic reaction still executes safely[cite: 22].</li>
-        <li>Expand the <code>Layer Specific Effects</code> list array[cite: 22]. Add unique elements for each distinct surface target archetype utilizing the properties and filters detailed above[cite: 22].</li>
+        <li>Mount the <code>DPT_ProjectileSurfaceImpact</code> component to the root layer of your projectile prefab alongside your core collision modules.</li>
+        <li>Provide generic assets into both the <code>Default Break VFX Prefab</code> and <code>Default Impact Audio Clips</code> slots. This guarantees that even if a projectile hits an unassigned layer or untagged custom terrain, a proper impact visual and acoustic reaction still executes safely.</li>
+        <li>Expand the <code>Layer Specific Effects</code> list array. Add unique elements for each distinct surface target archetype utilizing the properties and filters detailed above.</li>
     </ol>
 
     <div class="warning">
         <strong>VFX Orientation &amp; Prefab Setup Rules:</strong><br><br>
-        The module extracts the exact face normal vector from the structural contact matrix using <code>collision.GetContact(0).normal</code> and builds a dynamic forward look rotation via <code>Quaternion.LookRotation</code>[cite: 22].<br><br>
-        To ensure your impact particles spray outward correctly away from walls and floors rather than clipping directly into the solid collision geometry, <strong>ensure that the primary directional burst of your particle prefab travels down its local positive Z-Axis (Forward)</strong>[cite: 22].<br><br>
-        This orientation also matters for rolling trenches specifically: the automatic spacing calculation measures each trench mark's length along its local Z-axis to determine overlap[cite: 22]. A trench mesh authored sideways (long axis on X) will produce inaccurate spacing[cite: 22].
+        The module extracts the exact face normal vector from the structural contact matrix using <code>collision.GetContact(0).normal</code> and builds a dynamic forward look rotation via <code>Quaternion.LookRotation</code>.<br><br>
+        To ensure your impact particles spray outward correctly away from walls and floors rather than clipping directly into the solid collision geometry, <strong>ensure that the primary directional burst of your particle prefab travels down its local positive Z-Axis (Forward)</strong>.<br><br>
+        This orientation also matters for rolling trenches specifically: the automatic spacing calculation measures each trench mark's length along its local Z-axis to determine overlap. A trench mesh authored sideways (long axis on X) will produce inaccurate spacing.
     </div>
 
     <hr class="divider">
