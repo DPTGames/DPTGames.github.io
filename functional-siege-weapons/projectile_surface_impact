@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DPT Siege Weapons - Projectile Surface Impact Guide</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0; padding: 40px;
+            font-size: 11pt; line-height: 1.5;
+        }
+        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        td code { font-size: 9.5pt; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .perf { background-color: #0c1f12; border-left: 4px solid #4ade80; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .tip { background-color: #1a1a2e; border-left: 4px solid #a78bfa; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        pre { padding: 12px; margin: 10px 0; overflow-x: auto; line-height: 1.6; }
+        .divider { border: none; border-top: 1px solid #1e293b; margin: 30px 0; }
+        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 15px; margin-bottom: 5px; page-break-after: avoid; }
+        .troubleshooting-a { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
+        <a href="https://dptgames.github.io/" style="color: #38bdf8; margin-right: 15px;">&larr; DPT Games Homepage</a>
+        <span style="color: #64748b;">|</span>
+        <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Functional Siege Weapons</a>
+        <a href="projectiles.html" style="color: #f8fafc; margin-right: 15px;">Projectiles System</a>
+        <a href="projectile_surface_impact.html" style="color: #f8fafc;">Surface Impact</a>
+    </nav>
+
+    <h1>DPT_ProjectileSurfaceImpact</h1>
+    <div class="subtitle">Modular Surface Reaction &amp; VFX Cleanup Utility<br>
+    <span style="font-size: 11pt; font-style: normal;">Provides robust, contextual material variations by analyzing the exact physics layers involved in the collision. This enables ammunition types to dynamically map dirt, stone, wood, or water elements to distinct visual effects, audio arrays, and physical vertex-mesh surface marks (cracks, molehills, or trenches)[cite: 22].</span></div>
+
+    <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
+        <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
+        <a href="#core-properties" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Core Properties</a>
+        <a href="#layer-effects" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">2. Layer Specific Effects</a>
+        <a href="#cleanup-utility" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">3. Surface Mark Cleanup Utility</a>
+        <a href="#workflow" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">4. Setup &amp; Integration Workflow</a>
+        <a href="#support" style="color: #a5f3fc; text-decoration: none;">5. Support</a>
+    </div>
+
+    <div class="note">
+        <strong>The Dual-Layer Audio Paradigm: Core Projectile Sounds vs. Surface Sweeteners</strong><br><br>
+        To preserve memory and streamline assembly configurations, impact audio is divided into two operational segments[cite: 22]:
+        <br><br>
+        <strong>1. The Projectile Audio Slot (Base Class):</strong> Located on the core projectile prefabs (Boulder, Cannonball, Ballista Bolt)[cite: 22]. This pool represents the universal kinetic energy, mass, and weight of the projectile itself (e.g., a heavy sub-bass thud or metallic displacement crack)[cite: 22]. This profile remains constant regardless of what object is hit because the mass of the projectile does not change[cite: 22].<br>
+        <strong>2. The Surface Impact Audio Slot (This Module):</strong> Handled contextually by the <code>DPT_ProjectileSurfaceImpact</code> companion component[cite: 22]. This represents the high-frequency debris layer or environmental reaction (e.g., splintering wood fibers, shattering rock shards, or loose dirt explosions) mapped exclusively to specific target physics layers[cite: 22].
+    </div>
+
+    <h2 id="core-properties">1. Core Properties</h2>
+    
+    <h3>Fallback Effects &amp; General Configuration</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Default Break VFX Prefab</strong></td>
+                <td>The base fallback visual effect instantiated at the point of impact if the targeted physics layer does not match an entry in the specific layer effects list[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Default Impact Audio Clips</strong></td>
+                <td>The fallback pool of high-frequency surface impact clips used if the hit physics layer does not match any custom layer configurations[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Pitch Variance</strong></td>
+                <td>Controls the randomized frequency shift added or subtracted from the surface impact sounds to prevent audio repetition (Default: ±0.15)[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Velocity Threshold</strong></td>
+                <td>The minimum collision speed (m/s) required to trigger the specialized surface impact logic and visual effects[cite: 22]. Low-speed grazes are ignored (Default: 2 m/s)[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Horizontal Dot Threshold</strong></td>
+                <td>Defines the slope cutoff for Horizontal vs Vertical surfaces used by the layer orientation filters[cite: 22]. A value of <code>0.707</code> represents exactly a 45-degree angle[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Ground Check Radius</strong></td>
+                <td>The radius of the physics SphereCast used to catch the ground[cite: 22]. Prevents visual gaps in the rolling trench trail if a heavy boulder slightly bounces off uneven terrain (Default: 0.5)[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Ground Check Distance</strong></td>
+                <td>The downward travel distance the SphereCast evaluates to confirm continuous ground contact during a roll (Default: 0.6)[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Max Rolling Velocity</strong></td>
+                <td>Maximum speed at which continuous rolling trenches will spawn, preventing gappy trenches during high-speed bouncing[cite: 22].</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Impact VFX Settings</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Scale VFX With Speed</strong></td>
+                <td>Dynamically scales the spawned particles based on the kinetic impact speed[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>VFX Scale Multiplier</strong></td>
+                <td>Base scale modifier applied to the instantiated VFX[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Max Scale Velocity</strong></td>
+                <td>The velocity at which the VFX reaches its maximum scale[cite: 22]. Slower impacts will spawn smaller particle bursts[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Min Scale Multiplier</strong></td>
+                <td>The baseline scale multiplier applied to the VFX even at very low collision speeds[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Align VFX With Velocity</strong></td>
+                <td>Rotates the particle system to align with the projectile's velocity (flattened against the hit surface)[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Fire VFX Backwards</strong></td>
+                <td>Reverses the velocity alignment so dust and debris spray opposite to the travel direction[cite: 22].</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="layer-effects">2. Layer Specific Effects</h2>
+    <p>An extensible array linking dynamic game layers directly to contextual cosmetic feedback modules[cite: 22].</p>
+
+    <h3>Target Identification</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>LayerMask</strong></td>
+                <td>The specific physics layer this effect applies to[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Orientation Filter</strong></td>
+                <td>Filters this effect by surface angle (Any, Horizontal Only, Vertical Only)[cite: 22]. For optimal performance and control, it is highly recommended to use Layer Masks, but this filter allows surface effects to function out-of-the-box in demo scenes without configuring project layers[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Surface Audio Clips</strong></td>
+                <td>The precise audio pool assigned to simulate structural degradation for that material type[cite: 22].</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Cosmetics &amp; Surface Marks</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>VFX Prefab &amp; Tint</strong></td>
+                <td>The matched directional particle explosion block, alongside an optional Color Tint to seamlessly blend dust particles with the environment[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Mark Type</strong></td>
+                <td>Determines the rendering approach for the footprint[cite: 22]. Options are <code>VertexMesh</code> (physical geometry like molehills) or <code>URPDecal</code> (flat projection materials)[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Surface Marks</strong></td>
+                <td>An array of physical vertex-mesh prefabs (cracks, molehills)[cite: 22]. Includes toggles for random 360-degree rotation (cracks) or 180-degree flipping for directional meshes (molehills/trenches)[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Preserve Depth Scale</strong></td>
+                <td>If enabled, scaling down a mark at low speeds only affects its footprint (X and Z axes)[cite: 22]. The depth/thickness remains at 1.0, preventing shallow impact marks from clipping entirely under the terrain mesh[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Scale To Fit Surface</strong></td>
+                <td>If enabled, the spawned mark's footprint is compared against the collider bounds of the object it struck and shrunk down proportionally when the surface is smaller than the mark's authored size[cite: 22]. Leave this off for marks that should only ever be used on large, planar surfaces like ground gouges or trenches[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Min Fit Scale Threshold</strong></td>
+                <td>Only used when <strong>Scale To Fit Surface</strong> is enabled[cite: 22]. If the required fit ratio falls below this value (0–1), the mark is skipped entirely rather than spawning as a barely-visible sliver[cite: 22]. A value of <code>0</code> disables the skip and always spawns something[cite: 22].</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Scaling &amp; Rolling Behaviors</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Mark Scale Multiplier</strong></td>
+                <td>Base scale multiplier for the impact marks[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Max Scale Velocity</strong></td>
+                <td>Velocity at which the mark reaches its full scale[cite: 22]. Slower impacts will spawn smaller marks[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Min Scale Multiplier</strong></td>
+                <td>The minimum scale multiplier applied even at very low speeds[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Scale Variance</strong></td>
+                <td>Adds a random percentage variance to the final scale (+/- this value)[cite: 22]. 0.15 = 15% variance[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Supports Rolling Trenches</strong></td>
+                <td>If enabled, this layer permits continuous tracking and spawning of directional trench meshes during a boulder's rolling phase[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Trench Spacing</strong></td>
+                <td>Fallback distance (in meters) used only when a rolling-trench layer has no measurable mesh bounds to derive spacing from (e.g. an empty Surface Marks array)[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Trench Overlap Fraction</strong></td>
+                <td>Controls how much consecutive rolling trench marks bite into one another so the trail reads as one continuous groove instead of a stop-start sequence of stamps[cite: 22]. A value of <code>0</code> places marks edge-to-edge; <code>0.2</code> overlaps each new mark by 20% of its own length into the previous one[cite: 22].</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="cleanup-utility">3. Surface Mark Cleanup Utility (DPT_SurfaceMarkCleanup)</h2>
+    <p>A self-contained lifecycle manager dynamically attached to surface marks (cracks, divots, trenches) upon instantiation[cite: 22]. It ensures the battlefield remains clear of excessive geometry over time without relying on expensive shader alpha-clipping or tying up the projectile object pool[cite: 22].</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Auto Cleanup Marks</strong></td>
+                <td>Toggles the cleanup system on or off for this specific layer configuration[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Lifetime</strong></td>
+                <td>The total time (in seconds) the surface mark remains fully visible and stationary before the cleanup transition begins[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Method</strong></td>
+                <td>The visual transition style used to hide the mesh[cite: 22]. <strong>Shrink</strong> scales the mesh down to zero[cite: 22]. <strong>Sink</strong> physically pushes the mesh one unit downward along the global Y-axis, ideal for hiding flat ground decals[cite: 22].</td>
+            </tr>
+            <tr>
+                <td><strong>Transition Duration</strong></td>
+                <td>The length of time (in seconds) it takes to execute the selected shrinking or sinking animation before calling <code>Destroy()</code> on the GameObject[cite: 22].</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="workflow">4. Setup &amp; Integration Workflow</h2>
+    <ol>
+        <li>Mount the <code>DPT_ProjectileSurfaceImpact</code> component to the root layer of your projectile prefab alongside your core collision modules[cite: 22].</li>
+        <li>Provide generic assets into both the <code>Default Break VFX Prefab</code> and <code>Default Impact Audio Clips</code> slots[cite: 22]. This guarantees that even if a projectile hits an unassigned layer or untagged custom terrain, a proper impact visual and acoustic reaction still executes safely[cite: 22].</li>
+        <li>Expand the <code>Layer Specific Effects</code> list array[cite: 22]. Add unique elements for each distinct surface target archetype utilizing the properties and filters detailed above[cite: 22].</li>
+    </ol>
+
+    <div class="warning">
+        <strong>VFX Orientation &amp; Prefab Setup Rules:</strong><br><br>
+        The module extracts the exact face normal vector from the structural contact matrix using <code>collision.GetContact(0).normal</code> and builds a dynamic forward look rotation via <code>Quaternion.LookRotation</code>[cite: 22].<br><br>
+        To ensure your impact particles spray outward correctly away from walls and floors rather than clipping directly into the solid collision geometry, <strong>ensure that the primary directional burst of your particle prefab travels down its local positive Z-Axis (Forward)</strong>[cite: 22].<br><br>
+        This orientation also matters for rolling trenches specifically: the automatic spacing calculation measures each trench mark's length along its local Z-axis to determine overlap[cite: 22]. A trench mesh authored sideways (long axis on X) will produce inaccurate spacing[cite: 22].
+    </div>
+
+    <hr class="divider">
+
+    <h2 id="support">Support &amp; Custom Pipeline Integration</h2>
+    <p>If your project requires external or custom 3D models to be fully integrated into the DPT ecosystem—including custom vertex-data packing, procedural wood grain mapping, normal array configuration, advanced GPU wind system implementation, or any other bespoke features—freelance technical art services are available. Additionally, availability extends to general 3D asset production, high-to-low poly hard surface modeling, stylized prop creation, and game-ready LOD budgeting built to align cleanly with your specific project constraints.</p>
+    <p>For freelance modeling contract inquiries, tech-art pipeline consulting, or custom asset optimization passes, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Contract Inquiry]</code>.</p>
+
+    <div class="note">
+        <strong>Standard Asset Support:</strong><br>
+        For standard package bug reports, technical asset setup issues, and publisher licensing enquiries, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Support Request]</code>.
+    </div>
+</body>
+</html>
