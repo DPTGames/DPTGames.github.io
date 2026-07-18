@@ -206,6 +206,33 @@
             </tr>
         </tbody>
     </table>
+<h3>Surface Audio</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Surface Audio Clips</strong></td>
+                <td>The precise audio pool assigned to simulate structural degradation for that material type.</td>
+            </tr>
+            <tr>
+                <td><strong>Layer Pitch Variance</strong></td>
+                <td>Random pitch variance applied specifically to this layer's impact sounds (± this value). Overrides the global pitch variance.</td>
+            </tr>
+            <tr>
+                <td><strong>Layer Volume Variance</strong></td>
+                <td>Random volume variance applied specifically to this layer's impact sounds (± this value).</td>
+            </tr>
+            <tr>
+                <td><strong>Layer Volume Multiplier</strong></td>
+                <td>Overall volume multiplier for this specific surface type. Set to <code>1</code> for default volume, or lower for softer materials like mud or snow.</td>
+            </tr>
+        </tbody>
+    </table>
     <h3>Cosmetics &amp; Surface Marks</h3>
     <table>
         <thead>
