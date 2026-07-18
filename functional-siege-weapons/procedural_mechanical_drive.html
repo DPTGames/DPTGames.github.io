@@ -36,12 +36,22 @@
     </style>
 </head>
 <body>
-
+<nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
+    <a href="https://dptgames.github.io/" style="color: #38bdf8; margin-right: 15px;">&larr; DPT Games Homepage</a>
+    <span style="color: #64748b;">|</span>
+    <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Functional Siege Weapons</a>
+    <a href="breakable_props.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Breakable Props</a>
+    <a href="projectiles.html" style="color: #f8fafc; margin-right: 15px;">Projectiles System</a>
+    <a href="procedural_mechanical_drive.html" style="color: #f8fafc;">Procedural Mechanical Drive</a>
+    <a href="rope_anchor.html" style="color: #f8fafc;">Rope Anchor</a>
+    <a href="cannon_barrel_heat.html" style="color: #f8fafc;">Cannon Barrel Heat</a>
+</nav>
+    
     <h1>DPT_ProceduralMechanicalDrive</h1>
     <div class="subtitle">Component Reference Guide<br>
     <span style="font-size: 11pt; font-style: normal;">A generic, data-driven companion component designed to mathematically translate, rotate, scale, and apply gravity-aligned pendulum physics to cosmetic secondary sub-assemblies in perfect synchronization with a weapon's core tracking state.</span></div>
 
-    <h2>1. Inspector Property Configuration Tables</h2>
+    <h2>Inspector Property Configuration Tables</h2>
     
     <h3>Mechanical Asset Elements Array</h3>
     <p>Processes an array of <code>MechanicalElement</code> blocks targeting distinct cosmetic sub-mesh objects within the prefab hierarchy.</p>
@@ -212,7 +222,7 @@
         </tbody>
     </table>
 
-    <h2>2. Technical Architecture</h2>
+    <h2>Technical Architecture</h2>
     <ul>
         <li><strong>Composition via Companion Scripting:</strong> Decouples purely aesthetic mechanical mesh logic from gameplay tracking engines (firing arrays, health loops, input listeners). It sits on the same object layer as a companion add-on, eliminating code modifications when creating unique visual styles.</li>
         <li><strong>Procedural Gravity & Animation Handoffs (The Baton Pass):</strong> Solves the notorious "Double Gravity" conflict where an Animator and script fight for transform control. Using <code>PausePendulumByLabel</code> instantly wipes the script's gravity calculation and resets the parent transform to its clean prefab state, allowing the Animator to execute Firing sequences completely unimpeded on the child object.</li>
@@ -226,7 +236,7 @@
         <li><strong>Automatic Destruction Gate:</strong> Continuously checks the main component status state loop. Updates automatically sleep if the tracking system switches into a <code>Destroyed</code> state, turning off looping audio immediately so separate debris fragment rigidbodies can fall and shatter naturally.</li>
     </ul>
 
-    <h2>3. Practical Assembly Configurations</h2>
+    <h2>Practical Assembly Configurations</h2>
     <p>Because the mechanical driver relies on a single generic script, you can easily replicate distinct ancient weapon physics setups natively in the Inspector without creating unique C# dependencies.</p>
      
     <div class="note">
@@ -261,7 +271,7 @@
         </ol>
     </div>
 
-    <h2>4. Troubleshooting Notes</h2>
+    <h2>Troubleshooting Notes</h2>
     
     <div class="troubleshooting-q">"My sling mesh points backward or has 'double rotation' applied when the script is on."</div>
     <div class="troubleshooting-a">
@@ -302,11 +312,15 @@
     <div class="troubleshooting-a">
         Verify that your parent weapon has its power options configured correctly. If <code>minLaunchSpeed</code> and <code>maxLaunchSpeed</code> possess identical metrics on a weapon without a physical elevation pivot, your interpolation fallback ratio cannot resolve and returns a flat value of zero.
     </div>
+<hr class="divider">
 
-    <h2>Support</h2>
-    <div class="note">
-        For bug reports, setup issues, and licensing enquiries:<br><br>
-        support.dptgames <span style="opacity:0.7;">[at]</span> gmail.com
-    </div>
+<h2 id="support">Support & Custom Pipeline Integration</h2>
+<p>If your project requires external or custom 3D models to be fully integrated into the DPT ecosystem—including custom vertex-data packing, procedural wood grain mapping, normal array configuration, advanced GPU wind system implementation, or any other bespoke features—freelance technical art services are available. Additionally, availability extends to general 3D asset production, high-to-low poly hard surface modeling, stylized prop creation, and game-ready LOD budgeting built to align cleanly with your specific project constraints.</p>
+<p>For freelance modeling contract inquiries, tech-art pipeline consulting, or custom asset optimization passes, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Contract Inquiry]</code>.</p>
+
+<div class="note">
+    <strong>Standard Asset Support:</strong><br>
+    For standard package bug reports, technical asset setup issues, and publisher licensing enquiries, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Support Request]</code>.
+</div>
 </body>
 </html>
