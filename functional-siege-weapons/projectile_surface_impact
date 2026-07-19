@@ -27,14 +27,64 @@
         td code { font-size: 9.5pt; }
         ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
         li { margin-bottom: 6px; }
+        
+        /* Subtitle Elements */
         .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .subtitle-desc { font-size: 11pt; font-style: normal; display: block; margin-top: 5px; }
+        
+        /* Top Navigation */
+        .top-nav {
+            background: #1e293b;
+            padding: 10px;
+            border-bottom: 2px solid #38bdf8;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        .top-nav a { color: #f8fafc; text-decoration: none; }
+        .top-nav a:hover { text-decoration: underline; }
+        .top-nav a.home-link { color: #38bdf8; }
+        .top-nav .divider { color: #64748b; }
+
+        /* Quick Navigation Container */
+        .quick-nav {
+            background-color: #1e293b;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+            border: 1px solid #334155;
+            line-height: 1.8;
+        }
+        .quick-nav strong {
+            color: #38bdf8;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .quick-nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .quick-nav-links a { color: #a5f3fc; text-decoration: none; }
+        .quick-nav-links a:hover { text-decoration: underline; }
+
+        /* Callout Boxes */
         .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
         .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
         .perf { background-color: #0c1f12; border-left: 4px solid #4ade80; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
         .tip { background-color: #1a1a2e; border-left: 4px solid #a78bfa; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        
+        /* Code Formatting */
         code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
         code { padding: 2px 5px; }
         pre { padding: 12px; margin: 10px 0; overflow-x: auto; line-height: 1.6; }
+        
+        /* Utilities */
         .divider { border: none; border-top: 1px solid #1e293b; margin: 30px 0; }
         .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 15px; margin-bottom: 5px; page-break-after: avoid; }
         .troubleshooting-a { margin-bottom: 15px; }
@@ -42,30 +92,34 @@
 </head>
 <body>
 
-<nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
-    <a href="https://dptgames.github.io/" style="color: #38bdf8; margin-right: 15px;">&larr; DPT Games Homepage</a>
-    <span style="color: #64748b;">|</span>
-    <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Functional Siege Weapons</a>
-    <a href="breakable_props.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Breakable Props</a>
-    <a href="projectiles.html" style="color: #f8fafc; margin-right: 15px;">Projectiles System</a>
-    <a href="projectile_surface_impact.html" style="color: #f8fafc; margin-right: 15px;">Projectile Surface Impact</a>
-    <a href="procedural_mechanical_drive.html" style="color: #f8fafc;">Procedural Mechanical Drive</a>
-     <a href="rope_anchor.html" style="color: #f8fafc;">Rope Anchor</a>
-     <a href="cannon_barrel_heat.html" style="color: #f8fafc;">Cannon Barrel Heat</a>
-</nav>
+    <nav class="top-nav">
+        <a href="https://dptgames.github.io/" class="home-link">&larr; DPT Games Homepage</a>
+        <span class="divider">|</span>
+        <a href="index.html">Functional Siege Weapons</a>
+        <a href="breakable_props.html">Breakable Props</a>
+        <a href="projectiles.html">Projectiles System</a>
+        <a href="projectile_surface_impact.html">Projectile Surface Impact</a>
+        <a href="procedural_mechanical_drive.html">Procedural Mechanical Drive</a>
+        <a href="rope_anchor.html">Rope Anchor</a>
+        <a href="cannon_barrel_heat.html">Cannon Barrel Heat</a>
+    </nav>
 
     <h1>DPT_ProjectileSurfaceImpact</h1>
-    <div class="subtitle">Modular Surface Reaction &amp; VFX Cleanup Utility<br>
-    <span style="font-size: 11pt; font-style: normal;">Provides robust, contextual material variations by analyzing the exact physics layers involved in the collision. This enables ammunition types to dynamically map dirt, stone, wood, or water elements to distinct visual effects, audio arrays, and physical vertex-mesh surface marks (cracks, molehills, or trenches).</span></div>
-
-    <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
-        <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
-        <a href="#core-properties" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Core Properties</a>
-        <a href="#layer-effects" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Layer Specific Effects</a>
-        <a href="#cleanup-utility" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Surface Mark Cleanup Utility</a>
-        <a href="#workflow" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Setup &amp; Integration Workflow</a>
-        <a href="#support" style="color: #a5f3fc; text-decoration: none;">Support</a>
+    <div class="subtitle">
+        Modular Surface Reaction &amp; VFX Cleanup Utility<br>
+        <span class="subtitle-desc">Provides robust, contextual material variations by analyzing the exact physics layers involved in the collision. This enables ammunition types to dynamically map dirt, stone, wood, or water elements to distinct visual effects, audio arrays, and physical vertex-mesh surface marks (cracks, molehills, or trenches).</span>
     </div>
+
+    <nav class="quick-nav" aria-label="Quick Navigation">
+        <strong>Quick Navigation Reference:</strong>
+        <ul class="quick-nav-links">
+            <li><a href="#core-properties">Core Properties</a></li>
+            <li><a href="#layer-effects">Layer Specific Effects</a></li>
+            <li><a href="#cleanup-utility">Surface Mark Cleanup Utility</a></li>
+            <li><a href="#workflow">Setup &amp; Integration Workflow</a></li>
+            <li><a href="#support">Support</a></li>
+        </ul>
+    </nav>
 
     <div class="note">
         <strong>The Dual-Layer Audio Paradigm: Core Projectile Sounds vs. Surface Sweeteners</strong><br><br>
@@ -86,7 +140,7 @@
             </tr>
         </thead>
         <tbody>
-  <tr>
+            <tr>
                 <td><strong>Default Spalling VFX Prefab</strong></td>
                 <td>Spalling VFX spawned on impact when no Layer Specific Effect matches the surface hit. Used as a universal surface-chipping fallback regardless of layer setup.</td>
             </tr>
@@ -237,7 +291,7 @@
                 <td><strong>LayerMask</strong></td>
                 <td>The specific physics layer this effect applies to.</td>
             </tr>
-<tr>
+            <tr>
                 <td><strong>Orientation Filter</strong></td>
                 <td>Filters this effect by the slope of the struck surface (e.g., spawning craters only on flat ground, and decals only on walls). For advanced setups, rely strictly on Layer Masks.</td>
             </tr>
@@ -247,7 +301,8 @@
             </tr>
         </tbody>
     </table>
-<h3>Reaction Overrides</h3>
+
+    <h3>Reaction Overrides</h3>
     <table>
         <thead>
             <tr>
@@ -270,7 +325,8 @@
             </tr>
         </tbody>
     </table>
-<h3>Surface Audio</h3>
+
+    <h3>Surface Audio</h3>
     <table>
         <thead>
             <tr>
@@ -289,7 +345,8 @@
             </tr>
         </tbody>
     </table>
-<h3>Cosmetics &amp; Surface Marks</h3>
+
+    <h3>Cosmetics &amp; Surface Marks</h3>
     <table>
         <thead>
             <tr>
@@ -298,7 +355,7 @@
             </tr>
         </thead>
         <tbody>
-<tr>
+            <tr>
                 <td><strong>Spalling VFX Prefab &amp; Tint</strong></td>
                 <td>The matched directional particle explosion block, alongside an optional Color Tint applied specifically to the spawned spalling dust and debris particles.</td>
             </tr>
@@ -332,7 +389,7 @@
             </tr>
             <tr>
                 <td><strong>Min Fit Scale Threshold</strong></td>
-                <td>Only used when <strong>Scale To Fit Surface</strong> is enabled. If the required fit ratio falls below this value (0–1), the mark is skipped entirely rather than spawning as a barely-visible sliver. A value of <code>0</code> disables the skip and always spawns something.</td>
+                <td>Only used when <strong>Scale To Fit Surface</strong> is enabled. If the required fit ratio falls below this value (0&ndash;1), the mark is skipped entirely rather than spawning as a barely-visible sliver. A value of <code>0</code> disables the skip and always spawns something.</td>
             </tr>
         </tbody>
     </table>
@@ -430,7 +487,7 @@
     <h2 id="workflow">Setup &amp; Integration Workflow</h2>
     <ol>
         <li>Mount the <code>DPT_ProjectileSurfaceImpact</code> component to the root layer of your projectile prefab alongside your core collision modules.</li>
-       <li>Provide generic assets into both the <code>Default Spalling VFX Prefab</code> and <code>Default Surface Audio Clips</code> slots. This guarantees that even if a projectile hits an unassigned layer or untagged custom terrain, a proper impact visual and acoustic reaction still executes safely.</li>
+        <li>Provide generic assets into both the <code>Default Spalling VFX Prefab</code> and <code>Default Surface Audio Clips</code> slots. This guarantees that even if a projectile hits an unassigned layer or untagged custom terrain, a proper impact visual and acoustic reaction still executes safely.</li>
         <li>Expand the <code>Layer Specific Effects</code> list array. Add unique elements for each distinct surface target archetype utilizing the properties and filters detailed above.</li>
     </ol>
 
@@ -444,7 +501,7 @@
     <hr class="divider">
 
     <h2 id="support">Support &amp; Custom Pipeline Integration</h2>
-    <p>If your project requires external or custom 3D models to be fully integrated into the DPT ecosystem—including custom vertex-data packing, procedural wood grain mapping, normal array configuration, advanced GPU wind system implementation, or any other bespoke features—freelance technical art services are available. Additionally, availability extends to general 3D asset production, high-to-low poly hard surface modeling, stylized prop creation, and game-ready LOD budgeting built to align cleanly with your specific project constraints.</p>
+    <p>If your project requires external or custom 3D models to be fully integrated into the DPT ecosystem&mdash;including custom vertex-data packing, procedural wood grain mapping, normal array configuration, advanced GPU wind system implementation, or any other bespoke features&mdash;freelance technical art services are available. Additionally, availability extends to general 3D asset production, high-to-low poly hard surface modeling, stylized prop creation, and game-ready LOD budgeting built to align cleanly with your specific project constraints.</p>
     <p>For freelance modeling contract inquiries, tech-art pipeline consulting, or custom asset optimization passes, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Contract Inquiry]</code>.</p>
 
     <div class="note">
