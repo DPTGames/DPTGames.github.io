@@ -86,13 +86,13 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><strong>Default Break VFX Prefab</strong></td>
-                <td>The base fallback visual effect instantiated at the point of impact if the targeted physics layer does not match an entry in the specific layer effects list.</td>
+  <tr>
+                <td><strong>Default Spalling VFX Prefab</strong></td>
+                <td>Spalling VFX spawned on impact when no Layer Specific Effect matches the surface hit. Used as a universal surface-chipping fallback regardless of layer setup.</td>
             </tr>
             <tr>
-                <td><strong>Default Impact Audio Clips</strong></td>
-                <td>The fallback pool of high-frequency surface impact clips used if the hit physics layer does not match any custom layer configurations.</td>
+                <td><strong>Default Surface Audio Clips</strong></td>
+                <td>Surface cracking/debris sounds played when no layer matches. These play alongside the projectile's core mass thud.</td>
             </tr>
             <tr>
                 <td><strong>Pitch Variance</strong></td>
@@ -177,9 +177,9 @@
                 <td><strong>LayerMask</strong></td>
                 <td>The specific physics layer this effect applies to.</td>
             </tr>
-            <tr>
+<tr>
                 <td><strong>Orientation Filter</strong></td>
-                <td>Filters this effect by surface angle (Any, Horizontal Only, Vertical Only). For optimal performance and control, it is highly recommended to use Layer Masks, but this filter allows surface effects to function out-of-the-box in demo scenes without configuring project layers.</td>
+                <td>Filters this effect by the slope of the struck surface (e.g., spawning craters only on flat ground, and decals only on walls). For advanced setups, rely strictly on Layer Masks.</td>
             </tr>
             <tr>
                 <td><strong>Surface Audio Clips</strong></td>
@@ -198,11 +198,11 @@
         <tbody>
             <tr>
                 <td><strong>Behavior Override</strong></td>
-                <td>Overrides the base projectile's physical reaction when hitting this specific layer[cite: 6]. Options include <code>None</code> (default projectile settings), <code>ForceShatter</code>, <code>ForcePenetrate</code>, <code>ForceStop</code>, <code>ForceEmbed</code>, and <code>PreventEmbed</code>[cite: 6].</td>
+                <td>Overrides the base projectile's physical reaction when hitting this specific layer. Options include <code>None</code> (default projectile settings), <code>ForceShatter</code>, <code>ForcePenetrate</code>, <code>ForceStop</code>, <code>ForceEmbed</code>, and <code>PreventEmbed</code>.</td>
             </tr>
             <tr>
                 <td><strong>Override Velocity Retention</strong></td>
-                <td>Only used if <strong>Force Penetrate</strong> is selected[cite: 6]. Overrides the projectile's default velocity retention multiplier (0.0 to 1.0)[cite: 6].</td>
+                <td>Only used if <strong>Force Penetrate</strong> is selected. Overrides the projectile's default velocity retention multiplier (0.0 to 1.0).</td>
             </tr>
             <tr>
                 <td><strong>Override Embed Depth</strong></td>
@@ -247,24 +247,24 @@
         </thead>
         <tbody>
 <tr>
-                <td><strong>VFX Prefab &amp; Tint</strong></td>
-                <td>The matched directional particle explosion block, alongside an optional Color Tint applied specifically to the spawned dust and debris particles.</td>
+                <td><strong>Spalling VFX Prefab &amp; Tint</strong></td>
+                <td>The matched directional particle explosion block, alongside an optional Color Tint applied specifically to the spawned spalling dust and debris particles.</td>
             </tr>
             <tr>
                 <td><strong>Surface Mark Tint</strong></td>
                 <td>The color tint applied to the physical surface marks (cracks, craters, trenches) to seamlessly blend the generated meshes with the environment.</td>
             </tr>
             <tr>
-                <td><strong>VFX Size Multiplier</strong></td>
-                <td>A local size multiplier applied specifically to this layer's VFX to match its visual weight.</td>
+                <td><strong>Spalling VFX Size Multiplier</strong></td>
+                <td>A local size multiplier applied specifically to this layer's spalling VFX to match its visual weight.</td>
             </tr>
             <tr>
                 <td><strong>Mark Type</strong></td>
-                <td>Determines the rendering approach for the footprint[cite: 14]. Options are <code>VertexMesh</code> (physical geometry like molehills) or <code>URPDecal</code> (flat projection materials)[cite: 14].</td>
+                <td>Determines the rendering approach for the footprint[cite: 14]. Options are <code>VertexMesh</code> (physical geometry like molehills) or <code>URPDecal</code> (flat projection materials).</td>
             </tr>
             <tr>
                 <td><strong>Surface Marks</strong></td>
-                <td>An array of physical vertex-mesh prefabs (cracks, molehills)[cite: 14]. Includes toggles for random 360-degree rotation (cracks) or 180-degree flipping for directional meshes (molehills/trenches)[cite: 14].</td>
+                <td>An array of physical vertex-mesh prefabs (cracks, trenches, craters etc.)[cite: 14]. Includes toggles for random 360-degree rotation (cracks) or 180-degree flipping for directional meshes (molehills/trenches)[cite: 14].</td>
             </tr>
             <tr>
                 <td><strong>Preserve Depth Scale</strong></td>
@@ -374,7 +374,7 @@
     <h2 id="workflow">4. Setup &amp; Integration Workflow</h2>
     <ol>
         <li>Mount the <code>DPT_ProjectileSurfaceImpact</code> component to the root layer of your projectile prefab alongside your core collision modules.</li>
-        <li>Provide generic assets into both the <code>Default Break VFX Prefab</code> and <code>Default Impact Audio Clips</code> slots. This guarantees that even if a projectile hits an unassigned layer or untagged custom terrain, a proper impact visual and acoustic reaction still executes safely.</li>
+       <li>Provide generic assets into both the <code>Default Spalling VFX Prefab</code> and <code>Default Surface Audio Clips</code> slots. This guarantees that even if a projectile hits an unassigned layer or untagged custom terrain, a proper impact visual and acoustic reaction still executes safely.</li>
         <li>Expand the <code>Layer Specific Effects</code> list array. Add unique elements for each distinct surface target archetype utilizing the properties and filters detailed above.</li>
     </ol>
 
