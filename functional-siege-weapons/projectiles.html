@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>DPT Siege Weapons Projectiles — Ammunition Systems Guide</title>
-    <style>
+<style>
         *, *::before, *::after { box-sizing: border-box; }
         @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
         body {
@@ -18,11 +18,7 @@
         h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
         h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
         p { margin: 0 0 12px 0; }
-        hr {
-            border: 0;
-            border-top: 1px solid #1e293b;
-            margin: 20px 0;
-        }
+        hr { border: 0; border-top: 1px solid #1e293b; margin: 20px 0; }
         table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
         tr { page-break-inside: avoid; }
         th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
@@ -32,42 +28,87 @@
         ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
         li { margin-bottom: 6px; }
         .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .subtitle-desc { font-size: 11pt; font-style: normal; display: block; margin-top: 5px; }
+        .top-nav {
+            background: #1e293b;
+            padding: 10px;
+            border-bottom: 2px solid #38bdf8;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        .top-nav a { color: #f8fafc; text-decoration: none; }
+        .top-nav a:hover { text-decoration: underline; }
+        .top-nav a.home-link { color: #38bdf8; }
+        .top-nav .divider { color: #64748b; }
+        .quick-nav {
+            background-color: #1e293b;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+            border: 1px solid #334155;
+            line-height: 1.8;
+        }
+        .quick-nav strong {
+            color: #38bdf8;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .quick-nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .quick-nav-links a { color: #a5f3fc; text-decoration: none; }
+        .quick-nav-links a:hover { text-decoration: underline; }
+
         .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
         .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+    
         code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
         code { padding: 2px 5px; }
+    
         .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 15px; margin-bottom: 5px; page-break-after: avoid; }
         .troubleshooting-a { margin-bottom: 15px; }
         .divider { border: none; border-top: 1px solid #1e293b; margin: 30px 0; }
     </style>
 </head>
 <body>
-<nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
-    <a href="https://dptgames.github.io/" style="color: #38bdf8; margin-right: 15px;">&larr; DPT Games Homepage</a>
-    <span style="color: #64748b;">|</span>
-    <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Functional Siege Weapons</a>
-    <a href="breakable_props.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Breakable Props</a>
-    <a href="projectiles.html" style="color: #f8fafc; margin-right: 15px;">Projectiles System</a>
-    <a href="projectile_surface_impact.html" style="color: #f8fafc; margin-right: 15px;">Projectile Surface Impact</a>
-    <a href="procedural_mechanical_drive.html.html" style="color: #f8fafc;">Procedural Mechanical Drive</a>
-     <a href="rope_anchor.html.html" style="color: #f8fafc;">Rope Anchor</a>
-     <a href="cannon_barrel_heat.html.html" style="color: #f8fafc;">Cannon Barrel Heat</a>
-</nav>
+<nav class="top-nav">
+        <a href="https://dptgames.github.io/" class="home-link">&larr; DPT Games Homepage</a>
+        <span class="divider">|</span>
+        <a href="index.html">Functional Siege Weapons</a>
+        <a href="breakable_props.html">Breakable Props</a>
+        <a href="projectiles.html">Projectiles System</a>
+        <a href="projectile_surface_impact.html">Projectile Surface Impact</a>
+        <a href="procedural_mechanical_drive.html">Procedural Mechanical Drive</a>
+        <a href="rope_anchor.html">Rope Anchor</a>
+        <a href="cannon_barrel_heat.html">Cannon Barrel Heat</a>
+    </nav>
 
-    <h1>DPT_Projectile Framework</h1>
-    <div class="subtitle">Ammunition & Kinetic Impact Reference Guide<br>
-    <span style="font-size: 11pt; font-style: normal;">An extensible, production-ready ballistic architecture that handles real-time rendering slerp orientation, matrix-free target locking tracking, continuous Perlin noise aerodynamic drift, and modular sub-mesh fragmentation cleanup.</span></div>
-
-    <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155;">
-        <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
-        <a href="#base-projectile" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Core Projectile Settings</a>
-        <a href="#cannonball" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Cannonball Spec</a>
-        <a href="#boulder" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Boulder Spec</a>
-        <a href="#ballista" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Ballista Bolt Spec</a>
-        <a href="#modular-components" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Screen Shake Modules</a>
-        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Troubleshooting</a>
-        <a href="#support" style="color: #a5f3fc; text-decoration: none;">Support</a>
+<h1>DPT_Projectile Framework</h1>
+    <div class="subtitle">
+        Ammunition &amp; Kinetic Impact Reference Guide<br>
+        <span class="subtitle-desc">An extensible, production-ready ballistic architecture that handles real-time rendering slerp orientation, matrix-free target locking tracking, continuous Perlin noise aerodynamic drift, and modular sub-mesh fragmentation cleanup.</span>
     </div>
+
+    <nav class="quick-nav" aria-label="Quick Navigation">
+        <strong>Quick Navigation Reference:</strong>
+        <ul class="quick-nav-links">
+            <li><a href="#base-projectile">Core Projectile Settings</a></li>
+            <li><a href="#cannonball">Cannonball Spec</a></li>
+            <li><a href="#boulder">Boulder Spec</a></li>
+            <li><a href="#ballista">Ballista Bolt Spec</a></li>
+            <li><a href="#modular-components">Screen Shake Modules</a></li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+            <li><a href="#support">Support</a></li>
+        </ul>
+    </nav>
 
     <h2 id="base-projectile">Projectile Base Class (Abstract)</h2>
     <p><code>DPT_Projectile</code> is an abstract <code>MonoBehaviour</code> that governs all ammunition lifecycle routines once spawned into world space. It encapsulates collision detection filtering, dynamic damage scaling, frame-throttled impact audio compilation, debris fracture separation, and structural cleanup. Custom projectile archetypes inherit directly from this script and override the <code>OnImpact()</code> routine to append distinct behaviors.</p>
@@ -190,12 +231,11 @@
                 <td><strong>Unbroken Ammo Object</strong></td>
                 <td>The child GameObject containing the intact flying model container and its main physics colliders. Hidden immediately upon collision.</td>
             </tr>
-            <tr>
+<tr>
                 <td><strong>Embedded Debris Root</strong></td>
                 <td>A pre-fractured child container asset model configured with loose individual rigidbodies. Activated, unparented, and thrown into root world space on impact. Should be deactivated by default in the prefab.</td>
             </tr>
             <tr>
-<tr>
                 <td><strong>Randomize Initial Rotation</strong></td>
                 <td>If true, applies a random rotation to the visual mesh on spawn so the projectile doesn't look identical every time. This only rotates the mesh locally, keeping the physics collision orientation and projectile trajectory stable.</td>
             </tr>
