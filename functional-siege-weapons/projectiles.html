@@ -135,9 +135,9 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
+<tr>
                 <td><strong>Impact Sounds</strong></td>
-                <td>An array pool of <code>AudioClip</code> assets representing the <strong>universal projectile sound</strong> (the core kinetic mass weight or baseline "thud"). One is selected at random upon a valid collision. Volume levels scale dynamically relative to the projectile's velocity magnitude on impact. <em>Note: Leave this array empty if you prefer 100% of the impact audio tracking handled contextually by the companion surface script module.</em></td>
+                <td>An array pool of <code>AudioClip</code> assets representing the <strong>universal projectile sound</strong> (the core kinetic mass weight or baseline "thud"). One is selected at random upon a valid collision. <em>Note: Leave this array empty if you prefer 100% of the impact audio tracking handled contextually by the companion surface script module.</em></td>
             </tr>
             <tr>
                 <td><strong>Pitch Variance</strong></td>
@@ -146,6 +146,22 @@
             <tr>
                 <td><strong>Velocity Threshold</strong></td>
                 <td>The minimum relative collision speed (m/s) required to trip the impact sequence. Low-speed grazes or minor rolling interactions are ignored. Default: 2 m/s.</td>
+            </tr>
+            <tr>
+                <td><strong>Scale Volume With Velocity</strong></td>
+                <td>If enabled, the volume of the impact sound scales dynamically based on the impact speed. Lighter impacts will naturally sound quieter.</td>
+            </tr>
+            <tr>
+                <td><strong>Scale Pitch With Velocity</strong></td>
+                <td>If enabled, the pitch of the impact sound shifts slightly lower at slower speeds to simulate a weaker physical kinetic interaction.</td>
+            </tr>
+            <tr>
+                <td><strong>Volume Scaling Reference Speed</strong></td>
+                <td>The impact speed (m/s) at which the audio reaches 100% of its volume and pitch. Slower impacts will scale downwards proportionally. Default: 15 m/s.</td>
+            </tr>
+            <tr>
+                <td><strong>Min Pitch Multiplier</strong></td>
+                <td>Only used if <strong>Scale Pitch With Velocity</strong> is enabled. This is the minimum pitch multiplier applied at very low impact speeds, which smoothly scales up to 1.0 at the reference speed. Default: 0.8.</td>
             </tr>
              <tr>
                 <td><strong>Min Damage</strong></td>
