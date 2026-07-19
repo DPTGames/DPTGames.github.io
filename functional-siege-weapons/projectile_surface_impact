@@ -140,6 +140,10 @@
             </tr>
         </thead>
         <tbody>
+       <tr>
+                <td><strong>Velocity Threshold</strong></td>
+                <td>The minimum collision speed (m/s) required to trigger the specialized surface impact logic and visual effects. Low-speed grazes are ignored (Default: 2 m/s).</td>
+            </tr>
             <tr>
                 <td><strong>Default Spalling VFX Prefab</strong></td>
                 <td>Spalling VFX spawned on impact when no Layer Specific Effect matches the surface hit. Used as a universal surface-chipping fallback regardless of layer setup.</td>
@@ -167,10 +171,6 @@
             <tr>
                 <td><strong>Hardness Pitch Influence</strong></td>
                 <td>How strongly each layer's <strong>Material Hardness</strong> shifts pitch away from 1.0. For example, with a value of 0.1, a hardness of 2 (hard/resonant) shifts pitch to +0.1, while a hardness of 0 (soft/dead) shifts it to -0.1. Set to 0 to have hardness affect volume only, with no pitch change (Default: 0.1).</td>
-            </tr>
-            <tr>
-                <td><strong>Velocity Threshold</strong></td>
-                <td>The minimum collision speed (m/s) required to trigger the specialized surface impact logic and visual effects. Low-speed grazes are ignored (Default: 2 m/s).</td>
             </tr>
         </tbody>
     </table>
