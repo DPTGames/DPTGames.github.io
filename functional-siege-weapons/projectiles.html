@@ -195,6 +195,11 @@
                 <td>A pre-fractured child container asset model configured with loose individual rigidbodies. Activated, unparented, and thrown into root world space on impact. Should be deactivated by default in the prefab.</td>
             </tr>
             <tr>
+<tr>
+                <td><strong>Randomize Initial Rotation</strong></td>
+                <td>If true, applies a random rotation to the visual mesh on spawn so the projectile doesn't look identical every time. This only rotates the mesh locally, keeping the physics collision orientation and projectile trajectory stable.</td>
+            </tr>
+            <tr>
                 <td><strong>Enable Flight Spin</strong></td>
                 <td>If true, forces continuous tracking rotation along a specified axis vector while traveling through the air.</td>
             </tr>
@@ -213,6 +218,34 @@
             <tr>
                 <td><strong>Spin Visuals Only</strong></td>
                 <td>If true, rotates only the visual child mesh container (Unbroken Ammo Object), ensuring root rigidbodies and main physics colliders stay perfectly stable during physics ticks.</td>
+            </tr>
+            <tr>
+                <td><strong>Impact Audio Source</strong></td>
+                <td>Assign an AudioSource configured for impacts. If left empty, one will be created automatically.</td>
+            </tr>
+            <tr>
+                <td><strong>Travel Audio Source</strong></td>
+                <td>Assign an AudioSource configured for traveling (whistle/roll). If left empty, one will be created automatically.</td>
+            </tr>
+            <tr>
+                <td><strong>Travel Audio Clip</strong></td>
+                <td>The audio clip played while the projectile is moving (e.g., flight wind or ground rolling).</td>
+            </tr>
+            <tr>
+                <td><strong>Loop Travel Audio</strong></td>
+                <td>If true, the travel audio will loop continuously.</td>
+            </tr>
+            <tr>
+                <td><strong>Blend Loop Seam</strong></td>
+                <td>If true and looping is enabled, crossfades the loop seam using a secondary audio source to seamlessly prevent audio clicks or pops.</td>
+            </tr>
+            <tr>
+                <td><strong>Loop Blend Duration</strong></td>
+                <td>Duration in seconds of the crossfade blend.</td>
+            </tr>
+            <tr>
+                <td><strong>Travel Fade Speed</strong></td>
+                <td>How quickly the travel audio fades out to zero volume after an impact or when coming to a rest.</td>
             </tr>
             <tr>
                 <td><strong>Local Cooldown</strong></td>
@@ -250,8 +283,8 @@ public class MortarShellProjectile : DPT_Projectile
     </div>
     <hr>
 
-    <h2 id="cannonball">DPT_Cannonball — Standard Ballistic Ammunition</h2>
-    <p><code>DPT_Cannonball</code> is a specialized extension designed for heavy, high-velocity projectile assets. It tracks high-speed ballistic pathways, layering a custom high-frequency pitch modification over the secondary looping audio source to simulate rapid air displacement. This looping wind shear volume seamlessly moves towards an audible zero upon hitting geometry to cleanly blend into the base impact framework.</p>
+<h2 id="cannonball">DPT_Cannonball — Standard Ballistic Ammunition</h2>
+    <p><code>DPT_Cannonball</code> is a specialized extension designed for heavy, high-velocity projectile assets. It tracks high-speed ballistic pathways, dynamically scaling its travel whistle pitch relative to its physical speed magnitude to give players a subconscious acoustic cue of its kinetic energy. This looping wind shear volume seamlessly moves towards an audible zero upon hitting geometry to cleanly blend into the base impact framework.</p>
 
     <h3>Inspector Property Fields</h3>
     <table>
@@ -263,16 +296,16 @@ public class MortarShellProjectile : DPT_Projectile
         </thead>
         <tbody>
             <tr>
-                <td><strong>Flight Whistle</strong></td>
-                <td>Audio asset clip loaded into the looping audio player to simulate rapid air displacement or whistling during travel.</td>
+                <td><strong>Min Flight Whistle Pitch</strong></td>
+                <td>Whistle loop pitch at zero or low speed. Default: 0.8.</td>
             </tr>
             <tr>
-                <td><strong>Flight Whistle Pitch</strong></td>
-                <td>Modulates the base playback frequency pitch of your flight whistle loop to simulate dense projectile speeds. Default: 1.4.</td>
+                <td><strong>Max Flight Whistle Pitch</strong></td>
+                <td>Whistle loop pitch once the cannonball reaches the reference speed. Default: 1.4.</td>
             </tr>
             <tr>
-                <td><strong>Flight Fade Speed</strong></td>
-                <td>The speed multiplier at which the looping air displacement track dampens down to zero upon structural contact, smoothing the audio crossover. Default: 6.</td>
+                <td><strong>Whistle Reference Speed</strong></td>
+                <td>Impact speed (m/s) at which the whistle reaches the Max Flight Whistle Pitch. Speeds above this are clamped to the max. Default: 40 m/s.</td>
             </tr>
         </tbody>
     </table>
@@ -290,11 +323,7 @@ public class MortarShellProjectile : DPT_Projectile
                 <th>Description</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td><strong>Rolling Loop</strong></td>
-                <td>Sustained audio asset clip representing grinding friction, rocky crushing, or heavy rolling momentum loops.</td>
-            </tr>
+<tbody>
             <tr>
                 <td><strong>Roll Volume Smoothing</strong></td>
                 <td>The interpolation factor governing how smoothly the rolling sound loop adjusts to sudden changes in velocity or unexpected terrain drop-offs. Default: 3.</td>
@@ -302,6 +331,10 @@ public class MortarShellProjectile : DPT_Projectile
             <tr>
                 <td><strong>Max Roll Speed</strong></td>
                 <td>The velocity threshold (m/s) at which the ground rolling audio loop reaches its maximum pitch shift and volume scaling boundaries. Default: 15 m/s.</td>
+            </tr>
+            <tr>
+                <td><strong>Launch Angular Velocity</strong></td>
+                <td>Applies real physical torque on spawn so the boulder hits the ground already spinning.</td>
             </tr>
             <tr>
                 <td><strong>Settled Threshold</strong></td>
@@ -312,12 +345,16 @@ public class MortarShellProjectile : DPT_Projectile
                 <td>A <code>UnityEvent</code> triggered the exact frame the rolling boulder falls below the settled threshold, ideal for spawning permanent environment craters or shifting navigation meshes.</td>
             </tr>
             <tr>
-                <td><strong>Rolling VFX</strong></td>
-                <td>The dust particle system driven during the rolling phase. Its emission rate is dynamically linked to the boulder's physical speed multiplier.</td>
+                <td><strong>Rolling VFX Prefab</strong></td>
+                <td>The dust particle system prefab to instantiate when the boulder spawns.</td>
             </tr>
             <tr>
-                <td><strong>Max Emission Rate</strong></td>
-                <td>The maximum number of particles to emit per second when the boulder is traveling at or above the maximum roll speed threshold. Default: 20.</td>
+                <td><strong>Emission Rate Over Distance</strong></td>
+                <td>The number of particles to emit per unit of distance moved. Default: 5.</td>
+            </tr>
+            <tr>
+                <td><strong>VFX Scale</strong></td>
+                <td>Uniform scale multiplier applied to the instantiated rolling VFX.</td>
             </tr>
         </tbody>
     </table>
@@ -349,24 +386,12 @@ public class MortarShellProjectile : DPT_Projectile
                 <th>Description</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td><strong>Flight Whistle</strong></td>
-                <td>Audio asset clip loaded into the secondary loop player to execute heavy wind shearing behaviors.</td>
-            </tr>
+       <tbody>
             <tr>
                 <td><strong>Alignment Speed</strong></td>
                 <td>The interpolation speed multiplier at which the physical rigidbody slerps its forward look matrix to align with its directional velocity path.</td>
             </tr>
             <tr>
-                <td><strong>Flight Fade Speed</strong></td>
-                <td>The dampening rate at which the looping flight source volume drops to zero upon registering a valid target contact.</td>
-            </tr>
-            <tr>
-                <td><strong>Randomize Initial Rotation</strong></td>
-                <td>If true, the bolt applies a completely randomized visual roll orientation twist strictly tracked along its local spin axis upon scene generation.</td>
-            </tr>
-             <tr>
                 <td><strong>Enable Wobble</strong></td>
                 <td>Toggles a complex, dynamic vibrational multi-axis shake on the perpendicular axes of the bolt during travel.</td>
             </tr>
