@@ -264,6 +264,14 @@
                 <td>The drag strength scalar applied per unit of speed-squared. Higher values decelerate the projectile faster for a given mass. Since mass factors into the outcome, lighter ammunition (arrows, javelins) will bleed off speed more readily than heavier ammunition (boulders) using the same coefficient value.</td>
             </tr>
             <tr>
+                <td><strong>Enable Cinematic Hang-Time</strong></td>
+                <td>If true, applies a continuous upward force to counteract global gravity, allowing for slower, more cinematic launch speeds that still travel far without modifying the engine's global physics matrix.</td>
+            </tr>
+            <tr>
+                <td><strong>Upward Hang Time Force</strong></td>
+                <td>The amount of upward acceleration to apply. Unity's default gravity is -9.81. Setting this to 4.9 will effectively cut the projectile's gravity in half, resulting in a massive, floaty arc.</td>
+            </tr>
+            <tr>
                 <td><strong>Unbroken Ammo Object</strong></td>
                 <td>The child GameObject containing the intact flying model container and its main physics colliders. Hidden immediately upon collision.</td>
             </tr>
