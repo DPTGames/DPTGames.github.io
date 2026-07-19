@@ -28,11 +28,9 @@
         ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
         li { margin-bottom: 6px; }
         
-        /* Subtitle Elements */
         .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
         .subtitle-desc { font-size: 11pt; font-style: normal; display: block; margin-top: 5px; }
         
-        /* Top Navigation */
         .top-nav {
             background: #1e293b;
             padding: 10px;
@@ -48,7 +46,6 @@
         .top-nav a.home-link { color: #38bdf8; }
         .top-nav .divider { color: #64748b; }
 
-        /* Quick Navigation Container */
         .quick-nav {
             background-color: #1e293b;
             padding: 15px;
@@ -302,7 +299,7 @@
         </tbody>
     </table>
 
-    <h3>Reaction Overrides</h3>
+<h3>Reaction Overrides</h3>
     <table>
         <thead>
             <tr>
@@ -313,7 +310,7 @@
         <tbody>
             <tr>
                 <td><strong>Behavior Override</strong></td>
-                <td>Overrides the base projectile's physical reaction when hitting this specific layer. Options include <code>None</code> (default projectile settings), <code>ForceShatter</code>, <code>ForcePenetrate</code>, <code>ForceStop</code>, <code>ForceEmbed</code>, and <code>PreventEmbed</code>.</td>
+                <td>Overrides the base projectile's physical reaction when hitting this specific layer. Options include <code>None</code> (default projectile settings), <code>ForceShatter</code>, <code>ForcePenetrate</code>, <code>ForceStop</code>, <code>ForceEmbed</code>, <code>PreventEmbed</code>, and <code>ForceBounce</code>.</td>
             </tr>
             <tr>
                 <td><strong>Override Velocity Retention</strong></td>
@@ -322,6 +319,10 @@
             <tr>
                 <td><strong>Override Embed Depth</strong></td>
                 <td>Only used if <strong>Force Embed</strong> is selected. Overrides how deep the projectile sinks into this specific layer.</td>
+            </tr>
+            <tr>
+                <td><strong>Override Bounce Multiplier</strong></td>
+                <td>Only used if <strong>Force Bounce</strong> is selected. Multiplies the projectile's remaining velocity after reflecting off the surface.</td>
             </tr>
         </tbody>
     </table>
