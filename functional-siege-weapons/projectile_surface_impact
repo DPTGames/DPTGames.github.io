@@ -170,7 +170,7 @@
             </tr>
             <tr>
                 <td><strong>Hardness Pitch Influence</strong></td>
-                <td>How strongly each layer's <strong>Material Hardness</strong> shifts pitch away from 1.0. For example, with a value of 0.1, a hardness of 2 (hard/resonant) shifts pitch to +0.1, while a hardness of 0 (soft/dead) shifts it to -0.1. Set to 0 to have hardness affect volume only, with no pitch change (Default: 0.1).</td>
+                <td>Determines the intensity of pitch-shifting based on Material Hardness. Positive values map harder surfaces to higher pitches and softer surfaces to lower pitches. Set to 0 for volume-only modulation.(Default: 0.1).</td>
             </tr>
         </tbody>
     </table>
