@@ -256,6 +256,14 @@
                 <td>The frequency multiplier governing how rapidly the continuous side-drift alters its directional vector heading through three-dimensional space.</td>
             </tr>
             <tr>
+                <td><strong>Enable Aerodynamic Drag</strong></td>
+                <td>If true, applies a mass-aware deceleration force to the projectile throughout its flight. Because this force is applied using <code>ForceMode.Force</code> rather than <code>ForceMode.Acceleration</code>, it is automatically divided by the projectile's Rigidbody mass — heavier ammunition resists this deceleration more than lighter ammunition, mirroring real-world drag behavior.</td>
+            </tr>
+            <tr>
+                <td><strong>Aerodynamic Drag Coefficient</strong></td>
+                <td>The drag strength scalar applied per unit of speed-squared. Higher values decelerate the projectile faster for a given mass. Since mass factors into the outcome, lighter ammunition (arrows, javelins) will bleed off speed more readily than heavier ammunition (boulders) using the same coefficient value.</td>
+            </tr>
+            <tr>
                 <td><strong>Unbroken Ammo Object</strong></td>
                 <td>The child GameObject containing the intact flying model container and its main physics colliders. Hidden immediately upon collision.</td>
             </tr>
