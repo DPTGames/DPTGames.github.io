@@ -14,21 +14,21 @@
             font-size: 11pt; line-height: 1.5;
             display: flex; flex-direction: column; align-items: center;
         }
+
         .container {
-            max-width: 800px;
+            max-width: 950px;
             width: 100%;
         }
         h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; text-align: center; }
         p.subtitle { font-size: 12pt; color: #94a3b8; text-align: center; margin-bottom: 40px; }
-        
+
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
-        
-        /* Interactive Card Styling */
+
         .card {
             background-color: #1e293b;
             border: 1px solid #334155;
@@ -58,6 +58,59 @@
             margin: 0;
         }
 
+
+        .store-card {
+            border-left: 5px solid #10b981;
+            padding: 0;
+            overflow: hidden;
+        }
+        .store-card:hover {
+            border-color: #10b981;
+            background-color: #064e3b;
+        }
+        .store-card img {
+            width: 100%;
+            aspect-ratio: 3 / 2;
+            object-fit: cover;
+            display: block;
+            border-bottom: 1px solid #334155;
+            transition: opacity 0.2s ease;
+        }
+        .store-card:hover img {
+            opacity: 0.9;
+        }
+        .store-card-content {
+            padding: 15px 20px;
+        }
+        .store-card h2 {
+            color: #34d399;
+        }
+        .coming-soon-card {
+            border-left: 5px solid #fb923c;
+            opacity: 0.8;
+            cursor: default;
+        }
+        .coming-soon-card:hover {
+            transform: none;
+            border-color: #fb923c;
+            background-color: #1e293b;
+        }
+        .coming-soon-card:hover img {
+            opacity: 1; /* Disable hover flash on coming soon */
+        }
+        .coming-soon-card h2 {
+            color: #fdba74;
+        }
+
+        .section-header {
+            font-size: 18pt; 
+            color: #bae6fd; 
+            border-bottom: 1px solid #1e293b; 
+            padding-bottom: 10px; 
+            margin-top: 60px; 
+            margin-bottom: 10px;
+        }
+
         .footer {
             margin-top: 60px;
             text-align: center;
@@ -77,9 +130,8 @@
 
         <h1>Documentation Hub</h1>
         <p class="subtitle">Official technical guides and API references for DPT Games frameworks.</p>
-
         <div class="grid">
-              <a href="core/index.html" class="card">
+            <a href="core/index.html" class="card">
                 <h2>Core</h2>
                 <p>Shader &amp; Material System</p>
             </a>
@@ -87,21 +139,49 @@
                 <h2>Stylized Harvestable Nature</h2>
                 <p>Harvestable Nature System.</p>
             </a>
-
             <a href="interactive-props/index.html" class="card">
                 <h2>Stylized Interactive Props</h2>
                 <p>Break, Open & Loot. Technical guides for configuring kinetic transfer, debris cleanup, and inventory drops.</p>
             </a>
-
             <a href="prefab-painter/index.html" class="card">
                 <h2>Prefab Painter</h2>
                 <p>Documentation for the standalone placement utility, variation tools, and GPU wind system optimization.</p>
             </a>
-                <a href="functional-siege-weapons/index.html" class="card">
-                <h2>Functional Siege Weapons</h2>
-                <p>Ready, Aim, Fire! Technical guides for setting up the various Siege Weapon components.</p>
-            </a>
+        </div>
 
+        <h2 class="section-header">Unity Asset Store</h2>
+        <div class="grid">
+            <a href="https://assetstore.unity.com/packages/tools/level-design/prefab-painter-placement-variation-tool-387782" target="_blank" class="card store-card">
+                <img src="assets/PrefabPainter_CardImage.png" alt="Prefab Painter">
+                <div class="store-card-content">
+                    <h2>Prefab Painter</h2>
+                    <p>View on the Unity Asset Store ↗</p>
+                </div>
+            </a>
+            
+            <a href="https://assetstore.unity.com/packages/3d/environments/stylized-harvestable-nature-forest-assets-prefab-painter-370686" target="_blank" class="card store-card">
+                <img src="assets/Harvestable_CardImage.png" alt="Stylized Harvestable Nature">
+                <div class="store-card-content">
+                    <h2>Harvestable Nature</h2>
+                    <p>View on the Unity Asset Store ↗</p>
+                </div>
+            </a>
+            
+            <a href="https://assetstore.unity.com/packages/3d/props/stylized-interactive-prop-system-break-open-loot-381308" target="_blank" class="card store-card">
+                <img src="assets/InteractiveProps_CardImage.png" alt="Stylized Interactive Props">
+                <div class="store-card-content">
+                    <h2>Interactive Props</h2>
+                    <p>View on the Unity Asset Store ↗</p>
+                </div>
+            </a>
+            
+            <div class="card store-card coming-soon-card">
+                <img src="assets/Siege_CardImage.png" alt="Functional Siege Weapons">
+                <div class="store-card-content">
+                    <h2>Functional Siege Weapons</h2>
+                    <p>Coming Soon...</p>
+                </div>
+            </div>
         </div>
 
         <div class="footer">

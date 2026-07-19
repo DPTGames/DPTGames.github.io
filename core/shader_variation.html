@@ -161,7 +161,7 @@
         <tbody>
             <tr>
                 <td><strong>Instance Color</strong></td>
-                <td>The color tint and brightness modifier pushed to this object's GPU stream. White (1,1,1,1) is default neutral. Darker values dim the object, while values with a high color magnitude lift it into HDR brightness. Driven natively by properties, or tracked dynamically via field analysis.</td>
+                <td>The color tint and brightness modifier pushed to this object's GPU stream. White (1,1,1,1) is default neutral. Darker values dim the object, while values with a high color magnitude lift it into HDR brightness. <strong>For emissive objects, the Alpha channel directly controls the emission strength.</strong> Driven natively by properties, or tracked dynamically via field analysis.</td>
             </tr>
             <tr>
                 <td><strong>Color Property Name</strong></td>
@@ -195,7 +195,7 @@
 }</code></pre>
 
     <ul>
-        <li><strong>For Dynamic Props (e.g., Cannon Fuses, Damage Flashes):</strong> Checking <code>Update Every Frame</code> keeps the update loop active. The component catches field alterations made by the Animator or other scripts instantly and pushes the packed values to the GPU on the exact frames they change.</li>
+        <li><strong>For Dynamic Props (e.g., Cannon Fuses, Damage Flashes):</strong> Checking <code>Update Every Frame</code> keeps the update loop active. The component catches field alterations made by the Animator or other scripts instantly and pushes the packed values to the GPU on the exact frames they change. <strong>This includes animating the Alpha channel to create pulsing emission or fading glow effects over time.</strong></li>
         <li><strong>For Standard Scenery (e.g., Barrels, Rocks):</strong> Unchecking <code>Update Every Frame</code> causes the component to push the data once during initialization, and then completely deactivate its own logic (<code>enabled = false</code>). This eliminates the common performance issue of Unity-to-Managed lifecycle overhead across thousands of scene props, leaving a net-zero impact on your CPU frame time.</li>
     </ul>
 

@@ -159,12 +159,15 @@
     </div>
 
     <h3>Global vs. Per-Instance Emission</h3>
-    <p>The emission system is designed to work seamlessly with the <strong>One Material Philosophy</strong>, allowing for both global and per-object color control:</p>
+    <p>The emission system is designed to work seamlessly with the <strong>One Material Philosophy</strong>, allowing for both global and per-object control:</p>
     <ul>
-        <li><strong>Global Material Emission:</strong> The <em>Emissive Color</em> property in the Material Inspector acts as a master tint. Whatever color you set here applies universally to <em>every</em> object in your scene sharing this material.</li>
-        <li><strong>Per-Instance Emission:</strong> The emission system natively hooks into the <code>DPT_ShaderVariation</code> script. If an object has this script attached, the script's <em>Instance Color</em> will multiply against the material's master emissive color, allowing you to recolor the glow on a per-object basis without duplicating the material.</li>
+        <li><strong>Global Material Emission:</strong> The <em>Emissive Color</em> and baseline <em>Emission Strength</em> properties in the Material Inspector act as a master setting. Whatever color and intensity you set here applies universally to <em>every</em> object in your scene sharing this material.</li>
+        <li><strong>Per-Instance Emission:</strong> The emission system natively hooks into the <code>DPT_ShaderVariation</code> script. If an object has this script attached, the script's <em>Instance Color</em> (and Alpha channel) will multiply against the material's master emissive settings, allowing you to recolor the glow and adjust its intensity on a per-object basis without duplicating the material.</li>
     </ul>
-
+<div class="warning">
+        <strong>The Metallic Object Exception:</strong><br><br>
+        Due to how the shader processes specular reflection data, <strong>metallic objects cannot have their emission color changed per-instance via the script</strong>. Instead, metallic emission is driven by a forged orange base hue inside the shader, which is then multiplied by the global <em>Emissive Color</em> property in the Material Inspector. (For example, leaving the material color white results in a pure orange glow, while tinting it will blend with the orange). However, you <em>can</em> still use the <code>DPT_ShaderVariation</code> script (via the Alpha channel) to control the <strong>emission strength</strong> of these metallic objects on a per-instance basis.
+    </div>
     <div class="note">
         <strong>The "White Base" Strategy for Perfect Tinting:</strong><br><br>
         If you want to use the <code>DPT_ShaderVariation</code> script to dynamically change the glow color of different objects (e.g., a red potion and a blue potion using the exact same material), set the master <strong>Emissive Color in the Material Inspector to pure White</strong>. Because the script uses mathematical multiplication, a white base allows the script's color to dictate 100% of the final glow hue.
