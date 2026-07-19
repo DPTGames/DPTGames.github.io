@@ -49,9 +49,9 @@
     <a href="breakable_props.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Breakable Props</a>
     <a href="projectiles.html" style="color: #f8fafc; margin-right: 15px;">Projectiles System</a>
     <a href="projectile_surface_impact.html" style="color: #f8fafc; margin-right: 15px;">Projectile Surface Impact</a>
-    <a href="procedural_mechanical_drive.html.html" style="color: #f8fafc;">Procedural Mechanical Drive</a>
-     <a href="rope_anchor.html.html" style="color: #f8fafc;">Rope Anchor</a>
-     <a href="cannon_barrel_heat.html.html" style="color: #f8fafc;">Cannon Barrel Heat</a>
+    <a href="procedural_mechanical_drive.html" style="color: #f8fafc;">Procedural Mechanical Drive</a>
+     <a href="rope_anchor.html" style="color: #f8fafc;">Rope Anchor</a>
+     <a href="cannon_barrel_heat.html" style="color: #f8fafc;">Cannon Barrel Heat</a>
 </nav>
 
     <h1>DPT_ProjectileSurfaceImpact</h1>
@@ -60,11 +60,11 @@
 
     <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
         <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
-        <a href="#core-properties" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Core Properties</a>
-        <a href="#layer-effects" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">2. Layer Specific Effects</a>
-        <a href="#cleanup-utility" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">3. Surface Mark Cleanup Utility</a>
-        <a href="#workflow" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">4. Setup &amp; Integration Workflow</a>
-        <a href="#support" style="color: #a5f3fc; text-decoration: none;">5. Support</a>
+        <a href="#core-properties" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Core Properties</a>
+        <a href="#layer-effects" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Layer Specific Effects</a>
+        <a href="#cleanup-utility" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Surface Mark Cleanup Utility</a>
+        <a href="#workflow" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Setup &amp; Integration Workflow</a>
+        <a href="#support" style="color: #a5f3fc; text-decoration: none;">Support</a>
     </div>
 
     <div class="note">
@@ -75,9 +75,9 @@
         <strong>2. The Surface Impact Audio Slot (This Module):</strong> Handled contextually by the <code>DPT_ProjectileSurfaceImpact</code> companion component. This represents the high-frequency debris layer or environmental reaction (e.g., splintering wood fibers, shattering rock shards, or loose dirt explosions) mapped exclusively to specific target physics layers.
     </div>
 
-    <h2 id="core-properties">1. Core Properties</h2>
+    <h2 id="core-properties">Core Properties</h2>
     
-    <h3>Fallback Effects &amp; General Configuration</h3>
+    <h3>Effects Mapping</h3>
     <table>
         <thead>
             <tr>
@@ -94,18 +94,42 @@
                 <td><strong>Default Surface Audio Clips</strong></td>
                 <td>Surface cracking/debris sounds played when no layer matches. These play alongside the projectile's core mass thud.</td>
             </tr>
+        </tbody>
+    </table>
+
+    <h3>Audio Customization</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
             <tr>
                 <td><strong>Pitch Variance</strong></td>
                 <td>Controls the randomized frequency shift added or subtracted from the surface impact sounds to prevent audio repetition (Default: ±0.15).</td>
             </tr>
             <tr>
+                <td><strong>Hardness Pitch Influence</strong></td>
+                <td>How strongly each layer's <strong>Material Hardness</strong> shifts pitch away from 1.0. For example, with a value of 0.1, a hardness of 2 (hard/resonant) shifts pitch to +0.1, while a hardness of 0 (soft/dead) shifts it to -0.1. Set to 0 to have hardness affect volume only, with no pitch change (Default: 0.1).</td>
+            </tr>
+            <tr>
                 <td><strong>Velocity Threshold</strong></td>
                 <td>The minimum collision speed (m/s) required to trigger the specialized surface impact logic and visual effects. Low-speed grazes are ignored (Default: 2 m/s).</td>
             </tr>
+        </tbody>
+    </table>
+
+    <h3>Rolling Trench Anti-Bounce</h3>
+    <table>
+        <thead>
             <tr>
-                <td><strong>Horizontal Dot Threshold</strong></td>
-                <td>Defines the slope cutoff for Horizontal vs Vertical surfaces used by the layer orientation filters. A value of <code>0.707</code> represents exactly a 45-degree angle.</td>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
             </tr>
+        </thead>
+        <tbody>
             <tr>
                 <td><strong>Ground Check Radius</strong></td>
                 <td>The radius of the physics SphereCast used to catch the ground. Prevents visual gaps in the rolling trench trail if a heavy boulder slightly bounces off uneven terrain (Default: 0.5).</td>
@@ -115,12 +139,48 @@
                 <td>The downward travel distance the SphereCast evaluates to confirm continuous ground contact during a roll (Default: 0.6).</td>
             </tr>
             <tr>
-                <td><strong>Min Roll Distance To Trench</strong></td>
-                <td>Minimum continuous distance the projectile must roll on the ground before it begins carving a trench. Helps prevent trenches from spawning during erratic skipping.</td>
+                <td><strong>Max Contact Gap Time</strong></td>
+                <td>If ground contact is lost for longer than this (e.g. the boulder catches air over a gap or takes a hard bounce), trench tracking resets cleanly on the next contact instead of bridging the gap with a burst of catch-up marks (Default: 0.35 seconds).</td>
             </tr>
             <tr>
-                <td><strong>Max Rolling Velocity</strong></td>
-                <td>Maximum speed at which continuous rolling trenches will spawn, preventing gappy trenches during high-speed bouncing.</td>
+                <td><strong>Min Roll Distance To Trench</strong></td>
+                <td>Minimum continuous distance the projectile must roll on the ground before it begins carving a trench. Helps prevent trenches from spawning during erratic skipping (Default: 1.5).</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Rolling Trench Mark Limit</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Limit Active Trench Marks</strong></td>
+                <td>If enabled, caps the number of simultaneously active rolling trench marks spawned by this projectile. When the cap is reached, the oldest trench mark is destroyed to make room for the newest. Does not affect one-off impact marks.</td>
+            </tr>
+            <tr>
+                <td><strong>Max Active Trench Marks</strong></td>
+                <td>Only used if <strong>Limit Active Trench Marks</strong> is enabled. Maximum number of rolling trench marks kept alive at once (Default: 20).</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Layer Overrides</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Horizontal Dot Threshold</strong></td>
+                <td>Defines the slope cutoff for Horizontal vs Vertical surfaces used by the layer orientation filters. A value of <code>0.707</code> would represent exactly a 45-degree angle (Default: 0.7).</td>
             </tr>
         </tbody>
     </table>
@@ -161,7 +221,7 @@
         </tbody>
     </table>
 
-    <h2 id="layer-effects">2. Layer Specific Effects</h2>
+    <h2 id="layer-effects">Layer Specific Effects</h2>
     <p>An extensible array linking dynamic game layers directly to contextual cosmetic feedback modules.</p>
 
     <h3>Target Identification</h3>
@@ -221,19 +281,11 @@
         <tbody>
             <tr>
                 <td><strong>Surface Audio Clips</strong></td>
-                <td>The precise audio pool assigned to simulate structural degradation for that material type.</td>
+                <td>Layer-specific impact sounds for this material type. These <strong>replace</strong> the Default Surface Audio Clips when this entry matches, and still play alongside the base projectile's own impact thud.</td>
             </tr>
             <tr>
-                <td><strong>Layer Pitch Variance</strong></td>
-                <td>Random pitch variance applied specifically to this layer's impact sounds (± this value). Overrides the global pitch variance.</td>
-            </tr>
-            <tr>
-                <td><strong>Layer Volume Variance</strong></td>
-                <td>Random volume variance applied specifically to this layer's impact sounds (± this value).</td>
-            </tr>
-            <tr>
-                <td><strong>Layer Volume Multiplier</strong></td>
-                <td>Overall volume multiplier for this specific surface type. Set to <code>1</code> for default volume, or lower for softer materials like mud or snow.</td>
+                <td><strong>Material Hardness</strong></td>
+                <td>Perceived hardness/density of this surface (0&ndash;2, default 1). Use lower values for soft/absorbent materials (mud, snow) and higher values for hard/resonant materials (stone, metal). This scales the volume of <em>both</em> this layer's own Surface Audio Clips and the base projectile's impact thud, and nudges pitch up or down to match (see <strong>Hardness Pitch Influence</strong>). Random per-hit pitch jitter still comes from the component's global Pitch Variance setting, not from this value.</td>
             </tr>
         </tbody>
     </table>
@@ -260,23 +312,27 @@
             </tr>
             <tr>
                 <td><strong>Mark Type</strong></td>
-                <td>Determines the rendering approach for the footprint[cite: 14]. Options are <code>VertexMesh</code> (physical geometry like molehills) or <code>URPDecal</code> (flat projection materials).</td>
+                <td>Determines the rendering approach for the footprint. Options are <code>VertexMesh</code> (physical geometry like molehills) or <code>URPDecal</code> (flat projection materials).</td>
             </tr>
             <tr>
                 <td><strong>Surface Marks</strong></td>
-                <td>An array of physical vertex-mesh prefabs (cracks, trenches, craters etc.)[cite: 14]. Includes toggles for random 360-degree rotation (cracks) or 180-degree flipping for directional meshes (molehills/trenches)[cite: 14].</td>
+                <td>An array of physical vertex-mesh prefabs (cracks, trenches, craters etc.). Includes toggles for random 360-degree rotation (cracks) or 180-degree flipping for directional meshes (molehills/trenches).</td>
+            </tr>
+            <tr>
+                <td><strong>Min Mark Spawn Velocity</strong></td>
+                <td>Minimum impact speed required to spawn a mark for this layer. Below this speed the mark is skipped entirely, though VFX and audio still play as normal.</td>
             </tr>
             <tr>
                 <td><strong>Preserve Depth Scale</strong></td>
-                <td>If enabled, scaling down a mark at low speeds only affects its footprint (X and Z axes)[cite: 14]. The depth/thickness remains at 1.0, preventing shallow impact marks from clipping entirely under the terrain mesh[cite: 14].</td>
+                <td>If enabled, scaling down a mark at low speeds only affects its footprint, leaving the depth/thickness at 1.0 so shallow impact marks don't clip under the terrain mesh. Which axis counts as "depth" depends on <strong>Mark Type</strong>: for <code>VertexMesh</code> it's the local Y-axis (footprint scales on X/Z), for <code>URPDecal</code> it's the local Z-axis, i.e. the projection direction (footprint scales on X/Y).</td>
             </tr>
             <tr>
                 <td><strong>Scale To Fit Surface</strong></td>
-                <td>If enabled, the spawned mark's footprint is compared against the collider bounds of the object it struck and shrunk down proportionally when the surface is smaller than the mark's authored size[cite: 14]. Leave this off for marks that should only ever be used on large, planar surfaces like ground gouges or trenches[cite: 14].</td>
+                <td>If enabled, the spawned mark's footprint is compared against the collider bounds of the object it struck and shrunk down proportionally when the surface is smaller than the mark's authored size. Leave this off for marks that should only ever be used on large, planar surfaces like ground gouges or trenches.</td>
             </tr>
             <tr>
                 <td><strong>Min Fit Scale Threshold</strong></td>
-                <td>Only used when <strong>Scale To Fit Surface</strong> is enabled[cite: 14]. If the required fit ratio falls below this value (0–1), the mark is skipped entirely rather than spawning as a barely-visible sliver[cite: 14]. A value of <code>0</code> disables the skip and always spawns something[cite: 14].</td>
+                <td>Only used when <strong>Scale To Fit Surface</strong> is enabled. If the required fit ratio falls below this value (0–1), the mark is skipped entirely rather than spawning as a barely-visible sliver. A value of <code>0</code> disables the skip and always spawns something.</td>
             </tr>
         </tbody>
     </table>
@@ -336,12 +392,12 @@
             </tr>
             <tr>
                 <td><strong>Trench Overlap Fraction</strong></td>
-                <td>Controls how much consecutive rolling trench marks bite into one another so the trail reads as one continuous groove instead of a stop-start sequence of stamps. A value of <code>0</code> places marks edge-to-edge; <code>0.2</code> overlaps each new mark by 20% of its own length into the previous one.</td>
+                <td>Controls how much consecutive rolling trench marks bite into one another so the trail reads as one continuous groove instead of a stop-start sequence of stamps. A value of <code>0</code> places marks edge-to-edge; <code>0.2</code> overlaps each new mark by 20% of its own length into the previous one. Clamped to a 0&ndash;0.5 range in the Inspector.</td>
             </tr>
         </tbody>
     </table>
 
-    <h2 id="cleanup-utility">3. Surface Mark Cleanup Utility (DPT_SurfaceMarkCleanup)</h2>
+    <h2 id="cleanup-utility">Surface Mark Cleanup Utility (DPT_SurfaceMarkCleanup)</h2>
     <p>A self-contained lifecycle manager dynamically attached to surface marks (cracks, divots, trenches) upon instantiation. It ensures the battlefield remains clear of excessive geometry over time without relying on expensive shader alpha-clipping or tying up the projectile object pool.</p>
 
     <table>
@@ -371,7 +427,7 @@
         </tbody>
     </table>
 
-    <h2 id="workflow">4. Setup &amp; Integration Workflow</h2>
+    <h2 id="workflow">Setup &amp; Integration Workflow</h2>
     <ol>
         <li>Mount the <code>DPT_ProjectileSurfaceImpact</code> component to the root layer of your projectile prefab alongside your core collision modules.</li>
        <li>Provide generic assets into both the <code>Default Spalling VFX Prefab</code> and <code>Default Surface Audio Clips</code> slots. This guarantees that even if a projectile hits an unassigned layer or untagged custom terrain, a proper impact visual and acoustic reaction still executes safely.</li>
