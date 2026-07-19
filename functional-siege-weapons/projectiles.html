@@ -191,13 +191,25 @@
                 <td><strong>Velocity Retention</strong></td>
                 <td>A percentage multiplier (0.0 to 1.0) dictating how much kinetic speed is retained after successfully punching through a target. A value of 1 ignores all structural resistance.</td>
             </tr>
-            <tr>
+<tr>
                 <td><strong>Embed On Impact</strong></td>
                 <td>If true, the projectile will embed itself into the hit object and freeze its physics in place. It utilizes matrix-free tracking to remain stuck to moving targets (like rolling siege towers) without being disrupted by hierarchy changes.</td>
             </tr>
             <tr>
                 <td><strong>Embed Depth</strong></td>
                 <td>How far forward (in meters) the projectile should sink into the target geometry upon impact to simulate a pierced surface.</td>
+            </tr>
+            <tr>
+                <td><strong>Min Embed Depth</strong></td>
+                <td>Minimum penetration depth required to stick. If the dynamically calculated depth falls below this threshold, the projectile will bounce or break instead of embedding. This calculation includes automatic compensation for shallow impact angles.</td>
+            </tr>
+            <tr>
+                <td><strong>Scale Embed With Velocity</strong></td>
+                <td>If true, the final embed depth scales dynamically based on the projectile's impact speed relative to the reference speed.</td>
+            </tr>
+            <tr>
+                <td><strong>Embed Scaling Reference Speed</strong></td>
+                <td>The impact speed (m/s) at which the projectile embeds to its full, maximum <strong>Embed Depth</strong>. Slower impacts will sink proportionally less.</td>
             </tr>
             <tr>
                 <td><strong>On Despawn Requested</strong></td>
