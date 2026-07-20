@@ -321,6 +321,10 @@
                 <td>Only used if <strong>Force Embed</strong> is selected. Overrides how deep the projectile sinks into this specific layer.</td>
             </tr>
             <tr>
+                <td><strong>Override Min Embed Depth</strong></td>
+                <td>Only used if <strong>Force Embed</strong> is selected. Overrides the projectile's default minimum embed depth threshold for this layer. If the calculated depth (after velocity scaling) falls below this, the projectile bounces or breaks instead of sticking.</td>
+            </tr>
+            <tr>
                 <td><strong>Override Bounce Multiplier</strong></td>
                 <td>Only used if <strong>Force Bounce</strong> is selected. Multiplies the projectile's remaining velocity after reflecting off the surface.</td>
             </tr>
