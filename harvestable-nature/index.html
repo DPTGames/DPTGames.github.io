@@ -42,19 +42,19 @@
 
     <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
         <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
-        <a href="#setup-dependencies" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Setup & Dependencies</a>
-        <a href="#sandbox-navigation" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">2. Sandbox Navigation</a>
-        <a href="#wind-system" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">3. Vegetation Wind System</a>
-        <a href="#harvestable-system" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">4. HarvestableProps System</a>
-        <a href="#inspector-reference" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">5. Inspector Reference</a>
-        <a href="#tree-fall-guide" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">6. Tree Fall Setup Guide</a>
-        <a href="#resource-presets" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">7. Resource Presets</a>
-        <a href="#custom-prefabs" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">8. Creating Custom Prefabs</a>
-        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">9. Troubleshooting Notes</a>
-        <a href="#support" style="color: #a5f3fc; text-decoration: none;">10. Support & Contracts</a>
+        <a href="#setup-dependencies" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Setup & Dependencies</a>
+        <a href="#sandbox-navigation" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Sandbox Navigation</a>
+        <a href="#wind-system" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Vegetation Wind System</a>
+        <a href="#harvestable-system" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">HarvestableProps System</a>
+        <a href="#inspector-reference" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Inspector Reference</a>
+        <a href="#tree-fall-guide" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Tree Fall Setup Guide</a>
+        <a href="#resource-presets" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Resource Presets</a>
+        <a href="#custom-prefabs" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Creating Custom Prefabs</a>
+        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Troubleshooting Notes</a>
+        <a href="#support" style="color: #a5f3fc; text-decoration: none;">Support & Contracts</a>
     </div>
 
-    <h2 id="setup-dependencies">1. Setup & Dependencies</h2>
+    <h2 id="setup-dependencies">Setup & Dependencies</h2>
     
     <div class="warning">
         <strong>The Unity Input System:</strong> The included testing sandbox environment relies on Unity's modern <code>UnityEngine.InputSystem</code>. If your project uses the Legacy Input Manager, opening the demonstration environment will generate compiler errors.
@@ -65,7 +65,7 @@
         <li><strong>Opting Out:</strong> If you do not wish to use the new Input System in your project, you can safely delete the <code>Demo_CameraController.cs</code> script. The core runtime scripts, shaders, materials, and 3D assets carry zero external dependencies and will function perfectly without it.</li>
     </ul>
 
-    <h2 id="sandbox-navigation">2. Sandbox Navigation & Control</h2>
+    <h2 id="sandbox-navigation">Sandbox Navigation & Control</h2>
     <p>A comprehensive demonstration environment is included to let you test the interaction mechanics and wind simulation parameters directly in real-time.</p>
 
     <h3>Navigation Inputs</h3>
@@ -118,7 +118,7 @@
         <strong>Range Safety:</strong> The interaction system verifies bounding radii; you must move within the configured interaction range to update the target asset state.
     </div>
 
-    <h2 id="wind-system">3. The Vegetation Wind System</h2>
+    <h2 id="wind-system">The Vegetation Wind System</h2>
     <p>The Nature Pack uses a specialized vertex shader displacement pipeline to simulate realistic foliage movement completely standalone. Rather than forcing scene management overhead or running heavy update scripts on the CPU, the animation cycles execute entirely on the GPU using native Unity time inputs.</p>
 
     <h3>System Architecture & Mechanics:</h3>
@@ -139,7 +139,7 @@
         <strong>Optimization Tip:</strong> When the <strong>Enable Grass Waving</strong> checkbox toggle is disabled on a material, Unity drops the compilation path in favor of a static shader variant. The GPU skips all wind nodes and vertex addition evaluations completely, ensuring zero performance penalty on non-vegetation structures.
     </div>
 
-    <h2 id="harvestable-system">4. The DPT_HarvestableProps System</h2>
+    <h2 id="harvestable-system">The DPT_HarvestableProps System</h2>
     <p>Resource gathering nodes handle state updates cleanly via the modular <code>DPT_HarvestableProps.cs</code> script layer. This system features dynamic custom inspector interfaces handled via <code>DPT_HarvestablePropsEditor.cs</code> to streamline asset configuration.</p>
 
     <h3>System Core Architecture:</h3>
@@ -151,7 +151,7 @@
         <li><strong>Hierarchy-Aware Raycasting:</strong> Click detection uses <code>GetComponentInParent</code> to walk up the collision hierarchy, meaning clicks anywhere on a prop — trunk, canopy, ore nodes, or any child mesh — correctly resolve back to the root harvestable component without requiring a collider specifically on the root object.</li>
     </ul>
 
-    <h3 id="inspector-reference">5. Inspector Configuration Reference</h3>
+    <h3 id="inspector-reference">Inspector Configuration Reference</h3>
     <table>
         <thead>
             <tr>
@@ -267,7 +267,7 @@
         </tbody>
     </table>
 
-    <h3 id="tree-fall-guide">6. Tree Fall Mode — Setup Guide</h3>
+    <h3 id="tree-fall-guide">Tree Fall Mode — Setup Guide</h3>
     <ol>
         <li>Set <strong>Animation Mode</strong> to <code>Tree Fall</code> on your tree prefab's <code>DPT_HarvestableProps</code> component.</li>
         <li>Assign the standing tree mesh(es) into the <strong>Objects To Disable</strong> array as normal.</li>
@@ -285,7 +285,7 @@
         <strong>Log Collider / Physics Fall:</strong> If <strong>Use Physics Fall</strong> is enabled, the log must contain a <strong>Rigidbody</strong> component in order to respond to physics forces correctly. If no Rigidbody is present, the system will log a warning and skip physics-based motion.
     </div>
 
-    <h3 id="resource-presets">7. Included Resource Presets</h3>
+    <h3 id="resource-presets">Included Resource Presets</h3>
     <p>The asset package includes pre-configured resource profiles ready to map into your custom asset overrides:</p>
     <ul>
         <li><strong>Mining Profile:</strong> Uses the multi-object array system with individual ore node GameObjects assigned per rock. Each click removes one ore deposit.</li>
@@ -293,7 +293,7 @@
         <li><strong>Lumber Profile:</strong> Configured to use the <em>Tree Fall</em> animation mode. The standing tree mesh is assigned to Objects To Disable, with the corresponding log mesh assigned to Log Object. Paired with deep tree-falling impact audio.</li>
     </ul>
 
-    <h3 id="custom-prefabs">8. Creating Custom Harvestable Prefabs:</h3>
+    <h3 id="custom-prefabs">Creating Custom Harvestable Prefabs:</h3>
     <ol>
         <li>Attach the <code>DPT_HarvestableProps</code> component to the root of your target entity prefab. This automatically adds required <code>Collider</code> and <code>AudioSource</code> requirements.</li>
         <li>Assign your harvestable child mesh objects into the <strong>Objects To Disable</strong> array. For a single-state prop assign one entry; for multi-stage props (e.g. a rock with multiple ore deposits) assign each removable object as a separate array entry.</li>
@@ -307,7 +307,7 @@
         <strong>Raycasting Requirement:</strong> The camera must possess an active <code>Physics Raycaster</code> component to translate cursor coordinates to interaction colliders accurately. Click detection resolves through the full GameObject hierarchy — clicking any child mesh, collider, or ore node on a prefab will correctly register against the root <code>DPT_HarvestableProps</code> component.
     </div>
 
-    <h2 id="troubleshooting">9. Technical Notes & Troubleshooting</h2>
+    <h2 id="troubleshooting">Technical Notes & Troubleshooting</h2>
 
     <div class="troubleshooting-q">"Foliage assets remain completely stationary"</div>
     <div class="troubleshooting-a">
