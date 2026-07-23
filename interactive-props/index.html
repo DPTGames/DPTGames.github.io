@@ -72,22 +72,22 @@ h4{
 
     <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
         <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
-        <a href="#getting-started" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Getting Started</a>
-        <a href="#inspector-reference" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">2. Inspector Reference</a>
-        <a href="#openable-setup" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">3. Lid / Door Setup</a>
-        <a href="#fracture-physics" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">4. Fracture &amp; Destruction Physics</a>
-        <a href="#kinetic-transfer" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">5. Kinetic Transfer</a>
-        <a href="#loot-configuration" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">6. Dynamic Loot Configuration</a>
-        <a href="#audio-vfx-events" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">7. Audio, VFX &amp; Events</a>
-        <a href="#debug-testing" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">8. Debug &amp; Testing</a>
-        <a href="#api-reference" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">9. API Reference</a>
-        <a href="#example-integration" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">10. Example Integration</a>
-        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">11. Troubleshooting</a>
-        <a href="#prefab-assembly" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">12. Appendix - Prefab Assembly</a>
-        <a href="#support" style="color: #a5f3fc; text-decoration: none;">13. Support &amp; Contract Inquiries</a>
+        <a href="#getting-started" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Getting Started</a>
+        <a href="#inspector-reference" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Inspector Reference</a>
+        <a href="#openable-setup" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Lid / Door Setup</a>
+        <a href="#fracture-physics" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Fracture &amp; Destruction Physics</a>
+        <a href="#kinetic-transfer" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Kinetic Transfer</a>
+        <a href="#loot-configuration" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Dynamic Loot Configuration</a>
+        <a href="#audio-vfx-events" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Audio, VFX &amp; Events</a>
+        <a href="#debug-testing" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Debug &amp; Testing</a>
+        <a href="#api-reference" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">API Reference</a>
+        <a href="#example-integration" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Example Integration</a>
+        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Troubleshooting</a>
+        <a href="#prefab-assembly" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Appendix - Prefab Assembly</a>
+        <a href="#support" style="color: #a5f3fc; text-decoration: none;">Support &amp; Contract Inquiries</a>
     </div>
 
-    <h2 id="getting-started">1. Getting Started</h2>
+    <h2 id="getting-started">Getting Started</h2>
     <p>Add the <code>DPT_InteractiveProp</code> component to any GameObject, assign the required references in the Inspector, and you are ready to go. The included prefabs are pre-configured; no setup is required to test them immediately.</p>
 
     <h3>Quick Start - Testing in Play Mode</h3>
@@ -140,7 +140,7 @@ h4{
         <strong>Note:</strong> You can also test without entering Play Mode. Use the Shatter, Open, and Reset buttons in the Inspector - the editor will temporarily simulate physics so you can preview destruction behavior directly in Edit Mode.
     </div>
 
-    <h2 id="inspector-reference">2. Inspector Reference</h2>
+    <h2 id="inspector-reference">Inspector Reference</h2>
     <p>The component is organised into logical groups in the Inspector. Each group is described below. The Inspector is fully dynamic—certain fields and entire sub-sections will only become visible once their parent feature is configured or enabled.</p>
 
     <h3>Core Object Setup</h3>
@@ -190,7 +190,7 @@ h4{
         </tbody>
     </table>
 
-    <h3 id="openable-setup">3. Lid / Door &amp; Openable Setup</h3>
+    <h3 id="openable-setup">Lid / Door &amp; Openable Setup</h3>
     <p><strong>Dynamic Visibility - Animation &amp; Physics Settings:</strong> All fields in this section are completely hidden until a Transform is assigned to the <strong>Lid Or Door</strong> slot. Assign a lid or door object first and these settings will appear automatically.</p>
 
     <table>
@@ -219,7 +219,7 @@ h4{
         ✓ <em>When using physics-based opening, the Rigidbody's mass, drag, angular drag, constraints, and collider shape all directly affect how the lid behaves. Use the Open editor button to preview the result without entering Play Mode.</em>
     </div>
 
-    <h3 id="fracture-physics">4. Fracture &amp; Explosion Physics</h3>
+    <h3 id="fracture-physics">Fracture &amp; Explosion Physics</h3>
     <p>Controls how fractured debris behaves at the moment of destruction.<br>
     <strong>Dynamic Visibility:</strong> All fields in this category are completely hidden until a prefab is assigned to the <strong>Broken Parent</strong> slot in Core Object Setup.</p>
     
@@ -250,7 +250,7 @@ h4{
         ✓ <em>When using object pooling, set <strong>Destroy On Cleanup</strong> to disabled and call <code>ResetProp()</code> on the object before returning it to the pool. This fully restores the prop to its pristine state.</em>
     </div>
 
-    <h3 id="kinetic-transfer">5. Kinetic Transfer (Nearby Objects)</h3>
+    <h3 id="kinetic-transfer">Kinetic Transfer (Nearby Objects)</h3>
     <p>Allows the prop's destruction to push nearby physics objects, adding physical weight and interactivity to explosions.</p>
     <table>
         <thead>
@@ -269,7 +269,7 @@ h4{
         <strong>Warning:</strong> Avoid enabling kinetic transfer on large numbers of props simultaneously. Each transfer performs a physics overlap check at destruction time: using it on dozens of props exploding at once will spike CPU cost.
     </div>
 
-    <h3 id="loot-configuration">6. Dynamic Loot Configuration</h3>
+    <h3 id="loot-configuration">Dynamic Loot Configuration</h3>
     <p>These settings determine the core logic for how loot items are managed, chosen, and handled physically when a container opens or breaks.</p>
     <table>
         <thead>
@@ -337,7 +337,7 @@ h4{
         </tbody>
     </table>
 
-    <h3 id="audio-vfx-events">7. Audio, VFX &amp; Events</h3>
+    <h3 id="audio-vfx-events">Audio, VFX &amp; Events</h3>
     <table>
         <thead>
             <tr><th style="width: 30%;">Field</th><th>Description</th></tr>
@@ -358,7 +358,7 @@ h4{
         ✓ <em>The On Break Event and On Open Event foldouts are collapsed by default to save screen space. Click the foldout arrow next to each event in the Inspector to expand it and assign listener functions.</em>
     </div>
 
-    <h2 id="debug-testing">8. Debug &amp; Testing</h2>
+    <h2 id="debug-testing">Debug &amp; Testing</h2>
     <table>
         <thead>
             <tr>
@@ -380,7 +380,7 @@ h4{
         <em>Use Shatter followed by Reset repeatedly to quickly iterate on explosion force, debris mass, and kinetic transfer settings without touching Play Mode at all.</em>
     </div>
 
-    <h2 id="api-reference">9. API Reference</h2>
+    <h2 id="api-reference">API Reference</h2>
     <p>All major interactions are exposed as public methods for integration with custom gameplay systems. Disable <strong>Enable Mouse Interaction</strong> and call these from your own scripts.</p>
 
     <h3>Applying Damage &amp; Breaking</h3>
@@ -421,7 +421,7 @@ h4{
         ■ <em>The system caches its references once during initialization. If you dynamically modify the prop's hierarchy or move debris pieces through code after startup, you will need to call <code>ResetProp()</code> or rebuild the instance manually to restore correct behavior.</em>
     </div>
 
-    <h2 id="example-integration">10. Example Integration</h2>
+    <h2 id="example-integration">Example Integration</h2>
 
     <h3>Programmer Notes</h3>
     <p>This section summarises the integration design of the system for developers connecting it to custom gameplay code.</p>
@@ -479,7 +479,7 @@ objectPool.Return(prop.gameObject);
         </tbody>
     </table>
 
-    <h2 id="troubleshooting">11. Troubleshooting</h2>
+    <h2 id="troubleshooting">Troubleshooting</h2>
 
     <div class="troubleshooting-q">The prop does not respond to clicks</div>
     <div class="troubleshooting-a">Confirm that <em>Enable Mouse Interaction</em> is checked in the Inspector. Also ensure the prop has a Collider so mouse raycasts can hit it.</div>
@@ -502,7 +502,7 @@ objectPool.Return(prop.gameObject);
     <div class="troubleshooting-q">Nearby objects are not being pushed on destruction</div>
     <div class="troubleshooting-a">Ensure <em>Transfer Kinetic Energy</em> is enabled and that the <em>Kinetic Transfer Radius</em> is large enough to reach the objects you want to push. Also check <em>Max Pushable Mass</em> - if nearby objects are heavier than this value, they will be skipped.</div>
 
-    <h2 id="prefab-assembly">12. Appendix - Custom Prefab Assembly</h2>
+    <h2 id="prefab-assembly">Appendix - Custom Prefab Assembly</h2>
     <p>This section is for advanced users building their own props from scratch. If you are using the prefabs included with this pack, everything is already assembled correctly and you do not need to read this. If you are importing your own fractured meshes from Blender or another tool, every layer of the hierarchy must be configured correctly for the caching and reset system to work.</p>
 
     <h3>Required Hierarchy Structure</h3>
@@ -575,15 +575,17 @@ objectPool.Return(prop.gameObject);
             <li style="margin-bottom: 8px;">✓ Only use Continuous Dynamic collision detection when visually necessary.</li>
         </ul>
     </div>
-
-    <h2 id="support">13. Support &amp; Custom Pipeline Integration</h2>
+<h2 id="support">Support & Custom Pipeline Integration</h2>
     <p>If your project requires external or custom 3D models to be fully integrated into the DPT ecosystem—including custom vertex-data packing, procedural wood grain mapping, normal array configuration, advanced GPU wind system implementation, or any other bespoke features—freelance technical art services are available. Additionally, availability extends to general 3D asset production, high-to-low poly hard surface modeling, stylized prop creation, and game-ready LOD budgeting built to align cleanly with your specific project constraints.</p>
-    <p>For freelance modeling contract inquiries, tech-art pipeline consulting, or custom asset optimization passes, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Contract Inquiry]</code>.</p>
 
     <div class="note">
-        <strong>Standard Asset Support:</strong><br>
-        For standard package bug reports, technical asset setup issues, and publisher licensing enquiries, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Support Request]</code>.
+        <strong>Contact & Inquiries:</strong><br>
+        For freelance modeling contracts, custom asset optimization passes, standard package bug reports, and publisher licensing enquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
     </div>
 
+    <div class="note">
+        <strong>DPT Support Discord:</strong><br>
+        For dedicated technical assistance, asset configuration help, and direct feedback on our Unity packages, join the <strong><a href="https://discord.gg/XqbeSePWQ" target="_blank">Support Server</a></strong>.
+    </div>
 </body>
 </html>
