@@ -170,7 +170,7 @@
     </div>
     <div class="note">
         <strong>The "White Base" Strategy for Perfect Tinting:</strong><br><br>
-        If you want to use the <code>DPT_ShaderVariation</code> script to dynamically change the glow color of different objects (e.g., a red potion and a blue potion using the exact same material), set the master <strong>Emissive Color in the Material Inspector to pure White</strong>. Because the script uses mathematical multiplication, a white base allows the script's color to dictate 100% of the final glow hue.
+        If you want to use the <code>DPT_ShaderVariation</code> script to dynamically change the glow color of different objects (e.g., a red potion and a blue potion using the exact same material), set the master <strong>Emissive Color in the Material Inspector to pure White</strong>. Because the script uses mathematical multiplication, a white base allows the script's color to dictate 100% of the final glow hue. <em>Note: this only applies to non-metallic surfaces — see the Metallic Object Exception above, as metallic emission hue cannot be changed per-instance regardless of the base color setting.</em>
     </div>
 
     <div class="note">
