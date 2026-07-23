@@ -171,14 +171,14 @@
     <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
         <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation:</strong>
         <a href="#getting-started" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Getting Started</a>
-        <a href="#prefab-palette" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Prefab Palette</a>
-        <a href="#painting-controls" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">2. Painting &amp; Controls</a>
+        <a href="#prefab-palette" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Prefab Palette</a>
+        <a href="#painting-controls" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Painting &amp; Controls</a>
  <a href="#visuals-variation" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">3. Visuals &amp; Variation</a>
-        <a href="#transform-placement" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">4. Transform &amp; Placement</a>
-        <a href="#hierarchy-tags-layers-scripts" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">5. Hierarchy, Tags, Layers &amp; Scripts</a>
-        <a href="#texture-packer" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">6. Texture Channel Packer</a>
-        <a href="#shortcuts" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">7. Shortcuts Reference</a>
-        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">8. Troubleshooting</a>
+        <a href="#transform-placement" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Transform &amp; Placement</a>
+        <a href="#hierarchy-tags-layers-scripts" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Hierarchy, Tags, Layers &amp; Scripts</a>
+        <a href="#texture-packer" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Texture Channel Packer</a>
+        <a href="#shortcuts" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Shortcuts Reference</a>
+        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Troubleshooting</a>
         <a href="#support" style="color: #a5f3fc; text-decoration: none;">9. Support</a>
     </div>
 
@@ -199,7 +199,7 @@
         <strong>Undo:</strong> Every paint stroke, erase, line, grid, and path action is fully registered with Unity's undo system. Use <code>Ctrl + Z</code> and <code>Ctrl + Y</code> freely.
     </div>
 
-    <h2 id="prefab-palette">1. Prefab Palette</h2>
+    <h2 id="prefab-palette">Prefab Palette</h2>
     <p>The palette is where you manage which prefabs the painter can place. It supports multiple groups, saveable presets, and several ways to add and remove assets.</p>
 
     <table>
@@ -241,7 +241,7 @@
         </tbody>
     </table>
 
-    <h2 id="painting-controls">2. Painting Controls</h2>
+    <h2 id="painting-controls">Painting Controls</h2>
     <p>Switch between <strong>Paint</strong>, <strong>Erase</strong>, and <strong>Recolor</strong> tabs at the top of the panel. Use the large green button to start painting and the red button to stop.</p>
 
     <h3>Placement Modes</h3>
@@ -319,7 +319,7 @@
             </tr>
         </tbody>
     </table>
-    <h2 id="visuals-variation">3. Visuals &amp; Variation</h2>
+    <h2 id="visuals-variation">Visuals &amp; Variation</h2>
     <p>Per-instance visual variation using the DPT shader pipeline. These options add variety across painted objects without creating extra materials or breaking GPU batching.</p>
 
     <table>
@@ -344,7 +344,7 @@
     <div class="note">
         <strong>Shader Integration:</strong> DPT shaders read per-instance variation values from the GPU Renderer Shader User Value (RSUV) stream. This is fully compatible with Unity 6's GPU Resident Drawer — variation has zero impact on draw call counts. The Color Property Name field is only editable when a standard URP Lit fallback shader is detected. In that case, a Material Property Block is used.
     </div>
-    <h2 id="transform-placement">4. Transform &amp; Placement</h2>
+    <h2 id="transform-placement">Transform &amp; Placement</h2>
     <p>Controls how placed prefabs are oriented, scaled, named, and organised in the scene hierarchy.</p>
 
     <table>
@@ -395,7 +395,7 @@
         </tbody>
     </table>
 
-  <h2 id="hierarchy-tags-layers-scripts">5. Hierarchy, Tags &amp; Scripts</h2>
+  <h2 id="hierarchy-tags-layers-scripts">Hierarchy, Tags &amp; Scripts</h2>
 <p>Options for organizing painted objects, overriding object settings, and injecting components at paint time.</p>
 
 <table>
@@ -437,7 +437,7 @@
 
 
 
-    <h2 id="texture-packer">6. Texture Channel Packer</h2>
+    <h2 id="texture-packer">Texture Channel Packer</h2>
     <p>The DPT shader uses a packed texture format that combines metallic, occlusion, detail, and smoothness data into a single file. You can create these using the built-in packer at <strong>Tools &rarr; DPT Games &rarr; Texture Channel Packer</strong>.</p>
 
     <ol>
@@ -471,7 +471,7 @@
         <strong>Brightness Conversion:</strong> The <strong>Convert Brightness</strong> option handles the conversion from 24-bit RGB maps to usable scalar data natively in the editor — no external tools needed.
     </div>
 
-    <h2 id="shortcuts">7. Shortcuts Reference</h2>
+    <h2 id="shortcuts">Shortcuts Reference</h2>
     <p>All shortcuts are active while the painter is open and painting is enabled. They do not interfere with Unity's built-in editor shortcuts.</p>
 
     <table>
@@ -585,7 +585,7 @@
         </tbody>
     </table>
 
-    <h2 id="troubleshooting">8. Troubleshooting</h2>
+    <h2 id="troubleshooting">Troubleshooting</h2>
 
     <div class="troubleshooting-q">Prefabs are not being placed when I paint</div>
     <div class="troubleshooting-a">The most common cause is a layer mismatch. The painter only places objects on surfaces assigned to the Paintable Layer. Check that your terrain or ground mesh uses the correct layer in its Inspector, and that the Paintable Layer setting in the painter matches. Also confirm painting is active — the button should be red and read <strong>Stop Painting</strong>.</div>
@@ -610,13 +610,17 @@
 
     <hr class="divider">
 
-    <h2 id="support">9. Support &amp; Custom Pipeline Integration</h2>
-    <p>If your project needs custom integration with the DPT ecosystem — including vertex data packing, normal array setup, GPU wind systems, or bespoke shader features — freelance technical art services are available. This also extends to general asset production: hard surface modelling, stylized prop creation, and game-ready LOD work tailored to your project's constraints.</p>
-    <p>For freelance or consulting enquiries, contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Contract Inquiry]</code>.</p>
+<h2 id="support">Support & Custom Pipeline Integration</h2>
+    <p>If your project requires external or custom 3D models to be fully integrated into the DPT ecosystem—including custom vertex-data packing, procedural wood grain mapping, normal array configuration, advanced GPU wind system implementation, or any other bespoke features—freelance technical art services are available. Additionally, availability extends to general 3D asset production, high-to-low poly hard surface modeling, stylized prop creation, and game-ready LOD budgeting built to align cleanly with your specific project constraints.</p>
 
     <div class="note">
-        <strong>Standard Support:</strong> For bug reports, setup questions, and licensing enquiries, contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Support Request]</code>.
+        <strong>Contact & Inquiries:</strong><br>
+        For freelance modeling contracts, custom asset optimization passes, standard package bug reports, and publisher licensing enquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
     </div>
 
+    <div class="note">
+        <strong>DPT Support Discord:</strong><br>
+        For dedicated technical assistance, asset configuration help, and direct feedback on our Unity packages, join the <strong><a href="https://discord.gg/XqbeSePWQ" target="_blank">Support Server</a></strong>.
+    </div>
 </body>
 </html>
