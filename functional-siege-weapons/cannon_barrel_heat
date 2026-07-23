@@ -1,143 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>DPT Siege Weapons Cannon Barrel Heat - Component Guide</title>
-    <style>
-        *, *::before, *::after { box-sizing: border-box; }
-        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            color: #f8fafc;
-            background-color: #0f172a;
-            margin: 0; padding: 40px;
-            font-size: 11pt; line-height: 1.5;
-        }
-        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
-        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
-        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
-        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
-        p { margin: 0 0 12px 0; }
-        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
-        tr { page-break-inside: avoid; }
-        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
-        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
-        td { background-color: #0f172a; }
-        td strong { color: #bae6fd; }
-        td code { font-size: 9.5pt; }
-        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
-        li { margin-bottom: 6px; }
-        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
-        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        .perf { background-color: #0c1f12; border-left: 4px solid #4ade80; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        .tip { background-color: #1a1a2e; border-left: 4px solid #a78bfa; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
-        code { padding: 2px 5px; }
-        pre { padding: 12px; margin: 10px 0; overflow-x: auto; line-height: 1.6; }
-        .badge {
-            display: inline-block;
-            background-color: #166534;
-            color: #4ade80;
-            font-size: 8.5pt;
-            font-weight: bold;
-            padding: 2px 8px;
-            border-radius: 3px;
-            letter-spacing: 0.05em;
-            vertical-align: middle;
-            margin-left: 6px;
-        }
-        .badge-blue { background-color: #1e3a5f; color: #7dd3fc; }
-        .badge-orange { background-color: #431407; color: #fb923c; }
-        .badge-purple { background-color: #2e1065; color: #c4b5fd; }
-        .state-arrow { color: #38bdf8; font-weight: bold; margin: 0 4px; }
-        .state-label {
-            display: inline-block;
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            color: #bae6fd;
-            font-family: 'Consolas', monospace;
-            font-size: 9.5pt;
-            padding: 2px 8px;
-            border-radius: 3px;
-        }
-        .divider { border: none; border-top: 1px solid #1e293b; margin: 30px 0; }
-        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 15px; margin-bottom: 5px; page-break-after: avoid; }
-        .troubleshooting-a { margin-bottom: 15px; }
-    </style>
+    <meta charset="UTF-8">
+    <title>DPT Siege Weapons Cannon Barrel Heat - Component Guide</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0; padding: 40px;
+            font-size: 11pt; line-height: 1.5;
+        }
+        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        td code { font-size: 9.5pt; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .perf { background-color: #0c1f12; border-left: 4px solid #4ade80; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .tip { background-color: #1a1a2e; border-left: 4px solid #a78bfa; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        pre { padding: 12px; margin: 10px 0; overflow-x: auto; line-height: 1.6; }
+        .badge {
+            display: inline-block;
+            background-color: #166534;
+            color: #4ade80;
+            font-size: 8.5pt;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 3px;
+            letter-spacing: 0.05em;
+            vertical-align: middle;
+            margin-left: 6px;
+        }
+        .badge-blue { background-color: #1e3a5f; color: #7dd3fc; }
+        .badge-orange { background-color: #431407; color: #fb923c; }
+        .badge-purple { background-color: #2e1065; color: #c4b5fd; }
+        .state-arrow { color: #38bdf8; font-weight: bold; margin: 0 4px; }
+        .state-label {
+            display: inline-block;
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            color: #bae6fd;
+            font-family: 'Consolas', monospace;
+            font-size: 9.5pt;
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+        .divider { border: none; border-top: 1px solid #1e293b; margin: 30px 0; }
+        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 15px; margin-bottom: 5px; page-break-after: avoid; }
+        .troubleshooting-a { margin-bottom: 15px; }
+    </style>
 </head>
 <body>
 
-<nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
-    <a href="https://dptgames.github.io/" style="color: #38bdf8; margin-right: 15px;">&larr; DPT Games Homepage</a>
-    <span style="color: #64748b;">|</span>
-    <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Functional Siege Weapons</a>
-    <a href="breakable_props.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Breakable Props</a>
-    <a href="projectiles.html" style="color: #f8fafc; margin-right: 15px;">Projectiles System</a>
-    <a href="projectile_surface_impact.html" style="color: #f8fafc; margin-right: 15px;">Projectile Surface Impact</a>
-    <a href="procedural_mechanical_drive.html.html" style="color: #f8fafc;">Procedural Mechanical Drive</a>
-     <a href="rope_anchor.html.html" style="color: #f8fafc;">Rope Anchor</a>
-     <a href="cannon_barrel_heat.html.html" style="color: #f8fafc;">Cannon Barrel Heat</a>
-</nav>
+    <nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
+        <a href="https://dptgames.github.io/" style="color: #38bdf8; margin-right: 15px;">&larr; DPT Games Homepage</a>
+        <span style="color: #64748b;">|</span>
+        <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Functional Siege Weapons</a>
+        <a href="breakable_props.html" style="color: #f8fafc; margin-right: 15px;">Breakable Props</a>
+        <a href="projectiles.html" style="color: #f8fafc; margin-right: 15px;">Projectiles System</a>
+        <a href="projectile_surface_impact.html" style="color: #f8fafc; margin-right: 15px;">Projectile Surface Impact</a>
+        <a href="procedural_mechanical_drive.html" style="color: #f8fafc; margin-right: 15px;">Procedural Mechanical Drive</a>
+        <a href="rope_anchor.html" style="color: #f8fafc; margin-right: 15px;">Rope Anchor</a>
+        <a href="cannon_barrel_heat.html" style="color: #f8fafc;">Cannon Barrel Heat</a>
+    </nav>
 
-    <h1>DPT_CannonBarrelHeat</h1>
-    <div class="subtitle">Component Reference Guide<br>
-    <span style="font-size: 11pt; font-style: normal;">A lightweight, event-driven utility designed to manage the emissive cooldown of weapon barrels over time, entirely decoupling visual heat decay from strict Animator clip durations.</span></div>
+    <h1>DPT_CannonBarrelHeat</h1>
+    <div class="subtitle">Component Reference Guide<br>
+    <span style="font-size: 11pt; font-style: normal;">A lightweight, event-driven utility designed to manage the emissive cooldown of weapon barrels over time, entirely decoupling visual heat decay from strict Animator clip durations.</span></div>
 
-    <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
-        <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
-        <a href="#inspector-configuration" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Inspector Configuration</a>
-        <a href="#technical-architecture" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">Technical Architecture</a>
-        <a href="#troubleshooting" style="color: #a5f3fc; text-decoration: none;">Troubleshooting Notes</a>
-        <a href="#support" style="color: #a5f3fc; text-decoration: none;">Support</a>
-    </div>
+    <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
+        <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
+        <a href="#inspector-configuration" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Inspector Configuration</a>
+        <a href="#technical-architecture" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">2. Technical Architecture</a>
+        <a href="#troubleshooting" style="color: #a5f3fc; text-decoration: none;">3. Troubleshooting Notes</a>
+        <a href="#support" style="color: #a5f3fc; text-decoration: none;">4. Support</a>
+    </div>
 
-    <h2 id="inspector-configuration">Inspector Property Configuration</h2>
-    
-    <h3>Dependencies &amp; Heat Settings</h3>
-    <p>Configures the baseline emission strength and the rate at which the material returns to its resting state.</p>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 30%;">Property</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Shader Variation</strong></td>
-                <td>The scene reference to the <code>DPT_ShaderVariation</code> component managing the barrel's material. The script pushes calculated alpha values directly to this target to control emission intensity.</td>
-            </tr>
-            <tr>
-                <td><strong>Cooling Duration</strong></td>
-                <td>The time (in seconds) it takes for the barrel to cool down from its maximum heat back to a dark (zero alpha) state.</td>
-            </tr>
-            <tr>
-                <td><strong>Max Heat Alpha</strong></td>
-                <td>The peak emission strength applied to the material the exact moment the weapon is fired. Values above 1.0 will push the shader into HDR ranges for intense bloom effects.</td>
-            </tr>
-        </tbody>
-    </table>
+    <h2 id="inspector-configuration">1. Inspector Property Configuration</h2>
+    
+    <h3>Dependencies &amp; Heat Settings</h3>
+    <p>Configures the baseline emission strength and the rate at which the material returns to its resting state.</p>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Shader Variation</strong></td>
+                <td>The scene reference to the <code>DPT_ShaderVariation</code> component managing the barrel's material. The script pushes calculated alpha values directly to this target to control emission intensity.</td>
+            </tr>
+            <tr>
+                <td><strong>Cooling Duration</strong></td>
+                <td>The time (in seconds) it takes for the barrel to cool down from its maximum heat back to a dark (zero alpha) state.</td>
+            </tr>
+            <tr>
+                <td><strong>Max Heat Alpha</strong></td>
+                <td>The peak emission strength applied to the material the exact moment the weapon is fired. Values above 1.0 will push the shader into HDR ranges for intense bloom effects.</td>
+            </tr>
+        </tbody>
+    </table>
 
-    <h2 id="technical-architecture">Technical Architecture</h2>
-    <ul>
-        <li><strong>Animator Decoupling:</strong> Because weapon firing animations are often extremely short, tying emission directly to an animation curve forces the glow to end prematurely. This script intercepts a single trigger and handles the mathematical decay smoothly over time, spanning seamlessly across idle or reload states.</li>
-        <li><strong>Event-Driven Trigger:</strong> The script sits entirely dormant with zero <code>Update</code> overhead until the public <code>FireCannonHeat()</code> method is called. This is designed to be triggered via an <strong>Animation Event</strong> on the exact frame the projectile leaves the barrel, or directly via your C# weapon firing logic.</li>
-        <li><strong>Cross-Assembly Integration:</strong> Operates natively with the <code>DPT.Core</code> assembly. By modifying the <code>InstanceColor.a</code> property of the variation script, it pushes variables straight to the optimized GPU instancing stream without breaking batching or allocating new material instances.</li>
-    </ul>
+    <h2 id="technical-architecture">2. Technical Architecture</h2>
+    <ul>
+        <li><strong>Animator Decoupling:</strong> Because weapon firing animations are often extremely short, tying emission directly to an animation curve forces the glow to end prematurely. This script intercepts a single trigger and handles the mathematical decay smoothly over time, spanning seamlessly across idle or reload states.</li>
+        <li><strong>Event-Driven Trigger:</strong> The script sits entirely dormant with zero <code>Update</code> overhead until the public <code>FireCannonHeat()</code> method is called. This is designed to be triggered via an <strong>Animation Event</strong> on the exact frame the projectile leaves the barrel, or directly via your C# weapon firing logic.</li>
+        <li><strong>Cross-Assembly Integration:</strong> Operates natively with the <code>DPT.Core</code> assembly. By modifying the <code>InstanceColor.a</code> property of the variation script, it pushes variables straight to the optimized GPU instancing stream without breaking batching or allocating new material instances.</li>
+    </ul>
 
-    <h2 id="troubleshooting">Troubleshooting Notes</h2>
-    <div class="troubleshooting-q">"The cannon fires and the event triggers, but the barrel doesn't glow"</div>
-    <div class="troubleshooting-a">Ensure that the <strong>Update Every Frame</strong> toggle is checked on the targeted <code>DPT_ShaderVariation</code> component. If it is disabled, the variation script will put itself to sleep on start and will not pass the updated alpha values to the shader.</div>
- <hr class="divider">
+    <h2 id="troubleshooting">3. Troubleshooting Notes</h2>
+    <div class="troubleshooting-q">"The cannon fires and the event triggers, but the barrel doesn't glow"</div>
+    <div class="troubleshooting-a">Ensure that the <strong>Update Every Frame</strong> toggle is checked on the targeted <code>DPT_ShaderVariation</code> component. If it is disabled, the variation script will put itself to sleep on start and will not pass the updated alpha values to the shader.</div>
+ <hr class="divider">
+<h2 id="support">Support & Custom Pipeline Integration</h2>
+<p>If your project requires external or custom 3D models to be fully integrated into the DPT ecosystem—including custom vertex-data packing, procedural wood grain mapping, normal array configuration, advanced GPU wind system implementation, or any other bespoke features—freelance technical art services are available. Additionally, availability extends to general 3D asset production, high-to-low poly hard surface modeling, stylized prop creation, and game-ready LOD budgeting built to align cleanly with your specific project constraints.</p>
 
-    <h2 id="support">Support & Custom Pipeline Integration</h2>
-    <p>If your project requires external or custom 3D models to be fully integrated into the DPT ecosystem—including custom vertex-data packing, procedural wood grain mapping, normal array configuration, advanced GPU wind system implementation, or any other bespoke features—freelance technical art services are available. Additionally, availability extends to general 3D asset production, high-to-low poly hard surface modeling, stylized prop creation, and game-ready LOD budgeting built to align cleanly with your specific project constraints.</p>
-    <p>For freelance modeling contract inquiries, tech-art pipeline consulting, or custom asset optimization passes, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Contract Inquiry]</code>.</p>
+<div class="note">
+    <strong>Contact & Inquiries:</strong><br>
+    For freelance modeling contracts, custom asset optimization passes, standard package bug reports, and publisher licensing enquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
+</div>
 
-    <div class="note">
-        <strong>Standard Asset Support:</strong><br>
-        For standard package bug reports, technical asset setup issues, and publisher licensing enquiries, please contact: <strong>support.dptgames [at] gmail.com</strong> with the subject line <code>[Support Request]</code>.
-    </div>
+<div class="note">
+    <strong>DPT Support Discord:</strong><br>
+    For dedicated technical assistance, asset configuration help, and direct feedback on our Unity packages, join the <strong><a href="https://discord.gg/XqbeSePWQ" target="_blank">Support Server</a></strong>.
+</div>
 </body>
 </html>
