@@ -79,7 +79,7 @@
             border-radius: 6px; padding: 20px; text-align: center;
         }
         .review-panel h4 { margin: 0 0 8px 0; color: #fbbf24; font-size: 12pt; }
-        .review-panel p { color: #94a3b8; font-size: 10pt; margin: 0; }
+        .review-panel p { color: #94a3b8; font-size: 10pt; margin: 0; line-height: 1.6; }
         
         .footer { margin-top: 60px; text-align: center; font-size: 10pt; color: #64748b; border-top: 1px solid #1e293b; padding-top: 20px; }
     </style>
@@ -117,24 +117,25 @@
         <div class="grid">
             <a href="https://assetstore.unity.com/packages/tools/level-design/prefab-painter-placement-variation-tool-387782" target="_blank" class="card store-card">
                 <img src="assets/PrefabPainter_CardImage.png" alt="Prefab Painter">
-                <div class="store-card-content"><h2>Prefab Painter</h2><p>View Store Page &amp; Leave a Review</p></div>
+                <div class="store-card-content"><h2>Prefab Painter</h2><p>View on Store &amp; Leave a Review</p></div>
             </a>
             <a href="https://assetstore.unity.com/packages/3d/environments/stylized-harvestable-nature-forest-assets-prefab-painter-370686" target="_blank" class="card store-card">
                 <img src="assets/Harvestable_CardImage.png" alt="Stylized Harvestable Nature">
-                <div class="store-card-content"><h2>Harvestable Nature</h2><p>View Store Page &amp; Leave a Review</p></div>
+                <div class="store-card-content"><h2>Harvestable Nature</h2><p>View on Store &amp; Leave a Review</p></div>
             </a>
             <a href="https://assetstore.unity.com/packages/3d/props/stylized-interactive-prop-system-break-open-loot-381308" target="_blank" class="card store-card">
                 <img src="assets/InteractiveProps_CardImage.png" alt="Stylized Interactive Props">
-                <div class="store-card-content"><h2>Interactive Props</h2><p>View Store Page &amp; Leave a Review</p></div>
+                <div class="store-card-content"><h2>Interactive Props</h2><p>View on Store &amp; Leave a Review</p></div>
             </a>
             <a href="https://assetstore.unity.com/packages/3d/props/stylized-functional-siege-weapons-ready-aim-fire-387314" target="_blank" class="card store-card">
                 <img src="assets/Siege_CardImage.png" alt="Functional Siege Weapons">
-                <div class="store-card-content"><h2>Functional Siege Weapons</h2><p>View Store Page &amp; Leave a Review</p></div>
+                <div class="store-card-content"><h2>Functional Siege Weapons</h2><p>View on Store &amp; Leave a Review</p></div>
             </a>
         </div>
 
         <h2 class="section-header" id="contact">Support &amp; Feedback</h2>
         <div class="contact-grid">
+            <!-- Formspree Contact Form (AJAX) -->
             <div class="form-container">
                 <div data-fs-success class="form-alert-success" hidden>Thank you! Your message has been sent. We will be in touch shortly.</div>
                 <div data-fs-error class="form-alert-error" hidden>There was an error submitting your form. Please try again.</div>
@@ -169,6 +170,8 @@
                     <button type="submit" class="btn-submit" data-fs-submit-btn>Send Message</button>
                 </form>
             </div>
+
+            <!-- Side Panel Container for Discord and Review Callouts -->
             <div class="side-panel-container">
                 <div class="discord-panel">
                     <h3>DPT Support Discord</h3>
@@ -177,8 +180,8 @@
                 </div>
                 
                 <div class="review-panel">
-                    <h4>Supporting the Packages</h4>
-                    <p>Finding the frameworks useful? Leaving a quick rating or review on the Unity Asset Store helps support ongoing updates and tool development.</p>
+                    <h4>Thank You for Your Support</h4>
+                    <p>We are incredibly grateful to have you building with our frameworks. If our tools have helped your workflow, taking a brief moment to leave a rating or review on the Unity Asset Store means the world to us and directly funds ongoing updates.</p>
                 </div>
             </div>
         </div>
@@ -187,6 +190,8 @@
             &copy; 2026 DPT Games. All rights reserved.
         </div>
     </div>
+
+    <!-- Formspree AJAX SDK -->
     <script>
         window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
         formspree('initForm', { formElement: '#contact-form', formId: 'mdaqlqpo' });
