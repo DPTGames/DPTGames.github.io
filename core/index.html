@@ -110,7 +110,8 @@
         <strong>Wood Grain Value Map:</strong><br><br>
         In addition to the normal array, the system uses a single, dedicated packed texture to handle the base color value adjustments for the Procedural Wood Grain. This operates automatically alongside the detail array when Wood features are active.
     </div>
-<h2>Stylized Lighting &amp; Shadow Shaping</h2>
+
+    <h2>Stylized Lighting &amp; Shadow Shaping</h2>
     <p>The VCCORE shader includes an optional <strong>Stylized Lighting</strong> mode, which replaces the default smooth PBR falloff with an art-directable light/shadow split, plus independent control over shadow color and darkness. When <em>Stylized Lighting</em> is disabled, the material behaves exactly as standard PBR — the system is fully bypassed with no runtime cost.</p>
 
     <h3>Shadow Terminator &amp; Light Terminator (Range: 0.0 &ndash; 1.0)</h3>
@@ -133,6 +134,10 @@
 
     <p>Under the hood, the terminator transition is driven by a half-lambert value — the surface normal's dot product with the light direction, remapped from its native <code>-1&hellip;1</code> range into <code>0&hellip;1</code>. A value of <strong>0</strong> corresponds to surfaces facing directly away from the light, while <strong>1</strong> corresponds to surfaces facing directly toward it. <em>Shadow Terminator</em> and <em>Light Terminator</em> act as the lower and upper thresholds against this value, which is why spreading them toward 0 and 1 produces a full-range, gradual falloff across the whole surface, while narrowing the range hardens the transition into a sharper line.</p>
 
+    <h3>Light Normal Smoothness (Range: 0.0 &ndash; 1.0)</h3>
+    <p>When lighting low-poly meshes with detailed normal maps, sharp lighting terminators can sometimes cause pixelated or jagged shadow edges along polygon boundaries. The <em>Light Normal Smoothness</em> slider allows you to smoothly blend between your detailed normal map and the mesh's clean vertex normals specifically for lighting dot-product calculations.</p>
+    <p>This eliminates jagged shadow terminators on low-poly geometry while preserving 100% of your normal map's texture bump details in specular reflections and direct light highlights!</p>
+
     <h3>Shadow Strength (Range: 0.0 &ndash; 1.0)</h3>
     <p>Controls how strongly the shadowed region is darkened and tinted:</p>
     <ul>
@@ -144,8 +149,29 @@
         <strong>Shadow Strength Gates the Terminators:</strong><br><br>
         Because <em>Shadow Strength</em> controls the overall visibility of the shadow effect, leaving it at 0.0 will make <em>Shadow Terminator</em> and <em>Light Terminator</em> appear to have no effect — the shadow shape is still being calculated, but it resolves to white either way. Increase <em>Shadow Strength</em> above 0 to see the terminator shaping take effect.
     </div>
-<h3>Shadow Tint</h3>
+
+    <h3>Shadow Tint</h3>
     <p>Sets the color applied to the shadowed side of the surface. This color is blended in according to <em>Shadow Strength</em>, then multiplied against Base Color before final output — allowing for cool/warm shadow color grading (e.g. blue-tinted shadows on a warm-lit object) without any additional lights or post-processing.</p>
+
+    <h3>Shadow Rim Lighting (Bounce &amp; Edge Glow)</h3>
+    <p>The VCCORE shader includes an integrated ambient shadow bounce and rim lighting system evaluated directly in Emission. This allows models to display vibrant, cool-toned outlines or atmospheric backlighting on their shadowed sides without being crushed or darkened by direct light attenuation.</p>
+    <ul>
+        <li><strong>Shadow Rim Color (HDR):</strong> Independent HDR color control for the ambient shadow glow.</li>
+        <li><strong>Shadow Rim Sharpness:</strong> Controls the silhouette tightness of the edge highlight. Higher values push the reflection into a razor-thin line along the grazing angle, while lower values create a broad, gentle ambient fade.</li>
+        <li><strong>Shadow Rim Strength:</strong> Master intensity multiplier for the bounce lighting luminance.</li>
+    </ul>
+    <div class="note">
+        <strong>Surface-Modulated Highlights &amp; Cavity Masking:</strong><br><br>
+        The rim lighting system dynamically responds to surface properties. Polished metallic surfaces automatically sharpen their rim outline into crisp highlights, while matte surfaces produce soft ambient bounce shading. Furthermore, the system incorporates dual-threshold AO masking ("Cavity Killer") to ensure hollow interiors (such as sockets or pipe bores) stay pitch-black without chopping up exterior silhouette outlines.
+    </div>
+
+    <h3>Real-Time Cast Shadow Controls (Cast Shadow Min / Max)</h3>
+    <p>In addition to self-shading terminators, VCCORE provides independent threshold and softness controls for real-time cast shadows (such as tree leaves or character shadows falling onto your props in URP):</p>
+    <ul>
+        <li><strong>Cast Shadow Min:</strong> Defines the threshold where incoming real-time cast shadows begin to appear.</li>
+        <li><strong>Cast Shadow Max:</strong> Defines the threshold where incoming real-time cast shadows reach full opacity.</li>
+    </ul>
+    <p>Widening the range between Min and Max softens incoming cast shadow edges, while narrowing the range creates crisp, razor-sharp cel-shaded cast shadows that match your self-shading terminators. The system includes built-in safety clamping to prevent shadow map bias flickering at high slider values.</p>
 
     <h3>Scene Shadow Helpers (URP Only)</h3>
     <p>Because <em>Shadow Terminator</em>, <em>Light Terminator</em>, <em>Shadow Tint</em>, and <em>Shadow Strength</em> are all self-shading effects baked into this material, they're entirely separate from Unity's own real-time cast shadows and scene color grading. You may wish to adjust your shadow settings in your URP asset and volume profile to match the shadow settings of the objects.</p>
@@ -164,10 +190,15 @@
         <li><strong>Global Material Emission:</strong> The <em>Emissive Color</em> and baseline <em>Emission Strength</em> properties in the Material Inspector act as a master setting. Whatever color and intensity you set here applies universally to <em>every</em> object in your scene sharing this material.</li>
         <li><strong>Per-Instance Emission:</strong> The emission system natively hooks into the <code>DPT_ShaderVariation</code> script. If an object has this script attached, the script's <em>Instance Color</em> (and Alpha channel) will multiply against the material's master emissive settings, allowing you to recolor the glow and adjust its intensity on a per-object basis without duplicating the material.</li>
     </ul>
-<div class="warning">
+
+    <h3>Metallic Emissive Color</h3>
+    <p>The Emission workflow features a dedicated <strong>Metallic Emissive Color</strong> property alongside the standard Base Emissive Color. You can now independently customize and drive emissive glow hues on metallic hardware (such as iron runes, copper pipes, or steel vents) entirely separately from non-metallic base materials on the same mesh!</p>
+
+    <div class="warning">
         <strong>The Metallic Object Exception:</strong><br><br>
-        Due to how the shader processes specular reflection data, <strong>metallic objects cannot have their emission color changed per-instance via the script</strong>. Instead, metallic emission is driven by a forged orange base hue inside the shader, which is then multiplied by the global <em>Emissive Color</em> property in the Material Inspector. (For example, leaving the material color white results in a pure orange glow, while tinting it will blend with the orange). However, you <em>can</em> still use the <code>DPT_ShaderVariation</code> script (via the Alpha channel) to control the <strong>emission strength</strong> of these metallic objects on a per-instance basis.
+        Due to how the shader processes specular reflection data, <strong>metallic objects cannot have their emission color changed per-instance via the script</strong>. Instead, metallic emission is controlled globally by the dedicated <em>Metallic Emissive Color</em> property in the Material Inspector. However, you <em>can</em> still use the <code>DPT_ShaderVariation</code> script (via the Alpha channel) to control the <strong>emission strength</strong> of these metallic objects on a per-instance basis.
     </div>
+
     <div class="note">
         <strong>The "White Base" Strategy for Perfect Tinting:</strong><br><br>
         If you want to use the <code>DPT_ShaderVariation</code> script to dynamically change the glow color of different objects (e.g., a red potion and a blue potion using the exact same material), set the master <strong>Emissive Color in the Material Inspector to pure White</strong>. Because the script uses mathematical multiplication, a white base allows the script's color to dictate 100% of the final glow hue. <em>Note: this only applies to non-metallic surfaces — see the Metallic Object Exception above, as metallic emission hue cannot be changed per-instance regardless of the base color setting.</em>
@@ -198,6 +229,10 @@
         <li><strong>Non-Metallic Tint:</strong> Controls whether diffuse, non-metallic surface regions receive the instanced color tint. When disabled, non-metallic areas are excluded from tinting entirely.</li>
         <li><strong>Metallic Tint:</strong> Controls whether metallic surface regions participate in tinting. When disabled, metallic areas are isolated from the tint and preserve their physically accurate specular reflection characteristics.</li>
     </ul>
+    <div class="note">
+        <strong>Optimized Keyword Architecture:</strong><br><br>
+        To ensure maximum runtime performance and minimal shader memory overhead, redundant shader compilation keywords for Metallic and Non-Metallic Tinting have been stripped from the pipeline. The tint gates now execute via high-speed dynamic branching, resulting in faster project build times and fewer shader variants without losing any tinting capability!
+    </div>
     
     <h3>Tint Strength Sliders (Range: -2.0 to 1.0)</h3>
     <p>Both sliders share the same asymmetric range, allowing control beyond simple tint blending in either direction:</p>
