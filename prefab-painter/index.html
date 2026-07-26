@@ -164,7 +164,9 @@
         <li>Integrated prefab palette with dynamic rotating hover preview cards and thumbnail grid</li>
         <li>Drag-and-drop prefab setup with marquee multi-selection and drop-to-remove zone</li>
         <li>Saveable palette presets — swap between biome or prop sets instantly</li>
-        <li>Group overrides for fine-grained per-group layer and parent control</li>
+        <li>Hotkeyed item selection (<code>Shift + 1–0</code>) with dynamic number badges for on-the-fly prefab toggling</li>
+        <li>Intelligent terrain texture (splatmap) filtering with real-time preview culling and per-group overrides</li>
+        <li>Group overrides for fine-grained per-group layer, parent, and terrain splatmap control</li>
         <li>C# script component injection applied dynamically at paint time</li>
         <li>Paint, Scatter, Line, Grid, Path, and interactive Measurement placement modes</li>
         <li>Continuous multi-group painting for seamless line and path stitching</li>
@@ -226,12 +228,16 @@
                 <td>Shows icon previews for all loaded prefabs. Hovering over any thumbnail renders an expanded, high-resolution preview card that automatically rotates the object. Right-click a thumbnail to open the prefab, create a variant, or toggle its active state in the palette.</td>
             </tr>
             <tr>
+                <td><strong>Hotkeyed Item Selection [Shift + 1–0]</strong></td>
+                <td>When a single prefab group is active, the first 10 prefabs display number badges (<span class="shortcut-tag">1</span>–<span class="shortcut-tag">0</span>) over their thumbnails. Press <code>Shift + [1–0]</code> to toggle individual prefabs in or out of your active selection on the fly, even while actively drawing lines or paths. Swapping groups preserves your selections and shifts the badges to the new group's items.</td>
+            </tr>
+            <tr>
                 <td><strong>Spawn Weight</strong></td>
                 <td>Select one or more prefabs in the palette to reveal the <strong>Selected Item Settings</strong> panel. Use the <strong>Spawn Weight</strong> slider or field to control how frequently that prefab appears relative to others during painting — a value of 2 makes it spawn twice as often as a prefab weighted at 1. A small <strong>w</strong> badge on the thumbnail indicates a non-default weight is active. Weights are saved with the palette file.</td>
             </tr>
             <tr>
                 <td><strong>Groups &amp; Overrides</strong></td>
-                <td>The first group acts as your main active palette. Add more groups with <strong>+ Add Group</strong> to organise assets by type, biome, or any other category. Press <span class="shortcut-tag">1</span>–<span class="shortcut-tag">9</span> / <span class="shortcut-tag">0</span> to switch between groups quickly. You can also configure specific overrides for Paintable Layers, Painted Layers, and Parent Objects on a per-group basis for complex multi-group setups.</td>
+                <td>The first group acts as your main active palette. Add more groups with <strong>+ Add Group</strong> to organise assets by type, biome, or any other category. Press <span class="shortcut-tag">1</span>–<span class="shortcut-tag">9</span> / <span class="shortcut-tag">0</span> to switch between groups quickly. You can also configure specific overrides for Spawn Layers, Paintable Layers, Parent Objects, and Terrain Splatmap Filters on a per-group basis for complex multi-group setups.</td>
             </tr>
             <tr>
                 <td><strong>Marquee Selection</strong></td>
@@ -303,6 +309,10 @@
             <tr>
                 <td><strong>Paintable Layer</strong></td>
                 <td>Only surfaces on this layer will receive prefabs. Make sure your terrain or ground mesh uses a matching layer, otherwise raycasts will pass through and nothing will be placed.</td>
+            </tr>
+            <tr>
+                <td><strong>Use Terrain Splatmaps</strong></td>
+                <td>When painting on Unity Terrains, filters prefab spawning by a specific terrain texture layer (e.g., grass, dirt, rock) and a minimum blend weight threshold. This prevents unwanted spawning (such as grass on dirt roads) across all placement modes, with full support for real-time live preview culling and per-group overrides.</td>
             </tr>
             <tr>
                 <td><strong>Brush Shape [C]</strong></td>
@@ -617,6 +627,10 @@
                 <td><span class="shortcut-tag">1</span>–<span class="shortcut-tag">9</span> / <span class="shortcut-tag">0</span></td>
                 <td>Switch palette group (recalculates continuous Line/Path spacing on the fly)</td>
             </tr>
+            <tr>
+                <td><span class="shortcut-tag">Shift + 1</span>–<span class="shortcut-tag">0</span></td>
+                <td>Toggle individual prefabs (1–10) in or out of active selection on the fly</td>
+            </tr>
         </tbody>
     </table>
 
@@ -624,6 +638,9 @@
 
     <div class="troubleshooting-q">Prefabs are not being placed when I paint</div>
     <div class="troubleshooting-a">The most common cause is a layer mismatch. The painter only places objects on surfaces assigned to the Paintable Layer. Check that your terrain or ground mesh uses the correct layer in its Inspector, and that the Paintable Layer setting in the painter matches. Also confirm painting is active — the button should be red and read <strong>Stop Painting</strong>.</div>
+
+    <div class="troubleshooting-q">Objects aren't spawning on my terrain when Use Terrain Splatmaps is checked</div>
+    <div class="troubleshooting-a">Make sure the selected Terrain Layer matches the texture you want to paint on (e.g., Layer 0 for Grass) and that the surface at your brush location meets or exceeds the <strong>Min Weight</strong> threshold. If your terrain texture blend is very subtle or faded at the edges, try lowering the Min Weight slider (e.g., down to 0.2 or 0.3) to allow spawning on transitional blends.</div>
 
     <div class="troubleshooting-q">Objects are overlapping or clipping into each other</div>
     <div class="troubleshooting-a">Enable <strong>Smart Clearance [I]</strong> and ensure <strong>Check Clearance [D]</strong> is toggled on — this automatically uses each prefab's physical size to determine safe spacing. If you want extra gap between objects on top of that, increase <strong>Min Spacing</strong>. Note that spacing is only checked against other children of the same parent object; objects across different parent objects are not checked against each other.</div>
