@@ -158,15 +158,20 @@
 
     <h3>Features</h3>
     <ul>
-        <li>Works out of the box (URP Ready)</li>
+        <li>Works out of the box (URP Ready) with responsively scaling Inspector UI</li>
+        <li>Live 1:1 holographic prefab previews in the scene prior to clicking</li>
         <li>Compact, responsive UI that adapts to different editor window widths</li>
-        <li>Integrated prefab palette with live hover preview cards and thumbnail grid</li>
+        <li>Integrated prefab palette with dynamic rotating hover preview cards and thumbnail grid</li>
         <li>Drag-and-drop prefab setup with marquee multi-selection and drop-to-remove zone</li>
         <li>Saveable palette presets — swap between biome or prop sets instantly</li>
+        <li>Hotkeyed item selection (<code>Shift + 1–0</code> / Numpad) and instant deselection (<code>Shift + D</code>) with dynamic number badges for on-the-fly prefab toggling</li>
+        <li>Intelligent terrain texture (splatmap) filtering with real-time preview culling and per-group overrides</li>
+        <li>Group overrides for fine-grained per-group layer, parent, and terrain splatmap control</li>
         <li>C# script component injection applied dynamically at paint time</li>
-        <li>Paint, Scatter, Line, Grid, and Path placement modes</li>
+        <li>Paint, Scatter, Line, Grid, Path, and interactive Measurement placement modes</li>
+        <li>Continuous multi-group painting with live retroactive segment updating in Path Mode for seamless stitching</li>
         <li>Post-placement rotation for precise object positioning after spawning</li>
-        <li>Smart Clearance to prevent prefab overlap automatically</li>
+        <li>Smart Clearance and toggleable Check Clearance for optimized overlap control</li>
         <li>Editor-side physics simulation for natural prop settling</li>
         <li>Seamless integration with <code>DPT_ShaderVariation</code> for per-instance recoloring with zero extra draw calls</li>
         <li>Full undo support integrated directly with Unity's history stack</li>
@@ -220,15 +225,19 @@
             </tr>
             <tr>
                 <td><strong>Thumbnail Grid</strong></td>
-                <td>Shows icon previews for all loaded prefabs. Hover over any thumbnail to see a larger preview and the asset name. Right-click a thumbnail to open the prefab, create a variant, or toggle its active state in the palette.</td>
+                <td>Shows icon previews for all loaded prefabs. Hovering over any thumbnail renders an expanded, high-resolution preview card that automatically rotates the object. Right-click a thumbnail to open the prefab, create a variant, or toggle its active state in the palette.</td>
             </tr>
-<tr>
-    <td><strong>Spawn Weight</strong></td>
-    <td>Select one or more prefabs in the palette to reveal the <strong>Selected Item Settings</strong> panel. Use the <strong>Spawn Weight</strong> slider or field to control how frequently that prefab appears relative to others during painting — a value of 2 makes it spawn twice as often as a prefab weighted at 1. A small <strong>w</strong> badge on the thumbnail indicates a non-default weight is active. Weights are saved with the palette file.</td>
-</tr>
             <tr>
-                <td><strong>Groups</strong></td>
-                <td>The first group acts as your main active palette. Add more groups with <strong>+ Add Group</strong> to organise assets by type, biome, or any other category. Press <span class="shortcut-tag">1</span>–<span class="shortcut-tag">9</span> / <span class="shortcut-tag">0</span> to switch between groups quickly.</td>
+                <td><strong>Hotkeyed Item Selection [Shift + 1–0] &amp; Deselect All [Shift + D]</strong></td>
+                <td>When a single prefab group is active, the first 10 prefabs display number badges (<span class="shortcut-tag">1</span>–<span class="shortcut-tag">0</span>) over their thumbnails. Press <code>Shift + [1–0]</code> (or <code>1–0</code> directly while holding <code>Ctrl + Alt</code> in Line/Path mode) to toggle individual prefabs in or out of your active selection on the fly, even while actively drawing lines or paths. Full Numpad key support is also included. Pressing <code>Shift + D</code> instantly clears all selected items in your palette without interrupting your workflow. Swapping groups preserves your selections and shifts the badges to the new group's items.</td>
+            </tr>
+            <tr>
+                <td><strong>Spawn Weight</strong></td>
+                <td>Select one or more prefabs in the palette to reveal the <strong>Selected Item Settings</strong> panel. Use the <strong>Spawn Weight</strong> slider or field to control how frequently that prefab appears relative to others during painting — a value of 2 makes it spawn twice as often as a prefab weighted at 1. A small <strong>w</strong> badge on the thumbnail indicates a non-default weight is active. Weights are saved with the palette file.</td>
+            </tr>
+            <tr>
+                <td><strong>Groups &amp; Overrides</strong></td>
+                <td>The first group acts as your main active palette. Add more groups with <strong>+ Add Group</strong> to organise assets by type, biome, or any other category. Press <span class="shortcut-tag">1</span>–<span class="shortcut-tag">9</span> / <span class="shortcut-tag">0</span> to switch between groups quickly. You can also configure specific overrides for Spawn Layers, Paintable Layers, Parent Objects, and Terrain Splatmap Filters on a per-group basis for complex multi-group setups.</td>
             </tr>
             <tr>
                 <td><strong>Marquee Selection</strong></td>
@@ -246,7 +255,7 @@
     </table>
 
     <h2 id="painting-controls">Painting Controls</h2>
-    <p>Switch between <strong>Paint</strong>, <strong>Erase</strong>, and <strong>Recolor</strong> tabs at the top of the panel. Use the large green button to start painting and the red button to stop.</p>
+    <p>Switch between <strong>Paint</strong>, <strong>Erase</strong>, <strong>Recolor</strong>, and <strong>Measure</strong> tabs at the top of the panel. Pressing the hotkey for Erase, Recolor, or Measure while already in those modes will intelligently flip you back to Paint mode. Use the large green button to start painting and the red button to stop.</p>
 
     <h3>Placement Modes</h3>
     <table>
@@ -267,15 +276,19 @@
             </tr>
             <tr>
                 <td><strong>Line Mode</strong></td>
-                <td>Hold <code>Ctrl + Alt + Drag</code> to paint prefabs in a straight line from your starting point. Useful for fences, walls, or road edges. Displays an estimated placement count while dragging.</td>
+                <td>Hold <code>Ctrl + Alt + Drag</code> to paint prefabs in a straight line from your starting point. Line Mode retains physical boundary memory across continuous clicks so corners and multi-segment lines automatically stitch together end-to-end without leaving leftover gaps or overlaps. You can even swap prefab groups mid-action to seamlessly connect different object types like walls and gates.</td>
             </tr>
             <tr>
                 <td><strong>Grid Mode</strong></td>
-                <td>Hold <code>Ctrl + Shift + Drag</code> to paint prefabs snapped to a regular grid pattern. Good for structured layouts like floor tiles, crates, or crops. Shows an estimated placement count while dragging.</td>
+                <td>Hold <code>Ctrl + Shift + Drag</code> to paint prefabs snapped to a regular grid pattern. Good for structured layouts like floor tiles, crates, or crops. Grid sizing is completely decoupled from the brush size, and you can click and drag the mouse to dynamically increase grid bounds.</td>
             </tr>
             <tr>
                 <td><strong>Paint Path [G]</strong></td>
-                <td>Places prefabs along a smooth curved path. Press <span class="shortcut-tag">G</span> to enter path mode, then <code>Ctrl + Left Click</code> to place nodes. Press <span class="shortcut-tag">G</span> again or <span class="shortcut-tag">Enter</span> to finish — the tool will populate the curve with prefabs spaced evenly along it. Shows an estimated placement count before you finish.</td>
+                <td>Places prefabs along a smooth curved path. Press <span class="shortcut-tag">G</span> to enter path mode, then <code>Ctrl + Left Click</code> to place nodes. Press <span class="shortcut-tag">G</span> again or <span class="shortcut-tag">Enter</span> to finish. The engine uses chord-length iterations to calculate exact physical dimensions, perfectly locking objects like walls end-to-end even around sharp bends. You can swap prefab groups mid-action, and each segment independently tracks assigned prefabs on the fly. You can also click any existing path node handle in the Scene View to select it and retroactively toggle items or groups in your palette to update that segment instantly!</td>
+            </tr>
+            <tr>
+                <td><strong>Measure Mode [Q / Shift+Q]</strong></td>
+                <td>Interactive measurement tools for checking scene distances. Press <span class="shortcut-tag">Q</span> for Line measuring and <span class="shortcut-tag">Shift + Q</span> for Grid measuring. Measurements persist on-screen when switching back to other modes until <span class="shortcut-tag">ESC</span> is pressed.</td>
             </tr>
         </tbody>
     </table>
@@ -290,8 +303,16 @@
         </thead>
         <tbody>
             <tr>
+                <td><strong>Live Prefab Previews [F]</strong></td>
+                <td>Renders true 1:1 holographic previews of the prefab in the scene exactly as it will be placed, allowing you to preview rotation, scale, and placement logic prior to clicking. Toggle on or off with <span class="shortcut-tag">F</span>.</td>
+            </tr>
+            <tr>
                 <td><strong>Paintable Layer</strong></td>
                 <td>Only surfaces on this layer will receive prefabs. Make sure your terrain or ground mesh uses a matching layer, otherwise raycasts will pass through and nothing will be placed.</td>
+            </tr>
+            <tr>
+                <td><strong>Use Terrain Splatmaps</strong></td>
+                <td>When painting on Unity Terrains, filters prefab spawning by a specific terrain texture layer (e.g., grass, dirt, rock) and a minimum blend weight threshold. This prevents unwanted spawning (such as grass on dirt roads) across all placement modes, with full support for real-time live preview culling and per-group overrides.</td>
             </tr>
             <tr>
                 <td><strong>Brush Shape [C]</strong></td>
@@ -302,8 +323,8 @@
                 <td>Controls the size of the brush area. Use <span class="shortcut-tag">[</span> to shrink and <span class="shortcut-tag">]</span> to grow the radius interactively in the scene.</td>
             </tr>
             <tr>
-                <td><strong>Randomize Scatter [U]</strong></td>
-                <td>When enabled, prefabs are placed at random positions within the brush radius rather than exactly at the cursor. When disabled, all placements land at the cursor position.</td>
+                <td><strong>Randomize Placement [U]</strong></td>
+                <td>When enabled, prefabs are placed at random positions within the brush radius rather than exactly at the cursor. Applies to all placement modes (Paint, Line, Grid, etc.), not just scatter mode. Toggle with <span class="shortcut-tag">U</span>.</td>
             </tr>
             <tr>
                 <td><strong>Min Spacing [M / Shift+M]</strong></td>
@@ -313,16 +334,17 @@
                 <td><strong>Spawn Rate [X / Shift+X]</strong></td>
                 <td>Controls how quickly prefabs are placed during a held drag. Lower values place objects faster. Use <span class="shortcut-tag">X</span> to increase the interval and <span class="shortcut-tag">Shift+X</span> to decrease it.</td>
             </tr>
-             <tr>
-          <td><strong>Stretch Spacing To Fit [S]</strong></td>
-          <td> Only visible in the editor window when Path Paint is active. If true, slightly stretches or squashes spacing to perfectly close a path loop. Turn OFF for rigid modular tiles (like roads) to prevent seams.</td>
-           </tr>
+            <tr>
+                <td><strong>Stretch Spacing To Fit [S]</strong></td>
+                <td>Only visible in the editor window when Path Paint is active. If true, slightly stretches or squashes spacing to perfectly close a path loop. Turn OFF for rigid modular tiles (like roads) to prevent seams.</td>
+            </tr>
             <tr>
                 <td><strong>Brush Handle Color</strong></td>
                 <td>Changes the color of the brush circle in the scene view. Adjust this if the default color is hard to see against your terrain.</td>
             </tr>
         </tbody>
     </table>
+
     <h2 id="visuals-variation">Visuals &amp; Variation</h2>
     <p>Per-instance visual variation using the DPT shader pipeline. These options add variety across painted objects without creating extra materials or breaking GPU batching.</p>
 
@@ -348,6 +370,7 @@
     <div class="note">
         <strong>Shader Integration:</strong> DPT shaders read per-instance variation values from the GPU Renderer Shader User Value (RSUV) stream. This is fully compatible with Unity 6's GPU Resident Drawer — variation has zero impact on draw call counts. The Color Property Name field is only editable when a standard URP Lit fallback shader is detected. In that case, a Material Property Block is used.
     </div>
+
     <h2 id="transform-placement">Transform &amp; Placement</h2>
     <p>Controls how placed prefabs are oriented, scaled, named, and organised in the scene hierarchy.</p>
 
@@ -359,7 +382,6 @@
             </tr>
         </thead>
         <tbody>
-   
             <tr>
                 <td><strong>Align to Ground [N]</strong></td>
                 <td>Rotates each placed prefab so its up axis matches the surface normal it lands on. Useful for objects on slopes or uneven terrain.</td>
@@ -389,8 +411,12 @@
                 <td>Automatically accounts for each prefab's physical size when spacing objects. This prevents overlapping even when Min Spacing is set low. Increasing Min Spacing adds extra gap on top of the object's natural footprint.</td>
             </tr>
             <tr>
+                <td><strong>Check Clearance Toggle [D]</strong></td>
+                <td>Toggles clearance checking on or off. Turning this off skips overlap detection entirely, allowing for vastly improved performance during rapid scatter placement when clipping isn't a concern. Toggle with <span class="shortcut-tag">D</span>.</td>
+            </tr>
+            <tr>
                 <td><strong>Use Physics Fall [H]</strong></td>
-                <td>After placement, runs a short editor-side physics simulation so prefabs fall and settle naturally under gravity. Good for filling uneven terrain, rock piles, or any scene where you want objects to rest realistically rather than float at the surface hit point.</td>
+                <td>After placement, runs a short editor-side physics simulation so prefabs fall and settle naturally under gravity. Good for filling uneven terrain, rock piles, or any scene where you want objects to rest realistically rather than float at the surface hit point. The maximum allowed padding spawn offset has been increased so objects can fall from higher up.</td>
             </tr>
             <tr>
                 <td><strong>Post-Placement Rotate [J]</strong></td>
@@ -399,47 +425,42 @@
         </tbody>
     </table>
 
-  <h2 id="hierarchy-tags-layers-scripts">Hierarchy, Tags &amp; Scripts</h2>
-<p>Options for organizing painted objects, overriding object settings, and injecting components at paint time.</p>
+    <h2 id="hierarchy-tags-layers-scripts">Hierarchy, Tags &amp; Scripts</h2>
+    <p>Options for organizing painted objects, overriding object settings, and injecting components at paint time.</p>
 
-<table>
-    <thead>
-        <tr>
-            <th style="width:30%;">Setting</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><strong>Parent Object &amp; Name</strong></td>
-            <td>All painted prefabs are placed as children of the assigned parent object. Set a name here and click <strong>New</strong> to create a fresh parent. The tool names each placed child sequentially using your chosen naming convention.</td>
-        </tr>
-
-        <tr>
-            <td><strong>Naming Convention</strong></td>
-            <td>Sets the prefix or pattern used when naming each spawned object. Objects are numbered sequentially—for example <code>Rock_001</code>, <code>Rock_002</code>, and so on.</td>
-        </tr>
-
-        <tr>
-            <td><strong>Override Tag &amp; Layer</strong></td>
-            <td>Forces all placed objects to use the tag and layer you specify here, ignoring the values stored on the source prefab. You can also choose whether child objects are included.</td>
-        </tr>
-
-        <tr>
-            <td><strong>Script Component Injection</strong></td>
-            <td>
-                Attach custom C# components automatically as prefabs are painted without creating prefab variants.
-                <ul>
-                    <li><strong>Root</strong> — Attaches the component to the instantiated root object.</li>
-                    <li><strong>Named Child</strong> — Attaches the component to a child object with a matching name (case-sensitive).</li>
-                    <li><strong>Skip If Already Exists</strong> — Prevents duplicate components from being added.</li>
-                </ul>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-
+    <table>
+        <thead>
+            <tr>
+                <th style="width:30%;">Setting</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Parent Object &amp; Name</strong></td>
+                <td>All painted prefabs are placed as children of the assigned parent object. Set a name here and click <strong>New</strong> to create a fresh parent. The tool names each placed child sequentially using your chosen naming convention. You can also override Parent Objects per-group in the palette settings.</td>
+            </tr>
+            <tr>
+                <td><strong>Naming Convention</strong></td>
+                <td>Sets the prefix or pattern used when naming each spawned object. Objects are numbered sequentially—for example <code>Rock_001</code>, <code>Rock_002</code>, and so on.</td>
+            </tr>
+            <tr>
+                <td><strong>Override Tag &amp; Layer</strong></td>
+                <td>Forces all placed objects to use the tag and layer you specify here, ignoring the values stored on the source prefab. You can also choose whether child objects are included, and set specific overrides per-group in the palette.</td>
+            </tr>
+            <tr>
+                <td><strong>Script Component Injection</strong></td>
+                <td>
+                    Attach custom C# components automatically as prefabs are painted without creating prefab variants.
+                    <ul>
+                        <li><strong>Root</strong> — Attaches the component to the instantiated root object.</li>
+                        <li><strong>Named Child</strong> — Attaches the component to a child object with a matching name (case-sensitive).</li>
+                        <li><strong>Skip If Already Exists</strong> — Prevents duplicate components from being added.</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
     <h2 id="texture-packer">Texture Channel Packer</h2>
     <p>The DPT shader uses a packed texture format that combines metallic, occlusion, detail, and smoothness data into a single file. You can create these using the built-in packer at <strong>Tools &rarr; DPT Games &rarr; Texture Channel Packer</strong>.</p>
@@ -491,6 +512,10 @@
                 <td>Toggle painting on / off</td>
             </tr>
             <tr>
+                <td><span class="shortcut-tag">F</span></td>
+                <td>Toggle Live Prefab Previews (1:1 holographic placement preview)</td>
+            </tr>
+            <tr>
                 <td><span class="shortcut-tag">Ctrl + Left Click</span></td>
                 <td>Paint prefabs (hold and drag to paint continuously)</td>
             </tr>
@@ -500,23 +525,35 @@
             </tr>
             <tr>
                 <td><span class="shortcut-tag">Ctrl + Alt + Drag</span></td>
-                <td>Line mode — paint along a straight line</td>
+                <td>Line mode — paint along a straight line (retains boundary memory for continuous stitching)</td>
             </tr>
             <tr>
                 <td><span class="shortcut-tag">Ctrl + Shift + Drag</span></td>
-                <td>Grid mode — paint snapped to a grid</td>
+                <td>Grid mode — paint snapped to an independently scalable grid</td>
             </tr>
             <tr>
                 <td><span class="shortcut-tag">G</span></td>
-                <td>Enter / finish Paint Path mode</td>
+                <td>Enter / finish Paint Path mode (chord-length iteration)</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">Q</span></td>
+                <td>Enter Measurement Mode — Line measuring tool</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">Shift + Q</span></td>
+                <td>Enter Measurement Mode — Grid measuring tool</td>
             </tr>
             <tr>
                 <td><span class="shortcut-tag">Enter</span></td>
                 <td>Finish and populate the current path</td>
             </tr>
-             <tr>
+            <tr>
+                <td><span class="shortcut-tag">ESC</span></td>
+                <td>Clear current path / exit persistent Measurement Mode</td>
+            </tr>
+            <tr>
                 <td><span class="shortcut-tag">S</span></td>
-                <td>Toggle Stretch Spacing To Fit, only viewable when Path Paint is on.</td>
+                <td>Toggle Stretch Spacing To Fit, only viewable when Path Paint is on</td>
             </tr>
             <tr>
                 <td><span class="shortcut-tag">[</span> / <span class="shortcut-tag">]</span></td>
@@ -532,7 +569,7 @@
             </tr>
             <tr>
                 <td><span class="shortcut-tag">U</span></td>
-                <td>Toggle Randomize Scatter</td>
+                <td>Toggle Randomize Placement (applies to all modes)</td>
             </tr>
             <tr>
                 <td><span class="shortcut-tag">M</span> / <span class="shortcut-tag">Shift+M</span></td>
@@ -567,6 +604,10 @@
                 <td>Toggle Smart Clearance</td>
             </tr>
             <tr>
+                <td><span class="shortcut-tag">D</span></td>
+                <td>Toggle Check Clearance (disable for fast scatter placement)</td>
+            </tr>
+            <tr>
                 <td><span class="shortcut-tag">H</span></td>
                 <td>Toggle Use Physics Fall</td>
             </tr>
@@ -584,7 +625,15 @@
             </tr>
             <tr>
                 <td><span class="shortcut-tag">1</span>–<span class="shortcut-tag">9</span> / <span class="shortcut-tag">0</span></td>
-                <td>Switch palette group</td>
+                <td>Switch palette group (recalculates continuous Line/Path spacing on the fly)</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">Shift + 1</span>–<span class="shortcut-tag">0</span> / <span class="shortcut-tag">Numpad</span></td>
+                <td>Toggle individual prefabs (1–10) in or out of active selection on the fly (can also press 1–0 directly without Shift while holding Ctrl+Alt in Line/Path mode)</td>
+            </tr>
+            <tr>
+                <td><span class="shortcut-tag">Shift + D</span></td>
+                <td>Deselect all currently selected palette items</td>
             </tr>
         </tbody>
     </table>
@@ -594,8 +643,11 @@
     <div class="troubleshooting-q">Prefabs are not being placed when I paint</div>
     <div class="troubleshooting-a">The most common cause is a layer mismatch. The painter only places objects on surfaces assigned to the Paintable Layer. Check that your terrain or ground mesh uses the correct layer in its Inspector, and that the Paintable Layer setting in the painter matches. Also confirm painting is active — the button should be red and read <strong>Stop Painting</strong>.</div>
 
+    <div class="troubleshooting-q">Objects aren't spawning on my terrain when Use Terrain Splatmaps is checked</div>
+    <div class="troubleshooting-a">Make sure the selected Terrain Layer matches the texture you want to paint on (e.g., Layer 0 for Grass) and that the surface at your brush location meets or exceeds the <strong>Min Weight</strong> threshold. If your terrain texture blend is very subtle or faded at the edges, try lowering the Min Weight slider (e.g., down to 0.2 or 0.3) to allow spawning on transitional blends.</div>
+
     <div class="troubleshooting-q">Objects are overlapping or clipping into each other</div>
-    <div class="troubleshooting-a">Enable <strong>Smart Clearance [I]</strong> — this automatically uses each prefab's physical size to determine safe spacing. If you want extra gap between objects on top of that, increase <strong>Min Spacing</strong>. Note that spacing is only checked against other children of the same parent object; objects across different parent objects are not checked against each other.</div>
+    <div class="troubleshooting-a">Enable <strong>Smart Clearance [I]</strong> and ensure <strong>Check Clearance [D]</strong> is toggled on — this automatically uses each prefab's physical size to determine safe spacing. If you want extra gap between objects on top of that, increase <strong>Min Spacing</strong>. Note that spacing is only checked against other children of the same parent object; objects across different parent objects are not checked against each other.</div>
 
     <div class="troubleshooting-q">Objects are stacking on top of each other in towers</div>
     <div class="troubleshooting-a">Check that <strong>Allow Stacking [K]</strong> is not enabled unless you specifically want objects to stack. When stacking is off, the painter will not place objects on top of previously painted children of the same parent.</div>
