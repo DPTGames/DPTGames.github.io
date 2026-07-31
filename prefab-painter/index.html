@@ -144,6 +144,16 @@
             font-family: 'Consolas', 'Courier New', monospace;
             font-size: 9.5pt;
             color: #a5f3fc;
+             .note a {
+        color: #38bdf8;
+        text-decoration: none; 
+        transition: color 0.2s ease-in-out;
+    }
+
+    .note a:hover {
+        color: #7dd3fc;
+        text-decoration: underline; 
+    }
         }
     </style>
 </head>
@@ -664,19 +674,21 @@
     <div class="troubleshooting-q">Does randomizing scale and rotation break GPU batching?</div>
     <div class="troubleshooting-a">No. Unity 6's GPU Resident Drawer and SRP Batcher work with unique per-instance transform matrices. Randomizing scale, rotation, or position has no negative effect on draw call counts.</div>
 
-    <hr class="divider">
+<hr class="divider">
+<h2 id="support">Support, Contact & Custom Integration</h2>
 
-<h2 id="support">Support & Custom Pipeline Integration</h2>
-    <p>If your project requires external or custom 3D models to be fully integrated into the DPT ecosystem—including custom vertex-data packing, procedural wood grain mapping, normal array configuration, advanced GPU wind system implementation, or any other bespoke features—freelance technical art services are available. Additionally, availability extends to general 3D asset production, high-to-low poly hard surface modeling, stylized prop creation, and game-ready LOD budgeting built to align cleanly with your specific project constraints.</p>
+<p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form. This is the primary and most reliable way to get help with any problems you encounter with the packages.</p>
 
-    <div class="note">
-        <strong>Contact & Inquiries:</strong><br>
-        For freelance modeling contracts, custom asset optimization passes, standard package bug reports, and publisher licensing enquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
-    </div>
+<p>You can also use this form to inquire about custom freelance technical art services. If your project requires external 3D models to be integrated into the DPT ecosystem—including bespoke vertex-data packing, procedural wood grain mapping, GPU wind systems, or game-ready LOD budgeting—get in touch to discuss your specific needs and availability.</p>
 
-    <div class="note">
-        <strong>DPT Support Discord:</strong><br>
-        For dedicated technical assistance, asset configuration help, and direct feedback on our Unity packages, join the <strong><a href="https://discord.gg/XqbeSePWQ" target="_blank">Support Server</a></strong>.
-    </div>
+<div class="note">
+    <strong>Email Contact (Preferred for all Support):</strong><br>
+    For troubleshooting, bug reports, publisher licensing, and freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
+</div>
+
+<div class="note">
+    <strong>DPT Community Discord:</strong><br>
+    While the contact form is the best way to get direct help with issues, you are also welcome to join the <strong><a href="https://discord.gg/XqbeSePWQ" target="_blank">Discord Server</a></strong> to share feedback and connect with other users.
+</div>
 </body>
 </html>
