@@ -31,16 +31,21 @@
         .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
         code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
         code { padding: 2px 5px; }
-    .note a {
-        color: #38bdf8;
-        text-decoration: none; 
-        transition: color 0.2s ease-in-out;
-    }
-
-    .note a:hover {
-        color: #7dd3fc;
-        text-decoration: underline; 
-    }
+        .divider {
+            border: 0;
+            height: 1px;
+            background: #1e293b;
+            margin: 30px 0;
+        }
+        .note a {
+            color: #38bdf8;
+            text-decoration: none; 
+            transition: color 0.2s ease-in-out;
+        }
+        .note a:hover {
+            color: #7dd3fc;
+            text-decoration: underline; 
+        }
     </style>
 </head>
 <body>
@@ -143,7 +148,7 @@
     </tbody>
 </table>
 <hr class="divider">
-<h2>Support, Contact & Custom Integration</h2>
+<h2 id="support">Support, Contact & Custom Integration</h2>
 
 <p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form. This is the primary and most reliable way to get help with any problems you encounter with the packages.</p>
 
