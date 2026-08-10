@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DPT Stylized Color Swapper & Material Optimizer - Reference Guide</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; color: #f8fafc; background-color: #0f172a; margin: 0; padding: 40px; font-size: 11pt; line-height: 1.5; }
+        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 35px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 25px; border-bottom: 1px solid #1e293b; padding-bottom: 5px; }
+        h4 { font-size: 11pt; color: #94a3b8; margin-top: 15px; font-style: italic; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        pre { padding: 12px; display: block; white-space: pre-wrap; border: 1px solid #1e293b; page-break-inside: avoid; }
+        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 25px; margin-bottom: 5px; page-break-after: avoid; }
+        .troubleshooting-a { margin-bottom: 15px; padding-left: 15px; border-left: 2px solid #334155; color: #cbd5e1; }
+        .divider { border: 0; height: 1px; background: #1e293b; margin: 40px 0; }
+        .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .feature-box { background: #1e293b; padding: 15px; border: 1px solid #334155; border-radius: 4px; }
+        .feature-box h4 { margin-top: 0; color: #7dd3fc; }
+ .note a {
+        color: #38bdf8;
+        text-decoration: none; 
+        transition: color 0.2s ease-in-out;
+    }
+
+    .note a:hover {
+        color: #7dd3fc;
+        text-decoration: underline; 
+    }
+    </style>
+</head>
+<body>
+<nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
+    <a href="../index.html" style="color: #38bdf8; margin-right: 15px;">&larr; Back to Hub</a>
+    <span style="color: #64748b;">|</span>
+    <a href="palette_system.html" style="color: #38bdf8; margin-left: 15px;">Zone Variation & Palettes</a>
+</nav>
+
+    <h1>Stylized Color Swapper & Material Optimizer</h1>
+    <div class="subtitle">Complete Technical Reference & Editor Guide</div>
+    
+    <p>The Stylized Color Swapper & Material Optimizer is a monolithic Editor utility engineered to eliminate the traditional "Photoshop to Unity" asset variation bottleneck. By allowing artists to interactively scan, paint, and re-bake stylized assets directly inside a custom 3D viewport, it empowers rapid creation of infinite prop variations with zero texture memory overhead.</p>
+
+    <div class="note">
+        <strong>Zero-Overhead Philosophy:</strong> Variations generated via the Vertex Bake & Pack mode cost absolutely no additional texture memory and utilize the optimized <code>VCCore</code> material for single-pass instanced rendering across thousands of variants.
+    </div>
+
+    <hr class="divider">
+
+    <h2>1. Core Architecture & Workflow</h2>
+    <p>The tool operates entirely non-destructively on your scene models. The typical lifecycle of a variation is as follows:</p>
+    <ol>
+        <li><strong>Selection:</strong> Drag a target GameObject or Prefab into the tool's <em>Target Object</em> field.</li>
+        <li><strong>Scanning:</strong> The tool raycasts your mesh against its original texture, extracting a unified Swatch Palette based on exact UV mappings.</li>
+        <li><strong>Painting:</strong> Using the interactive 3D viewport, you paint new base colors, adjust Metallic/Smoothness response, assign PBR material IDs, and paint emissive glow directly onto the 3D surface.</li>
+        <li><strong>Generation:</strong> The tool bakes all painted data into a new isolated Mesh asset, packs PBR data into secondary UV channels, and saves a <strong>Phantom Prefab</strong> ready for level placement.</li>
+    </ol>
+
+    <h2>2. Scanning & Recolor Modes</h2>
+    <p>The tool offers specific modes for scanning meshes and outputting the final recolored data.</p>
+    
+    <h3>Scan Modes</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 25%;">Mode</th>
+                <th>Behavior & Use Case</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Texture Palette (Default)</strong></td>
+                <td>Scans the base map of the material and groups mesh triangles by their exact sampled color. Ideal for traditional flat-shaded or gradient-mapped stylized models (e.g., Synty, Polygon packs).</td>
+            </tr>
+            <tr>
+                <td><strong>Vertex Colors</strong></td>
+                <td>Reads pre-existing vertex colors on the mesh instead of the texture, averaging all 3 vertices of each triangle for a stable sample. Use this if the model is already vertex-painted from software like Blender or ZBrush.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Two additional toggles refine either scan mode: <strong>Combine Similar Colors</strong> (<code>Alt+C</code>) merges near-identical sampled colors into a single swatch at scan time, and <strong>Split Disconnected Parts</strong> (<code>Alt+I</code>) keeps physically separate islands of the same color as independent swatches instead of merging them. <strong>Split All Faces</strong> (<code>Alt+F</code>) goes further and gives every individual triangle its own swatch — this is always on automatically in Vertex Bake & Pack mode, since vertex color data has to be authored per-triangle.</p>
+
+    <h3>Recolor Modes (Output)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 25%;">Mode</th>
+                <th>Output Format</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Texture Coloring</strong></td>
+                <td>Traditional approach. Recolor the swatches and export a brand new PNG texture atlas. Used for legacy pipelines or mobile targets with strict vertex limitations.</td>
+            </tr>
+            <tr>
+                <td><strong>Vertex Bake & Pack (Recommended)</strong></td>
+                <td>Injects colors directly into the mesh Vertex Colors (<code>COLOR</code>). Encodes advanced PBR values (Metallic, Smoothness, AO) into unused UV channels (<code>TEXCOORD1</code>, <code>TEXCOORD2</code>). Bypasses textures entirely.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr class="divider">
+
+    <h2>3. The Interactive 3D Viewport</h2>
+    <p>The tool bypasses the standard Unity Scene View in favor of a specialized dual-rendering sandbox. This allows you to paint props without dragging them into your game scene.</p>
+
+    <div class="feature-grid">
+        <div class="feature-box">
+            <h4>Before / After Preview</h4>
+            <p>The embedded viewport shows your live "After" recolor by default. Hold <code>O</code> to temporarily peek at the original, unmodified "Before" mesh — release to return to the live recolor.</p>
+        </div>
+        <div class="feature-box">
+            <h4>Scene View Comparison</h4>
+            <p>Press <code>B</code> to spawn temporary preview proxies directly in your main Unity Scene view, complete with real-time lighting evaluation. <em>(Will automatically clean up on window close).</em></p>
+        </div>
+        <div class="feature-box">
+            <h4>Auto-Rotation</h4>
+            <p>Press <code>T</code> to enable a slow, continuous turntable rotation for reviewing your lighting response from all angles.</p>
+        </div>
+        <div class="feature-box">
+            <h4>Dynamic Lighting</h4>
+            <p>Fully supports dynamic Editor preview lighting, ensuring your metallic and smoothness values accurately reflect environment probes and directional highlights.</p>
+        </div>
+        <div class="feature-box">
+            <h4>Show/Hide Preview</h4>
+            <p>Press <code>V</code> to toggle visibility of the embedded viewport entirely, freeing up window space for the swatch list.</p>
+        </div>
+        <div class="feature-box">
+            <h4>Camera Sync</h4>
+            <p>The <strong>Sync Scene</strong> and <strong>Sync Game</strong> toggle buttons above the viewport lock the Scene View camera and/or Main Camera to match the tool's preview camera — useful for lining up a Game View recording with what you're painting.</p>
+        </div>
+    </div>
+
+    <h2>4. Toolbar & Painting Controls</h2>
+    <p>Once a mesh is scanned, the toolbar below the viewport offers key modes for mesh manipulation. Most hotkeys are suppressed while typing in the Save Path or Output Name fields.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 20%;">Mode / Action</th>
+                <th style="width: 15%;">Hotkey</th>
+                <th>Functionality</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Paint Mode</strong></td>
+                <td><code>P</code></td>
+                <td>Enables direct 3D painting. Click and drag across the model to apply the currently selected color or PBR value to faces underneath the cursor. <code>Shift+Click</code> also paints even if Paint Mode is off.</td>
+            </tr>
+            <tr>
+                <td><strong>Eraser Mode</strong></td>
+                <td><code>E</code></td>
+                <td>Available only when Paint Mode is active. Clicking on the model will instantly reset the targeted faces to their original extracted texture color and default PBR values (0 Metallic, 0.5 Roughness, 1.0 AO).</td>
+            </tr>
+            <tr>
+                <td><strong>Individual Faces</strong></td>
+                <td><code>Q</code></td>
+                <td>Toggles whether the brush paints one triangle at a time under the cursor, instead of the whole connected swatch/island it belongs to.</td>
+            </tr>
+            <tr>
+                <td><strong>Pick Color</strong></td>
+                <td><code>Ctrl+X</code></td>
+                <td>Eyedropper mode. Click any surface on the preview model to sample its current color directly into your active brush. Press <code>Esc</code> to cancel.</td>
+            </tr>
+            <tr>
+                <td><strong>Select All Swatches</strong></td>
+                <td><code>Ctrl+A</code></td>
+                <td>Selects every swatch on the current target object.</td>
+            </tr>
+            <tr>
+                <td><strong>Invert Selection</strong></td>
+                <td><code>Ctrl+I</code></td>
+                <td>Inverts the current swatch selection.</td>
+            </tr>
+            <tr>
+                <td><strong>Reset Selected</strong></td>
+                <td><code>Click</code></td>
+                <td>Visible when Paint Mode is OFF. Acts as a batch reset. Instantly restores all currently selected list swatches back to their default unedited state.</td>
+            </tr>
+            <tr>
+                <td><strong>Change Channel</strong></td>
+                <td><code>Dropdown</code></td>
+                <td>Determines what your brush paints. Options include Color, Metallic, Smoothness, AO (Ambient Occlusion), and Emissive.</td>
+            </tr>
+            <tr>
+                <td><strong>Load Palette Color</strong></td>
+                <td><code>Shift+1</code>&ndash;<code>Shift+0</code></td>
+                <td>While the Color channel is active, loads Custom Palette slots 1&ndash;10 directly into your brush and applies it to the current selection.</td>
+            </tr>
+            <tr>
+                <td><strong>Hide/Show Sub-Target</strong></td>
+                <td><code>H</code></td>
+                <td>Toggles visibility of the currently selected renderer sub-target in the list and preview.</td>
+            </tr>
+            <tr>
+                <td><strong>Full Rescan</strong></td>
+                <td><code>Ctrl+Shift+R</code></td>
+                <td>Re-scans the target object from scratch, discarding all current swatch edits. Equivalent to the <strong>Reset</strong> button.</td>
+            </tr>
+            <tr>
+                <td><strong>Refresh Material / Preview</strong></td>
+                <td><code>M</code></td>
+                <td>Lightweight resync: re-reads Metallic/Roughness/AO from the assigned material and updates the live preview, without rescanning mesh geometry or discarding your painted colors.</td>
+            </tr>
+            <tr>
+                <td><strong>Refresh Footprint Audit</strong></td>
+                <td><code>F</code></td>
+                <td>Refreshes the memory footprint audit preview. This does not save or export anything &mdash; see Section 7 for the actual export buttons.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+        <strong>Native Undo:</strong> <code>Ctrl+Z</code> / <code>Cmd+Z</code> uses Unity's own, global Undo system &mdash; it works regardless of which window has focus. Because it's the same shared history as the rest of the Editor, paint strokes and other scene edits are undone in the chronological order they happened; if you make a scene edit after painting, that scene edit will be the next thing undone, not your paint stroke.
+    </div>
+
+
+    <hr class="divider">
+
+    <h2>5. Advanced PBR & Feature ID Assignments</h2>
+    <p>When operating in <strong>Vertex Bake & Pack</strong> mode, the tool allows you to assign procedural shading characteristics directly to specific geometric faces via "Feature IDs".</p>
+    
+    <p>Select a swatch in the list view, and use the <strong>Feature ID</strong> dropdown to assign specialized material types:</p>
+    <ul>
+        <li><code>Default (None)</code> - Standard PBR response based on your slider settings, no procedural detail.</li>
+        <li><code>Wood</code> - Applies a procedural base color tint in addition to a wood grain normal detail &mdash; the one Feature ID that affects base color as well as surface normal.</li>
+        <li><code>Bark, Steel, Copper, CastIron, Leather, Cloth, Stone, Rope, Foliage</code> - Each applies its own procedural surface normal detail only (no base color change), tri-planar mapped like the rest of the VCCore detail system.</li>
+    </ul>
+
+    <h3>Additional Sub-Mesh Controls</h3>
+    <p>When a specialized Feature ID is assigned, additional controls unlock in the swatch editor:</p>
+    <ul>
+        <li><strong>Detail Scale:</strong> Adjusts the tiling density of the procedural noise (e.g., making wood grain tighter or metal scratches larger).</li>
+        <li><strong>Rotate Detail 90°:</strong> Fixes directional procedural textures (like Wood Grain) if the UV mapping of the prop was aligned horizontally instead of vertically.</li>
+        <li><strong>Seam Blend:</strong> Blends harsh UV seams using tri-planar projection averaging. Adjust the <strong>Strength</strong> slider to control the overlap distance.</li>
+    </ul>
+
+    <hr class="divider">
+
+    <h2>6. Palette Management</h2>
+    <p>The tool includes a dual-palette workflow for maintaining artistic consistency across multiple assets.</p>
+
+    <ul>
+        <li><strong>Custom User Palette (Left):</strong> A grid of 18 persistent color slots. These colors are saved to your Editor Preferences and persist across all unity sessions. Click any slot to load it into your brush.</li>
+        <li><strong>Imported Source Palette (Right):</strong> When you scan a mesh, its extracted colors are populated here. </li>
+        <li><strong>Copy <code>&lt;</code> Button:</strong> Clicking the arrow between the palettes copies the extracted colors from the current prop (Imported Palette) directly into your global Custom Palette for use on other assets.</li>
+    </ul>
+    
+    <p>You can also use the <strong>Export Palette (PNG)</strong> and <strong>Import Palette (PNG)</strong> buttons to save your custom swatches to disk as a 256x1 pixel texture strip, allowing you to share color schemes across team members or backup project themes.</p>
+
+    <hr class="divider">
+
+    <h2>7. Phantom Asset Generation</h2>
+    <p>Once you are satisfied with your 3D painting, use the buttons at the bottom of the window to save your work. Which ones are available depends on what you're working on:</p>
+    <ul>
+        <li><strong>Apply to Scene Object:</strong> Only shown when your Target Object is an instance already in the scene. Applies the recolored mesh/material directly to that object in place, without creating a new prefab asset.</li>
+        <li><strong>Create Prefab:</strong> Saves a new, standalone prefab variant to your configured Save Path and leaves your current session pointed at the original target.</li>
+        <li><strong>Save and Continue:</strong> Saves a new prefab the same way, then immediately re-targets the tool onto that freshly-saved prefab so you can keep painting further variations on top of what you just saved &mdash; useful for chaining multiple variants in one session.</li>
+    </ul>
+
+    <p>Whichever button you use, the save process performs the following:</p>
+    <ol>
+        <li>Clones the original mesh geometry.</li>
+        <li>Injects your painted Color data into the mesh's <code>COLOR</code> channel.</li>
+        <li>Packs your Metallic, Smoothness, and AO data efficiently into the mesh's <code>TEXCOORD1</code> or <code>TEXCOORD2</code> channels.</li>
+        <li>Saves the new mesh (and any generated textures, in Texture Coloring mode) under your configured Save Path.</li>
+        <li>Generates or updates a Prefab that references the new mesh and assigns the appropriate <code>VCCore</code> material.</li>
+    </ol>
+
+    <div class="note">
+        <strong>Audit System:</strong> The Footprint panel (and the <code>F</code> hotkey) let you preview the memory footprint of your in-progress asset before you save, so you can check the savings from bypassing traditional texture generation ahead of time rather than only finding out after export.
+    </div>
+
+    <hr class="divider">
+
+<h2>8. Troubleshooting & FAQ</h2>
+
+    <div class="troubleshooting-q">I clicked the model in Paint Mode but nothing happened.</div>
+    <div class="troubleshooting-a">Check that <strong>Eraser Mode [E]</strong> is not accidentally toggled on. The active painting brush is tied directly to your current View selection, so ensure you have the correct View enabled for the property you are trying to edit (e.g., you cannot paint Metallic values while in the Color view).</div>
+
+    <div class="troubleshooting-q">I can't see the "Detail Scale" or "Feature ID" settings on my swatches.</div>
+    <div class="troubleshooting-a">These advanced PBR controls only appear if your <strong>Recolor Mode</strong> is set to <em>Vertex Bake & Pack</em>. If you are in <em>Texture Coloring</em> mode, the tool assumes you are exporting a standard PNG and hides the GPU-specific parametric controls.</div>
+
+    <div class="troubleshooting-q">Ctrl+Z undid something else in my scene instead of my brush stroke.</div>
+    <div class="troubleshooting-a">Undo runs through Unity's native, global Undo history rather than a separate tool-only stack, so it's chronological across everything you've done in the Editor &mdash; if you touched something else in the scene after your last paint stroke, that's what undoes first. Keep undoing and your paint history will come up next in order.</div>
+
+    <div class="troubleshooting-q">My generated prefab is pink (Missing Material).</div>
+    <div class="troubleshooting-a">This occurs if your project is missing the targeted base materials (like VCCore). Ensure that the DPT core shader packages are fully imported and that your Unity Render Pipeline settings match the material targets.</div>
+
+    <div class="troubleshooting-q">The UI is lagging heavily when I drag to paint a high-poly mesh.</div>
+    <div class="troubleshooting-a">The raycasting system performs precise mathematical intersection against every triangle to ensure pixel-perfect swatch detection. If you are painting a model with 50,000+ polygons, use the list view checkboxes or <em>Paint Entire Object</em> instead of dragging the 3D brush.</div>
+
+<hr class="divider">
+<h2 id="support">Support, Contact & Custom Integration</h2>
+
+<p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form. This is the primary and most reliable way to get help with any problems you encounter with the packages.</p>
+
+<p>You can also use this form to inquire about custom freelance technical art services. If your project requires external 3D models to be integrated into the DPT ecosystem—including bespoke vertex-data packing, procedural wood grain mapping, GPU wind systems, or game-ready LOD budgeting—get in touch to discuss your specific needs and availability.</p>
+
+<div class="note">
+    <strong>Email Contact (Preferred for all Support):</strong><br>
+    For troubleshooting, bug reports, publisher licensing, and freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
+</div>
+
+<div class="note">
+    <strong>DPT Community Discord:</strong><br>
+    While the contact form is the best way to get direct help with issues, you are also welcome to join the <strong><a href="https://discord.gg/XqbeSePWQ" target="_blank">Discord Server</a></strong> to share feedback and connect with other users.
+</div>
+</body>
+</html>

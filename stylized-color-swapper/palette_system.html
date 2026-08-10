@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DPT Zone Variation & Palette System - Reference Guide</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; color: #f8fafc; background-color: #0f172a; margin: 0; padding: 40px; font-size: 11pt; line-height: 1.5; }
+        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 35px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 25px; border-bottom: 1px solid #1e293b; padding-bottom: 5px; }
+        h4 { font-size: 11pt; color: #94a3b8; margin-top: 15px; font-style: italic; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        pre { padding: 12px; display: block; white-space: pre-wrap; border: 1px solid #1e293b; page-break-inside: avoid; }
+        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 25px; margin-bottom: 5px; page-break-after: avoid; }
+        .troubleshooting-a { margin-bottom: 15px; padding-left: 15px; border-left: 2px solid #334155; color: #cbd5e1; }
+        .divider { border: 0; height: 1px; background: #1e293b; margin: 40px 0; }
+        .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .feature-box { background: #1e293b; padding: 15px; border: 1px solid #334155; border-radius: 4px; }
+        .feature-box h4 { margin-top: 0; color: #7dd3fc; }
+ .note a {
+        color: #38bdf8;
+        text-decoration: none; 
+        transition: color 0.2s ease-in-out;
+    }
+
+    .note a:hover {
+        color: #7dd3fc;
+        text-decoration: underline; 
+    }
+    </style>
+</head>
+<body>
+<nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
+    <a href="../index.html" style="color: #38bdf8; margin-right: 15px;">&larr; Back to Hub</a>
+    <span style="color: #64748b;">|</span>
+    <a href="index.html" style="color: #38bdf8; margin-left: 15px;">Stylized Color Swapper</a>
+</nav>
+
+    <h1>Zone Variation & Palette System</h1>
+    <div class="subtitle">Per-Instance Color Variation for the VCCore Shader</div>
+
+    <p>This system gives individually-placed props their own color variation without breaking GPU instancing — no MaterialPropertyBlocks, no per-object materials. Instead, each instance's color choices are matched against a shared master palette texture and packed into a single per-instance value the VCCore shader reads at render time. It's made up of three pieces: the <code>DPT_ZoneVariation</code> component you place on instances, the <code>DPT_PaletteMatcher</code> utility that does the color-to-index lookup, and the <code>DPT_PaletteGenerator</code> editor tool that builds the master palette texture itself.</p>
+
+    <div class="note">
+        <strong>Why palette indices instead of raw color?</strong> Packing raw RGB per instance costs more bits than packing a small index into a shared palette. Indexing into a palette also keeps every instance's variation reading from the exact same finite set of colors, which is what lets this ride along on Unity's GPU Resident Drawer instancing path — MaterialPropertyBlocks break that batching, so this system deliberately avoids them.
+    </div>
+
+    <hr class="divider">
+
+    <h2>1. The DPT_ZoneVariation Component</h2>
+    <p>Add <code>DPT_ZoneVariation</code> to any instance of a VCCore-shaded prop to give it independent color variation. It exposes four zone color fields (<strong>Zone 0&ndash;3</strong>) plus a single object-wide <strong>Emissive</strong> intensity slider.</p>
+
+    <ul>
+        <li><strong>Zone 0&ndash;3 Colors:</strong> Each is matched to the nearest entry in the object's master palette texture and packed as a 6-bit index (see the packing reference below). Zone 0 is also the shader's fallback color for any zone ID it doesn't recognize.</li>
+        <li><strong>Emissive:</strong> A single 0&ndash;1 intensity applied uniformly across all four zones on that instance.</li>
+        <li><strong>Update Every Frame:</strong> Off by default. Only enable this if you're changing zone colors at runtime (e.g. a damage-state color shift) &mdash; for static props it just adds CPU overhead checking values that never change, so leave it unchecked.</li>
+    </ul>
+
+    <p>The component automatically finds the renderers it controls (including children), and re-applies whenever you edit values in the Inspector (<code>OnValidate</code>) or the object is enabled. In Play Mode, if <strong>Update Every Frame</strong> is off, it applies its values once on <code>Start</code> and then disables itself &mdash; it isn't ticking every frame doing nothing.</p>
+
+    <div class="warning">
+        <strong>Requires the VCCore shader:</strong> DPT_ZoneVariation checks whether any of its renderers use a material with a <code>_ZonesPalette</code> property. If none do, it logs a warning at runtime (once) and the component has no visible effect &mdash; the values it packs have nowhere to be read from.
+    </div>
+
+    <h3>Editor Cleanup</h3>
+    <p>When the component is removed or destroyed in the Editor (not in Play Mode), it resets the instance's packed value back to zero so the renderer doesn't keep showing a stale variation after the component is gone.</p>
+
+    <hr class="divider">
+
+    <h2>2. How Palette Matching Works</h2>
+    <p><code>DPT_PaletteMatcher.FindNearestIndex</code> takes a target color and a palette texture, and returns the index of the closest matching color in that palette. Distance is measured using Rec.601 luma-weighted channel differences (0.299 / 0.587 / 0.114 for R/G/B) rather than flat Euclidean distance, so the match favors perceptual closeness &mdash; the same weighting the rest of the VCCore pipeline uses for luminance.</p>
+
+    <p>Palette pixel data is cached per-texture after the first lookup, so repeated matches against the same palette (e.g. matching all four zone colors on one instance) don't re-read the texture each time. If a palette texture isn't marked <strong>Read/Write Enabled</strong> in its import settings, the matcher falls back to a GPU blit + readback to get pixel data instead of failing outright.</p>
+
+    <div class="note">
+        <strong>Cache invalidation:</strong> If you regenerate or reimport a palette texture, call <code>DPT_PaletteMatcher.ClearCache()</code> (or pass the specific texture) so subsequent matches read the updated palette instead of the stale cached one.
+    </div>
+
+    <hr class="divider">
+
+    <h2>3. Generating a Master Palette</h2>
+    <p>Open the generator via <strong>Tools &rarr; DPTTools &rarr; Tools &rarr; Generate Palette</strong>. It builds a 64-color master palette as a full-gamut lattice across R/G/B &mdash; not a gradient path through color space &mdash; so the resulting palette actually spans the color cube rather than one line through it.</p>
+
+    <ul>
+        <li><strong>Red / Green / Blue Weight sliders:</strong> Control how many of the 6 total index bits get allocated to each channel. A higher weight means more distinct shade levels for that channel at the expense of the others.</li>
+        <li><strong>Reset to VCCore Luma Weights:</strong> Sets weights to 0.299 / 0.587 / 0.114, matching the perceptual weighting used everywhere else in the palette/matching pipeline.</li>
+        <li><strong>Reset to Uniform:</strong> Sets all three weights equal, giving each channel the same number of shade levels regardless of perceptual importance.</li>
+        <li><strong>Bake to PNG:</strong> Writes the current 64-color strip to disk in your project's Assets folder under the given file name.</li>
+    </ul>
+
+    <p>The preview strip and the "Resulting levels per channel" readout update live as you adjust the weight sliders, so you can see exactly how many shades each channel is getting before baking.</p>
+
+    <hr class="divider">
+
+    <h2>4. RSUV Packing Reference</h2>
+    <p>Each instance's four zone indices and emissive intensity are packed into a single 32-bit value written to the GPU Resident Drawer's per-instance user value (RSUV) &mdash; this is what makes the whole system instancing-compatible with no MaterialPropertyBlocks.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 25%;">Bits</th>
+                <th style="width: 25%;">Field</th>
+                <th>Contents</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>0&ndash;5</code></td>
+                <td>Zone 0 Index</td>
+                <td>6-bit index (0&ndash;63) into the 64-color master palette.</td>
+            </tr>
+            <tr>
+                <td><code>6&ndash;11</code></td>
+                <td>Zone 1 Index</td>
+                <td>6-bit palette index.</td>
+            </tr>
+            <tr>
+                <td><code>12&ndash;17</code></td>
+                <td>Zone 2 Index</td>
+                <td>6-bit palette index.</td>
+            </tr>
+            <tr>
+                <td><code>18&ndash;23</code></td>
+                <td>Zone 3 Index</td>
+                <td>6-bit palette index.</td>
+            </tr>
+            <tr>
+                <td><code>24&ndash;31</code></td>
+                <td>Emissive</td>
+                <td>8-bit intensity (0&ndash;255), with the lowest bit always forced on.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+        <strong>Why the packed value can never be zero:</strong> The emissive byte's lowest bit is always forced to 1, and the whole packed value is nudged to 1 if it would otherwise land on exactly zero. This keeps an all-default instance (zone 0, no emission) distinguishable from an instance with no per-instance value set at all.
+    </div>
+
+    <hr class="divider">
+
+    <h2>5. Troubleshooting & FAQ</h2>
+
+    <div class="troubleshooting-q">My DPT_ZoneVariation colors have no effect in-game.</div>
+    <div class="troubleshooting-a">Check the Console for a "no renderer using the custom VCCore shader" warning. This means none of the renderers under that object have a material with a <code>_ZonesPalette</code> property &mdash; assign a VCCore material to fix it.</div>
+
+    <div class="troubleshooting-q">I regenerated my palette and now all my zone colors look wrong.</div>
+    <div class="troubleshooting-a">Palette indices are only meaningful relative to the exact palette texture they were matched against. Regenerating the palette changes which color sits at each index, so every existing DPT_ZoneVariation instance re-resolves against the new layout. Re-select your zone colors (or re-trigger <code>ApplyVariation</code>) after swapping palettes, and call <code>DPT_PaletteMatcher.ClearCache()</code> if you replaced the texture asset in place rather than creating a new one.</div>
+
+    <div class="troubleshooting-q">Should I turn on "Update Every Frame"?</div>
+    <div class="troubleshooting-a">Only if the zone colors genuinely change during gameplay (damage states, faction recoloring, etc.). For static set-dressing props, leave it off &mdash; the component already re-applies automatically whenever you edit it in the Editor.</div>
+
+</body>
+</html>
