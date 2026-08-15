@@ -63,7 +63,7 @@
 
     <hr class="divider">
 
-    <h2>1. The DPT_ZoneVariation Component</h2>
+    <h2>The DPT_ZoneVariation Component</h2>
     <p>Add <code>DPT_ZoneVariation</code> to any instance of a VCCore-shaded prop to give it independent color variation. It exposes four zone color fields (<strong>Zone 0&ndash;3</strong>) plus a single object-wide <strong>Emissive</strong> intensity slider.</p>
 
     <ul>
@@ -83,7 +83,7 @@
 
     <hr class="divider">
 
-    <h2>2. How Palette Matching Works</h2>
+    <h2>How Palette Matching Works</h2>
     <p><code>DPT_PaletteMatcher.FindNearestIndex</code> takes a target color and a palette texture, and returns the index of the closest matching color in that palette. Distance is measured using Rec.601 luma-weighted channel differences (0.299 / 0.587 / 0.114 for R/G/B) rather than flat Euclidean distance, so the match favors perceptual closeness &mdash; the same weighting the rest of the VCCore pipeline uses for luminance.</p>
 
     <p>Palette pixel data is cached per-texture after the first lookup, so repeated matches against the same palette (e.g. matching all four zone colors on one instance) don't re-read the texture each time. If a palette texture isn't marked <strong>Read/Write Enabled</strong> in its import settings, the matcher falls back to a GPU blit + readback to get pixel data instead of failing outright.</p>
@@ -94,7 +94,7 @@
 
     <hr class="divider">
 
-    <h2>3. Generating a Master Palette</h2>
+    <h2>Generating a Master Palette</h2>
     <p>Open the generator via <strong>Tools &rarr; DPTTools &rarr; Tools &rarr; Generate Palette</strong>. It builds a 64-color master palette as a full-gamut lattice across R/G/B &mdash; not a gradient path through color space &mdash; so the resulting palette actually spans the color cube rather than one line through it.</p>
 
     <ul>
@@ -108,7 +108,7 @@
 
     <hr class="divider">
 
-    <h2>4. RSUV Packing Reference</h2>
+    <h2>RSUV Packing Reference</h2>
     <p>Each instance's four zone indices and emissive intensity are packed into a single 32-bit value written to the GPU Resident Drawer's per-instance user value (RSUV) &mdash; this is what makes the whole system instancing-compatible with no MaterialPropertyBlocks.</p>
 
     <table>
@@ -153,7 +153,7 @@
     </div>
 <hr class="divider">
 
-    <h2>5. Canvas Blending & Replacement Controls (Tint vs. Recolor)</h2>
+    <h2>Canvas Blending & Replacement Controls (Tint vs. Recolor)</h2>
     <p>The VCCore shader features customizable blend strengths that dictate how instance variations interact with the underlying surface canvas (such as baked vertex colors and ambient occlusion).</p>
 
     <ul>
@@ -164,7 +164,7 @@
     <p>Unscripted objects or instances left at default values bypass these blends automatically, preserving original asset data cleanly.</p>
     <hr class="divider">
 
-    <h2>5. Troubleshooting & FAQ</h2>
+    <h2>Troubleshooting & FAQ</h2>
 
     <div class="troubleshooting-q">My DPT_ZoneVariation colors have no effect in-game.</div>
     <div class="troubleshooting-a">Check the Console for a "no renderer using the custom VCCore shader" warning. This means none of the renderers under that object have a material with a <code>_ZonesPalette</code> property &mdash; assign a VCCore material to fix it.</div>
