@@ -151,7 +151,17 @@
     <div class="note">
         <strong>Why the packed value can never be zero:</strong> The emissive byte's lowest bit is always forced to 1, and the whole packed value is nudged to 1 if it would otherwise land on exactly zero. This keeps an all-default instance (zone 0, no emission) distinguishable from an instance with no per-instance value set at all.
     </div>
+<hr class="divider">
 
+    <h2>5. Canvas Blending & Replacement Controls (Tint vs. Recolor)</h2>
+    <p>The VCCore shader features customizable blend strengths that dictate how instance variations interact with the underlying surface canvas (such as baked vertex colors and ambient occlusion).</p>
+
+    <ul>
+        <li><strong>Tint Replacement Strength (<code>_Tint_Blend</code>):</strong> Managed via the Shader Variation Controls in the material inspector. At <code>0</code>, standard shader variations act as a multiplier (tinting the original vertex colors and preserving baked shadows). At <code>1</code>, it fully replaces the vertex color canvas with a flat white base for complete recoloring.</li>
+        <li><strong>Zone Replacement Strength (<code>_Zone_Blend</code>):</strong> Managed inside the Zones Palette & Controls foldout. Controls whether zone variations tint over the original baked vertex shadows (<code>0</code>) or completely overwrite them with a clean white canvas for flat palette swatching (<code>1</code>).</li>
+    </ul>
+
+    <p>Unscripted objects or instances left at default values bypass these blends automatically, preserving original asset data cleanly.</p>
     <hr class="divider">
 
     <h2>5. Troubleshooting & FAQ</h2>
@@ -164,6 +174,24 @@
 
     <div class="troubleshooting-q">Should I turn on "Update Every Frame"?</div>
     <div class="troubleshooting-a">Only if the zone colors genuinely change during gameplay (damage states, faction recoloring, etc.). For static set-dressing props, leave it off &mdash; the component already re-applies automatically whenever you edit it in the Editor.</div>
+</div>
+    <hr class="divider">
+<h2 id="support">Support, Contact & Custom Integration</h2>
 
+<p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form. This is the primary and most reliable way to get help with any problems you encounter with the packages.</p>
+
+<p>You can also use this form to inquire about custom freelance technical art services. If your project requires external 3D models to be integrated into the DPT ecosystem—including bespoke vertex-data packing, procedural wood grain mapping, GPU wind systems, or game-ready LOD budgeting—get in touch to discuss your specific needs and availability.</p>
+
+<div class="note">
+    <strong>Email Contact (Preferred for all Support):</strong><br>
+    For troubleshooting, bug reports, publisher licensing, and freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
+</div>
+
+<div class="note">
+    <strong>DPT Community Discord:</strong><br>
+    While the contact form is the best way to get direct help with issues, you are also welcome to join the <strong><a href="https://discord.gg/XqbeSePWQ" target="_blank">Discord Server</a></strong> to share feedback and connect with other users.
+</div>
+</body>
+</html>
 </body>
 </html>
