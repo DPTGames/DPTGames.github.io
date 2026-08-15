@@ -92,10 +92,22 @@
                 <td><strong>Vertex Colors</strong></td>
                 <td>Reads pre-existing vertex colors on the mesh instead of the texture, averaging all 3 vertices of each triangle for a stable sample. Use this if the model is already vertex-painted from software like Blender or ZBrush.</td>
             </tr>
+            <tr>
+                <td><strong>Material Colors</strong></td>
+                <td>Reads the solid color directly off each assigned unlit material instead of a texture or vertex data. Use this for objects whose materials have no textures or vertex colors and are just flat colors set via the material's color wheel.</td>
+            </tr>
         </tbody>
     </table>
 
     <p>Two additional toggles refine either scan mode: <strong>Combine Similar Colors</strong> (<code>Alt+C</code>) merges near-identical sampled colors into a single swatch at scan time, and <strong>Split Disconnected Parts</strong> (<code>Alt+I</code>) keeps physically separate islands of the same color as independent swatches instead of merging them. <strong>Split All Faces</strong> (<code>Alt+F</code>) goes further and gives every individual triangle its own swatch — this is always on automatically in Vertex Bake & Pack mode, since vertex color data has to be authored per-triangle.</p>
+
+    <h3>Scan Fidelity &amp; Geometry Options</h3>
+    <p>A few additional settings control how faithfully the tool reads and rebuilds your source geometry:</p>
+    <ul>
+        <li><strong>Auto-Uncompress Textures (Scan Mode):</strong> Temporarily marks compressed textures (DXT5, BC7, etc.) as uncompressed while scanning, avoiding block artifacts and color banding that would otherwise degrade palette accuracy and cause edge seams. If the tool detects compressed textures on your target, it shows a warning with a <strong>Re-Scan (Lossless)</strong> button to force a one-off high-fidelity rescan.</li>
+        <li><strong>Adaptive Tessellation:</strong> Subdivides large triangles automatically to improve vertex-painting resolution, particularly for preserving fine texture detail (text, decals, small logos) when baking into vertex colors. Controls: <strong>Protect Smooth Surfaces</strong> (prevents slicing on curved geometry like wheels, avoiding shading artifacts), <strong>Max Subdivision</strong> (1&ndash;5, the depth limit for adaptive splitting), and <strong>Color Threshold</strong> (how much color variation across a triangle is needed to trigger a split). Effectiveness varies by mesh: it captures fine detail well on hard-surface models but has little to no visible effect on already-low-poly, largely uniform-colored meshes.</li>
+        <li><strong>Auto-Unwrap (Lossless):</strong> Dynamically generates a mathematically clean UV map during bake, specifically for Feature ID detail mapping. Fixes models with poor or missing original UVs without modifying the source asset. When enabled, a <strong>Hard Edge Cutoff</strong> angle slider controls where the unwrapper is willing to cut a seam to relieve UV pressure &mdash; lower values hide seams on sharper corners.</li>
+    </ul>
 
     <h3>Recolor Modes (Output)</h3>
     <table>
@@ -133,7 +145,7 @@
         </div>
         <div class="feature-box">
             <h4>Auto-Rotation</h4>
-            <p>Press <code>T</code> to enable a slow, continuous turntable rotation for reviewing your lighting response from all angles.</p>
+            <p>Press <code>T</code> (or <code>Space</code>, when no text field has focus) to enable a slow, continuous turntable rotation for reviewing your lighting response from all angles.</p>
         </div>
         <div class="feature-box">
             <h4>Dynamic Lighting</h4>
@@ -146,6 +158,10 @@
         <div class="feature-box">
             <h4>Camera Sync</h4>
             <p>The <strong>Sync Scene</strong> and <strong>Sync Game</strong> toggle buttons above the viewport lock the Scene View camera and/or Main Camera to match the tool's preview camera — useful for lining up a Game View recording with what you're painting.</p>
+        </div>
+        <div class="feature-box">
+            <h4>Marquee Select</h4>
+            <p><code>Shift</code> + click-drag in the embedded viewport (while not in Paint Mode or Pick Color mode) draws a selection box and selects every swatch whose faces fall inside it — a fast way to multi-select swatches without Ctrl-clicking each one in the list.</p>
         </div>
     </div>
 
@@ -199,7 +215,12 @@
             <tr>
                 <td><strong>Change Channel</strong></td>
                 <td><code>Dropdown</code></td>
-                <td>Determines what your brush paints. Options include Color, Metallic, Smoothness, AO (Ambient Occlusion), and Emissive.</td>
+                <td>Determines what your brush paints, and what the viewport displays. Options include Color, Metallic, Smoothness, AO (Ambient Occlusion), Emissive, and (Vertex Bake &amp; Pack only) <strong>Zones</strong> &mdash; see below.</td>
+            </tr>
+            <tr>
+                <td><strong>Gradient Paint</strong></td>
+                <td><code>G</code></td>
+                <td>Vertex Bake &amp; Pack only. Click and drag across the model to apply a directional 3D gradient tint to the selected swatch instead of a flat color. <strong>Blend Mode</strong> (<code>Replace</code>, <code>Multiply</code>, or <code>SoftLight</code>), <strong>Alpha</strong> (opacity), and <strong>Sharp</strong> (falloff sharpness) controls appear next to the toggle while active. Enabling this automatically turns off Paint Mode.</td>
             </tr>
             <tr>
                 <td><strong>Load Palette Color</strong></td>
@@ -215,6 +236,46 @@
                 <td><strong>Full Rescan</strong></td>
                 <td><code>Ctrl+Shift+R</code></td>
                 <td>Re-scans the target object from scratch, discarding all current swatch edits. Equivalent to the <strong>Reset</strong> button.</td>
+            </tr>
+            <tr>
+                <td><strong>Reset Selected</strong></td>
+                <td><code>R</code></td>
+                <td>Available only when Paint Mode is OFF. Restores all currently selected swatches back to their original scanned color and PBR values. Equivalent to the Reset Selected button.</td>
+            </tr>
+            <tr>
+                <td><strong>Paint Entire Object</strong></td>
+                <td><code>Shift+Enter</code> or <code>Shift+P</code></td>
+                <td>Applies your active brush color to every paintable swatch on the target object in one action.</td>
+            </tr>
+            <tr>
+                <td><strong>Deselect All</strong></td>
+                <td><code>Ctrl+D</code></td>
+                <td>Clears the current swatch selection and removes keyboard focus from any text field.</td>
+            </tr>
+            <tr>
+                <td><strong>Copy / Paste Color</strong></td>
+                <td><code>Ctrl+C</code> / <code>Ctrl+V</code></td>
+                <td>Copies the selected swatch's current color, then pastes it onto the selected swatch (or all currently multi-selected swatches).</td>
+            </tr>
+            <tr>
+                <td><strong>Show All Sub-Targets</strong></td>
+                <td><code>Shift+H</code></td>
+                <td>Unhides every renderer sub-target on the object at once.</td>
+            </tr>
+            <tr>
+                <td><strong>Hide All Sub-Targets</strong></td>
+                <td><code>Ctrl+H</code></td>
+                <td>Hides every renderer sub-target on the object at once.</td>
+            </tr>
+            <tr>
+                <td><strong>Swap Active Palette</strong></td>
+                <td><code>Tab</code></td>
+                <td>When the window is too narrow to show both palettes side by side, swaps between the Custom and Imported palette views. No effect once the window is wide enough for both to display at once.</td>
+            </tr>
+            <tr>
+                <td><strong>Reset View to Combined</strong></td>
+                <td>&#96; (backtick)</td>
+                <td>Snaps the viewport's view channel back to Combined, regardless of which channel you were viewing.</td>
             </tr>
             <tr>
                 <td><strong>Refresh Material / Preview</strong></td>
@@ -250,8 +311,24 @@
     <p>When a specialized Feature ID is assigned, additional controls unlock in the swatch editor:</p>
     <ul>
         <li><strong>Detail Scale:</strong> Adjusts the tiling density of the procedural noise (e.g., making wood grain tighter or metal scratches larger).</li>
-        <li><strong>Rotate Detail 90°:</strong> Fixes directional procedural textures (like Wood Grain) if the UV mapping of the prop was aligned horizontally instead of vertically.</li>
-        <li><strong>Seam Blend:</strong> Blends harsh UV seams using tri-planar projection averaging. Adjust the <strong>Strength</strong> slider to control the overlap distance.</li>
+        <li><strong>Detail Rotation:</strong> A 0&ndash;360&deg; slider that rotates the procedural detail texture on this swatch &mdash; use it to fix directional textures (like Wood Grain) when the underlying UV mapping runs the wrong way.</li>
+        <li><strong>Blend Detail:</strong> Blends the procedural detail across faces and UV seams using tri-planar projection averaging. When enabled, two independent sliders appear: <strong>Face</strong> controls how much detail blends across adjoining faces, and <strong>Seam</strong> controls blend strength specifically across UV seams.</li>
+        <li><strong>Apply Wind:</strong> Enables a wind sway effect on this swatch's detail, with a <strong>Strength</strong> slider. Wind only evaluates on saved prefabs &mdash; it won't animate on the in-tool preview.</li>
+    </ul>
+
+    <div class="note">
+        <strong>Feature IDs require the _DETAIL keyword:</strong> If your Target Material doesn't have the <code>_DETAIL</code> shader keyword enabled, assigning a non-Default Feature ID shows a warning with an "Enable Procedural Details" button in the swatch editor. Click it to enable the keyword on the material directly (tiling size for the detail system is then adjustable on the material itself).
+    </div>
+
+    <hr class="divider">
+
+    <h2>Zone Painting</h2>
+    <p>In <strong>Vertex Bake &amp; Pack</strong> mode, the <strong>Zones</strong> option in the Change Channel dropdown lets you paint a Zone ID (0&ndash;7, where 7 is Default) directly onto swatches. This is a separate data channel from Color/Metallic/etc. and is packed alongside the other PBR data at bake time.</p>
+    <p>Zone IDs are read at runtime by <code>DPT_ZoneVariation</code> to drive per-instance color variation &mdash; see the <a href="palette_system.html">Zone Variation &amp; Palettes</a> page for how zones are consumed by the shader system. This section covers only the paint-time assignment inside the Recolor Tool itself:</p>
+    <ul>
+        <li>Switch the view/paint channel to <strong>Zones</strong>. Swatches display in a distinct zone-index color rather than their actual paint color.</li>
+        <li>With a swatch selected, either drag the <strong>Zone</strong> slider (0&ndash;7) in the swatch editor, or paint directly in the viewport the same way you'd paint a color &mdash; the active zone value takes the place of the brush color while this channel is active.</li>
+        <li>Zone 7 is treated as the Default zone; use 0&ndash;6 for zones you intend to reference from gameplay code or shader variation logic.</li>
     </ul>
 
     <hr class="divider">
@@ -269,12 +346,39 @@
 
     <hr class="divider">
 
+    <h2>Multi-Material PBR Overrides</h2>
+    <p>When your Target Object has more than one material, each material that supplies textures gets its own collapsible group in the PBR input area, labeled with the source material name(s). Inside each group you can independently override that material's <strong>Base Color</strong>, and its Metallic/Smoothness/AO input &mdash; either as a single <strong>Packed MRAO Map</strong> (with a channel mapping selector) or as separate <strong>Metal</strong>, <strong>Smooth</strong>, and <strong>AO</strong> texture slots, depending on the material's <strong>PBR Mode</strong>. Leave a slot empty to fall back to whatever the tool auto-detected from that material.</p>
+
+    <hr class="divider">
+
+    <h2>Raycast AO Baker</h2>
+    <p>A separate foldout from the main paint workflow, the Raycast AO Baker computes a fresh global ambient occlusion pass for your target by casting rays from every vertex, independent of whatever AO the source mesh or material already had baked in.</p>
+    <ul>
+        <li><strong>Rays Per Vertex:</strong> Sample count per vertex (16&ndash;512). Higher is cleaner but slower to compute.</li>
+        <li><strong>Max Distance:</strong> How far a ray can travel before it's considered unoccluded.</li>
+        <li><strong>Intensity:</strong> Overall strength multiplier for the computed occlusion.</li>
+        <li><strong>Blur Passes:</strong> Smooths the raw raycast result to reduce noise.</li>
+        <li><strong>Bake Target:</strong> Choose whether the result is written into the mesh's vertex AO data, or baked out to a standalone AO texture map (with a resolution field and a <strong>Match Base Color</strong> button to copy the current palette texture's resolution).</li>
+    </ul>
+    <p>Click <strong>Compute &amp; Bake Global Raycast AO</strong> to run it. This section is hidden automatically when Texture Coloring mode has <strong>Optimize Palette Size</strong> enabled, since baking AO to a texture needs independent UVs that conflict with palette-size optimization.</p>
+
+    <hr class="divider">
+
     <h2>Phantom Asset Generation</h2>
     <p>Once you are satisfied with your 3D painting, use the buttons at the bottom of the window to save your work. Which ones are available depends on what you're working on:</p>
     <ul>
         <li><strong>Apply to Scene Object:</strong> Only shown when your Target Object is an instance already in the scene. Applies the recolored mesh/material directly to that object in place, without creating a new prefab asset.</li>
         <li><strong>Create Prefab:</strong> Saves a new, standalone prefab variant to your configured Save Path and leaves your current session pointed at the original target.</li>
         <li><strong>Save and Continue:</strong> Saves a new prefab the same way, then immediately re-targets the tool onto that freshly-saved prefab so you can keep painting further variations on top of what you just saved &mdash; useful for chaining multiple variants in one session.</li>
+    </ul>
+
+    <p>A <strong>Material Mode</strong> setting controls how the material asset itself is handled on save:</p>
+    <ul>
+        <li><strong>Create Variant of Target Material:</strong> Creates a new material variant per save, based on your configured Target Material.</li>
+        <li><strong>Create Single Shared Variant (Merge All):</strong> All variants generated in a session share one material variant instead of getting their own.</li>
+        <li><strong>Assign Shared Target Material (No New .mat):</strong> Points every output straight at the Target Material with no new material asset created at all.</li>
+        <li><strong>Modify Existing Material In-Place:</strong> Edits the object's current material asset directly instead of creating anything new.</li>
+        <li><strong>Keep Existing Material As-Is:</strong> Leaves the material assignment untouched entirely.</li>
     </ul>
 
     <p>Whichever button you use, the save process performs the following:</p>
