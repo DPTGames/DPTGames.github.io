@@ -131,6 +131,38 @@
 
     <hr class="divider">
 
+    <h2>Understanding Vertex Colors: Benefits &amp; Limits</h2>
+    <p>Vertex Bake &amp; Pack is the recommended mode, but it's a genuinely different way of storing color and material data than a texture, with its own trade-offs. Understanding these will save you time diagnosing results that look "off."</p>
+
+    <div class="feature-grid">
+        <div class="feature-box">
+            <h4>Benefit: Zero Texture Memory</h4>
+            <p>Every variant reuses the same tiny <code>VCCore</code> material and shares GPU-instanced draw calls (see the Zero-Overhead note above) &mdash; no per-variant texture memory cost, even across thousands of prop variants.</p>
+        </div>
+        <div class="feature-box">
+            <h4>Limit: Resolution Is Tied to Geometry</h4>
+            <p>A texture can hold fine detail (text, decals, logos) regardless of mesh density. Vertex color resolution is capped by how many vertices exist &mdash; color only changes where a vertex exists to carry it. Fine detail gets smoothed or lost unless you add geometry, which is what <strong>Adaptive Tessellation</strong> (above) is for.</p>
+        </div>
+        <div class="feature-box">
+            <h4>Limit: Zones &amp; Emissive Need Texture Mode</h4>
+            <p>In this tool, the Zones and Emissive paint channels are only available in Vertex Bake &amp; Pack mode. If you need Zones or Emissive on a texture-based setup instead, don't use this tool's vertex output for it &mdash; assign your <code>VCCore</code> material in its <strong>non-vertex-color mode</strong>, which exposes dedicated texture fields for both.</p>
+        </div>
+        <div class="feature-box">
+            <h4>Limit: Gradient Paint Is Vertex-Only</h4>
+            <p>Gradient Paint isn't available in Texture Coloring mode. With <strong>Optimize Palette Size</strong> on, every swatch's UVs get squashed down to a single pixel, leaving no room to represent a directional gradient at all. With it off, texture UV layouts aren't consistent enough between models to reliably map a gradient onto them.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <strong>Ambient Occlusion in Vertex Coloring mode:</strong> Textured AO maps don't conform reliably onto vertex data &mdash; a texture's AO detail is denser than the mesh's vertices can represent, and errors compound. Because of this, when you're in Vertex Coloring mode using a Texture-based scan, every swatch starts with AO reset to a flat <code>1.0</code> (no occlusion) rather than inheriting the source texture's AO. From there you can manually paint AO values back in, or run the <strong>Raycast AO Baker</strong> to compute genuine occlusion directly against your geometry.
+    </div>
+
+    <div class="warning">
+        <strong>Painted AO affects shadowing under Stylized Lighting:</strong> If your target material has Stylized Lighting enabled, any AO value you paint or bake isn't purely a decorative darkening &mdash; it factors into the shadow response itself. Overly dark painted AO can read as unwanted shadowing rather than subtle occlusion under that lighting mode.
+    </div>
+
+    <hr class="divider">
+
     <h2>The Interactive 3D Viewport</h2>
     <p>The tool bypasses the standard Unity Scene View in favor of a specialized dual-rendering sandbox. This allows you to paint props without dragging them into your game scene.</p>
 
@@ -330,6 +362,9 @@
         <li>With a swatch selected, either drag the <strong>Zone</strong> slider (0&ndash;7) in the swatch editor, or paint directly in the viewport the same way you'd paint a color &mdash; the active zone value takes the place of the brush color while this channel is active.</li>
         <li>Zone 7 is treated as the Default zone; use 0&ndash;6 for zones you intend to reference from gameplay code or shader variation logic.</li>
     </ul>
+    <div class="note">
+        <strong>Working with textures instead of vertex colors?</strong> This paint workflow only exists in Vertex Bake &amp; Pack mode. For a texture-based prop that still needs Zones, set <code>VCCore</code> to its non-vertex-color mode instead, which exposes a dedicated texture field for zone data.
+    </div>
 
     <hr class="divider">
 
@@ -360,7 +395,7 @@
         <li><strong>Blur Passes:</strong> Smooths the raw raycast result to reduce noise.</li>
         <li><strong>Bake Target:</strong> Choose whether the result is written into the mesh's vertex AO data, or baked out to a standalone AO texture map (with a resolution field and a <strong>Match Base Color</strong> button to copy the current palette texture's resolution).</li>
     </ul>
-    <p>Click <strong>Compute &amp; Bake Global Raycast AO</strong> to run it. This section is hidden automatically when Texture Coloring mode has <strong>Optimize Palette Size</strong> enabled, since baking AO to a texture needs independent UVs that conflict with palette-size optimization.</p>
+    <p>Click <strong>Compute &amp; Bake Global Raycast AO</strong> to run it. This section is hidden when Texture Coloring mode has <strong>Optimize Palette Size</strong> enabled: baking AO to its own texture map needs each face to have independent, non-overlapping UVs, and Optimize Palette Size intentionally shrinks and overlaps UVs to save disk space &mdash; the two goals are incompatible, so the baker is hidden rather than producing broken results.</p>
 
     <hr class="divider">
 
