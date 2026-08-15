@@ -63,7 +63,7 @@
 
     <hr class="divider">
 
-    <h2>1. Core Architecture & Workflow</h2>
+    <h2>Core Architecture & Workflow</h2>
     <p>The tool operates entirely non-destructively on your scene models. The typical lifecycle of a variation is as follows:</p>
     <ol>
         <li><strong>Selection:</strong> Drag a target GameObject or Prefab into the tool's <em>Target Object</em> field.</li>
@@ -72,7 +72,7 @@
         <li><strong>Generation:</strong> The tool bakes all painted data into a new isolated Mesh asset, packs PBR data into secondary UV channels, and saves a <strong>Phantom Prefab</strong> ready for level placement.</li>
     </ol>
 
-    <h2>2. Scanning & Recolor Modes</h2>
+    <h2>Scanning & Recolor Modes</h2>
     <p>The tool offers specific modes for scanning meshes and outputting the final recolored data.</p>
     
     <h3>Scan Modes</h3>
@@ -119,7 +119,7 @@
 
     <hr class="divider">
 
-    <h2>3. The Interactive 3D Viewport</h2>
+    <h2>The Interactive 3D Viewport</h2>
     <p>The tool bypasses the standard Unity Scene View in favor of a specialized dual-rendering sandbox. This allows you to paint props without dragging them into your game scene.</p>
 
     <div class="feature-grid">
@@ -149,7 +149,7 @@
         </div>
     </div>
 
-    <h2>4. Toolbar & Painting Controls</h2>
+    <h2>Toolbar & Painting Controls</h2>
     <p>Once a mesh is scanned, the toolbar below the viewport offers key modes for mesh manipulation. Most hotkeys are suppressed while typing in the Save Path or Output Name fields.</p>
 
     <table>
@@ -236,7 +236,7 @@
 
     <hr class="divider">
 
-    <h2>5. Advanced PBR & Feature ID Assignments</h2>
+    <h2>Advanced PBR & Feature ID Assignments</h2>
     <p>When operating in <strong>Vertex Bake & Pack</strong> mode, the tool allows you to assign procedural shading characteristics directly to specific geometric faces via "Feature IDs".</p>
     
     <p>Select a swatch in the list view, and use the <strong>Feature ID</strong> dropdown to assign specialized material types:</p>
@@ -256,7 +256,7 @@
 
     <hr class="divider">
 
-    <h2>6. Palette Management</h2>
+    <h2>Palette Management</h2>
     <p>The tool includes a dual-palette workflow for maintaining artistic consistency across multiple assets.</p>
 
     <ul>
@@ -269,7 +269,7 @@
 
     <hr class="divider">
 
-    <h2>7. Phantom Asset Generation</h2>
+    <h2>Phantom Asset Generation</h2>
     <p>Once you are satisfied with your 3D painting, use the buttons at the bottom of the window to save your work. Which ones are available depends on what you're working on:</p>
     <ul>
         <li><strong>Apply to Scene Object:</strong> Only shown when your Target Object is an instance already in the scene. Applies the recolored mesh/material directly to that object in place, without creating a new prefab asset.</li>
@@ -292,7 +292,7 @@
 
     <hr class="divider">
 
-<h2>8. Troubleshooting & FAQ</h2>
+<h2>Troubleshooting & FAQ</h2>
 
     <div class="troubleshooting-q">I clicked the model in Paint Mode but nothing happened.</div>
     <div class="troubleshooting-a">Check that <strong>Eraser Mode [E]</strong> is not accidentally toggled on. The active painting brush is tied directly to your current View selection, so ensure you have the correct View enabled for the property you are trying to edit (e.g., you cannot paint Metallic values while in the Color view).</div>
