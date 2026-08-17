@@ -407,9 +407,8 @@
     <h2>Phantom Asset Generation</h2>
     <p>Once you are satisfied with your 3D painting, use the buttons at the bottom of the window to save your work. Which ones are available depends on what you're working on:</p>
     <ul>
-        <li><strong>Apply to Scene Object:</strong> Only shown when your Target Object is an instance already in the scene. Applies the recolored mesh/material directly to that object in place, without creating a new prefab asset.</li>
+        <li><strong>Apply to Scene Object:</strong> Only shown when your Target Object is an instance already in the scene. Generates the new assets and saves them as a Prefab on disk, creates a backup of your original model, and seamlessly replaces the scene object with the new Prefab instance. The tool will automatically target this new instance so you can continue making adjustments.</li>
         <li><strong>Create Prefab:</strong> Saves a new, standalone prefab variant to your configured Save Path and leaves your current session pointed at the original target.</li>
-        <li><strong>Save and Continue:</strong> Saves a new prefab the same way, then immediately re-targets the tool onto that freshly-saved prefab so you can keep painting further variations on top of what you just saved &mdash; useful for chaining multiple variants in one session.</li>
     </ul>
 
     <p>A <strong>Material Mode</strong> setting controls how the material asset itself is handled on save:</p>
@@ -438,7 +437,7 @@
 
 <h2>Troubleshooting & FAQ</h2>
     <div class="troubleshooting-q">I'm have <strong>Optimize Palette Size</strong> on with <strong>Split Disconnected Islands On</strong> and it isn't highlighting what I'm clicking on but I can still change it's color.</div>
-    <div class="troubleshooting-a">You can fix this by clicking save and continue but it is caused by mirrored UV's on the original object.</div>
+    <div class="troubleshooting-a">You can fix this by creating a prefab and replacing it in the target object field, but it is caused by mirrored UV's on the original object.</div>
 
     <div class="troubleshooting-q">I clicked the model in Paint Mode but nothing happened.</div>
     <div class="troubleshooting-a">Check that <strong>Eraser Mode [E]</strong> is not accidentally toggled on. The active painting brush is tied directly to your current View selection, so ensure you have the correct View enabled for the property you are trying to edit (e.g., you cannot paint Metallic values while in the Color view).</div>
