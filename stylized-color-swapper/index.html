@@ -200,7 +200,7 @@
     <h2>Toolbar & Painting Controls</h2>
     <p>Once a mesh is scanned, the toolbar below the viewport offers key modes for mesh manipulation. Most hotkeys are suppressed while typing in the Save Path or Output Name fields.</p>
 
-    <table>
+  <table>
         <thead>
             <tr>
                 <th style="width: 20%;">Mode / Action</th>
@@ -223,6 +223,11 @@
                 <td><strong>Individual Faces</strong></td>
                 <td><code>Q</code></td>
                 <td>Toggles whether the brush paints one triangle at a time under the cursor, instead of the whole connected swatch/island it belongs to.</td>
+            </tr>
+            <tr>
+                <td><strong>Hover Select</strong></td>
+                <td><code>Alt+Q</code></td>
+                <td>Universally selects the face or swatch directly beneath your cursor without needing to click, safely bypassing Paint Mode. Hold <code>Ctrl+Alt+Q</code> to dynamically add or remove hovered faces from a multi-selection.</td>
             </tr>
             <tr>
                 <td><strong>Pick Color</strong></td>
@@ -260,9 +265,9 @@
                 <td>While the Color channel is active, loads Custom Palette slots 1&ndash;10 directly into your brush and applies it to the current selection.</td>
             </tr>
             <tr>
-                <td><strong>Hide/Show Sub-Target</strong></td>
+                <td><strong>Hide/Show Selected</strong></td>
                 <td><code>H</code></td>
-                <td>Toggles visibility of the currently selected renderer sub-target in the list and preview.</td>
+                <td>Toggles visibility of the currently selected swatches/faces in the 3D viewport. If no swatches are selected, this toggles the visibility of the entire sub-target instead.</td>
             </tr>
             <tr>
                 <td><strong>Full Rescan</strong></td>
@@ -290,9 +295,9 @@
                 <td>Copies the selected swatch's current color, then pastes it onto the selected swatch (or all currently multi-selected swatches).</td>
             </tr>
             <tr>
-                <td><strong>Show All Sub-Targets</strong></td>
+                <td><strong>Show All</strong></td>
                 <td><code>Shift+H</code></td>
-                <td>Unhides every renderer sub-target on the object at once.</td>
+                <td>Unhides every renderer sub-target and all individually hidden faces on the object at once.</td>
             </tr>
             <tr>
                 <td><strong>Hide All Sub-Targets</strong></td>
