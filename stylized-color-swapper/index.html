@@ -436,6 +436,9 @@
     <hr class="divider">
 
 <h2>Troubleshooting & FAQ</h2>
+    <div class="troubleshooting-q">I have toggled on <strong>Split Disconnected Islands</strong> but it still won't let me paint individual color islands.</div>
+    <div class="troubleshooting-a">Make sure you have toggled off <strong>Group Similar (ALT +G)</strong> in the 3D Viewport section.</div>
+
     <div class="troubleshooting-q">I'm have <strong>Optimize Palette Size</strong> on with <strong>Split Disconnected Islands On</strong> and it isn't highlighting what I'm clicking on but I can still change it's color.</div>
     <div class="troubleshooting-a">You can fix this by creating a prefab and replacing it in the target object field, but it is caused by mirrored UV's on the original object.</div>
 
@@ -452,7 +455,7 @@
     <div class="troubleshooting-a">This occurs if your project is missing the targeted base materials (like VCCore). Ensure that the DPT core shader packages are fully imported and that your Unity Render Pipeline settings match the material targets.</div>
 
     <div class="troubleshooting-q">The UI is lagging heavily when I drag to paint a high-poly mesh.</div>
-    <div class="troubleshooting-a">The raycasting system performs precise mathematical intersection against every triangle to ensure pixel-perfect swatch detection. If you are painting a model with 50,000+ polygons, use the list view checkboxes or <em>Paint Entire Object</em> instead of dragging the 3D brush.</div>
+    <div class="troubleshooting-a">The raycasting system performs precise mathematical intersection against every triangle to ensure pixel-perfect swatch detection. If you are painting a model with 50,000+ polygons, increasing the combine similar tolerance can help to reduce the number of swatches.</div>
 
 <hr class="divider">
 <h2 id="support">Support, Contact & Custom Integration</h2>
