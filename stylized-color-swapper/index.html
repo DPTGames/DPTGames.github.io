@@ -1,3 +1,23 @@
+Here is the error audit of your documentation along with the corrected, polished HTML:
+
+---
+
+### 🛠️ Issues Found & Fixed:
+
+1. **HTML Validation Error (Nested `<ul>` inside `<p>`):**
+   * In the *Texel Density & Normal Smoothing* section, the `<ul>` list was wrapped inside a `<p>` tag (`<p>...<ul>...</ul></p>`). In standard HTML, `<p>` cannot contain block-level lists, which causes browsers to break the closing `</p>` tag.
+2. **Grammar & Typos in Troubleshooting:**
+   * *"I'm have Optimize Palette Size on..."* &rarr; Fixed to *"I have Optimize Palette Size on..."*
+   * *"change it's color"* &rarr; Fixed to *"change its color"* (possessive).
+   * *"mirrored UV's"* &rarr; Fixed to *"mirrored UVs"*.
+3. **Duplicate Table Entries:**
+   * **"Reset Selected"** was listed twice in the Toolbar table (once under `Click` and once under `R`). Merged into a single clean row: `R` / `Click`.
+
+---
+
+### ✅ Fully Validated & Corrected HTML:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,16 +53,15 @@
         .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
         .feature-box { background: #1e293b; padding: 15px; border: 1px solid #334155; border-radius: 4px; }
         .feature-box h4 { margin-top: 0; color: #7dd3fc; }
- .note a {
-        color: #38bdf8;
-        text-decoration: none; 
-        transition: color 0.2s ease-in-out;
-    }
-
-    .note a:hover {
-        color: #7dd3fc;
-        text-decoration: underline; 
-    }
+        .note a {
+            color: #38bdf8;
+            text-decoration: none; 
+            transition: color 0.2s ease-in-out;
+        }
+        .note a:hover {
+            color: #7dd3fc;
+            text-decoration: underline; 
+        }
     </style>
 </head>
 <body>
@@ -68,7 +87,7 @@
     <ol>
         <li><strong>Selection:</strong> Drag a target GameObject or Prefab into the tool's <em>Target Object</em> field.</li>
         <li><strong>Scanning:</strong> The tool raycasts your mesh against its original texture, extracting a unified Swatch Palette based on exact UV mappings.</li>
-        <li><strong>Painting:</strong> Using the interactive 3D viewport, you paint new base colors, adjust Metallic/Smoothness response, assign PBR material IDs, and paint emissive glow directly onto the 3D surface.</li>
+        <li><strong>Painting:</strong> Using the interactive 3D viewport, you paint new base colors, adjust Metallic/Smoothness response, assign PBR material IDs, adjust surface normal smoothing, and paint emissive glow directly onto the 3D surface.</li>
         <li><strong>Generation:</strong> The tool bakes all painted data into a new isolated Mesh asset, packs PBR data into secondary UV channels, and saves a <strong>Phantom Prefab</strong> ready for level placement.</li>
     </ol>
 
@@ -107,6 +126,7 @@
         <li><strong>Auto-Uncompress Textures (Scan Mode):</strong> Temporarily marks compressed textures (DXT5, BC7, etc.) as uncompressed while scanning, avoiding block artifacts and color banding that would otherwise degrade palette accuracy and cause edge seams. If the tool detects compressed textures on your target, it shows a warning with a <strong>Re-Scan (Lossless)</strong> button to force a one-off high-fidelity rescan.</li>
         <li><strong>Adaptive Tessellation:</strong> Subdivides large triangles automatically to improve vertex-painting resolution, particularly for preserving fine texture detail (text, decals, small logos) when baking into vertex colors. Controls: <strong>Protect Smooth Surfaces</strong> (prevents slicing on curved geometry like wheels, avoiding shading artifacts), <strong>Max Subdivision</strong> (1&ndash;5, the depth limit for adaptive splitting), and <strong>Color Threshold</strong> (how much color variation across a triangle is needed to trigger a split). Effectiveness varies by mesh: it captures fine detail well on hard-surface models but has little to no visible effect on already-low-poly, largely uniform-colored meshes.</li>
         <li><strong>Auto-Unwrap (Lossless):</strong> Dynamically generates a mathematically clean UV map during bake, specifically for Feature ID detail mapping. Fixes models with poor or missing original UVs without modifying the source asset. When enabled, a <strong>Hard Edge Cutoff</strong> angle slider controls where the unwrapper is willing to cut a seam to relieve UV pressure &mdash; lower values hide seams on sharper corners.</li>
+        <li><strong>Smooth Normals (Per-Swatch Geometry Smoothing):</strong> Recalculates and averages vertex normals across coincident split edges using a continuous angle-thresholding algorithm. Available in both <strong>Vertex Bake &amp; Pack</strong> and <strong>Texture Coloring</strong> modes. Allows selective rounding of faceted, low-poly geometry (such as campfire stones, chopped logs, or terrain) without altering the underlying mesh vertex count.</li>
     </ul>
 
     <h3>Recolor Modes (Output)</h3>
@@ -120,11 +140,11 @@
         <tbody>
             <tr>
                 <td><strong>Texture Coloring</strong></td>
-                <td>Traditional approach. Recolor the swatches and export a brand new PNG texture atlas. Used for legacy pipelines or mobile targets with strict vertex limitations.</td>
+                <td>Traditional approach. Recolor the swatches and export a brand new PNG texture atlas. Used for legacy pipelines or mobile targets with strict vertex limitations. Supports Normal Smoothing and Texel Density scaling.</td>
             </tr>
             <tr>
                 <td><strong>Vertex Bake & Pack (Recommended)</strong></td>
-                <td>Injects colors directly into the mesh Vertex Colors (<code>COLOR</code>). Encodes advanced PBR values (Metallic, Smoothness, AO) into unused UV channels (<code>TEXCOORD1</code>, <code>TEXCOORD2</code>). Bypasses textures entirely.</td>
+                <td>Injects colors directly into the mesh Vertex Colors (<code>COLOR</code>). Encodes advanced PBR values (Metallic, Smoothness, AO) into unused UV channels (<code>TEXCOORD1</code>, <code>TEXCOORD2</code>). Bypasses textures entirely while unlocking Feature IDs, Gradient Paint, Normal Smoothing, and Zones.</td>
             </tr>
         </tbody>
     </table>
@@ -195,12 +215,16 @@
             <h4>Marquee Select</h4>
             <p><code>Shift</code> + click-drag in the embedded viewport (while not in Paint Mode or Pick Color mode) draws a selection box and selects every swatch whose faces fall inside it — a fast way to multi-select swatches without Ctrl-clicking each one in the list.</p>
         </div>
+        <div class="feature-box">
+            <h4>Real-time Normal Smoothing Preview</h4>
+            <p>Adjusting the Normal Smoothing slider updates live in the 3D viewport instantly, recalculating tangents and lighting in real-time so you can dial in the exact curvature before baking.</p>
+        </div>
     </div>
 
     <h2>Toolbar & Painting Controls</h2>
     <p>Once a mesh is scanned, the toolbar below the viewport offers key modes for mesh manipulation. Most hotkeys are suppressed while typing in the Save Path or Output Name fields.</p>
 
-  <table>
+    <table>
         <thead>
             <tr>
                 <th style="width: 20%;">Mode / Action</th>
@@ -246,8 +270,8 @@
             </tr>
             <tr>
                 <td><strong>Reset Selected</strong></td>
-                <td><code>Click</code></td>
-                <td>Visible when Paint Mode is OFF. Acts as a batch reset. Instantly restores all currently selected list swatches back to their default unedited state.</td>
+                <td><code>R</code> / <code>Click</code></td>
+                <td>Available only when Paint Mode is OFF. Acts as a batch reset: instantly restores all currently selected list swatches back to their original scanned color and PBR values.</td>
             </tr>
             <tr>
                 <td><strong>Change Channel</strong></td>
@@ -257,7 +281,7 @@
             <tr>
                 <td><strong>Gradient Paint</strong></td>
                 <td><code>G</code></td>
-                <td>Vertex Bake &amp; Pack only. Click and drag across the model to apply a directional 3D gradient tint to the selected swatch instead of a flat color. <strong>Blend Mode</strong> (<code>Replace</code>, <code>Multiply</code>, or <code>SoftLight</code>), <strong>Alpha</strong> (opacity), and <strong>Sharp</strong> (falloff sharpness) controls appear next to the toggle while active. Enabling this automatically turns off Paint Mode.</td>
+                <td>Vertex Bake &amp; Pack only. Click and drag across the model to apply a directional 3D gradient tint to the selected swatch instead of a flat color. Scale-compensated for non-uniform objects and tiny import scale factors. <strong>Blend Mode</strong> (<code>Replace</code>, <code>Multiply</code>, or <code>SoftLight</code>), <strong>Alpha</strong> (opacity), and <strong>Sharp</strong> (falloff sharpness) controls appear next to the toggle while active. Enabling this automatically turns off Paint Mode.</td>
             </tr>
             <tr>
                 <td><strong>Group Similar</strong></td>
@@ -278,11 +302,6 @@
                 <td><strong>Full Rescan</strong></td>
                 <td><code>Ctrl+Shift+R</code></td>
                 <td>Re-scans the target object from scratch, discarding all current swatch edits. Equivalent to the <strong>Reset</strong> button.</td>
-            </tr>
-            <tr>
-                <td><strong>Reset Selected</strong></td>
-                <td><code>R</code></td>
-                <td>Available only when Paint Mode is OFF. Restores all currently selected swatches back to their original scanned color and PBR values. Equivalent to the Reset Selected button.</td>
             </tr>
             <tr>
                 <td><strong>Paint Entire Object</strong></td>
@@ -336,6 +355,30 @@
         <strong>Native Undo:</strong> <code>Ctrl+Z</code> / <code>Cmd+Z</code> uses Unity's own, global Undo system &mdash; it works regardless of which window has focus. Because it's the same shared history as the rest of the Editor, paint strokes and other scene edits are undone in the chronological order they happened; if you make a scene edit after painting, that scene edit will be the next thing undone, not your paint stroke.
     </div>
 
+    <hr class="divider">
+
+    <h2>Texel Density & Normal Smoothing Controls</h2>
+    <p>Located directly within the Selected Area Recolor panel, these specialized tools ensure uniform procedural detail scaling and advanced geometry curvature control across your meshes:</p>
+
+    <div class="feature-grid">
+        <div class="feature-box">
+            <h4>Texel Density Tools</h4>
+            <p>Allows you to target a uniform pixel density (px/m) based on your intended Atlas Size. The joined <strong>Calculate &amp; Assign Scale</strong> and <strong>Auto-Normalize Scale</strong> buttons evaluate the 3D surface area against UV area across all zones, ensuring procedural noise (wood grain, cloth weaves) tiles evenly without stretching across different sub-meshes.</p>
+        </div>
+        <div class="feature-box">
+            <h4>Smooth Normals & Angle Threshold</h4>
+            <p>Toggling <strong>Smooth Normals</strong> on any selected swatch unlocks an angle slider (0&deg;&ndash;180&deg;) situated directly on the same row. It operates selectively on each swatch:</p>
+            <ul>
+                <li><code>0°</code> - Completely preserves original/flat faceted imported normals.</li>
+                <li><code>10°–60°</code> - Progressively smooths shallow creases while keeping sharp corners hard.</li>
+                <li><code>120°–180°</code> - Fully rounds out steep polygon angles into smooth curved surfaces.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="note">
+        <strong>Scale-Invariant Geometry Engine:</strong> The normal smoothing and gradient painting systems utilize bounds-normalized spatial hashing and unit vector cross-products. Whether a model is a 100m dragon, a 1m dog, or a 1cm campfire imported with a <code>0.01</code> scale factor, normals and gradients calculate accurately with zero underflow or distortion.
+    </div>
 
     <hr class="divider">
 
@@ -346,7 +389,7 @@
     <ul>
         <li><code>Default (None)</code> - Standard PBR response based on your slider settings, no procedural detail.</li>
         <li><code>Wood</code> - Applies a procedural base color tint in addition to a wood grain normal detail &mdash; the one Feature ID that affects base color as well as surface normal.</li>
-        <li><code>Bark, Steel, Copper, CastIron, Leather, Cloth, Stone, Rope, Foliage</code> - Each applies its own procedural surface normal detail only (no base color change), tri-planar mapped like the rest of the VCCore detail system.</li>
+        <li><code>Bark, Steel, Copper, CastIron, Leather, Cloth, Fur, Stone, Rope, Foliage</code> - Each applies its own procedural surface normal or clump detail (tri-planar mapped across the mesh).</li>
     </ul>
 
     <h3>Additional Sub-Mesh Controls</h3>
@@ -430,6 +473,7 @@
         <li>Clones the original mesh geometry.</li>
         <li>Injects your painted Color data into the mesh's <code>COLOR</code> channel.</li>
         <li>Packs your Metallic, Smoothness, and AO data efficiently into the mesh's <code>TEXCOORD1</code> or <code>TEXCOORD2</code> channels.</li>
+        <li>Calculates angle-thresholded normal smoothing on designated swatches, recalculating tangent space.</li>
         <li>Saves the new mesh (and any generated textures, in Texture Coloring mode) under your configured Save Path.</li>
         <li>Generates or updates a Prefab that references the new mesh and assigns the appropriate <code>VCCore</code> material.</li>
     </ol>
@@ -440,12 +484,18 @@
 
     <hr class="divider">
 
-<h2>Troubleshooting & FAQ</h2>
+    <h2>Troubleshooting & FAQ</h2>
     <div class="troubleshooting-q">I have toggled on <strong>Split Disconnected Islands</strong> but it still won't let me paint individual color islands.</div>
     <div class="troubleshooting-a">Make sure you have toggled off <strong>Group Similar (CTRL + G)</strong> in the 3D Viewport section.</div>
 
-    <div class="troubleshooting-q">I'm have <strong>Optimize Palette Size</strong> on with <strong>Split Disconnected Islands On</strong> and it isn't highlighting what I'm clicking on but I can still change it's color.</div>
-    <div class="troubleshooting-a">You can fix this by creating a prefab and replacing it in the target object field, but it is caused by mirrored UV's on the original object.</div>
+    <div class="troubleshooting-q">I have <strong>Optimize Palette Size</strong> on with <strong>Split Disconnected Islands On</strong> and it isn't highlighting what I'm clicking on but I can still change its color.</div>
+    <div class="troubleshooting-a">You can fix this by creating a prefab and replacing it in the target object field, but it is caused by mirrored UVs on the original object.</div>
+
+    <div class="troubleshooting-q">Why aren't my low-poly rocks or logs smoothing when I turn on Smooth Normals?</div>
+    <div class="troubleshooting-a">Low-poly props have steep dihedral angles between adjacent faces (often 60° to 90°+). Increase the Smooth Normals slider towards <code>120°–180°</code> to allow those large angles to blend together. A setting of <code>0°</code> keeps faces completely flat.</div>
+
+    <div class="troubleshooting-q">Can I smooth only specific materials on my model without making everything round?</div>
+    <div class="troubleshooting-a">Yes! Smooth Normals is assigned on a per-swatch basis. You can enable smoothing on organic elements (wood, rocks, creature bodies) while leaving hard-surface elements (metal blades, armor plates) toggled off with crisp flat normals.</div>
 
     <div class="troubleshooting-q">I clicked the model in Paint Mode but nothing happened.</div>
     <div class="troubleshooting-a">Check that <strong>Eraser Mode [E]</strong> is not accidentally toggled on. The active painting brush is tied directly to your current View selection, so ensure you have the correct View enabled for the property you are trying to edit (e.g., you cannot paint Metallic values while in the Color view).</div>
@@ -462,21 +512,21 @@
     <div class="troubleshooting-q">The UI is lagging heavily when I drag to paint a high-poly mesh.</div>
     <div class="troubleshooting-a">The raycasting system performs precise mathematical intersection against every triangle to ensure pixel-perfect swatch detection. If you are painting a model with 50,000+ polygons, increasing the combine similar tolerance can help to reduce the number of swatches.</div>
 
-<hr class="divider">
-<h2 id="support">Support, Contact & Custom Integration</h2>
+    <hr class="divider">
+    <h2 id="support">Support, Contact & Custom Integration</h2>
 
-<p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form. This is the primary and most reliable way to get help with any problems you encounter with the packages.</p>
+    <p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form. This is the primary and most reliable way to get help with any problems you encounter with the packages.</p>
 
-<p>You can also use this form to inquire about custom freelance technical art services. If your project requires external 3D models to be integrated into the DPT ecosystem—including bespoke vertex-data packing, procedural wood grain mapping, GPU wind systems, or game-ready LOD budgeting—get in touch to discuss your specific needs and availability.</p>
+    <p>You can also use this form to inquire about custom freelance technical art services. If your project requires external 3D models to be integrated into the DPT ecosystem—including bespoke vertex-data packing, procedural wood grain mapping, GPU wind systems, or game-ready LOD budgeting—get in touch to discuss your specific needs and availability.</p>
 
-<div class="note">
-    <strong>Email Contact (Preferred for all Support):</strong><br>
-    For troubleshooting, bug reports, publisher licensing, and freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
-</div>
+    <div class="note">
+        <strong>Email Contact (Preferred for all Support):</strong><br>
+        For troubleshooting, bug reports, publisher licensing, and freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
+    </div>
 
-<div class="note">
-    <strong>DPT Community Discord:</strong><br>
-    While the contact form is the best way to get direct help with issues, you are also welcome to join the <strong><a href="https://discord.gg/XqbeSePWQ" target="_blank">Discord Server</a></strong> to share feedback and connect with other users.
-</div>
+    <div class="note">
+        <strong>DPT Community Discord:</strong><br>
+        While the contact form is the best way to get direct help with issues, you are also welcome to join the <strong><a href="https://discord.gg/XqbeSePWQ" target="_blank">Discord Server</a></strong> to share feedback and connect with other users.
+    </div>
 </body>
 </html>
