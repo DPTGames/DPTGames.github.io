@@ -1,23 +1,3 @@
-Here is the error audit of your documentation along with the corrected, polished HTML:
-
----
-
-### 🛠️ Issues Found & Fixed:
-
-1. **HTML Validation Error (Nested `<ul>` inside `<p>`):**
-   * In the *Texel Density & Normal Smoothing* section, the `<ul>` list was wrapped inside a `<p>` tag (`<p>...<ul>...</ul></p>`). In standard HTML, `<p>` cannot contain block-level lists, which causes browsers to break the closing `</p>` tag.
-2. **Grammar & Typos in Troubleshooting:**
-   * *"I'm have Optimize Palette Size on..."* &rarr; Fixed to *"I have Optimize Palette Size on..."*
-   * *"change it's color"* &rarr; Fixed to *"change its color"* (possessive).
-   * *"mirrored UV's"* &rarr; Fixed to *"mirrored UVs"*.
-3. **Duplicate Table Entries:**
-   * **"Reset Selected"** was listed twice in the Toolbar table (once under `Click` and once under `R`). Merged into a single clean row: `R` / `Click`.
-
----
-
-### ✅ Fully Validated & Corrected HTML:
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,8 +66,8 @@ Here is the error audit of your documentation along with the corrected, polished
     <p>The tool operates entirely non-destructively on your scene models. The typical lifecycle of a variation is as follows:</p>
     <ol>
         <li><strong>Selection:</strong> Drag a target GameObject or Prefab into the tool's <em>Target Object</em> field.</li>
-        <li><strong>Scanning:</strong> The tool raycasts your mesh against its original texture, extracting a unified Swatch Palette based on exact UV mappings.</li>
-        <li><strong>Painting:</strong> Using the interactive 3D viewport, you paint new base colors, adjust Metallic/Smoothness response, assign PBR material IDs, adjust surface normal smoothing, and paint emissive glow directly onto the 3D surface.</li>
+        <li><strong>Scanning:</strong> The tool evaluates your mesh against its original texture or vertex stream, extracting a unified Swatch Palette based on exact UV mappings and material zones.</li>
+        <li><strong>Painting:</strong> Using the interactive 3D viewport, you paint new base colors, author directional 3D gradients, assign procedural PBR material IDs, adjust surface normal smoothing, paint emissive glow, and paint natural vertex wind sway weights directly onto the 3D surface.</li>
         <li><strong>Generation:</strong> The tool bakes all painted data into a new isolated Mesh asset, packs PBR data into secondary UV channels, and saves a <strong>Phantom Prefab</strong> ready for level placement.</li>
     </ol>
 
@@ -109,7 +89,7 @@ Here is the error audit of your documentation along with the corrected, polished
             </tr>
             <tr>
                 <td><strong>Vertex Colors</strong></td>
-                <td>Reads pre-existing vertex colors on the mesh instead of the texture, averaging all 3 vertices of each triangle for a stable sample. Use this if the model is already vertex-painted from software like Blender or ZBrush.</td>
+                <td>Reads pre-existing vertex colors on the mesh instead of the texture, averaging all 3 vertices of each triangle for a stable sample. Use this if the model is already vertex-painted from software like Blender or ZBrush, or when reloading a saved DPT prefab to continue editing.</td>
             </tr>
             <tr>
                 <td><strong>Material Colors</strong></td>
@@ -118,7 +98,7 @@ Here is the error audit of your documentation along with the corrected, polished
         </tbody>
     </table>
 
-    <p>Two additional toggles refine either scan mode: <strong>Combine Similar Colors</strong> (<code>Alt+C</code>) merges near-identical sampled colors into a single swatch at scan time, and <strong>Split Disconnected Parts</strong> (<code>Alt+I</code>) keeps physically separate islands of the same color as independent swatches instead of merging them. <strong>Split All Faces</strong> (<code>Alt+F</code>) goes further and gives every individual triangle its own swatch — this is always on automatically in Vertex Bake & Pack mode, since vertex color data has to be authored per-triangle.</p>
+    <p>Two additional toggles refine scanning behavior: <strong>Combine Similar Colors</strong> (<code>Alt+C</code>) merges near-identical sampled colors into a single swatch at scan time, and <strong>Split Disconnected Islands</strong> (<code>Alt+I</code>) separates physically disconnected clusters sharing the same color into independently paintable swatches. When saving, identical swatches automatically fold into single master pixels in the output texture atlas.</p>
 
     <h3>Scan Fidelity &amp; Geometry Options</h3>
     <p>A few additional settings control how faithfully the tool reads and rebuilds your source geometry:</p>
@@ -144,10 +124,60 @@ Here is the error audit of your documentation along with the corrected, polished
             </tr>
             <tr>
                 <td><strong>Vertex Bake & Pack (Recommended)</strong></td>
-                <td>Injects colors directly into the mesh Vertex Colors (<code>COLOR</code>). Encodes advanced PBR values (Metallic, Smoothness, AO) into unused UV channels (<code>TEXCOORD1</code>, <code>TEXCOORD2</code>). Bypasses textures entirely while unlocking Feature IDs, Gradient Paint, Normal Smoothing, and Zones.</td>
+                <td>Injects colors directly into the mesh Vertex Colors (<code>COLOR</code>). Encodes advanced PBR values (Metallic, Smoothness, AO) and procedural Feature IDs into unused UV channels (<code>TEXCOORD1</code>, <code>TEXCOORD2</code>). Bypasses textures entirely while unlocking Directional 3D Gradients, Live Wind Painting, Normal Smoothing, and Zones.</td>
             </tr>
         </tbody>
     </table>
+
+    <hr class="divider">
+
+    <h2>Multi-Scope Selection Engine</h2>
+    <p>The tool includes a robust three-tier geometric selection hierarchy paired with dynamic polygon extraction. Switch between selection scopes by clicking their buttons in the toolbar or pressing <code>I</code>:</p>
+
+    <div class="feature-grid">
+        <div class="feature-box">
+            <h4>Face Selection</h4>
+            <p>Target individual triangles/polygons with pinpoint precision. Ideal for painting fine accents, small trim lines, glowing runes, or specific facets without affecting adjoining faces.</p>
+        </div>
+        <div class="feature-box">
+            <h4>UV Island Selection</h4>
+            <p>Selects the entire contiguous UV cluster under your cursor. Perfect for recoloring distinct texture regions that were unwrapped together as a single continuous UV piece.</p>
+        </div>
+        <div class="feature-box">
+            <h4>3D Mesh Shell Selection</h4>
+            <p>Selects the entire physically encapsulated 3D geometry element across all UV seams. Instantly selects detached accessories, complete hair clumps, armor plates, weapons, and clothing layers in a single click.</p>
+        </div>
+        <div class="feature-box">
+            <h4>Dynamic Face Extract (<code>Q</code>)</h4>
+            <p>Dynamically isolates and carves out single polygons on-the-fly without needing to split the entire mesh upfront. Extracted faces become independent swatches ready for instant recoloring or gradient application.</p>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <h2>Directional 3D Gradients &amp; Vertex Wind Sway</h2>
+    <p>Exclusive to <strong>Vertex Bake &amp; Pack</strong> mode, the <strong>Gradient Paint (<code>G</code>)</strong> tool allows you to author directional 3D gradients across any material channel (Color, Metallic, Smoothness, AO, Emissive, and Wind) by clicking and dragging directly across the model in the 3D viewport.</p>
+
+    <div class="feature-grid">
+        <div class="feature-box">
+            <h4>Directional 3D Gradients</h4>
+            <p>Click to set the start point (anchor) and drag to define the direction and length of the gradient. Gradients are scale-invariant and calculate accurately on any object size.</p>
+            <ul>
+                <li><strong>Blend Modes:</strong> Choose between <code>Multiply</code>, <code>Replace</code>, or <code>SoftLight</code>.</li>
+                <li><strong>Alpha:</strong> Adjusts overall gradient intensity and opacity.</li>
+                <li><strong>Sharpness:</strong> Controls the falloff curve from soft linear transitions to crisp high-contrast thresholds.</li>
+                <li><strong>Clear:</strong> The dedicated <strong>Clear</strong> button immediately strips active gradients from the current selection.</li>
+            </ul>
+        </div>
+        <div class="feature-box">
+            <h4>Gradient-Based Vertex Wind Painting</h4>
+            <p>Switch the view channel to <strong>Wind</strong> and drag a gradient from the plant/prop base to its tips to paint natural, progressive sway weight. Stems stay rooted firmly at <code>0.0</code> while leaves and branches sway dynamically at <code>1.0</code>.</p>
+            <ul>
+                <li><strong>Simulate Wind Preview:</strong> Toggle the <strong>Simulate Wind</strong> button in the Wind channel toolbar to preview live real-time GPU vertex wind animation directly inside the viewport before saving.</li>
+                <li><strong>Zero Performance Cost:</strong> Wind weights are baked straight into the vertex stream and evaluated at runtime by the lightweight <code>VCCore</code> shader.</li>
+            </ul>
+        </div>
+    </div>
 
     <hr class="divider">
 
@@ -216,8 +246,8 @@ Here is the error audit of your documentation along with the corrected, polished
             <p><code>Shift</code> + click-drag in the embedded viewport (while not in Paint Mode or Pick Color mode) draws a selection box and selects every swatch whose faces fall inside it — a fast way to multi-select swatches without Ctrl-clicking each one in the list.</p>
         </div>
         <div class="feature-box">
-            <h4>Real-time Normal Smoothing Preview</h4>
-            <p>Adjusting the Normal Smoothing slider updates live in the 3D viewport instantly, recalculating tangents and lighting in real-time so you can dial in the exact curvature before baking.</p>
+            <h4>Live Wind Motion Preview</h4>
+            <p>Toggle <strong>Simulate Wind</strong> inside the Wind view channel to watch foliage, grass, and props sway in real-time right inside the editor viewport.</p>
         </div>
     </div>
 
@@ -234,19 +264,29 @@ Here is the error audit of your documentation along with the corrected, polished
         </thead>
         <tbody>
             <tr>
+                <td><strong>Selection Scope</strong></td>
+                <td><code>I</code></td>
+                <td>Cycles between <strong>Face</strong> (single polygon), <strong>Island</strong> (UV cluster), and <strong>Shell</strong> (entire 3D disconnected mesh part).</td>
+            </tr>
+            <tr>
+                <td><strong>Face Extract</strong></td>
+                <td><code>Q</code></td>
+                <td>Dynamically isolates the single polygon under your cursor without splitting the whole mesh.</td>
+            </tr>
+            <tr>
                 <td><strong>Paint Mode</strong></td>
                 <td><code>P</code></td>
                 <td>Enables direct 3D painting. Click and drag across the model to apply the currently selected color or PBR value to faces underneath the cursor. <code>Shift+Click</code> also paints even if Paint Mode is off.</td>
             </tr>
             <tr>
+                <td><strong>Gradient Paint</strong></td>
+                <td><code>G</code></td>
+                <td>Vertex Bake &amp; Pack only. Click and drag in the viewport to apply a 3D directional gradient across Color, Metallic, Smoothness, AO, Emissive, or Wind channels.</td>
+            </tr>
+            <tr>
                 <td><strong>Eraser Mode</strong></td>
                 <td><code>E</code></td>
                 <td>Available only when Paint Mode is active. Clicking on the model will instantly reset the targeted faces to their original extracted texture color and default PBR values (0 Metallic, 0.5 Roughness, 1.0 AO).</td>
-            </tr>
-            <tr>
-                <td><strong>Individual Faces</strong></td>
-                <td><code>Q</code></td>
-                <td>Toggles whether the brush paints one triangle at a time under the cursor, instead of the whole connected swatch/island it belongs to.</td>
             </tr>
             <tr>
                 <td><strong>Hover Select</strong></td>
@@ -275,18 +315,13 @@ Here is the error audit of your documentation along with the corrected, polished
             </tr>
             <tr>
                 <td><strong>Change Channel</strong></td>
-                <td><code>Dropdown</code></td>
-                <td>Determines what your brush paints, and what the viewport displays. Options include Color, Metallic, Smoothness, AO (Ambient Occlusion), Emissive, and (Vertex Bake &amp; Pack only) <strong>Zones</strong> &mdash; see below.</td>
-            </tr>
-            <tr>
-                <td><strong>Gradient Paint</strong></td>
-                <td><code>G</code></td>
-                <td>Vertex Bake &amp; Pack only. Click and drag across the model to apply a directional 3D gradient tint to the selected swatch instead of a flat color. Scale-compensated for non-uniform objects and tiny import scale factors. <strong>Blend Mode</strong> (<code>Replace</code>, <code>Multiply</code>, or <code>SoftLight</code>), <strong>Alpha</strong> (opacity), and <strong>Sharp</strong> (falloff sharpness) controls appear next to the toggle while active. Enabling this automatically turns off Paint Mode.</td>
+                <td><code>Dropdown / Top Row</code></td>
+                <td>Determines what your brush paints, and what the viewport displays. Options include Combined, Color, Metallic, Smoothness, AO (Ambient Occlusion), Emissive, Zones, and <strong>Wind</strong>.</td>
             </tr>
             <tr>
                 <td><strong>Group Similar</strong></td>
                 <td><code>Ctrl+G</code></td>
-                <td>Select all colors within a set tolerance.</td>
+                <td>Selects all swatches across the mesh that fall within the configured color tolerance slider.</td>
             </tr>
             <tr>
                 <td><strong>Load Palette Color</strong></td>
@@ -398,7 +433,7 @@ Here is the error audit of your documentation along with the corrected, polished
         <li><strong>Detail Scale:</strong> Adjusts the tiling density of the procedural noise (e.g., making wood grain tighter or metal scratches larger).</li>
         <li><strong>Detail Rotation:</strong> A 0&ndash;360&deg; slider that rotates the procedural detail texture on this swatch &mdash; use it to fix directional textures (like Wood Grain) when the underlying UV mapping runs the wrong way.</li>
         <li><strong>Blend Detail:</strong> Blends the procedural detail across faces and UV seams using tri-planar projection averaging. When enabled, two independent sliders appear: <strong>Face</strong> controls how much detail blends across adjoining faces, and <strong>Seam</strong> controls blend strength specifically across UV seams.</li>
-        <li><strong>Apply Wind:</strong> Enables a wind sway effect on this swatch's detail, with a <strong>Strength</strong> slider. Wind only evaluates on saved prefabs &mdash; it won't animate on the in-tool preview.</li>
+        <li><strong>Apply Wind:</strong> Enables flat wind sway on this swatch's detail with a <strong>Strength</strong> slider (or use <strong>Gradient Paint</strong> in the Wind channel for continuous directional sway).</li>
     </ul>
 
     <div class="note">
@@ -487,6 +522,12 @@ Here is the error audit of your documentation along with the corrected, polished
     <h2>Troubleshooting & FAQ</h2>
     <div class="troubleshooting-q">I have toggled on <strong>Split Disconnected Islands</strong> but it still won't let me paint individual color islands.</div>
     <div class="troubleshooting-a">Make sure you have toggled off <strong>Group Similar (CTRL + G)</strong> in the 3D Viewport section.</div>
+
+    <div class="troubleshooting-q">How do I paint directional wind sway on vegetation or cloth?</div>
+    <div class="troubleshooting-a">Switch the view/paint channel to <strong>Wind</strong> and enable <strong>Gradient Paint [G]</strong>. Click at the base of the plant/stem and drag towards the tip. Toggle <strong>Simulate Wind</strong> in the top toolbar to watch the model sway live in the viewport.</div>
+
+    <div class="troubleshooting-q">What is the difference between Face, Island, and Shell selection?</div>
+    <div class="troubleshooting-a"><strong>Face</strong> targets single triangles for surgical precision. <strong>Island</strong> selects contiguous UV clusters. <strong>Shell</strong> selects entire 3D detached geometry pieces (e.g. hair clumps, armor plates, weapons) across all UV seams. Cycle through them using the <code>I</code> hotkey.</div>
 
     <div class="troubleshooting-q">I have <strong>Optimize Palette Size</strong> on with <strong>Split Disconnected Islands On</strong> and it isn't highlighting what I'm clicking on but I can still change its color.</div>
     <div class="troubleshooting-a">You can fix this by creating a prefab and replacing it in the target object field, but it is caused by mirrored UVs on the original object.</div>
