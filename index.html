@@ -33,6 +33,24 @@
         .store-card:hover img { opacity: 0.9; }
         .store-card-content { padding: 15px 20px; }
         .store-card h2 { color: #34d399; }
+
+        .coming-soon-card { border-left: 5px solid #a855f7; padding: 0; overflow: hidden; }
+        .coming-soon-card:hover { border-color: #c084fc; background-color: #3b0764; }
+        .coming-soon-card img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; display: block; border-bottom: 1px solid #334155; transition: opacity 0.2s ease; }
+        .coming-soon-card:hover img { opacity: 0.9; }
+        .coming-soon-card h2 { color: #c084fc; }
+        .badge {
+            display: inline-block;
+            background-color: #a855f7;
+            color: #ffffff;
+            font-size: 8pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
         
         .section-header { font-size: 18pt; color: #bae6fd; border-bottom: 1px solid #1e293b; padding-bottom: 10px; margin-top: 60px; margin-bottom: 10px; }
         
@@ -135,6 +153,18 @@
                 <img src="assets/Harvestable_CardImage.png" alt="Stylized Harvestable Nature">
                 <div class="store-card-content"><h2>Harvestable Nature</h2><p>View on Store &amp; Leave a Review</p></div>
             </a>
+        </div>
+
+        <h2 class="section-header">Coming Soon</h2>
+        <div class="grid">
+            <div class="card coming-soon-card">
+                <img src="assets/ColorSwapper_CardImage.png" alt="Stylized Color Swapper &amp; Material Optimizer">
+                <div class="store-card-content">
+                    <span class="badge">In Development</span>
+                    <h2>Stylized Color Swapper &amp; Material Optimizer</h2>
+                    <p>Runtime recoloring, material batching, and automated texture packing workflows.</p>
+                </div>
+            </div>
         </div>
 
         <h2 class="section-header" id="contact">Support &amp; Feedback</h2>
