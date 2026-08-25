@@ -228,6 +228,36 @@
         Because the <code>DPT_ShaderVariation</code> script passes a single color per <code>MeshRenderer</code>, the object's body tint and emissive glow will share the same hue. If you need an object to have contrasting colors (e.g., a dark blue sword with bright orange glowing runes), the industry-standard best practice is to separate the glowing runes into a floating decal child mesh. This allows you to apply one variation script to the sword body, and a separate variation script to the rune mesh, keeping both perfectly batched under the same master material.
     </div>
 
+    <h2>Wind System &amp; Wind Movement</h2>
+    <p>The VCCORE shader incorporates a lightweight, procedural GPU vertex displacement wind system. When <strong>Wind Waving</strong> is enabled, natural harmonic wind waves and directional sways are evaluated entirely on the GPU vertex shader without CPU bone skinning or vertex physics overhead.</p>
+
+    <div class="note">
+        <strong>Requires the Wind Package Signature:</strong><br><br>
+        Like Procedural Details and Emission, the Wind System is gated by the <strong>Ecosystem Detection System</strong> — this section is only displayed if your project contains a DPT package that includes the Wind signature file (such as Harvestable Nature or Foliage packs). It also requires <em>Use Vertex Colors</em> to be active.
+    </div>
+
+    <h3>Wind Strength</h3>
+    <p>Controls the master speed and amplitude of the vertex displacement oscillation. Set this to <strong>0.0</strong> to completely freeze all movement on the object while keeping the wind pipeline active.</p>
+
+    <h3>360&deg; Directional Controls (Compass &amp; Pitch)</h3>
+    <p>Rather than requiring confusing 3D vector math coordinates, the VCCORE Wind Inspector provides an intuitive, artist-friendly 2-slider spherical control system:</p>
+    <ul>
+        <li><strong>Compass Heading (0&deg; &ndash; 359&deg;):</strong> Controls the horizontal direction of both the physical sway displacement and the traveling wave ripples across your world:
+            <ul>
+                <li><strong>0&deg;:</strong> Blowing East (+X)</li>
+                <li><strong>90&deg;:</strong> Blowing North (+Z)</li>
+                <li><strong>180&deg;:</strong> Blowing West (&minus;X)</li>
+                <li><strong>270&deg;:</strong> Blowing South (&minus;Z)</li>
+            </ul>
+        </li>
+        <li><strong>Vertical Pitch (&minus;45&deg; &ndash; +45&deg;):</strong> Adjusts the vertical tilt of the wind. A pitch of <code>0&deg;</code> produces a flat, ground-parallel breeze, positive values create rising updrafts (lifting foliage and leaves), and negative values create downward drafts along hillside slopes.</li>
+    </ul>
+
+    <div class="note">
+        <strong>Hardware-Normalized Unit Vectors:</strong><br><br>
+        Under the hood, the Editor GUI automatically converts your Compass Heading and Pitch into a pre-normalized 3D unit vector. This ensures wind displacement speed and wave frequency remain 100% uniform in all 360&deg; directions without wasting GPU ALU cycles or causing mathematical division-by-zero crashes.
+    </div>
+
     <h2>Color Variation</h2>
     <p>Per-instance color and brightness variation is handled by the <code>DPT_ShaderVariation</code> component, which writes variation data directly to Unity's GPU instancing buffer without duplicating or modifying the shared material.</p>
 
