@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DPT Vertex Terrain DPT_VertexTerrainUI - Component Guide</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0; padding: 40px;
+            font-size: 11pt; line-height: 1.5;
+        }
+        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        td code { font-size: 9.5pt; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .perf { background-color: #0c1f12; border-left: 4px solid #4ade80; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .tip { background-color: #1a1a2e; border-left: 4px solid #a78bfa; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        pre { padding: 12px; margin: 10px 0; overflow-x: auto; line-height: 1.6; }
+        .divider { border: none; border-top: 1px solid #1e293b; margin: 30px 0; }
+        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 15px; margin-bottom: 5px; page-break-after: avoid; }
+        .troubleshooting-a { margin-bottom: 15px; }
+        .note a {
+            color: #38bdf8;
+            text-decoration: none; 
+            transition: color 0.2s ease-in-out;
+        }
+        .note a:hover {
+            color: #7dd3fc;
+            text-decoration: underline; 
+        }
+    </style>
+</head>
+<body>
+    <nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
+        <a href="https://dptgames.github.io/" style="color: #38bdf8; margin-right: 15px;">&larr; DPT Games Homepage</a>
+        <span style="color: #64748b;">|</span>
+        <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Vertex Terrain Hub</a>
+        <a href="dpt-vertex-terrain-ui.html" style="color: #f8fafc; margin-right: 15px;">DPT_VertexTerrainUI</a>
+    </nav>
+    <h1>DPT_VertexTerrainUI</h1>
+    <div class="subtitle">Component Reference Guide<br>
+    <span style="font-size: 11pt; font-style: normal;">A Unity EditorWindow tool designed for real-time vertex-based terrain painting, organic sculpting, procedural gradient blending, spline path generation, and performance optimization[cite: 1].</span></div>
+    <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
+        <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
+        <a href="#section-one" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Target & Brush Settings</a>
+        <a href="#section-two" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">2. Core Architecture & Tools</a>
+        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">3. Troubleshooting Notes</a>
+        <a href="#support" style="color: #a5f3fc; text-decoration: none;">4. Support</a>
+    </div>
+    <h2 id="section-one">1. Target & Brush Settings</h2>
+    
+    <h3>Configuration Parameters</h3>
+    <p>Controls target pipeline workflows, active terrain meshes, and primary brush characteristics in the Inspector[cite: 1].</p>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Property</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Pipeline Mode</strong></td>
+                <td>Switches between Terrain Atlas (Texture-based arrays using VCCore shaders) and Direct Vertex Color modes[cite: 1].</td>
+            </tr>
+            <tr>
+                <td><strong>Target Terrain Object</strong></td>
+                <td>The active root GameObject containing the MeshFilter and MeshRenderer targeted for painting or sculpting in the SceneView[cite: 1].</td>
+            </tr>
+            <tr>
+                <td><strong>Radius</strong></td>
+                <td>The world-meter radius of the 3D interactive brush (adjustable via hotkeys <code>[</code> and <code>]</code> or Shift + ScrollWheel)[cite: 1].</td>
+            </tr>
+            <tr>
+                <td><strong>Brush Flow / Opacity</strong></td>
+                <td>Defines the rate of color and weight application per stroke, ranging from smooth gradual feathering (0.01) to instantaneous replacement (1.0)[cite: 1].</td>
+            </tr>
+            <tr>
+                <td><strong>Blend Sharpness</strong></td>
+                <td>Controls transition contrast between biomes, from soft gradual gradients (0.0) to crisp stylized borders (1.0)[cite: 1].</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="tip"><strong>Tip:</strong> Use hotkeys <code>B</code>, <code>H</code>, <code>G</code>, <code>S</code>, and <code>P</code> to instantly toggle between Paint, Sculpt, Gradient, Smooth, and Path modes without using the UI buttons[cite: 1].</div>
+    <h2 id="section-two">2. Core Architecture & Tool Modes</h2>
+    <ul>
+        <li><strong>Primary Tool Modes:</strong> Manages 8 distinct operational modes including Paint, Sculpt, Cave Digger, Gradient, Smooth, Clean-Up Brush, Path Splines, and Eyedropper sampling[cite: 1].</li>
+        <li><strong>Dynamic Topology & Tessellation:</strong> Automatically subdivides and tessellates stretched polygon edges on-the-fly when edge lengths exceed the configured threshold during sculpting or path creation[cite: 1].</li>
+        <li><strong>Raycast AO Baker:</strong> Fires hemisphere raycasts per vertex to bake contact ambient occlusion directly into vertex data (UV2.x) for realistic crevice and shadow definition[cite: 1].</li>
+        <li><strong>Chunk Partitioning & LODs:</strong> Slices large terrain meshes into N x N spatial grid partitions, automatically generating decimated LOD levels and native Unity LODGroup components[cite: 1].</li>
+    </ul>
+    <h2 id="troubleshooting">3. Troubleshooting Notes</h2>
+    <div class="troubleshooting-q">"Target GameObject does not have the VCCore Shader assigned."</div>
+    <div class="troubleshooting-a">Ensure the GameObject's MeshRenderer references the correct `SH_DPT_VCCore` material. Click the "Assign VCCore Material" or "Enable on Material" button directly inside the Target section of the UI to automatically fix material configurations[cite: 1].</div>
+
+    <div class="troubleshooting-q">"Selected GameObject does not have a MeshFilter attached."</div>
+    <div class="troubleshooting-a">The target object must contain a valid MeshFilter and mesh asset to record vertex color and height data. Select an appropriate terrain tile or generate a new surface via the Terrain Generator panel[cite: 1].</div>
+
+<hr class="divider">
+<h2 id="support">Support, Contact & Custom Integration</h2>
+
+<p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form[cite: 2]. This is the primary and most reliable way to get help with any problems you encounter with the packages[cite: 2].</p>
+
+<p>You can also use this form to inquire about custom freelance technical art services[cite: 2]. If your project requires external 3D models to be integrated into the DPT ecosystem—including bespoke vertex-data packing, procedural wood grain mapping, GPU wind systems, or game-ready LOD budgeting—get in touch to discuss your specific needs and availability[cite: 2].</p>
+
+<div class="note">
+    <strong>Email Contact (Preferred for all Support):</strong><br>
+    For troubleshooting, bug reports, publisher licensing, and freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>[cite: 2].
+</div>
+
+<div class="note">
+    <strong>DPT Community Discord:</strong><br>
+    While the contact form is the best way to get direct help with issues, you are also welcome to join the <strong><a href="https://discord.gg/XqbeSePWQ" target="_blank">Discord Server</a></strong> to share feedback and connect with other users[cite: 2].
+</div>
+</body>
+</html>
