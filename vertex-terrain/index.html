@@ -58,7 +58,7 @@
     </nav>
     <h1>DPT_VertexTerrainUI</h1>
     <div class="subtitle">Component Reference Guide<br>
-    <span style="font-size: 11pt; font-style: normal;">A Unity EditorWindow tool designed for real-time vertex-based terrain painting, organic sculpting, procedural gradient blending, spline path generation, and performance optimization[cite: 1].</span></div>
+    <span style="font-size: 11pt; font-style: normal;">A Unity EditorWindow tool designed for real-time vertex-based terrain painting, organic sculpting, procedural gradient blending, spline path generation, and performance optimization.</span></div>
     <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
         <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
         <a href="#section-one" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Target & Brush Settings</a>
@@ -69,7 +69,7 @@
     <h2 id="section-one">1. Target & Brush Settings</h2>
     
     <h3>Configuration Parameters</h3>
-    <p>Controls target pipeline workflows, active terrain meshes, and primary brush characteristics in the Inspector[cite: 1].</p>
+    <p>Controls target pipeline workflows, active terrain meshes, and primary brush characteristics in the Inspector.</p>
     <table>
         <thead>
             <tr>
@@ -80,57 +80,57 @@
         <tbody>
             <tr>
                 <td><strong>Pipeline Mode</strong></td>
-                <td>Switches between Terrain Atlas (Texture-based arrays using VCCore shaders) and Direct Vertex Color modes[cite: 1].</td>
+                <td>Switches between Terrain Atlas (Texture-based arrays using VCCore shaders) and Direct Vertex Color modes.</td>
             </tr>
             <tr>
                 <td><strong>Target Terrain Object</strong></td>
-                <td>The active root GameObject containing the MeshFilter and MeshRenderer targeted for painting or sculpting in the SceneView[cite: 1].</td>
+                <td>The active root GameObject containing the MeshFilter and MeshRenderer targeted for painting or sculpting in the SceneView.</td>
             </tr>
             <tr>
                 <td><strong>Radius</strong></td>
-                <td>The world-meter radius of the 3D interactive brush (adjustable via hotkeys <code>[</code> and <code>]</code> or Shift + ScrollWheel)[cite: 1].</td>
+                <td>The world-meter radius of the 3D interactive brush (adjustable via hotkeys <code>[</code> and <code>]</code> or Shift + ScrollWheel).</td>
             </tr>
             <tr>
                 <td><strong>Brush Flow / Opacity</strong></td>
-                <td>Defines the rate of color and weight application per stroke, ranging from smooth gradual feathering (0.01) to instantaneous replacement (1.0)[cite: 1].</td>
+                <td>Defines the rate of color and weight application per stroke, ranging from smooth gradual feathering (0.01) to instantaneous replacement (1.0).</td>
             </tr>
             <tr>
                 <td><strong>Blend Sharpness</strong></td>
-                <td>Controls transition contrast between biomes, from soft gradual gradients (0.0) to crisp stylized borders (1.0)[cite: 1].</td>
+                <td>Controls transition contrast between biomes, from soft gradual gradients (0.0) to crisp stylized borders (1.0).</td>
             </tr>
         </tbody>
     </table>
 
-    <div class="tip"><strong>Tip:</strong> Use hotkeys <code>B</code>, <code>H</code>, <code>G</code>, <code>S</code>, and <code>P</code> to instantly toggle between Paint, Sculpt, Gradient, Smooth, and Path modes without using the UI buttons[cite: 1].</div>
+    <div class="tip"><strong>Tip:</strong> Use hotkeys <code>B</code>, <code>H</code>, <code>G</code>, <code>S</code>, and <code>P</code> to instantly toggle between Paint, Sculpt, Gradient, Smooth, and Path modes without using the UI buttons.</div>
     <h2 id="section-two">2. Core Architecture & Tool Modes</h2>
     <ul>
-        <li><strong>Primary Tool Modes:</strong> Manages 8 distinct operational modes including Paint, Sculpt, Cave Digger, Gradient, Smooth, Clean-Up Brush, Path Splines, and Eyedropper sampling[cite: 1].</li>
-        <li><strong>Dynamic Topology & Tessellation:</strong> Automatically subdivides and tessellates stretched polygon edges on-the-fly when edge lengths exceed the configured threshold during sculpting or path creation[cite: 1].</li>
-        <li><strong>Raycast AO Baker:</strong> Fires hemisphere raycasts per vertex to bake contact ambient occlusion directly into vertex data (UV2.x) for realistic crevice and shadow definition[cite: 1].</li>
-        <li><strong>Chunk Partitioning & LODs:</strong> Slices large terrain meshes into N x N spatial grid partitions, automatically generating decimated LOD levels and native Unity LODGroup components[cite: 1].</li>
+        <li><strong>Primary Tool Modes:</strong> Manages 8 distinct operational modes including Paint, Sculpt, Cave Digger, Gradient, Smooth, Clean-Up Brush, Path Splines, and Eyedropper sampling.</li>
+        <li><strong>Dynamic Topology & Tessellation:</strong> Automatically subdivides and tessellates stretched polygon edges on-the-fly when edge lengths exceed the configured threshold during sculpting or path creation.</li>
+        <li><strong>Raycast AO Baker:</strong> Fires hemisphere raycasts per vertex to bake contact ambient occlusion directly into vertex data (UV2.x) for realistic crevice and shadow definition.</li>
+        <li><strong>Chunk Partitioning & LODs:</strong> Slices large terrain meshes into N x N spatial grid partitions, automatically generating decimated LOD levels and native Unity LODGroup components.</li>
     </ul>
     <h2 id="troubleshooting">3. Troubleshooting Notes</h2>
     <div class="troubleshooting-q">"Target GameObject does not have the VCCore Shader assigned."</div>
-    <div class="troubleshooting-a">Ensure the GameObject's MeshRenderer references the correct `SH_DPT_VCCore` material. Click the "Assign VCCore Material" or "Enable on Material" button directly inside the Target section of the UI to automatically fix material configurations[cite: 1].</div>
+    <div class="troubleshooting-a">Ensure the GameObject's MeshRenderer references the correct `SH_DPT_VCCore` material. Click the "Assign VCCore Material" or "Enable on Material" button directly inside the Target section of the UI to automatically fix material configurations.</div>
 
     <div class="troubleshooting-q">"Selected GameObject does not have a MeshFilter attached."</div>
-    <div class="troubleshooting-a">The target object must contain a valid MeshFilter and mesh asset to record vertex color and height data. Select an appropriate terrain tile or generate a new surface via the Terrain Generator panel[cite: 1].</div>
+    <div class="troubleshooting-a">The target object must contain a valid MeshFilter and mesh asset to record vertex color and height data. Select an appropriate terrain tile or generate a new surface via the Terrain Generator panel.</div>
 
 <hr class="divider">
 <h2 id="support">Support, Contact & Custom Integration</h2>
 
-<p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form[cite: 2]. This is the primary and most reliable way to get help with any problems you encounter with the packages[cite: 2].</p>
+<p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form. This is the primary and most reliable way to get help with any problems you encounter with the packages.</p>
 
-<p>You can also use this form to inquire about custom freelance technical art services[cite: 2]. If your project requires external 3D models to be integrated into the DPT ecosystem—including bespoke vertex-data packing, procedural wood grain mapping, GPU wind systems, or game-ready LOD budgeting—get in touch to discuss your specific needs and availability[cite: 2].</p>
+<p>You can also use this form to inquire about custom freelance technical art services. If your project requires external 3D models to be integrated into the DPT ecosystem—including bespoke vertex-data packing, procedural wood grain mapping, GPU wind systems, or game-ready LOD budgeting—get in touch to discuss your specific needs and availability.</p>
 
 <div class="note">
     <strong>Email Contact (Preferred for all Support):</strong><br>
-    For troubleshooting, bug reports, publisher licensing, and freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>[cite: 2].
+    For troubleshooting, bug reports, publisher licensing, and freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
 </div>
 
 <div class="note">
     <strong>DPT Community Discord:</strong><br>
-    While the contact form is the best way to get direct help with issues, you are also welcome to join the <strong><a href="https://discord.gg/XqbeSePWQ" target="_blank">Discord Server</a></strong> to share feedback and connect with other users[cite: 2].
+    While the contact form is the best way to get direct help with issues, you are also welcome to join the <strong><a href="https://discord.gg/XqbeSePWQ" target="_blank">Discord Server</a></strong> to share feedback and connect with other users.
 </div>
 </body>
 </html>
