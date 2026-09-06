@@ -56,8 +56,8 @@
         <a href="https://dptgames.github.io/" style="color: #38bdf8; margin-right: 15px;">&larr; DPT Games Homepage</a>
         <span style="color: #64748b;">|</span>
         <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Vertex Terrain Hub</a>
-        <a href="DPT_SurfaceCreator_Guide.html" style="color: #f8fafc; margin-right: 15px;">Surface Creator</a>
-        <a href="DPT_DemoSuite_Guide.html" style="color: #f8fafc;">Demo & Runtime Suite</a>
+        <a href="dpt-vertex-terrain-ui.html" style="color: #f8fafc; margin-right: 15px;">Vertex Terrain UI</a>
+        <a href="dpt-demo-suite-guide.html" style="color: #38bdf8; font-weight: bold;">Demo & Runtime Suite</a>
     </nav>
 
     <!-- HEADER & SUBTITLE -->
@@ -175,7 +175,7 @@
 
     <!-- SECTION TWO: DPT_SurfaceRaycastTester -->
     <h2 id="surface-raycast-tester">2. DPT_SurfaceRaycastTester</h2>
-    <p><code>DPT_SurfaceRaycastTester</code> is a multi-mode diagnostic and probing utility[cite: 14]. It performs real-time raycasts against terrain geometry, queries the baked <code>DPT_TerrainSurfaceData</code> ledger through <code>DPT_TerrainSurfaceTarget</code>, and resolves the current dominant biome—factoring in active live weather and growth modifiers[cite: 12, 14].</p>
+    <p><code>DPT_SurfaceRaycastTester</code> is a multi-mode diagnostic and probing utility. It performs real-time raycasts against terrain geometry, queries the baked <code>DPT_TerrainSurfaceData</code> ledger through <code>DPT_TerrainSurfaceTarget</code>, and resolves the current dominant biome—factoring in active live weather and growth modifiers.</p>
 
     <h3>Raycast & Probing Configuration</h3>
     <table>
@@ -188,22 +188,22 @@
         <tbody>
             <tr>
                 <td><strong>Raycast Mode</strong></td>
-                <td>Selects the probing origin and direction[cite: 14]:<br>
-                &bull; <code>DownwardProbe</code>: Casts straight down (-Y) from the GameObject transform (standard for player footsteps)[cite: 14].<br>
-                &bull; <code>TransformForward</code>: Casts along the forward vector (+Z) of the transform[cite: 14].<br>
-                &bull; <code>MouseCursor</code>: Casts rays from the scene/main camera through the mouse pointer for point-and-click inspection[cite: 14].</td>
+                <td>Selects the probing origin and direction:<br>
+                &bull; <code>DownwardProbe</code>: Casts straight down (-Y) from the GameObject transform (standard for player footsteps).<br>
+                &bull; <code>TransformForward</code>: Casts along the forward vector (+Z) of the transform.<br>
+                &bull; <code>MouseCursor</code>: Casts rays from the scene/main camera through the mouse pointer for point-and-click inspection.</td>
             </tr>
             <tr>
                 <td><strong>Max Ray Distance</strong></td>
-                <td>Maximum distance (in meters) the ray will travel before reporting a miss[cite: 14]. Default: <code>50m</code>[cite: 14].</td>
+                <td>Maximum distance (in meters) the ray will travel before reporting a miss. Default: <code>50m</code>.</td>
             </tr>
             <tr>
                 <td><strong>Raycast Layers</strong></td>
-                <td><code>LayerMask</code> filter used to ensure rays only hit terrain colliders while ignoring triggers, props, or actors[cite: 14].</td>
+                <td><code>LayerMask</code> filter used to ensure rays only hit terrain colliders while ignoring triggers, props, or actors.</td>
             </tr>
             <tr>
                 <td><strong>Override Surface Data</strong></td>
-                <td>Optional field allowing you to manually assign a <code>DPT_TerrainSurfaceData</code> asset directly, bypassing the target component on the hit collider[cite: 14].</td>
+                <td>Optional field allowing you to manually assign a <code>DPT_TerrainSurfaceData</code> asset directly, bypassing the target component on the hit collider.</td>
             </tr>
         </tbody>
     </table>
@@ -219,21 +219,21 @@
         <tbody>
             <tr>
                 <td><strong>Show Scene Gizmos</strong></td>
-                <td>Draws green impact lines, cyan surface normal rays, and Scene view handle tags displaying the hit triangle and biome metadata[cite: 14].</td>
+                <td>Draws green impact lines, cyan surface normal rays, and Scene view handle tags displaying the hit triangle and biome metadata.</td>
             </tr>
             <tr>
                 <td><strong>Show Game HUD</strong></td>
-                <td>Renders an immediate-mode on-screen GUI box in the top-left corner displaying the hit object, triangle index, resolved biome name, and world normal[cite: 14].</td>
+                <td>Renders an immediate-mode on-screen GUI box in the top-left corner displaying the hit object, triangle index, resolved biome name, and world normal.</td>
             </tr>
             <tr>
                 <td><strong>Log Clicks to Console</strong></td>
-                <td>When enabled, left-clicking while aiming at a valid terrain surface prints full debug telemetry to the Unity Console[cite: 14].</td>
+                <td>When enabled, left-clicking while aiming at a valid terrain surface prints full debug telemetry to the Unity Console.</td>
             </tr>
         </tbody>
     </table>
 
     <div class="tip">
-        <strong>Tip for Footstep Setup:</strong> In your final game, replace this tester with a call to <code>DPT_TerrainSurfaceTarget.TryGetHitBiome(hit, out int biomeID, out string biomeName)</code> inside your player movement or animation event scripts[cite: 12]. It executes in ~10 nanoseconds with zero GC allocation[cite: 12].
+        <strong>Tip for Footstep Setup:</strong> In your final game, replace this tester with a call to <code>DPT_TerrainSurfaceTarget.TryGetHitBiome(hit, out int biomeID, out string biomeName)</code> inside your player movement or animation event scripts. It executes in ~10 nanoseconds with zero GC allocation.
     </div>
 
     <!-- SECTION THREE: DPT_Terrain_DemoCamera -->
@@ -300,44 +300,44 @@
     <h2 id="runtime-architecture">4. Architecture & Data Flow</h2>
     <p>The demo suite relies on a decoupled, non-destructive architecture that keeps rendering and physics perfectly synchronized:</p>
     <ul>
-        <li><strong>Zero-Cost Mesh Geometry:</strong> Terrain meshes do not require <code>Read/Write Enabled</code> in their import settings[cite: 4, 11]. Base vertex colors and weights remain strictly on the GPU, protecting memory budgets on consoles and mobile devices[cite: 4, 11].</li>
-        <li><strong>Tri-Biome Runtime Ledger:</strong> When terrain is baked via <code>DPT_SurfaceDataBaker</code>, the system packs the three candidate biomes (<code>id0, id1, id2</code>) and their base unscaled weights (<code>w0, w1</code>) into contiguous byte arrays inside <code>DPT_TerrainSurfaceData</code>[cite: 9, 11]. This requires only 5 bytes per triangle (~150 KB for a 30,000-triangle mesh)[cite: 11].</li>
-        <li><strong>On-Demand Evaluation:</strong> When <code>DPT_SurfaceRaycastTester</code> hits a triangle, <code>DPT_TerrainSurfaceTarget</code> queries the material's current vector properties (<code>_Dynamic_Biome_Slot1</code>, etc.)[cite: 12, 14]. It multiplies only the matching candidate weights for that single hit triangle and immediately returns the winner[cite: 12].</li>
-        <li><strong>Exact Visual/Audio Parity:</strong> If snow accumulates from a dusting to full coverage via <code>DPT_DynamicBiomeDemoController</code>, the raycast query dynamically transitions from returning Grass to returning Mountain Snow at the exact threshold where snow takes over visually[cite: 6, 10, 12].</li>
+        <li><strong>Zero-Cost Mesh Geometry:</strong> Terrain meshes do not require <code>Read/Write Enabled</code> in their import settings[cite: 4]. Base vertex colors and weights remain strictly on the GPU, protecting memory budgets on consoles and mobile devices[cite: 4].</li>
+        <li><strong>Tri-Biome Runtime Ledger:</strong> When terrain is baked via <code>DPT_SurfaceDataBaker</code>, the system packs the three candidate biomes (<code>id0, id1, id2</code>) and their base unscaled weights (<code>w0, w1</code>) into contiguous byte arrays inside <code>DPT_TerrainSurfaceData</code>[cite: 9]. This requires only 5 bytes per triangle (~150 KB for a 30,000-triangle mesh).</li>
+        <li><strong>On-Demand Evaluation:</strong> When <code>DPT_SurfaceRaycastTester</code> hits a triangle, <code>DPT_TerrainSurfaceTarget</code> queries the material's current vector properties (<code>_Dynamic_Biome_Slot1</code>, etc.). It multiplies only the matching candidate weights for that single hit triangle and immediately returns the winner.</li>
+        <li><strong>Exact Visual/Audio Parity:</strong> If snow accumulates from a dusting to full coverage via <code>DPT_DynamicBiomeDemoController</code>, the raycast query dynamically transitions from returning Grass to returning Mountain Snow at the exact threshold where snow takes over visually[cite: 6].</li>
     </ul>
 
     <!-- SECTION FIVE: TROUBLESHOOTING -->
     <h2 id="troubleshooting">5. Troubleshooting Notes</h2>
     
     <div class="troubleshooting-q">"The Raycast Tester reports 'None' or does not detect any surface."</div>
-    <div class="troubleshooting-a">Ensure the terrain GameObject has an active <code>MeshCollider</code> attached and that its physics layer is included in the <code>Raycast Layers</code> mask[cite: 14]. Also verify that <code>DPT_TerrainSurfaceTarget</code> is present on the same GameObject and references a valid baked <code>DPT_TerrainSurfaceData</code> asset[cite: 9, 12, 14].</div>
+    <div class="troubleshooting-a">Ensure the terrain GameObject has an active <code>MeshCollider</code> attached and that its physics layer is included in the <code>Raycast Layers</code> mask. Also verify that <code>DPT_TerrainSurfaceTarget</code> is present on the same GameObject and references a valid baked <code>DPT_TerrainSurfaceData</code> asset[cite: 9].</div>
 
     <div class="troubleshooting-q">"Live Biome Modifiers are changing the visuals, but raycasts still return the old baked biome."</div>
-    <div class="troubleshooting-a">Re-bake the terrain using the updated <code>DPT_SurfaceDataBaker</code>[cite: 9]. Earlier versions only stored a single precomputed dominant byte per triangle, which lacked the multi-biome candidate arrays required for real-time runtime re-evaluation[cite: 9, 11].</div>
+    <div class="troubleshooting-a">Re-bake the terrain using the updated <code>DPT_SurfaceDataBaker</code>[cite: 9]. Earlier versions only stored a single precomputed dominant byte per triangle, which lacked the multi-biome candidate arrays required for real-time runtime re-evaluation[cite: 9].</div>
 
     <div class="troubleshooting-q">"Setting a Weight Multiplier to 0.0 makes other biomes disappear or cut off sharply."</div>
     <div class="troubleshooting-a">In a multiplicative weighting pipeline, <code>1.0</code> represents neutral baseline coverage[cite: 6]. Setting a multiplier to <code>0.0</code> erases that biome completely from the face[cite: 6]. If that biome was blending with a secondary biome, the secondary biome will take 100% of the normalized weight[cite: 6]. To disable a dynamic slot without modifying underlying painted weights, uncheck the slot's active toggle or set its Target ID to <code>-1</code>[cite: 6].</div>
 
     <div class="troubleshooting-q">"The on-screen control hint box overlaps the Raycast Tester HUD."</div>
-    <div class="troubleshooting-a">The <code>DPT_Terrain_DemoCamera</code> overlay is anchored to the bottom-center of the viewport, while <code>DPT_SurfaceRaycastTester</code> renders in the top-left corner[cite: 14]. Ensure both scripts are updated to the latest version to prevent viewport rect overlap.</div>
+    <div class="troubleshooting-a">The <code>DPT_Terrain_DemoCamera</code> overlay is anchored to the bottom-center of the viewport, while <code>DPT_SurfaceRaycastTester</code> renders in the top-left corner. Ensure both scripts are updated to the latest version to prevent viewport rect overlap.</div>
 
     <hr class="divider">
 
     <!-- SUPPORT SECTION -->
     <h2 id="support">Support, Contact & Custom Integration</h2>
 
-    <p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form. This is the primary and most reliable way to get help with any problems you encounter with the packages[cite: 15].</p>
+    <p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form. This is the primary and most reliable way to get help with any problems you encounter with the packages.</p>
 
-    <p>You can also use this form to inquire about custom freelance technical art services. If your project requires external 3D models to be integrated into the DPT ecosystem—including bespoke vertex-data packing, procedural wood grain mapping, GPU wind systems, or game-ready LOD budgeting—get in touch to discuss your specific needs and availability[cite: 15].</p>
+    <p>You can also use this form to inquire about custom freelance technical art services. If your project requires external 3D models to be integrated into the DPT ecosystem—including bespoke vertex-data packing, procedural wood grain mapping, GPU wind systems, or game-ready LOD budgeting—get in touch to discuss your specific needs and availability.</p>
 
     <div class="note">
         <strong>Email Contact (Preferred for all Support):</strong><br>
-        For troubleshooting, bug reports, publisher licensing, and freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>[cite: 15].
+        For troubleshooting, bug reports, publisher licensing, and freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
     </div>
 
     <div class="note">
         <strong>DPT Community Discord:</strong><br>
-        While the contact form is the best way to get direct help with issues, you are also welcome to join the <strong><a href="https://discord.gg/XqbeSePWQ" target="_blank">Discord Server</a></strong> to share feedback and connect with other users[cite: 15].
+        While the contact form is the best way to get direct help with issues, you are also welcome to join the <strong><a href="https://discord.gg/XqbeSePWQ" target="_blank">Discord Server</a></strong> to share feedback and connect with other users.
     </div>
 
 </body>
