@@ -48,7 +48,7 @@
 <nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
     <a href="../index.html" style="color: #38bdf8; margin-right: 15px;">&larr; Back to Hub</a>
     <span style="color: #64748b;">|</span>
-    <a href="palette_system.html" style="color: #38bdf8; margin-left: 15px;">Zone Variation & Palettes</a>
+    <a href="palette-system.html" style="color: #38bdf8; margin-left: 15px;">Zone Variation & Palettes</a>
 </nav>
 
     <h1>Stylized Color Swapper & Material Optimizer</h1>
@@ -444,7 +444,7 @@
 
     <h2>Zone Painting</h2>
     <p>In <strong>Vertex Bake &amp; Pack</strong> mode, the <strong>Zones</strong> option in the Change Channel dropdown lets you paint a Zone ID (0&ndash;7, where 7 is Default) directly onto swatches. This is a separate data channel from Color/Metallic/etc. and is packed alongside the other PBR data at bake time.</p>
-    <p>Zone IDs are read at runtime by <code>DPT_ZoneVariation</code> to drive per-instance color variation &mdash; see the <a href="palette_system.html">Zone Variation &amp; Palettes</a> page for how zones are consumed by the shader system. This section covers only the paint-time assignment inside the Recolor Tool itself:</p>
+    <p>Zone IDs are read at runtime by <code>DPT_ZoneVariation</code> to drive per-instance color variation &mdash; see the <a href="palette-system.html">Zone Variation &amp; Palettes</a> page for how zones are consumed by the shader system. This section covers only the paint-time assignment inside the Recolor Tool itself:</p>
     <ul>
         <li>Switch the view/paint channel to <strong>Zones</strong>. Swatches display in a distinct zone-index color rather than their actual paint color.</li>
         <li>With a swatch selected, either drag the <strong>Zone</strong> slider (0&ndash;7) in the swatch editor, or paint directly in the viewport the same way you'd paint a color &mdash; the active zone value takes the place of the brush color while this channel is active.</li>
