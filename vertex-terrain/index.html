@@ -59,16 +59,18 @@
     </nav>
     <h1>DPT_VertexTerrainUI</h1>
     <div class="subtitle">Component Reference Guide<br>
-    <span style="font-size: 11pt; font-style: normal;">A Unity EditorWindow tool designed for real-time vertex-based terrain painting, organic sculpting, procedural gradient blending, spline path generation, and performance optimization.</span></div>
+    <span style="font-size: 11pt; font-style: normal;">A Unity EditorWindow tool designed for real-time vertex-based terrain painting, organic sculpting, procedural gradient blending, spline path generation, multi-tile seamless terrains, and performance optimization.</span></div>
     <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
         <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
-        <a href="#section-one" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Target & Brush Settings</a>
-        <a href="#section-two" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">2. Core Architecture & Tools</a>
-        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">3. Troubleshooting Notes</a>
-        <a href="#support" style="color: #a5f3fc; text-decoration: none;">4. Support</a>
+        <a href="#section-one" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Target &amp; Brush Settings</a>
+        <a href="#section-two" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">2. Core Architecture &amp; Tools</a>
+        <a href="#section-three" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">3. Multi-Tile Terrains</a>
+        <a href="#section-four" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">4. Performance Tips</a>
+        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">5. Troubleshooting</a>
+        <a href="#support" style="color: #a5f3fc; text-decoration: none;">6. Support</a>
     </div>
-    <h2 id="section-one">1. Target & Brush Settings</h2>
-    
+    <h2 id="section-one">1. Target &amp; Brush Settings</h2>
+
     <h3>Configuration Parameters</h3>
     <p>Controls target pipeline workflows, active terrain meshes, and primary brush characteristics in the Inspector.</p>
     <table>
@@ -81,11 +83,11 @@
         <tbody>
             <tr>
                 <td><strong>Pipeline Mode</strong></td>
-                <td>Switches between Terrain Atlas (Texture-based arrays using VCCore shaders) and Direct Vertex Color modes.</td>
+                <td>Switches the target between <strong>Terrain Atlas</strong> (texture-array based biomes rendered through the shared VCCore shader) and <strong>Direct Vertex Color</strong> (lightweight, texture-free biome blending baked straight into vertex data). Switching pipeline modes on an existing mesh automatically re-assigns the VCCore material and converts the mesh's vertex data to match the new mode.</td>
             </tr>
             <tr>
                 <td><strong>Target Terrain Object</strong></td>
-                <td>The active root GameObject containing the MeshFilter and MeshRenderer targeted for painting or sculpting in the SceneView.</td>
+                <td>The active root GameObject containing the MeshFilter and MeshRenderer targeted for painting or sculpting in the SceneView. When working with a multi-tile terrain, tools will automatically discover and include neighboring tiles near the brush without needing to reassign this per tile.</td>
             </tr>
             <tr>
                 <td><strong>Radius</strong></td>
@@ -99,26 +101,158 @@
                 <td><strong>Blend Sharpness</strong></td>
                 <td>Controls transition contrast between biomes, from soft gradual gradients (0.0) to crisp stylized borders (1.0).</td>
             </tr>
+            <tr>
+                <td><strong>Dynamic Topology</strong></td>
+                <td>When enabled, automatically subdivides triangle edges that stretch beyond a configurable maximum length while sculpting or drawing spline paths, so raised terrain keeps clean, evenly-sized geometry instead of a handful of giant stretched triangles. Subdivision is throttled internally (both by cursor movement and by time) so continuous strokes stay responsive rather than re-triangulating on every tick.</td>
+            </tr>
+            <tr>
+                <td><strong>Pen / Tablet Input</strong></td>
+                <td>Graphics tablets and stylus pointers are supported alongside the mouse for brush placement, useful for freehand painting and sculpting passes that benefit from a more natural pointing device.</td>
+            </tr>
         </tbody>
     </table>
 
     <div class="tip"><strong>Tip:</strong> Use hotkeys <code>B</code>, <code>H</code>, <code>G</code>, <code>S</code>, and <code>P</code> to instantly toggle between Paint, Sculpt, Gradient, Smooth, and Path modes without using the UI buttons.</div>
-    <h2 id="section-two">2. Core Architecture & Tool Modes</h2>
+
+    <h3>Ground / Biome Library</h3>
+    <p>Each terrain (or family of terrains) references a <strong>Biome Library</strong> asset — the palette of ground presets available to the Paint brush and gradient tools. Terrain Atlas and Direct Vertex Color pipelines each keep their own independent list of presets within the same library, since they carry different data (Terrain Atlas presets reference source textures; Direct Vertex Color presets store a flat base color instead).</p>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Action</th>
+                <th>What it does</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Add</strong></td>
+                <td>Appends a new, blank ground preset to the active pipeline's list and opens it in the preset editor.</td>
+            </tr>
+            <tr>
+                <td><strong>Duplicate</strong></td>
+                <td>Clones the selected preset (including its ramp, textures, and PBR settings) as a starting point for a variant biome.</td>
+            </tr>
+            <tr>
+                <td><strong>Delete</strong></td>
+                <td>Removes a preset from the library and re-indexes the remaining presets. In Terrain Atlas mode this also triggers a recompile of the Micro Atlas and Detail Texture Array so the material stays in sync.</td>
+            </tr>
+            <tr>
+                <td><strong>Reorder / Swap</strong></td>
+                <td>Drag presets to reorder the palette, or swap two entries directly. Reordering updates preset IDs and any painted vertex/face data automatically remaps to the new indices.</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>Per-preset authoring options include a color ramp (used for both albedo tinting and height-based blending), emissive color and intensity, ambient occlusion / parallax depth strength, normal strength, tiling scale, and anti-tiling patch rotation to break up obvious texture repetition at large tiling scales. PBR input can come from a single packed texture (with selectable channel layouts covering common Unity, and Unreal-style ORM packing conventions) or from separate metallic/smoothness maps.</p>
+    <div class="note"><strong>Note:</strong> The Micro Atlas and Detail Texture Array are regenerated automatically whenever the library changes in Terrain Atlas mode — you don't need to manually trigger a rebake after adding or editing a biome.</div>
+
+    <h2 id="section-two">2. Core Architecture &amp; Tool Modes</h2>
     <ul>
         <li><strong>Primary Tool Modes:</strong> Manages 8 distinct operational modes including Paint, Sculpt, Cave Digger, Gradient, Smooth, Clean-Up Brush, Path Splines, and Eyedropper sampling.</li>
-        <li><strong>Dynamic Topology & Tessellation:</strong> Automatically subdivides and tessellates stretched polygon edges on-the-fly when edge lengths exceed the configured threshold during sculpting or path creation.</li>
+        <li><strong>Dynamic Topology &amp; Tessellation:</strong> Automatically subdivides and tessellates stretched polygon edges on-the-fly when edge lengths exceed the configured threshold during sculpting or path creation.</li>
         <li><strong>Raycast AO Baker:</strong> Fires hemisphere raycasts per vertex to bake contact ambient occlusion directly into vertex data (UV2.x) for realistic crevice and shadow definition.</li>
-        <li><strong>Chunk Partitioning & LODs:</strong> Slices large terrain meshes into N x N spatial grid partitions, automatically generating decimated LOD levels and native Unity LODGroup components.</li>
+        <li><strong>Chunk Partitioning &amp; LODs:</strong> Slices large terrain meshes into N x N spatial grid partitions, automatically generating decimated LOD levels and native Unity LODGroup components.</li>
     </ul>
-    <h2 id="troubleshooting">3. Troubleshooting Notes</h2>
+
+    <h3>Tool Modes In Depth</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 22%;">Mode</th>
+                <th>What it's for</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Paint</strong></td>
+                <td>Paints biome IDs and blend weights across triangle corners, blending multiple ground presets together at their borders according to Blend Sharpness.</td>
+            </tr>
+            <tr>
+                <td><strong>Sculpt</strong></td>
+                <td>Raise / lower geometry along the vertex normal. Includes a <strong>Grab</strong> action for freeform vertex dragging (useful for pulling out ridges or overhangs by hand) alongside standard raise/lower.</td>
+            </tr>
+            <tr>
+                <td><strong>Cave Digger (Carve)</strong></td>
+                <td>Digs tunnels, caves, and overhangs into the mesh. On multi-tile terrains, a carve that reaches a tile boundary can automatically detect and punch through into the neighboring tile so the tunnel continues seamlessly across the seam.</td>
+            </tr>
+            <tr>
+                <td><strong>Gradient</strong></td>
+                <td>Automatically blends biomes based on slope angle or height range, useful for laying down large-scale rules like "snow above X height" or "rock on slopes steeper than Y" in a single pass.</td>
+            </tr>
+            <tr>
+                <td><strong>Smooth</strong></td>
+                <td>Relaxes vertex positions toward their neighbors to soften sculpted detail. Smoothing passes run multi-threaded across the affected vertex groups for responsiveness on larger brushes.</td>
+            </tr>
+            <tr>
+                <td><strong>Clean-Up Brush</strong></td>
+                <td>Simplifies over-dense or messy geometry (for example, areas that accumulated a lot of dynamic-topology subdivision) back down to a cleaner triangle budget.</td>
+            </tr>
+            <tr>
+                <td><strong>Path Splines</strong></td>
+                <td>Lay down a spline in the SceneView (add, move, and delete nodes interactively) to paint a biome strip along a path or carve a trench/road profile following the curve.</td>
+            </tr>
+            <tr>
+                <td><strong>Eyedropper</strong></td>
+                <td>Samples the biome under the cursor and sets it as the active paint biome — a quick way to match an existing area without hunting through the palette.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Material Pipelines: Terrain Atlas vs. Direct Vertex Color</h3>
+    <p>Both pipelines render through the same shared <strong>VCCore</strong> master shader/material system used across all DPT packages, so switching a terrain between pipelines doesn't require assigning a different shader by hand — the tool configures the correct keywords and texture bindings automatically.</p>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 22%;">Pipeline</th>
+                <th>Behavior</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Terrain Atlas</strong></td>
+                <td>Compiles your biome library into a <strong>Detail Texture Array</strong> (per-biome normal, height, and packed PBR data) plus a small <strong>Micro Atlas</strong> lookup texture carrying per-biome color ramps and material parameters. Best suited to large, natural, photoreal-leaning terrains that need real texture detail up close.</td>
+            </tr>
+            <tr>
+                <td><strong>Direct Vertex Color</strong></td>
+                <td>Bakes each biome's flat base color directly into the mesh's vertex colors — no texture arrays or atlases involved. Zero texture memory overhead and fully SRP Batcher / GPU Resident Drawer friendly, at the cost of per-texel surface texturing. A good fit for stylized, low-poly, or highly instanced environments.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Undo &amp; Safety</h3>
+    <p>All painting, sculpting, and carving operations are fully integrated with Unity's native Undo system. Each continuous stroke (from mouse/pen down to release) is grouped as a single Undo step rather than one step per tick, so undoing a stroke reverts the whole brush pass in one action instead of requiring dozens of undos.</p>
+
+    <h2 id="section-three">3. Multi-Tile Terrains</h2>
+    <p>Large worlds are typically built from several terrain tiles placed edge-to-edge rather than one enormous mesh. The tool keeps adjacent tiles' shared borders in sync automatically as you paint, sculpt, and carve near a seam:</p>
+    <ul>
+        <li><strong>Seam-aware sculpting and painting:</strong> Height changes, biome blends, and vertex colors applied near a tile boundary are mirrored onto the matching vertices of the neighboring tile, so the seam stays visually continuous instead of showing a hard edge.</li>
+        <li><strong>Cross-tile carving:</strong> A carve stroke that reaches a boundary can tunnel through into the next tile automatically, continuing caves and overhangs across multiple tiles.</li>
+        <li><strong>New tile placement checks:</strong> When creating a neighboring tile, the tool compares the new tile's footprint against the actual current mesh bounds of nearby tiles (not just their nominal grid size) and warns before creating it if they'd overlap — a safety net for tiles whose edges have already drifted from prior sculpting.</li>
+    </ul>
+    <div class="warning"><strong>Best practice:</strong> Seam synchronization needs both tiles on either side of a boundary to have been touched at least once (so the seam is registered) before it can be reliably protected. If you carve or aggressively drag geometry right at the very edge of a brand-new tile pair before painting or sculpting a normal pass over that boundary first, the boundary may not be respected as strictly as it is once it's an established, registered seam. When starting a new tile next to an existing one, do an ordinary paint or sculpt pass across the shared edge first, then use Cave Digger near it with confidence.</div>
+
+    <h2 id="section-four">4. Performance Tips</h2>
+    <ul>
+        <li><strong>Dynamic Topology has a real cost:</strong> subdividing geometry is inherently more expensive than a plain sculpt tick. For broad, sweeping height changes, consider sculpting with Dynamic Topology off and only re-enabling it for a finishing pass where you want extra triangle density for detail.</li>
+        <li><strong>Large single strokes vs. many small ones:</strong> a few large, deliberate strokes generally sync tile seams and rebuild vertex data less often than many tiny flicks of the brush — both get the same result, but fewer stroke boundaries means fewer full-mesh Undo snapshots.</li>
+        <li><strong>Chunk Partitioning for big terrains:</strong> once a terrain's layout is finalized, partition it into an N x N grid of chunks with generated LODs rather than leaving it as one very large mesh — this keeps both editor responsiveness and runtime rendering cost down.</li>
+        <li><strong>Smoothing large areas:</strong> the Smooth brush's relaxation pass is multi-threaded per affected vertex group, so larger brush radii scale reasonably well, but very large radii on very dense meshes will still take longer than a small, focused pass.</li>
+    </ul>
+
+    <h2 id="troubleshooting">5. Troubleshooting Notes</h2>
     <div class="troubleshooting-q">"Target GameObject does not have the VCCore Shader assigned."</div>
     <div class="troubleshooting-a">Ensure the GameObject's MeshRenderer references the correct `SH_DPT_VCCore` material. Click the "Assign VCCore Material" or "Enable on Material" button directly inside the Target section of the UI to automatically fix material configurations.</div>
 
     <div class="troubleshooting-q">"Selected GameObject does not have a MeshFilter attached."</div>
     <div class="troubleshooting-a">The target object must contain a valid MeshFilter and mesh asset to record vertex color and height data. Select an appropriate terrain tile or generate a new surface via the Terrain Generator panel.</div>
 
+    <div class="troubleshooting-q">A seam between two tiles looks cracked or misaligned after carving a tunnel near the edge.</div>
+    <div class="troubleshooting-a">This is almost always a not-yet-registered seam (see the Multi-Tile Terrains section above). Undo back to before the carve, run a normal Paint or Sculpt stroke across that shared edge so the boundary gets registered, then redo the carve.</div>
+
+    <div class="troubleshooting-q">Sculpting feels sluggish, or there's a brief pause right at the start of a stroke.</div>
+    <div class="troubleshooting-a">A short pause at the very start of a stroke is expected — it's Unity's Undo system taking its one snapshot for that stroke, and it's proportional to mesh size. If sculpting stays slow throughout the stroke rather than just at the start, try disabling Dynamic Topology temporarily; subdivision is the most expensive part of a sculpt tick, especially with a small brush radius moving quickly (e.g. with a pen tablet) across a lot of stretched geometry.</div>
+
 <hr class="divider">
-<h2 id="support">Support, Contact & Custom Integration</h2>
+<h2 id="support">Support, Contact &amp; Custom Integration</h2>
 
 <p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form. This is the primary and most reliable way to get help with any problems you encounter with the packages.</p>
 
