@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>DPT Stylized Color Swapper & Material Optimizer - Reference Guide</title>
+    <title>DPT Stylized Color Swapper & Material Optimizer - Easy Guide</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
@@ -52,522 +52,521 @@
 </nav>
 
     <h1>Stylized Color Swapper & Material Optimizer</h1>
-    <div class="subtitle">Complete Technical Reference & Editor Guide</div>
+    <div class="subtitle">Technical Guide</div>
     
-    <p>The Stylized Color Swapper & Material Optimizer is a monolithic Editor utility engineered to eliminate the traditional "Photoshop to Unity" asset variation bottleneck. By allowing artists to interactively scan, paint, and re-bake stylized assets directly inside a custom 3D viewport, it empowers rapid creation of infinite prop variations with zero texture memory overhead.</p>
+    <p>The Color Swapper is a tool that lives inside Unity's editor and lets you change the colors and look of your 3D models without leaving Unity or opening an image-editing program. You pick a model, paint new colors onto it in a 3D preview window, and save the result as a ready-to-use version, all in a few clicks, with no separate image files to manage.</p>
 
     <div class="note">
-        <strong>Optimized Performance:</strong> Variations generated via the Vertex Bake & Pack mode cost absolutely no additional texture memory and utilize the optimized <code>VCCore</code> material for single-pass instanced rendering across thousands of variants.
+        <strong>Runs efficiently:</strong> When you save using Vertex mode, your color variations don't need any extra image files, and Unity can display thousands of differently-colored copies of the same model at once without slowing down. With Texture mode, you can make entire scenes run off 1 material with 1 micro-atlas.
     </div>
 
     <hr class="divider">
 
-    <h2>Core Architecture & Workflow</h2>
-    <p>The tool operates entirely non-destructively on your scene models. The typical lifecycle of a variation is as follows:</p>
+    <h2>How It Works, Step by Step</h2>
+    <p>The tool never changes your original files by accident, it always works on a copy, and nothing is saved until you click a save button. Here's the general process:</p>
     <ol>
-        <li><strong>Selection:</strong> Drag a target GameObject or Prefab into the tool's <em>Target Object</em> field.</li>
-        <li><strong>Scanning:</strong> The tool evaluates your mesh against its original texture or vertex stream, extracting a unified Swatch Palette based on exact UV mappings and material zones.</li>
-        <li><strong>Painting:</strong> Using the interactive 3D viewport, you paint new base colors, author directional 3D gradients, assign procedural PBR material IDs, adjust surface normal smoothing, paint emissive glow, and paint natural vertex wind sway weights directly onto the 3D surface.</li>
-        <li><strong>Generation:</strong> The tool bakes all painted data into a new isolated Mesh asset, packs PBR data into secondary UV channels, and saves a <strong>Phantom Prefab</strong> ready for level placement.</li>
+        <li><strong>Pick a model:</strong> Drag the object or model you want to recolor into the tool's window.</li>
+        <li><strong>Scan it:</strong> The tool looks at the model's current colors and sorts its surface into a list of color groups (called "swatches") that you can edit one at a time, or several at once.</li>
+        <li><strong>Paint it:</strong> In the 3D preview window, you paint new colors, blend smooth color transitions, apply realistic material looks (like wood or metal), round off sharp edges, add a glow, or set up gentle wind movement, all by clicking and dragging directly on the model.</li>
+        <li><strong>Save it:</strong> Once you're happy with it, the tool saves your changes as a new, ready-to-drop-into-your-game version of the model.</li>
     </ol>
 
-    <h2>Scanning & Recolor Modes</h2>
-    <p>The tool offers specific modes for scanning meshes and outputting the final recolored data.</p>
+    <h2>Scanning Your Model & Choosing How to Save</h2>
+    <p>Before you can paint, the tool needs to read your model's current colors. There are a few ways it can do that, and a couple of ways it can save the result.</p>
     
-    <h3>Scan Modes</h3>
+    <h3>How the Tool Reads Your Model's Colors</h3>
     <table>
         <thead>
             <tr>
-                <th style="width: 25%;">Mode</th>
-                <th>Behavior & Use Case</th>
+                <th style="width: 25%;">Option</th>
+                <th>What It Does & When to Use It</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td><strong>Texture Palette (Default)</strong></td>
-                <td>Scans the base map of the material and groups mesh triangles by their exact sampled color. Ideal for traditional flat-shaded or gradient-mapped stylized models (e.g., Synty, Polygon packs).</td>
+                <td><strong>From the Model's Image (Default)</strong></td>
+                <td>Looks at the color image already applied to the model and groups its surface by matching colors. This is the right choice for most stylized models (like Synty or Polygon-style packs).</td>
             </tr>
             <tr>
-                <td><strong>Vertex Colors</strong></td>
-                <td>Reads pre-existing vertex colors on the mesh instead of the texture, averaging all 3 vertices of each triangle for a stable sample. Use this if the model is already vertex-painted from software like Blender or ZBrush, or when reloading a saved DPT prefab to continue editing.</td>
+                <td><strong>From Colors Already Painted on the Model</strong></td>
+                <td>Reads colors that are already stored directly on the model's surface rather than in an image. Use this if the model was made in something like Blender or ZBrush, or if you're reopening a model you already saved with this tool and want to keep editing it.</td>
             </tr>
             <tr>
-                <td><strong>Material Colors</strong></td>
-                <td>Reads the solid color directly off each assigned unlit material instead of a texture or vertex data. Use this for objects whose materials have no textures or vertex colors and are just flat colors set via the material's color wheel.</td>
+                <td><strong>From a Plain Flat Color</strong></td>
+                <td>For a model that has no image and no painted colors, just a single flat color chosen from a color wheel. Use this mode to read that flat color instead.</td>
             </tr>
         </tbody>
     </table>
 
-    <p>Two additional toggles refine scanning behavior: <strong>Combine Similar Colors</strong> (<code>Alt+C</code>) merges near-identical sampled colors into a single swatch at scan time, and <strong>Split Disconnected Islands</strong> (<code>Alt+I</code>) separates physically disconnected clusters sharing the same color into independently paintable swatches. When saving, identical swatches automatically fold into single master pixels in the output texture atlas.</p>
+    <p>Two extra options fine-tune how scanning works: <strong>Combine Similar Colors</strong> (<code>Alt+C</code>) merges colors that are nearly identical into a single group, so you're not stuck editing near-duplicates separately. <strong>Split Disconnected Islands</strong> (<code>Alt+I</code>) keeps physically separate pieces that happen to share the same color (like two arms) as independently editable groups, instead of lumping them together. When you save, any groups that end up with identical colors are automatically merged back together to keep the result efficient.</p>
 
-    <h3>Scan Fidelity &amp; Geometry Options</h3>
-    <p>A few additional settings control how faithfully the tool reads and rebuilds your source geometry:</p>
+    <h3>Extra Accuracy Settings</h3>
+    <p>A few more settings control how carefully the tool reads and rebuilds your model:</p>
     <ul>
-        <li><strong>Auto-Uncompress Textures (Scan Mode):</strong> Temporarily marks compressed textures (DXT5, BC7, etc.) as uncompressed while scanning, avoiding block artifacts and color banding that would otherwise degrade palette accuracy and cause edge seams. If the tool detects compressed textures on your target, it shows a warning with a <strong>Re-Scan (Lossless)</strong> button to force a one-off high-fidelity rescan.</li>
-        <li><strong>Adaptive Tessellation:</strong> Subdivides large triangles automatically to improve vertex-painting resolution, particularly for preserving fine texture detail (text, decals, small logos) when baking into vertex colors. Controls: <strong>Protect Smooth Surfaces</strong> (prevents slicing on curved geometry like wheels, avoiding shading artifacts), <strong>Max Subdivision</strong> (1&ndash;5, the depth limit for adaptive splitting), and <strong>Color Threshold</strong> (how much color variation across a triangle is needed to trigger a split). Effectiveness varies by mesh: it captures fine detail well on hard-surface models but has little to no visible effect on already-low-poly, largely uniform-colored meshes.</li>
-        <li><strong>Auto-Unwrap (Lossless):</strong> Dynamically generates a mathematically clean UV map during bake, specifically for Feature ID detail mapping. Fixes models with poor or missing original UVs without modifying the source asset. When enabled, a <strong>Hard Edge Cutoff</strong> angle slider controls where the unwrapper is willing to cut a seam to relieve UV pressure &mdash; lower values hide seams on sharper corners.</li>
-        <li><strong>Smooth Normals (Per-Swatch Geometry Smoothing):</strong> Recalculates and averages vertex normals across coincident split edges using a continuous angle-thresholding algorithm. Available in both <strong>Vertex Bake &amp; Pack</strong> and <strong>Texture Coloring</strong> modes. Allows selective rounding of faceted, low-poly geometry (such as campfire stones, chopped logs, or terrain) without altering the underlying mesh vertex count.</li>
+        <li><strong>Read Compressed Images at Full Quality:</strong> Some image files are compressed to save space, which can make colors look slightly blurry or blocky when sampled directly. This option temporarily undoes that compression while scanning, so the colors it picks up are accurate. If it spots a compressed image, it will offer a one-click button to redo the scan at full quality.</li>
+        <li><strong>Add Detail Automatically:</strong> If a model needs extra fine detail preserved (like small text, a logo, or a decal) when its colors are saved directly onto the model rather than an image, this setting automatically adds a bit of extra geometry only where it's needed to capture that detail. You can protect naturally curved surfaces (like wheels) from being cut up unnecessarily, limit how much extra detail is added, and set how big a color difference has to be before extra detail kicks in. It works best on blocky, hard-surface models, it won't do much for models that are already low-detail and mostly one color.</li>
+        <li><strong>Fix Missing Wrap Layout:</strong> Some models don't have a clean "layout" for how a flat image wraps around their 3D shape. This automatically builds a clean one when needed, without touching your original file. A slider controls how aggressively it's allowed to add seams (the invisible cut lines needed to unfold a 3D shape flat) a lower value hides those seams on sharper corners.</li>
+        <li><strong>Round Off Sharp Edges (Per Piece):</strong> Smooths out how light reflects off blocky, low-detail surfaces (like campfire stones or chopped logs) without adding any extra geometry, it just changes how the lighting looks. Works no matter which save option you use.</li>
     </ul>
 
-    <h3>Recolor Modes (Output)</h3>
+    <h3>How the Result Gets Saved</h3>
     <table>
         <thead>
             <tr>
-                <th style="width: 25%;">Mode</th>
-                <th>Output Format</th>
+                <th style="width: 25%;">Option</th>
+                <th>What You Get</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td><strong>Texture Coloring</strong></td>
-                <td>Traditional approach. Recolor the swatches and export a brand new PNG texture atlas. Used for legacy pipelines or mobile targets with strict vertex limitations. Supports Normal Smoothing and Texel Density scaling.</td>
+                <td><strong>Save as an Image</strong></td>
+                <td>The traditional approach, recolors your model and creates a brand-new image file, just like the original had. Best for older projects or mobile games that need to keep things lightweight.</td>
             </tr>
             <tr>
-                <td><strong>Vertex Bake & Pack (Recommended)</strong></td>
-                <td>Injects colors directly into the mesh Vertex Colors (<code>COLOR</code>). Encodes advanced PBR values (Metallic, Smoothness, AO) and procedural Feature IDs into unused UV channels (<code>TEXCOORD1</code>, <code>TEXCOORD2</code>). Bypasses textures entirely while unlocking Directional 3D Gradients, Live Wind Painting, Normal Smoothing, and Zones.</td>
+                <td><strong>Save Directly on the Model (Recommended)</strong></td>
+                <td>Stores your colors and material settings (metal, shine, shadowing) directly on the model itself instead of in a separate image. This skips images entirely and unlocks extra features like smooth color gradients, live wind animation, edge smoothing, and zones (covered further below).</td>
             </tr>
         </tbody>
     </table>
 
     <hr class="divider">
 
-    <h2>Multi-Scope Selection Engine</h2>
-    <p>The tool includes a robust three-tier geometric selection hierarchy paired with dynamic polygon extraction. Switch between selection scopes by clicking their buttons in the toolbar or pressing <code>I</code>:</p>
+    <h2>Ways to Select Parts of Your Model</h2>
+    <p>The tool gives you three ways to select what you want to paint, plus a quick shortcut. Switch between them using the toolbar buttons or by pressing <code>I</code>:</p>
 
     <div class="feature-grid">
         <div class="feature-box">
-            <h4>Face Selection</h4>
-            <p>Target individual triangles/polygons with pinpoint precision. Ideal for painting fine accents, small trim lines, glowing runes, or specific facets without affecting adjoining faces.</p>
+            <h4>Single Surface</h4>
+            <p>Selects one small triangle at a time, for pinpoint precision. Great for tiny details like a trim line or a single glowing rune.</p>
         </div>
         <div class="feature-box">
-            <h4>UV Island Selection</h4>
-            <p>Selects the entire contiguous UV cluster under your cursor. Perfect for recoloring distinct texture regions that were unwrapped together as a single continuous UV piece.</p>
+            <h4>Connected Region</h4>
+            <p>Selects a whole connected patch of the model that shares one continuous area on its image. Handy for recoloring a clearly defined region in one click.</p>
         </div>
         <div class="feature-box">
-            <h4>3D Mesh Shell Selection</h4>
-            <p>Selects the entire physically encapsulated 3D geometry element across all UV seams. Instantly selects detached accessories, complete hair clumps, armor plates, weapons, and clothing layers in a single click.</p>
+            <h4>Whole Piece</h4>
+            <p>Selects an entire physically separate part of the model, like a whole armor plate, a sword, or a clump of hair, in a single click.</p>
         </div>
         <div class="feature-box">
-            <h4>Dynamic Face Extract (<code>Q</code>)</h4>
-            <p>Dynamically isolates and carves out single polygons on-the-fly without needing to split the entire mesh upfront. Extracted faces become independent swatches ready for instant recoloring or gradient application.</p>
+            <h4>Quick Pull-Out (<code>Q</code>)</h4>
+            <p>Instantly splits off just the surface under your cursor into its own separately-editable piece, without needing to split the whole model first.</p>
         </div>
     </div>
 
     <hr class="divider">
 
-    <h2>Directional 3D Gradients &amp; Vertex Wind Sway</h2>
-    <p>Exclusive to <strong>Vertex Bake &amp; Pack</strong> mode, the <strong>Gradient Paint (<code>G</code>)</strong> tool allows you to author directional 3D gradients across any material channel (Color, Metallic, Smoothness, AO, Emissive, and Wind) by clicking and dragging directly across the model in the 3D viewport.</p>
+    <h2>Smooth Color Gradients & Gentle Wind Sway</h2>
+    <p>Only available when saving directly on the model (the recommended option). The <strong>Gradient tool (<code>G</code>)</strong> lets you click and drag across the model to smoothly blend from one color or setting to another, instead of applying one flat value everywhere.</p>
 
     <div class="feature-grid">
         <div class="feature-box">
-            <h4>Directional 3D Gradients</h4>
-            <p>Click to set the start point (anchor) and drag to define the direction and length of the gradient. Gradients are scale-invariant and calculate accurately on any object size.</p>
+            <h4>Smooth Gradients</h4>
+            <p>Click to set a starting point, then drag to set the direction and length of the blend. This works accurately no matter how big or small the model is.</p>
             <ul>
-                <li><strong>Blend Modes:</strong> Choose between <code>Multiply</code>, <code>Replace</code>, or <code>SoftLight</code>.</li>
-                <li><strong>Alpha:</strong> Adjusts overall gradient intensity and opacity.</li>
-                <li><strong>Sharpness:</strong> Controls the falloff curve from soft linear transitions to crisp high-contrast thresholds.</li>
-                <li><strong>Clear:</strong> The dedicated <strong>Clear</strong> button immediately strips active gradients from the current selection.</li>
+                <li><strong>Blend Style:</strong> Choose how the gradient combines with what's already there, darken it, fully replace it, or blend it in more subtly.</li>
+                <li><strong>Strength:</strong> How strong or faint the gradient looks overall.</li>
+                <li><strong>Sharpness:</strong> How gradual or abrupt the transition is.</li>
+                <li><strong>Clear:</strong> Instantly removes any gradient from what you've currently selected.</li>
             </ul>
         </div>
         <div class="feature-box">
-            <h4>Gradient-Based Vertex Wind Painting</h4>
-            <p>Switch the view channel to <strong>Wind</strong> and drag a gradient from the plant/prop base to its tips to paint natural, progressive sway weight. Stems stay rooted firmly at <code>0.0</code> while leaves and branches sway dynamically at <code>1.0</code>.</p>
+            <h4>Painting Wind Movement</h4>
+            <p>Switch to the Wind setting and drag from the base of a plant or prop to its tip to set up natural, gradual sway. The base stays still while the tip sways the most.</p>
             <ul>
-                <li><strong>Simulate Wind Preview:</strong> Toggle the <strong>Simulate Wind</strong> button in the Wind channel toolbar to preview live real-time GPU vertex wind animation directly inside the viewport before saving.</li>
-                <li><strong>Zero Performance Cost:</strong> Wind weights are baked straight into the vertex stream and evaluated at runtime by the lightweight <code>VCCore</code> shader.</li>
+                <li><strong>Live Preview:</strong> Turn on "Simulate Wind" to watch the sway play out in real time, right in the preview window, before you save.</li>
+                <li><strong>No Extra Cost:</strong> This movement is stored directly on the model and costs nothing extra to run in your game.</li>
             </ul>
         </div>
     </div>
 
     <hr class="divider">
 
-    <h2>Understanding Vertex Colors: Benefits &amp; Limits</h2>
-    <p>Vertex Bake &amp; Pack is the recommended mode, but it's a genuinely different way of storing color and material data than a texture, with its own trade-offs. Understanding these will save you time diagnosing results that look "off."</p>
+    <h2>Saving Colors Directly on the Model: What to Expect</h2>
+    <p>Saving your colors directly on the model (rather than as an image) is the recommended option, but it works a little differently from a normal image and has a few trade-offs worth knowing about, understanding these will save you time if a result ever looks "off."</p>
 
     <div class="feature-grid">
         <div class="feature-box">
-            <h4>Benefit: Zero Texture Memory</h4>
-            <p>Every variant reuses the same tiny <code>VCCore</code> material and shares GPU-instanced draw calls (see the Zero-Overhead note above) &mdash; no per-variant texture memory cost, even across thousands of prop variants.</p>
+            <h4>Upside: No Extra Image Memory</h4>
+            <p>Every color variation shares the same lightweight setup, so there's no added memory cost, even across thousands of differently-colored copies.</p>
         </div>
         <div class="feature-box">
-            <h4>Limit: Resolution Is Tied to Geometry</h4>
-            <p>A texture can hold fine detail (text, decals, logos) regardless of mesh density. Vertex color resolution is capped by how many vertices exist &mdash; color only changes where a vertex exists to carry it. Fine detail gets smoothed or lost unless you add geometry, which is what <strong>Adaptive Tessellation</strong> (above) is for.</p>
+            <h4>Trade-off: Detail Is Limited by the Model's Shape</h4>
+            <p>An image can hold as much fine detail as you like. Colors stored directly on the model, though, can only be as detailed as the model itself, color can only change at a point where the model actually has a corner. If you need finer detail, add more geometry there (see "Add Detail Automatically" above).</p>
         </div>
         <div class="feature-box">
-            <h4>Limit: Zones &amp; Emissive Need Texture Mode</h4>
-            <p>In this tool, the Zones and Emissive paint channels are only available in Vertex Bake &amp; Pack mode. If you need Zones or Emissive on a texture-based setup instead, don't use this tool's vertex output for it &mdash; assign your <code>VCCore</code> material in its <strong>non-vertex-color mode</strong>, which exposes dedicated texture fields for both.</p>
+            <h4>Trade-off: Zones & Glow Need the Other Save Option</h4>
+            <p>Two features, numbered "zones" and glow effects, only work when using the VCCore material in either mode.</p>
         </div>
         <div class="feature-box">
-            <h4>Limit: Gradient Paint Is Vertex-Only</h4>
-            <p>Gradient Paint isn't available in Texture Coloring mode. With <strong>Optimize Palette Size</strong> on, every swatch's UVs get squashed down to a single pixel, leaving no room to represent a directional gradient at all. With it off, texture UV layouts aren't consistent enough between models to reliably map a gradient onto them.</p>
+            <h4>Trade-off: Gradients Only Work This Way</h4>
+            <p>Smooth gradients aren't available if you're saving as an image. With the image-shrinking option turned on, there simply isn't enough room in the tiny resulting image to fit a gradient. With it off, different models' images aren't laid out consistently enough to reliably place a gradient on them.</p>
         </div>
     </div>
 
     <div class="note">
-        <strong>Ambient Occlusion in Vertex Coloring mode:</strong> Textured AO maps don't conform reliably onto vertex data &mdash; a texture's AO detail is denser than the mesh's vertices can represent, and errors compound. Because of this, when you're in Vertex Coloring mode using a Texture-based scan, every swatch starts with AO reset to a flat <code>1.0</code> (no occlusion) rather than inheriting the source texture's AO. From there you can manually paint AO values back in, or run the <strong>Raycast AO Baker</strong> to compute genuine occlusion directly against your geometry.
+        <strong>A note on shadowing in crevices:</strong> Natural shading in corners and crevices (sometimes called "ambient occlusion") doesn't transfer well from an image onto a model directly, an image usually holds far more detail than the model has corners to represent it. Because of this, when you scan colors from an image but save directly onto the model, this shading starts out blank (no extra shadowing) rather than guessing at something inaccurate. You can paint it back in by hand afterward, or use the <strong>automatic shading tool</strong> below to calculate a genuine result.
     </div>
 
     <div class="warning">
-        <strong>Painted AO affects shadowing under Stylized Lighting:</strong> If your target material has Stylized Lighting enabled, any AO value you paint or bake isn't purely a decorative darkening &mdash; it factors into the shadow response itself. Overly dark painted AO can read as unwanted shadowing rather than subtle occlusion under that lighting mode.
+        <strong>Painted shading can affect lighting, not just looks:</strong> If your material has the "Stylized Lighting" option turned on, any shading you paint or calculate isn't purely decorative, it actually factors into how shadows appear. Painting it too dark can end up looking like an unwanted shadow rather than subtle shading.
     </div>
 
     <hr class="divider">
 
-    <h2>The Interactive 3D Viewport</h2>
-    <p>The tool bypasses the standard Unity Scene View in favor of a specialized dual-rendering sandbox. This allows you to paint props without dragging them into your game scene.</p>
+    <h2>The 3D Preview Window</h2>
+    <p>Instead of using Unity's normal scene view, the tool opens its own dedicated 3D preview window. This lets you paint a model without needing to place it in your actual game scene first.</p>
 
     <div class="feature-grid">
         <div class="feature-box">
-            <h4>Before / After Preview</h4>
-            <p>The embedded viewport shows your live "After" recolor by default. Hold <code>O</code> to temporarily peek at the original, unmodified "Before" mesh — release to return to the live recolor.</p>
+            <h4>Before / After</h4>
+            <p>The window shows your edited version by default. Hold <code>O</code> to briefly peek at the original, unedited version, let go to go back to your edit.</p>
         </div>
         <div class="feature-box">
-            <h4>Scene View Comparison</h4>
-            <p>Press <code>B</code> to spawn temporary preview proxies directly in your main Unity Scene view, complete with real-time lighting evaluation. <em>(Will automatically clean up on window close).</em></p>
+            <h4>Compare in Your Scene</h4>
+            <p>Press <code>B</code> to temporarily place preview copies directly into your actual game scene, with real lighting, so you can compare them side by side. They clean themselves up automatically when you close the tool.</p>
         </div>
         <div class="feature-box">
-            <h4>Auto-Rotation</h4>
-            <p>Press <code>T</code> (or <code>Space</code>, when no text field has focus) to enable a slow, continuous turntable rotation for reviewing your lighting response from all angles.</p>
+            <h4>Auto-Rotate</h4>
+            <p>Press <code>T</code> (or <code>Space</code>) to slowly spin the model, so you can check how it looks from every angle.</p>
         </div>
         <div class="feature-box">
-            <h4>Dynamic Lighting</h4>
-            <p>Fully supports dynamic Editor preview lighting, ensuring your metallic and smoothness values accurately reflect environment probes and directional highlights.</p>
+            <h4>Realistic Lighting</h4>
+            <p>The preview reflects your project's actual lighting setup in real time, so metal and shine settings look accurate.</p>
         </div>
         <div class="feature-box">
-            <h4>Show/Hide Preview</h4>
-            <p>Press <code>V</code> to toggle visibility of the embedded viewport entirely, freeing up window space for the swatch list.</p>
+            <h4>Hide the Preview</h4>
+            <p>Press <code>V</code> to hide the 3D window entirely and free up space for your list of color groups.</p>
         </div>
         <div class="feature-box">
-            <h4>Camera Sync</h4>
-            <p>The <strong>Sync Scene</strong> and <strong>Sync Game</strong> toggle buttons above the viewport lock the Scene View camera and/or Main Camera to match the tool's preview camera — useful for lining up a Game View recording with what you're painting.</p>
+            <h4>Match Your Camera</h4>
+            <p>Two toggle buttons let you line up your Scene or Game view camera with the tool's preview camera.</p>
         </div>
         <div class="feature-box">
-            <h4>Marquee Select</h4>
-            <p><code>Shift</code> + click-drag in the embedded viewport (while not in Paint Mode or Pick Color mode) draws a selection box and selects every swatch whose faces fall inside it — a fast way to multi-select swatches without Ctrl-clicking each one in the list.</p>
+            <h4>Box Select</h4>
+            <p>Hold <code>Shift</code> and drag a box around anything in the preview window to select everything inside it at once, instead of clicking each piece one by one.</p>
         </div>
         <div class="feature-box">
-            <h4>Live Wind Motion Preview</h4>
-            <p>Toggle <strong>Simulate Wind</strong> inside the Wind view channel to watch foliage, grass, and props sway in real-time right inside the editor viewport.</p>
+            <h4>Live Wind Preview</h4>
+            <p>Turn on "Simulate Wind" while viewing the Wind setting to watch plants and props sway in real time, right in the preview window.</p>
         </div>
     </div>
 
-    <h2>Toolbar & Painting Controls</h2>
-    <p>Once a mesh is scanned, the toolbar below the viewport offers key modes for mesh manipulation. Most hotkeys are suppressed while typing in the Save Path or Output Name fields.</p>
+    <h2>Toolbar & Shortcut Reference</h2>
+    <p>Once you've scanned a model, the toolbar underneath the preview window gives you these tools. Most shortcuts are turned off while you're typing in a text box (like the save-path field).</p>
 
     <table>
         <thead>
             <tr>
-                <th style="width: 20%;">Mode / Action</th>
-                <th style="width: 15%;">Hotkey</th>
-                <th>Functionality</th>
+                <th style="width: 20%;">Tool</th>
+                <th style="width: 15%;">Shortcut</th>
+                <th>What It Does</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td><strong>Selection Scope</strong></td>
+                <td><strong>Change Selection Type</strong></td>
                 <td><code>I</code></td>
-                <td>Cycles between <strong>Face</strong> (single polygon), <strong>Island</strong> (UV cluster), and <strong>Shell</strong> (entire 3D disconnected mesh part).</td>
+                <td>Cycles between selecting a single surface, a connected region, or a whole separate piece.</td>
             </tr>
             <tr>
-                <td><strong>Face Extract</strong></td>
+                <td><strong>Quick Pull-Out</strong></td>
                 <td><code>Q</code></td>
-                <td>Dynamically isolates the single polygon under your cursor without splitting the whole mesh.</td>
+                <td>Splits off just the surface under your cursor into its own piece, without splitting the rest of the model.</td>
             </tr>
             <tr>
-                <td><strong>Paint Mode</strong></td>
+                <td><strong>Paint</strong></td>
                 <td><code>P</code></td>
-                <td>Enables direct 3D painting. Click and drag across the model to apply the currently selected color or PBR value to faces underneath the cursor. <code>Shift+Click</code> also paints even if Paint Mode is off.</td>
+                <td>Turns on click-and-drag painting, applies your chosen color or setting wherever you drag. Holding <code>Shift</code> also paints, even with this turned off.</td>
             </tr>
             <tr>
-                <td><strong>Gradient Paint</strong></td>
+                <td><strong>Gradient</strong></td>
                 <td><code>G</code></td>
-                <td>Vertex Bake &amp; Pack only. Click and drag in the viewport to apply a 3D directional gradient across Color, Metallic, Smoothness, AO, Emissive, or Wind channels.</td>
+                <td>Only when saving directly on the model. Click and drag to blend colors or settings smoothly.</td>
             </tr>
             <tr>
-                <td><strong>Eraser Mode</strong></td>
+                <td><strong>Eraser</strong></td>
                 <td><code>E</code></td>
-                <td>Available only when Paint Mode is active. Clicking on the model will instantly reset the targeted faces to their original extracted texture color and default PBR values (0 Metallic, 0.5 Roughness, 1.0 AO).</td>
+                <td>Only while Paint is turned on. Click to reset a surface back to its original color and default settings.</td>
             </tr>
             <tr>
-                <td><strong>Hover Select</strong></td>
+                <td><strong>Hover to Select</strong></td>
                 <td><code>Shift+Q</code></td>
-                <td>Universally selects the face or swatch directly beneath your cursor without needing to click, safely bypassing Paint Mode. Hold <code>Ctrl+Alt+Q</code> to dynamically add or remove hovered faces from a multi-selection.</td>
+                <td>Selects whatever's under your cursor just by hovering, no click needed, and it won't accidentally paint. Hold <code>Ctrl+Alt+Q</code> to add or remove pieces from your selection this way.</td>
             </tr>
             <tr>
-                <td><strong>Pick Color</strong></td>
+                <td><strong>Pick a Color</strong></td>
                 <td><code>Ctrl+X</code></td>
-                <td>Eyedropper mode. Click any surface on the preview model to sample its current color directly into your active brush. Press <code>Esc</code> to cancel.</td>
+                <td>Click anywhere on the model to copy its color into your brush, like an eyedropper. Press <code>Esc</code> to cancel.</td>
             </tr>
             <tr>
-                <td><strong>Select All Swatches</strong></td>
+                <td><strong>Select Everything</strong></td>
                 <td><code>Ctrl+A</code></td>
-                <td>Selects every swatch on the current target object.</td>
+                <td>Selects every paintable piece on the model.</td>
             </tr>
             <tr>
-                <td><strong>Invert Selection</strong></td>
+                <td><strong>Flip Selection</strong></td>
                 <td><code>Ctrl+I</code></td>
-                <td>Inverts the current swatch selection.</td>
+                <td>Selects everything that wasn't selected, and deselects everything that was.</td>
             </tr>
             <tr>
                 <td><strong>Reset Selected</strong></td>
                 <td><code>R</code> / <code>Click</code></td>
-                <td>Available only when Paint Mode is OFF. Acts as a batch reset: instantly restores all currently selected list swatches back to their original scanned color and PBR values.</td>
+                <td>Only while Paint is turned off. Restores everything you've selected back to its original color and settings.</td>
             </tr>
             <tr>
-                <td><strong>Change Channel</strong></td>
+                <td><strong>Change What You're Painting</strong></td>
                 <td><code>Dropdown / Top Row</code></td>
-                <td>Determines what your brush paints, and what the viewport displays. Options include Combined, Color, Metallic, Smoothness, AO (Ambient Occlusion), Emissive, Zones, and <strong>Wind</strong>.</td>
+                <td>Chooses what your brush affects and what the preview shows: plain color, metal look, shine, shadowing, glow, zones, or wind.</td>
             </tr>
             <tr>
-                <td><strong>Group Similar</strong></td>
+                <td><strong>Select Similar Colors</strong></td>
                 <td><code>Ctrl+G</code></td>
-                <td>Selects all swatches across the mesh that fall within the configured color tolerance slider.</td>
+                <td>Selects every piece on the model with a similar color, based on a tolerance slider you set.</td>
             </tr>
             <tr>
-                <td><strong>Load Palette Color</strong></td>
+                <td><strong>Apply a Saved Color</strong></td>
                 <td><code>Shift+1</code>&ndash;<code>Shift+0</code></td>
-                <td>While the Color channel is active, loads Custom Palette slots 1&ndash;10 directly into your brush and applies it to the current selection.</td>
+                <td>While viewing plain color, instantly applies one of your 10 saved palette colors to whatever's selected.</td>
             </tr>
             <tr>
                 <td><strong>Hide/Show Selected</strong></td>
                 <td><code>H</code></td>
-                <td>Toggles visibility of the currently selected swatches/faces in the 3D viewport. If no swatches are selected, this toggles the visibility of the entire sub-target instead.</td>
+                <td>Hides whatever you've currently selected. If nothing's selected, it hides the whole model instead.</td>
             </tr>
             <tr>
-                <td><strong>Full Rescan</strong></td>
+                <td><strong>Start Over Completely</strong></td>
                 <td><code>Ctrl+Shift+R</code></td>
-                <td>Re-scans the target object from scratch, discarding all current swatch edits. Equivalent to the <strong>Reset</strong> button.</td>
+                <td>Re-scans the model from scratch, undoing every edit you've made. Same as the Reset button.</td>
             </tr>
             <tr>
-                <td><strong>Paint Entire Object</strong></td>
+                <td><strong>Paint the Whole Model</strong></td>
                 <td><code>Shift+Enter</code> or <code>Shift+P</code></td>
-                <td>Applies your active brush color to every paintable swatch on the target object in one action.</td>
+                <td>Applies your current color to every paintable piece on the model in one action.</td>
             </tr>
             <tr>
-                <td><strong>Deselect All</strong></td>
+                <td><strong>Deselect Everything</strong></td>
                 <td><code>Ctrl+D</code></td>
-                <td>Clears the current swatch selection and removes keyboard focus from any text field.</td>
+                <td>Clears your selection and takes your cursor out of any text box.</td>
             </tr>
             <tr>
-                <td><strong>Copy / Paste Color</strong></td>
+                <td><strong>Copy / Paste a Color</strong></td>
                 <td><code>Ctrl+C</code> / <code>Ctrl+V</code></td>
-                <td>Copies the selected swatch's current color, then pastes it onto the selected swatch (or all currently multi-selected swatches).</td>
+                <td>Copies the color from one piece, then applies it to another piece (or several selected at once).</td>
             </tr>
             <tr>
-                <td><strong>Show All</strong></td>
+                <td><strong>Show Everything</strong></td>
                 <td><code>Shift+H</code></td>
-                <td>Unhides every renderer sub-target and all individually hidden faces on the object at once.</td>
+                <td>Makes every hidden part of the model visible again.</td>
             </tr>
             <tr>
-                <td><strong>Hide All Sub-Targets</strong></td>
+                <td><strong>Hide Everything</strong></td>
                 <td><code>Ctrl+H</code></td>
-                <td>Hides every renderer sub-target on the object at once.</td>
+                <td>Hides every part of the model at once.</td>
             </tr>
             <tr>
-                <td><strong>Swap Active Palette</strong></td>
+                <td><strong>Switch Color Grid</strong></td>
                 <td><code>Tab</code></td>
-                <td>When the window is too narrow to show both palettes side by side, swaps between the Custom and Imported palette views. No effect once the window is wide enough for both to display at once.</td>
+                <td>If the window's too narrow to show both your saved colors and your scanned colors side by side, switches which one you're looking at. Does nothing once the window is wide enough for both.</td>
             </tr>
             <tr>
-                <td><strong>Reset View to Combined</strong></td>
+                <td><strong>Reset the View</strong></td>
                 <td>&#96; (backtick)</td>
-                <td>Snaps the viewport's view channel back to Combined, regardless of which channel you were viewing.</td>
+                <td>Snaps the preview back to the normal combined view, whatever you were looking at before.</td>
             </tr>
             <tr>
-                <td><strong>Refresh Material / Preview</strong></td>
+                <td><strong>Refresh the Material</strong></td>
                 <td><code>M</code></td>
-                <td>Lightweight resync: re-reads Metallic/Roughness/AO from the assigned material and updates the live preview, without rescanning mesh geometry or discarding your painted colors.</td>
+                <td>Quickly updates the preview to match your material's current settings, without re-scanning the whole model or losing any painted colors.</td>
             </tr>
             <tr>
-                <td><strong>Refresh Footprint Audit</strong></td>
+                <td><strong>Refresh Memory Check</strong></td>
                 <td><code>F</code></td>
-                <td>Refreshes the memory footprint audit preview. This does not save or export anything &mdash; see Section 7 for the actual export buttons.</td>
+                <td>Updates the memory-usage preview mentioned later in this guide. It doesn't save or export anything on its own.</td>
             </tr>
         </tbody>
     </table>
 
     <div class="note">
-        <strong>Native Undo:</strong> <code>Ctrl+Z</code> / <code>Cmd+Z</code> uses Unity's own, global Undo system &mdash; it works regardless of which window has focus. Because it's the same shared history as the rest of the Editor, paint strokes and other scene edits are undone in the chronological order they happened; if you make a scene edit after painting, that scene edit will be the next thing undone, not your paint stroke.
+        <strong>Undo works normally:</strong> <code>Ctrl+Z</code> / <code>Cmd+Z</code> uses Unity's regular Undo history, so it works no matter which window is focused, but that also means it undoes your most recent action across your whole project, not just this tool. If you do something else in your scene right after painting, that gets undone first, and your paint stroke comes up next.
     </div>
 
     <hr class="divider">
 
-    <h2>Texel Density & Normal Smoothing Controls</h2>
-    <p>Located directly within the Selected Area Recolor panel, these specialized tools ensure uniform procedural detail scaling and advanced geometry curvature control across your meshes:</p>
+    <h2>Keeping Patterns Consistent & Smoothing Edges</h2>
+    <p>Found in the color-editing panel, these settings help patterns look consistent in size and let you control how rounded or sharp your model's edges appear:</p>
 
     <div class="feature-grid">
         <div class="feature-box">
-            <h4>Texel Density Tools</h4>
-            <p>Allows you to target a uniform pixel density (px/m) based on your intended Atlas Size. The joined <strong>Calculate &amp; Assign Scale</strong> and <strong>Auto-Normalize Scale</strong> buttons evaluate the 3D surface area against UV area across all zones, ensuring procedural noise (wood grain, cloth weaves) tiles evenly without stretching across different sub-meshes.</p>
+            <h4>Keeping Pattern Size Consistent</h4>
+            <p>Helps patterns like wood grain or fabric weave look the same size across different parts of your model, instead of stretched in some spots and squished in others. Two buttons work this out automatically for you.</p>
         </div>
         <div class="feature-box">
-            <h4>Smooth Normals & Angle Threshold</h4>
-            <p>Toggling <strong>Smooth Normals</strong> on any selected swatch unlocks an angle slider (0&deg;&ndash;180&deg;) situated directly on the same row. It operates selectively on each swatch:</p>
+            <h4>Rounding Edges & Angle Control</h4>
+            <p>Turning on edge-rounding for a selected piece reveals an angle slider (0°&ndash;180°) that controls how it looks:</p>
             <ul>
-                <li><code>0°</code> - Completely preserves original/flat faceted imported normals.</li>
-                <li><code>10°–60°</code> - Progressively smooths shallow creases while keeping sharp corners hard.</li>
-                <li><code>120°–180°</code> - Fully rounds out steep polygon angles into smooth curved surfaces.</li>
+                <li><code>0°</code> - Keeps the original blocky, flat-faceted look completely untouched.</li>
+                <li><code>10°–60°</code> - Gently smooths small creases while keeping sharp corners sharp.</li>
+                <li><code>120°–180°</code> - Rounds off even steep angles into soft, smooth curves.</li>
             </ul>
         </div>
     </div>
 
     <div class="note">
-        <strong>Scale-Invariant Geometry Engine:</strong> The normal smoothing and gradient painting systems utilize bounds-normalized spatial hashing and unit vector cross-products. Whether a model is a 100m dragon, a 1m dog, or a 1cm campfire imported with a <code>0.01</code> scale factor, normals and gradients calculate accurately with zero underflow or distortion.
+        <strong>Works at any size:</strong> Edge-rounding and gradients are calculated accurately whether your model is a giant dragon, a small dog, or a tiny campfire, regardless of how it was scaled when imported.
     </div>
 
     <hr class="divider">
 
-    <h2>Advanced PBR & Feature ID Assignments</h2>
-    <p>When operating in <strong>Vertex Bake & Pack</strong> mode, the tool allows you to assign procedural shading characteristics directly to specific geometric faces via "Feature IDs".</p>
+    <h2>One-Click Material Looks (Feature IDs)</h2>
+    <p>When saving directly on the model, you can give any painted piece a realistic surface look with one click, instead of having to hand-paint the detail yourself.</p>
     
-    <p>Select a swatch in the list view, and use the <strong>Feature ID</strong> dropdown to assign specialized material types:</p>
+    <p>Select a piece, then use the dropdown menu to choose from these looks:</p>
     <ul>
-        <li><code>Default (None)</code> - Standard PBR response based on your slider settings, no procedural detail.</li>
-        <li><code>Wood</code> - Applies a procedural base color tint in addition to a wood grain normal detail &mdash; the one Feature ID that affects base color as well as surface normal.</li>
-        <li><code>Bark, Steel, Copper, CastIron, Leather, Cloth, Fur, Stone, Rope, Foliage</code> - Each applies its own procedural surface normal or clump detail (tri-planar mapped across the mesh).</li>
+        <li><code>Default (None)</code> - Just your painted color and settings, with no extra surface detail added.</li>
+        <li><code>Wood</code> - Adds both a wood-tone color tint and a wood-grain surface pattern, the only option here that changes the color as well as the surface detail.</li>
+        <li><code>Bark, Steel, Copper, Cast Iron, Leather, Cloth, Fur, Stone, Rope, Foliage</code> - Each adds its own realistic surface pattern (like scratches, weave, or grain) without changing the color underneath.</li>
     </ul>
 
-    <h3>Additional Sub-Mesh Controls</h3>
-    <p>When a specialized Feature ID is assigned, additional controls unlock in the swatch editor:</p>
+    <h3>Fine-Tuning a Material Look</h3>
+    <p>Once you've picked a look, a few more controls appear:</p>
     <ul>
-        <li><strong>Detail Scale:</strong> Adjusts the tiling density of the procedural noise (e.g., making wood grain tighter or metal scratches larger).</li>
-        <li><strong>Detail Rotation:</strong> A 0&ndash;360&deg; slider that rotates the procedural detail texture on this swatch &mdash; use it to fix directional textures (like Wood Grain) when the underlying UV mapping runs the wrong way.</li>
-        <li><strong>Blend Detail:</strong> Blends the procedural detail across faces and UV seams using tri-planar projection averaging. When enabled, two independent sliders appear: <strong>Face</strong> controls how much detail blends across adjoining faces, and <strong>Seam</strong> controls blend strength specifically across UV seams.</li>
-        <li><strong>Apply Wind:</strong> Enables flat wind sway on this swatch's detail with a <strong>Strength</strong> slider (or use <strong>Gradient Paint</strong> in the Wind channel for continuous directional sway).</li>
+        <li><strong>Pattern Size:</strong> Makes the pattern (like wood grain) bigger or smaller.</li>
+        <li><strong>Pattern Rotation:</strong> Rotates the pattern, useful if it's running in the wrong direction, like sideways wood grain.</li>
+        <li><strong>Smooth the Pattern's Edges:</strong> Blends the pattern smoothly across the model's surface so it doesn't look tiled or repetitive, with separate strength sliders for regular edges and for sharper seams.</li>
+        <li><strong>Add Wind to the Pattern:</strong> Adds a swaying motion to the surface detail, with a strength slider (or use the Gradient tool's Wind setting for more natural, directional sway).</li>
     </ul>
 
     <div class="note">
-        <strong>Feature IDs require the _DETAIL keyword:</strong> If your Target Material doesn't have the <code>_DETAIL</code> shader keyword enabled, assigning a non-Default Feature ID shows a warning with an "Enable Procedural Details" button in the swatch editor. Click it to enable the keyword on the material directly (tiling size for the detail system is then adjustable on the material itself).
+        <strong>One-time setup may be needed:</strong> If your material hasn't been set up to support these looks yet, choosing one will show a warning with a button that turns the right setting on for you automatically.
     </div>
 
     <hr class="divider">
 
-    <h2>Zone Painting</h2>
-    <p>In <strong>Vertex Bake &amp; Pack</strong> mode, the <strong>Zones</strong> option in the Change Channel dropdown lets you paint a Zone ID (0&ndash;7, where 7 is Default) directly onto swatches. This is a separate data channel from Color/Metallic/etc. and is packed alongside the other PBR data at bake time.</p>
-    <p>Zone IDs are read at runtime by <code>DPT_ZoneVariation</code> to drive per-instance color variation &mdash; see the <a href="palette-system.html">Zone Variation &amp; Palettes</a> page for how zones are consumed by the shader system. This section covers only the paint-time assignment inside the Recolor Tool itself:</p>
+    <h2>Zones (Tagging Areas for Later Use)</h2>
+    <p>When saving directly on the model, you can also tag each piece with a "zone" number from 0 to 7. This doesn't change how anything looks right now inside the tool, it's a way to mark different areas so your game's code or shader can treat them differently later on (for example, applying random color variety only within certain zones).</p>
     <ul>
-        <li>Switch the view/paint channel to <strong>Zones</strong>. Swatches display in a distinct zone-index color rather than their actual paint color.</li>
-        <li>With a swatch selected, either drag the <strong>Zone</strong> slider (0&ndash;7) in the swatch editor, or paint directly in the viewport the same way you'd paint a color &mdash; the active zone value takes the place of the brush color while this channel is active.</li>
-        <li>Zone 7 is treated as the Default zone; use 0&ndash;6 for zones you intend to reference from gameplay code or shader variation logic.</li>
+        <li>Switch to the Zones setting to see each piece shown in a distinct zone color instead of its actual paint color.</li>
+        <li>With a piece selected, either drag the Zone slider (0&ndash;7), or paint directly in the preview the same way you'd paint a color, while this setting is active, your brush applies a zone number instead of a color.</li>
+        <li>Zone 7 is the default/fallback zone; use 0&ndash;6 for zones you plan to use in your own game logic or shader effects.</li>
     </ul>
     <div class="note">
-        <strong>Working with textures instead of vertex colors?</strong> This paint workflow only exists in Vertex Bake &amp; Pack mode. For a texture-based prop that still needs Zones, set <code>VCCore</code> to its non-vertex-color mode instead, which exposes a dedicated texture field for zone data.
+        <strong>Using an image instead of on-model colors?</strong> This zone-painting feature only works when saving directly on the model. For an image-based model that still needs zones, set up the material a different way, which has a dedicated image slot for zone data instead.
     </div>
 
     <hr class="divider">
 
-    <h2>Palette Management</h2>
-    <p>The tool includes a dual-palette workflow for maintaining artistic consistency across multiple assets.</p>
+    <h2>Managing Your Color Palettes</h2>
+    <p>Two side-by-side color grids help you keep your color choices consistent across different models.</p>
 
     <ul>
-        <li><strong>Custom User Palette (Left):</strong> A grid of 18 persistent color slots. These colors are saved to your Editor Preferences and persist across all unity sessions. Click any slot to load it into your brush.</li>
-        <li><strong>Imported Source Palette (Right):</strong> When you scan a mesh, its extracted colors are populated here. </li>
-        <li><strong>Copy <code>&lt;</code> Button:</strong> Clicking the arrow between the palettes copies the extracted colors from the current prop (Imported Palette) directly into your global Custom Palette for use on other assets.</li>
+        <li><strong>Your Personal Palette (Left):</strong> 18 color slots that you fill in yourself. These are saved on your computer and stick around across every project. Click any slot to load that color into your brush.</li>
+        <li><strong>Colors From This Model (Right):</strong> Automatically fills in with whatever colors were found when you scanned the current model.</li>
+        <li><strong>Copy Button:</strong> Copies the colors from the current model straight into your Personal Palette, so you can reuse them on other models later.</li>
     </ul>
     
-    <p>You can also use the <strong>Export Palette (PNG)</strong> and <strong>Import Palette (PNG)</strong> buttons to save your custom swatches to disk as a 256x1 pixel texture strip, allowing you to share color schemes across team members or backup project themes.</p>
+    <p>You can also save or load your Personal Palette as a small image file, useful for backing it up or sharing a consistent color scheme with teammates.</p>
 
     <hr class="divider">
 
-    <h2>Multi-Material PBR Overrides</h2>
-    <p>When your Target Object has more than one material, each material that supplies textures gets its own collapsible group in the PBR input area, labeled with the source material name(s). Inside each group you can independently override that material's <strong>Base Color</strong>, and its Metallic/Smoothness/AO input &mdash; either as a single <strong>Packed MRAO Map</strong> (with a channel mapping selector) or as separate <strong>Metal</strong>, <strong>Smooth</strong>, and <strong>AO</strong> texture slots, depending on the material's <strong>PBR Mode</strong>. Leave a slot empty to fall back to whatever the tool auto-detected from that material.</p>
+    <h2>Handling Models With Multiple Materials</h2>
+    <p>If your model uses more than one material, each one that has its own image gets its own section in the settings panel, labeled by name. In each section you can independently set that material's base color, along with its metal, shine, and shadowing look, either as one combined image or as separate ones, depending on how that material was originally set up. Leave anything blank to keep whatever the tool automatically detected.</p>
 
     <hr class="divider">
 
-    <h2>Raycast AO Baker</h2>
-    <p>A separate foldout from the main paint workflow, the Raycast AO Baker computes a fresh global ambient occlusion pass for your target by casting rays from every vertex, independent of whatever AO the source mesh or material already had baked in.</p>
+    <h2>Automatic Shading Tool</h2>
+    <p>A separate tool (not part of the main painting workflow) that calculates realistic shading in corners and crevices by simulating how light would actually be blocked around your model, rather than relying on any pre-made image.</p>
     <ul>
-        <li><strong>Rays Per Vertex:</strong> Sample count per vertex (16&ndash;512). Higher is cleaner but slower to compute.</li>
-        <li><strong>Max Distance:</strong> How far a ray can travel before it's considered unoccluded.</li>
-        <li><strong>Intensity:</strong> Overall strength multiplier for the computed occlusion.</li>
-        <li><strong>Blur Passes:</strong> Smooths the raw raycast result to reduce noise.</li>
-        <li><strong>Bake Target:</strong> Choose whether the result is written into the mesh's vertex AO data, or baked out to a standalone AO texture map (with a resolution field and a <strong>Match Base Color</strong> button to copy the current palette texture's resolution).</li>
+        <li><strong>Detail Level:</strong> How many light samples are taken at each point, higher gives a cleaner result but takes longer to calculate.</li>
+        <li><strong>Max Distance:</strong> How far a simulated ray of light can travel before it's counted as unblocked.</li>
+        <li><strong>Strength:</strong> How strong the resulting shading looks overall.</li>
+        <li><strong>Smoothing:</strong> Reduces any graininess in the result.</li>
+        <li><strong>Where to Save the Result:</strong> Choose whether the shading is stored directly on the model, or saved as a separate image (with a button to automatically match the size of your other images).</li>
     </ul>
-    <p>Click <strong>Compute &amp; Bake Global Raycast AO</strong> to run it. This section is hidden when Texture Coloring mode has <strong>Optimize Palette Size</strong> enabled: baking AO to its own texture map needs each face to have independent, non-overlapping UVs, and Optimize Palette Size intentionally shrinks and overlaps UVs to save disk space &mdash; the two goals are incompatible, so the baker is hidden rather than producing broken results.</p>
+    <p>Click the button to run it. This tool is hidden if you're saving as an image with the image-shrinking option turned on, the shading calculation needs each part of the model to have its own separate space in the image, and that option specifically removes that separate space to save disk size. Rather than produce a broken result, the tool simply hides itself in that case.</p>
 
     <hr class="divider">
 
-    <h2>Phantom Asset Generation</h2>
-    <p>Once you are satisfied with your 3D painting, use the buttons at the bottom of the window to save your work. Which ones are available depends on what you're working on:</p>
+    <h2>Saving Your Work</h2>
+    <p>Once you're happy with your changes, use the buttons at the bottom of the window to save. Which ones you see depends on what you're working on:</p>
     <ul>
-        <li><strong>Apply to Scene Object:</strong> Only shown when your Target Object is an instance already in the scene. Generates the new assets and saves them as a Prefab on disk, creates a backup of your original model, and seamlessly replaces the scene object with the new Prefab instance. The tool will automatically target this new instance so you can continue making adjustments.</li>
-        <li><strong>Create Prefab:</strong> Saves a new, standalone prefab variant to your configured Save Path and leaves your current session pointed at the original target.</li>
+        <li><strong>Apply to Scene Object:</strong> Only shows up if you're editing something already placed in your scene. Saves your new version to disk, keeps a backup copy of the original, and automatically swaps the new version into your scene so you can keep adjusting it.</li>
+        <li><strong>Create New Version:</strong> Saves a separate, standalone copy to your chosen folder, without touching the model you started with.</li>
     </ul>
 
-    <p>A <strong>Material Mode</strong> setting controls how the material asset itself is handled on save:</p>
+    <p>A separate setting controls what happens to the material file itself each time you save:</p>
     <ul>
-        <li><strong>Create Variant of Target Material:</strong> Creates a new material variant per save, based on your configured Target Material.</li>
-        <li><strong>Create Single Shared Variant (Merge All):</strong> All variants generated in a session share one material variant instead of getting their own.</li>
-        <li><strong>Assign Shared Target Material (No New .mat):</strong> Points every output straight at the Target Material with no new material asset created at all.</li>
-        <li><strong>Modify Existing Material In-Place:</strong> Edits the object's current material asset directly instead of creating anything new.</li>
-        <li><strong>Keep Existing Material As-Is:</strong> Leaves the material assignment untouched entirely.</li>
+        <li><strong>Make a New Copy Each Time:</strong> Creates a fresh material file every time you save.</li>
+        <li><strong>Share One Copy:</strong> Every save in the same session shares a single material file instead of getting its own.</li>
+        <li><strong>Reuse the Existing Material:</strong> Points every save at your original material with no new file created at all.</li>
+        <li><strong>Edit the Original Directly:</strong> Changes your existing material file itself, instead of creating anything new.</li>
+        <li><strong>Leave It Alone:</strong> Doesn't touch the material assignment at all.</li>
     </ul>
 
-    <p>Whichever button you use, the save process performs the following:</p>
+    <p>Whichever save button you use, here's what happens behind the scenes:</p>
     <ol>
-        <li>Clones the original mesh geometry.</li>
-        <li>Injects your painted Color data into the mesh's <code>COLOR</code> channel.</li>
-        <li>Packs your Metallic, Smoothness, and AO data efficiently into the mesh's <code>TEXCOORD1</code> or <code>TEXCOORD2</code> channels.</li>
-        <li>Calculates angle-thresholded normal smoothing on designated swatches, recalculating tangent space.</li>
-        <li>Saves the new mesh (and any generated textures, in Texture Coloring mode) under your configured Save Path.</li>
-        <li>Generates or updates a Prefab that references the new mesh and assigns the appropriate <code>VCCore</code> material.</li>
+        <li>Makes a copy of your original model.</li>
+        <li>Applies your painted colors to that copy.</li>
+        <li>Stores your metal, shine, and shadowing settings efficiently on the model.</li>
+        <li>Applies any edge-rounding you set up.</li>
+        <li>Saves the new model (and a new image, if you chose that save option) to your chosen folder.</li>
+        <li>Creates or updates a ready-to-use version that's already set up with the right material.</li>
     </ol>
 
     <div class="note">
-        <strong>Audit System:</strong> The Footprint panel (and the <code>F</code> hotkey) let you preview the memory footprint of your in-progress asset before you save, so you can check the savings from bypassing traditional texture generation ahead of time rather than only finding out after export.
+        <strong>Check memory usage before saving:</strong> A memory-check panel (and the <code>F</code> shortcut) let you preview how much memory your new version will use before you save, so you can see the savings ahead of time instead of only finding out afterward.
     </div>
 
     <hr class="divider">
 
-    <h2>Troubleshooting & FAQ</h2>
-    <div class="troubleshooting-q">I have toggled on <strong>Split Disconnected Islands</strong> but it still won't let me paint individual color islands.</div>
-    <div class="troubleshooting-a">Make sure you have toggled off <strong>Group Similar (CTRL + G)</strong> in the 3D Viewport section.</div>
+    <h2>Troubleshooting & Common Questions</h2>
+    <div class="troubleshooting-q">I turned on "Split Disconnected Islands" but it still won't let me paint individual pieces separately.</div>
+    <div class="troubleshooting-a">Make sure "Group Similar" (<code>Ctrl+G</code>) is turned off with both on, similarly colored pieces get grouped back together even after being split.</div>
 
-    <div class="troubleshooting-q">How do I paint directional wind sway on vegetation or cloth?</div>
-    <div class="troubleshooting-a">Switch the view/paint channel to <strong>Wind</strong> and enable <strong>Gradient Paint [G]</strong>. Click at the base of the plant/stem and drag towards the tip. Toggle <strong>Simulate Wind</strong> in the top toolbar to watch the model sway live in the viewport.</div>
+    <div class="troubleshooting-q">How do I paint wind sway onto plants or cloth?</div>
+    <div class="troubleshooting-a">Switch to the Wind setting, turn on Gradient (<code>G</code>), then click at the base of the plant or stem and drag toward the tip. Turn on "Simulate Wind" in the toolbar to watch it sway live in the preview.</div>
 
-    <div class="troubleshooting-q">What is the difference between Face, Island, and Shell selection?</div>
-    <div class="troubleshooting-a"><strong>Face</strong> targets single triangles for surgical precision. <strong>Island</strong> selects contiguous UV clusters. <strong>Shell</strong> selects entire 3D detached geometry pieces (e.g. hair clumps, armor plates, weapons) across all UV seams. Cycle through them using the <code>I</code> hotkey.</div>
+    <div class="troubleshooting-q">What's the difference between the three selection types?</div>
+    <div class="troubleshooting-a"><strong>Single Surface</strong> picks one small triangle at a time for precise edits. <strong>Connected Region</strong> picks a whole patch that shares one continuous area on the model's image. <strong>Whole Piece</strong> picks an entire separate part (like a hair clump or armor plate) in one click. Cycle between them with the <code>I</code> key.</div>
 
-    <div class="troubleshooting-q">I have <strong>Optimize Palette Size</strong> on with <strong>Split Disconnected Islands On</strong> and it isn't highlighting what I'm clicking on but I can still change its color.</div>
-    <div class="troubleshooting-a">You can fix this by creating a prefab and replacing it in the target object field, but it is caused by mirrored UVs on the original object.</div>
+    <div class="troubleshooting-q">Selecting a piece isn't highlighting it correctly, even though I can still change its color.</div>
+    <div class="troubleshooting-a">This is usually caused by mirrored parts of the model sharing the same image space. Try creating a new version of the model and using that as your target instead.</div>
 
-    <div class="troubleshooting-q">Why aren't my low-poly rocks or logs smoothing when I turn on Smooth Normals?</div>
-    <div class="troubleshooting-a">Low-poly props have steep dihedral angles between adjacent faces (often 60° to 90°+). Increase the Smooth Normals slider towards <code>120°–180°</code> to allow those large angles to blend together. A setting of <code>0°</code> keeps faces completely flat.</div>
+    <div class="troubleshooting-q">Why won't my low-poly rocks or logs round off when I turn on edge-rounding?</div>
+    <div class="troubleshooting-a">Blocky, low-detail shapes have sharp angles between their surfaces (often 60&deg;&ndash;90&deg; or more). Raise the edge-rounding angle slider higher, toward <code>120&deg;&ndash;180&deg;</code>, to let those larger angles round off too. A setting of <code>0&deg;</code> keeps everything completely flat.</div>
 
-    <div class="troubleshooting-q">Can I smooth only specific materials on my model without making everything round?</div>
-    <div class="troubleshooting-a">Yes! Smooth Normals is assigned on a per-swatch basis. You can enable smoothing on organic elements (wood, rocks, creature bodies) while leaving hard-surface elements (metal blades, armor plates) toggled off with crisp flat normals.</div>
+    <div class="troubleshooting-q">Can I round off some parts without rounding the whole model?</div>
+    <div class="troubleshooting-a">Yes, edge-rounding is set individually per piece. You can round off organic parts (like wood, rock, or creature bodies) while leaving hard-surface parts (like metal blades or armor) crisp and flat.</div>
 
-    <div class="troubleshooting-q">I clicked the model in Paint Mode but nothing happened.</div>
-    <div class="troubleshooting-a">Check that <strong>Eraser Mode [E]</strong> is not accidentally toggled on. The active painting brush is tied directly to your current View selection, so ensure you have the correct View enabled for the property you are trying to edit (e.g., you cannot paint Metallic values while in the Color view).</div>
+    <div class="troubleshooting-q">I clicked on the model to paint, but nothing happened.</div>
+    <div class="troubleshooting-a">Check that Eraser mode isn't accidentally turned on. Also make sure you're viewing the right setting for what you're trying to change, for example, you can't paint a metal look while viewing plain color.</div>
 
-    <div class="troubleshooting-q">I can't see the "Detail Scale" or "Feature ID" settings on my swatches.</div>
-    <div class="troubleshooting-a">These advanced PBR controls only appear if your <strong>Recolor Mode</strong> is set to <em>Vertex Bake & Pack</em>. If you are in <em>Texture Coloring</em> mode, the tool assumes you are exporting a standard PNG and hides the GPU-specific parametric controls.</div>
+    <div class="troubleshooting-q">I can't find the one-click material look options on my pieces.</div>
+    <div class="troubleshooting-a">Those options only appear when you're saving directly on the model. If you're saving as an image instead, the tool assumes you want a plain picture and hides those options.</div>
 
-    <div class="troubleshooting-q">Ctrl+Z undid something else in my scene instead of my brush stroke.</div>
-    <div class="troubleshooting-a">Undo runs through Unity's native, global Undo history rather than a separate tool-only stack, so it's chronological across everything you've done in the Editor &mdash; if you touched something else in the scene after your last paint stroke, that's what undoes first. Keep undoing and your paint history will come up next in order.</div>
+    <div class="troubleshooting-q">Undo undid something else in my scene instead of my last brush stroke.</div>
+    <div class="troubleshooting-a">Undo works through Unity's normal history for your whole project, not a separate list just for this tool. So if you did something else in your scene right after painting, that gets undone first, keep pressing Undo and your paint stroke will come up next.</div>
 
-    <div class="troubleshooting-q">My generated prefab is pink (Missing Material).</div>
-    <div class="troubleshooting-a">This occurs if your project is missing the targeted base materials (like VCCore). Ensure that the DPT core shader packages are fully imported and that your Unity Render Pipeline settings match the material targets.</div>
+    <div class="troubleshooting-q">My saved model shows up bright pink.</div>
+    <div class="troubleshooting-a">This means your project is missing a material the tool needs. Make sure everything from the package was imported properly, and that your project's rendering settings match what the tool requires.</div>
 
-    <div class="troubleshooting-q">The UI is lagging heavily when I drag to paint a high-poly mesh.</div>
-    <div class="troubleshooting-a">The raycasting system performs precise mathematical intersection against every triangle to ensure pixel-perfect swatch detection. If you are painting a model with 50,000+ polygons, increasing the combine similar tolerance can help to reduce the number of swatches.</div>
+    <div class="troubleshooting-q">The tool feels slow or laggy while I'm painting a detailed model.</div>
+    <div class="troubleshooting-a">The tool checks your exact click position against every single surface for precision, which takes a little longer on very detailed models. If you're working with a model that has 50,000+ triangles, try increasing the color-grouping tolerance to reduce the number of separate pieces.</div>
 
     <hr class="divider">
-    <h2 id="support">Support, Contact & Custom Integration</h2>
+    <h2 id="support">Support & Getting Help</h2>
 
-    <p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form. This is the primary and most reliable way to get help with any problems you encounter with the packages.</p>
+    <p>For any technical help, bug reports, or general questions, please get in touch through the Contact Formit's the most reliable way to get help with anything you run into.</p>
 
-    <p>You can also use this form to inquire about custom freelance technical art services. If your project requires external 3D models to be integrated into the DPT ecosystem—including bespoke vertex-data packing, procedural wood grain mapping, GPU wind systems, or game-ready LOD budgeting—get in touch to discuss your specific needs and availability.</p>
+    <p>You can also use the same form to ask about custom freelance work, for example, if you need outside 3D models specially prepared for this tool, or need help with things like wind effects or level-of-detail setup for your game.</p>
 
     <div class="note">
-        <strong>Email Contact (Preferred for all Support):</strong><br>
-        For troubleshooting, bug reports, publisher licensing, and freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
+        <strong>Email (Preferred for All Support):</strong><br>
+        For troubleshooting, bug reports, licensing questions, or freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
     </div>
 
     <div class="note">
-        <strong>DPT Community Discord:</strong><br>
-        While the contact form is the best way to get direct help with issues, you are also welcome to join the <strong><a href="https://discord.gg/XqbeSePWQ" target="_blank">Discord Server</a></strong> to share feedback and connect with other users.
+        <strong>Community Discord:</strong><br>
+        The contact form is the best way to get direct help, but you're also welcome to join the <strong><a href="https://discord.gg/XqbeSePWQ" target="_blank">Discord Server</a></strong> to share feedback and chat with other users.
     </div>
 </body>
 </html>
