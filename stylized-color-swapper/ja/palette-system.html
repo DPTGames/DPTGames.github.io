@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>DPT Zone Variation & Palette System - 日本語リファレンスガイド</title>
+    <link rel="alternate" hreflang="en" href="https://dptgames.github.io/stylized-color-swapper/palette-system.html">
+    <link rel="alternate" hreflang="ja" href="https://dptgames.github.io/stylized-color-swapper/ja/palette-system.html">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body { font-family: 'Segoe UI', 'Yu Gothic', 'Meiryo', system-ui, sans-serif; color: #f8fafc; background-color: #0f172a; margin: 0; padding: 40px; font-size: 11pt; line-height: 1.5; }
+        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 35px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 25px; border-bottom: 1px solid #1e293b; padding-bottom: 5px; }
+        h4 { font-size: 11pt; color: #94a3b8; margin-top: 15px; font-style: italic; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        pre { padding: 12px; display: block; white-space: pre-wrap; border: 1px solid #1e293b; page-break-inside: avoid; }
+        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 25px; margin-bottom: 5px; page-break-after: avoid; }
+        .troubleshooting-a { margin-bottom: 15px; padding-left: 15px; border-left: 2px solid #334155; color: #cbd5e1; }
+        .divider { border: 0; height: 1px; background: #1e293b; margin: 40px 0; }
+        .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .feature-box { background: #1e293b; padding: 15px; border: 1px solid #334155; border-radius: 4px; }
+        .feature-box h4 { margin-top: 0; color: #7dd3fc; }
+ .note a {
+        color: #38bdf8;
+        text-decoration: none; 
+        transition: color 0.2s ease-in-out;
+    }
+
+    .note a:hover {
+        color: #7dd3fc;
+        text-decoration: underline; 
+    }
+    </style>
+</head>
+<body>
+<nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
+    <a href="../../index.html" style="color: #38bdf8; margin-right: 15px;">&larr; DPT Games</a>
+    <span style="color: #64748b;">|</span>
+    <a href="index.html" style="color: #38bdf8; margin: 0 15px;">Stylized Color Swapper 日本語ガイド</a>
+    <span style="color: #64748b;">|</span>
+    <a href="../palette-system.html" style="color: #38bdf8; margin-left: 15px;">English</a>
+    <span style="color: #f8fafc; margin-left: 10px;">日本語</span>
+</nav>
+
+    <h1>Zone Variation &amp; Palette System</h1>
+    <div class="subtitle">VCCoreシェーダー向けインスタンス単位のカラーバリエーション</div>
+
+    <p>このシステムでは、GPUインスタンシングを維持したまま、個別に配置された各プロップへ独自のカラーバリエーションを与えられます。MaterialPropertyBlockやオブジェクトごとの個別Materialは使用しません。代わりに、各インスタンスで選択したカラーを共有Master Palette Textureと照合し、VCCoreシェーダーがレンダリング時に読み取る単一のインスタンス別データへパックします。システムは3つの要素で構成されています。各インスタンスへ追加する<code>DPT_ZoneVariation</code>コンポーネント、カラーからインデックスへの検索を行う<code>DPT_PaletteMatcher</code>ユーティリティ、そしてMaster Palette Texture自体を生成する<code>DPT_PaletteGenerator</code> Editorツールです。</p>
+
+    <div class="note">
+        <strong>なぜRaw ColorではなくPalette Indexを使うのか？</strong> インスタンスごとに生のRGB値を格納するより、共有Palette内の小さなIndexを格納する方が必要なbit数を抑えられます。またPaletteをIndex参照することで、すべてのインスタンスが同じ有限のカラーセットからバリエーションを取得できます。これによりUnityのGPU Resident Drawerによるインスタンシング経路を維持できます。MaterialPropertyBlockはこのBatchingを崩すため、このシステムでは意図的に使用していません。
+    </div>
+
+    <hr class="divider">
+
+    <h2>DPT_ZoneVariation コンポーネント</h2>
+    <p>VCCoreシェーダーを使用する任意のプロップインスタンスへ<code>DPT_ZoneVariation</code>を追加すると、そのインスタンス独自のカラーバリエーションを設定できます。4つのZone Colorフィールド（<strong>Zone 0&ndash;3</strong>）と、オブジェクト全体に適用される1つの<strong>Emissive</strong>強度スライダーを使用できます。</p>
+
+    <ul>
+        <li><strong>Zone 0&ndash;3 Colors:</strong> 各カラーはオブジェクトのMaster Palette Texture内で最も近い色へ照合され、6-bit Indexとしてパックされます（下記のPacking Referenceを参照）。Zone 0は、シェーダーが認識できないZone IDに対するFallback Colorとしても使用されます。</li>
+        <li><strong>Emissive:</strong> 0&ndash;1の単一の強度値を、そのインスタンスの4つすべてのZoneへ一様に適用します。</li>
+        <li><strong>Update Every Frame:</strong> デフォルトではオフです。Runtime中にZone Colorを変更する場合（例: ダメージ状態による色変化）だけ有効にしてください。静的なプロップでは、変化しない値を毎Frame確認するCPU Overheadが増えるだけなので、通常はオフのままにします。</li>
+    </ul>
+
+    <p>このコンポーネントは制御対象のRenderer（子オブジェクトを含む）を自動的に検出し、Inspectorで値を変更したとき（<code>OnValidate</code>）やオブジェクトが有効化されたときに再適用します。Play Modeで<strong>Update Every Frame</strong>がオフの場合、<code>Start</code>時に値を1度適用した後、自身を無効化します。つまり、何もする必要がない状態で毎Frame処理を続けることはありません。</p>
+
+    <div class="warning">
+        <strong>VCCoreシェーダーが必要です:</strong> DPT_ZoneVariationは、対象Rendererのいずれかが<code>_ZonesPalette</code>プロパティを持つMaterialを使用しているか確認します。該当するMaterialがない場合、Runtimeで警告を1度だけ出力し、コンポーネントによる見た目の変化は発生しません。パックした値を読み取るシェーダー側の受け口が存在しないためです。
+    </div>
+
+    <h3>Editorでのクリーンアップ</h3>
+    <p>Editor上（Play Mode以外）でコンポーネントを削除または破棄すると、そのインスタンスのPacked Valueは0へリセットされます。これにより、コンポーネント削除後もRendererに古いVariationが残って表示されることを防ぎます。</p>
+
+    <hr class="divider">
+
+    <h2>Palette Matchingの仕組み</h2>
+    <p><code>DPT_PaletteMatcher.FindNearestIndex</code>はTarget ColorとPalette Textureを受け取り、そのPalette内で最も近い色のIndexを返します。距離の計算には単純なEuclidean Distanceではなく、Rec.601のLuma Weight（R/G/B = 0.299 / 0.587 / 0.114）によるChannel Differenceを使用します。そのため、人間の知覚上より近い色が優先されます。このWeightingはVCCoreパイプライン内のLuminance計算でも使用されています。</p>
+
+    <p>PaletteのPixel Dataは最初のLookup後、Texture単位でCacheされます。そのため、同じPaletteに対して繰り返し照合する場合（例: 1つのインスタンスで4つのZone Colorを照合する場合）でも、毎回Textureを読み直すことはありません。Palette TextureのImport Settingsで<strong>Read/Write Enabled</strong>が無効になっている場合は、エラーにする代わりにGPU Blit + ReadbackへFallbackしてPixel Dataを取得します。</p>
+
+    <div class="note">
+        <strong>Cacheの無効化:</strong> Palette Textureを再生成または再Importした場合は、<code>DPT_PaletteMatcher.ClearCache()</code>を呼び出してください（特定のTextureを渡すことも可能です）。これにより、以降の照合では古いCacheではなく更新後のPaletteが使用されます。
+    </div>
+
+    <hr class="divider">
+
+    <h2>Master Paletteの生成</h2>
+    <p><strong>Tools &rarr; DPTTools &rarr; Tools &rarr; Generate Palette</strong>からGeneratorを開きます。これはColor Space上を1本のGradientとして通過するのではなく、R/G/B全体に広がるFull-Gamut Latticeとして64色のMaster Paletteを構築します。そのため、生成されるPaletteはColor Cube全体をカバーします。</p>
+
+    <ul>
+        <li><strong>Red / Green / Blue Weight sliders:</strong> 合計6bitのIndexのうち、各Channelへ何bit相当を割り当てるかを制御します。Weightを高くすると、そのChannelで使用できるShade Levelが増える代わりに、他のChannelへ割り当てられる範囲が減ります。</li>
+        <li><strong>Reset to VCCore Luma Weights:</strong> Weightを0.299 / 0.587 / 0.114へ設定します。Palette / Matchingパイプライン全体で使用されている知覚ベースのWeightingと一致します。</li>
+        <li><strong>Reset to Uniform:</strong> 3つのWeightを同じ値へ設定し、知覚上の重要度に関係なく各Channelへ同数のShade Levelを割り当てます。</li>
+        <li><strong>Bake to PNG:</strong> 現在の64色Stripを、指定したFile NameでProjectのAssetsフォルダーへPNGとして保存します。</li>
+    </ul>
+
+    <p>Weight Sliderを調整すると、Preview Stripと「Resulting levels per channel」の表示がリアルタイムで更新されます。Bakeする前に、各Channelへ何段階のShadeが割り当てられているか正確に確認できます。</p>
+
+    <hr class="divider">
+
+    <h2>RSUV Packing リファレンス</h2>
+    <p>各インスタンスの4つのZone IndexとEmissive Intensityは、GPU Resident DrawerのPer-Instance User Value（RSUV）へ書き込まれる単一の32-bit値にパックされます。これにより、MaterialPropertyBlockを使用せずにシステム全体をインスタンシング対応にしています。</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 25%;">Bits</th>
+                <th style="width: 25%;">Field</th>
+                <th>内容</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>0&ndash;5</code></td>
+                <td>Zone 0 Index</td>
+                <td>64色Master Paletteを参照する6-bit Index（0&ndash;63）。</td>
+            </tr>
+            <tr>
+                <td><code>6&ndash;11</code></td>
+                <td>Zone 1 Index</td>
+                <td>6-bit Palette Index。</td>
+            </tr>
+            <tr>
+                <td><code>12&ndash;17</code></td>
+                <td>Zone 2 Index</td>
+                <td>6-bit Palette Index。</td>
+            </tr>
+            <tr>
+                <td><code>18&ndash;23</code></td>
+                <td>Zone 3 Index</td>
+                <td>6-bit Palette Index。</td>
+            </tr>
+            <tr>
+                <td><code>24&ndash;31</code></td>
+                <td>Emissive</td>
+                <td>8-bit Intensity（0&ndash;255）。最下位bitは常に1へ強制されます。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+        <strong>なぜPacked Valueが0にならないのか:</strong> Emissive Byteの最下位bitは常に1へ強制され、全体のPacked Valueが完全に0になる場合も1へ補正されます。これにより、すべてデフォルトのインスタンス（Zone 0、Emissionなし）と、Per-Instance Value自体が設定されていないインスタンスを区別できます。
+    </div>
+<hr class="divider">
+
+    <h2>Canvas Blending &amp; Replacement Controls（Tint vs. Recolor）</h2>
+    <p>VCCoreシェーダーにはカスタマイズ可能なBlend Strengthがあり、インスタンスVariationがベースとなるSurface Canvas（Bake済みVertex ColorやAmbient Occlusionなど）とどのように組み合わされるかを制御できます。</p>
+
+    <ul>
+        <li><strong>Tint Replacement Strength (<code>_Tint_Blend</code>):</strong> Material InspectorのShader Variation Controlsから設定します。<code>0</code>では通常のShader VariationがMultiplierとして動作し、元のVertex ColorへTintを掛けながらBake済みShadowを保持します。<code>1</code>ではVertex Color CanvasをFlat White Baseへ完全に置き換え、完全なRecolorを行います。</li>
+        <li><strong>Zone Replacement Strength (<code>_Zone_Blend</code>):</strong> Zones Palette &amp; Controls Foldout内で設定します。Zone Variationを元のBake済みVertex ShadowへTintとして重ねるか（<code>0</code>）、Clean White Canvasで完全に上書きしてFlatなPalette Swatchとして使用するか（<code>1</code>）を制御します。</li>
+    </ul>
+
+    <p>ScriptによるVariationを使用していないオブジェクトや、デフォルト値のままのインスタンスでは、これらのBlend処理は自動的にBypassされ、元のアセットデータがそのまま維持されます。</p>
+    <hr class="divider">
+
+    <h2>トラブルシューティング &amp; FAQ</h2>
+
+    <div class="troubleshooting-q">DPT_ZoneVariationのカラーがゲーム内で反映されません。</div>
+    <div class="troubleshooting-a">Consoleに「no renderer using the custom VCCore shader」という警告が出ていないか確認してください。これは、そのオブジェクト配下のRendererが<code>_ZonesPalette</code>プロパティを持つMaterialを1つも使用していないことを意味します。VCCore Materialを割り当てると解決します。</div>
+
+    <div class="troubleshooting-q">Paletteを再生成したら、すべてのZone Colorがおかしくなりました。</div>
+    <div class="troubleshooting-a">Palette Indexは、照合時に使用した特定のPalette Textureに対してのみ意味を持ちます。Paletteを再生成すると各Indexに割り当てられる色が変わるため、既存のすべてのDPT_ZoneVariationインスタンスは新しいLayoutに対して再解決されます。Paletteを差し替えた後はZone Colorを再選択するか、<code>ApplyVariation</code>を再実行してください。また、新しいTexture Assetを作成せず同じAssetを置き換えた場合は、<code>DPT_PaletteMatcher.ClearCache()</code>も呼び出してください。</div>
+
+    <div class="troubleshooting-q">「Update Every Frame」はオンにするべきですか？</div>
+    <div class="troubleshooting-a">Gameplay中にZone Colorが実際に変化する場合（Damage State、Faction Recoloringなど）だけオンにしてください。静的なSet Dressing用プロップではオフのままで問題ありません。Editor上で値を編集した場合は、コンポーネントが自動的に再適用します。</div>
+</div>
+    <hr class="divider">
+<h2 id="support">サポート、問い合わせ &amp; カスタム統合</h2>
+
+<p>技術的なサポート、Bug Report、アセット設定に関する質問、その他一般的なサポートについては、Contact Formからお問い合わせください。パッケージ利用中に発生した問題についてサポートを受ける最も確実な方法です。</p>
+
+<p>このフォームから、カスタムのTechnical ArtやFreelance作業について問い合わせることもできます。外部3DモデルをDPTのシステムへ統合する必要がある場合、独自のVertex Data Packing、Procedural Wood Grain Mapping、GPU Wind System、ゲーム向けLOD設計など、プロジェクト固有の要件についてご相談いただけます。</p>
+
+<div class="note">
+    <strong>お問い合わせ:</strong><br>
+    トラブルシューティング、Bug Report、Publisher Licensing、Freelanceに関するお問い合わせは、<strong><a href="https://dptgames.github.io/#contact">DPT Games HubのContact Form</a></strong>をご利用ください。
+</div>
+
+<div class="note">
+    <strong>DPT Community Discord:</strong><br>
+    問題について直接サポートを受ける場合はContact Formが最適ですが、Feedbackの共有や他のユーザーとの交流には<strong><a href="https://discord.gg/EkQykfzP5X" target="_blank">Discord Server</a></strong>もご利用いただけます。
+</div>
+</body>
+</html>
