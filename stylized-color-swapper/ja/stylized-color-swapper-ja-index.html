@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<title>DPT Stylized Color Swapper &amp; Material Optimizer - 日本語ガイド</title>
+<style>
+        *, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body { font-family: 'Segoe UI', 'Yu Gothic', 'Meiryo', system-ui, sans-serif; color: #f8fafc; background-color: #0f172a; margin: 0; padding: 40px; font-size: 11pt; line-height: 1.5; }
+        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 35px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 25px; border-bottom: 1px solid #1e293b; padding-bottom: 5px; }
+        h4 { font-size: 11pt; color: #94a3b8; margin-top: 15px; font-style: italic; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        pre { padding: 12px; display: block; white-space: pre-wrap; border: 1px solid #1e293b; page-break-inside: avoid; }
+        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 25px; margin-bottom: 5px; page-break-after: avoid; }
+        .troubleshooting-a { margin-bottom: 15px; padding-left: 15px; border-left: 2px solid #334155; color: #cbd5e1; }
+        .divider { border: 0; height: 1px; background: #1e293b; margin: 40px 0; }
+        .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .feature-box { background: #1e293b; padding: 15px; border: 1px solid #334155; border-radius: 4px; }
+        .feature-box h4 { margin-top: 0; color: #7dd3fc; }
+        .note a {
+            color: #38bdf8;
+            text-decoration: none; 
+            transition: color 0.2s ease-in-out;
+        }
+        .note a:hover {
+            color: #7dd3fc;
+            text-decoration: underline; 
+        }
+    </style>
+<link href="https://dptgames.github.io/stylized-color-swapper/" hreflang="en" rel="alternate"/><link href="https://dptgames.github.io/stylized-color-swapper/ja/" hreflang="ja" rel="alternate"/></head>
+<body>
+<nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;"><a href="../../index.html" style="color: #38bdf8; margin-right: 15px;">← DPT Gamesへ戻る</a><span style="color: #64748b;">|</span><a href="../palette-system.html" style="color: #38bdf8; margin: 0 15px;">Zone Variation &amp; Palettes (English)</a><span style="color: #64748b;">|</span><a href="../" style="color: #38bdf8; margin-left: 15px;">English</a><span style="color: #f8fafc; margin-left: 10px;">日本語</span></nav>
+<h1>Stylized Color Swapper &amp; Material Optimizer</h1>
+<div class="subtitle">日本語テクニカルガイド</div>
+<p>Color SwapperはUnityエディタ内で動作し、Unityを離れたり画像編集ソフトを開いたりせずに3Dモデルの色や外観を変更できるツールです。モデルを選び、3Dプレビュー上で新しい色をペイントし、数回のクリックでその結果をすぐに使えるモデルとして保存できます。個別の画像ファイルを管理する必要もありません。</p>
+<div class="note">
+<strong>効率よく動作:</strong> Vertex Bake &amp; Packモードではカラーテクスチャを完全に不要にし、色の異なるほぼ無制限の数のプロップで1つのマスターマテリアルを共有できます。さらにZonesでバリエーションを制御すれば、数千個の異なるカラーのコピーでもまとめてバッチ処理できます。Texture Coloringモードでは元のテクスチャシートを超軽量なマイクロパレットに置き換え、VRAM使用量を最大96%削減できます。
+    </div>
+<hr class="divider"/>
+<h2>クイックスタート</h2>
+<p>すぐに始めたい場合は、インストールから最初のペイント済みモデルを作るまで、次の手順が最短です。</p>
+<ol>
+<li><strong>ツールを開く:</strong> Unityのメニューバーから次を開きます: <code>Tools &gt; DPT Games &gt; Stylized Color Swapper</code>.</li>
+<li><strong>ターゲットを設定:</strong> リカラーしたいGameObjectをScene HierarchyまたはProjectウィンドウから、ウィンドウ上部の <strong>Target Object</strong> フィールドへドラッグします。</li>
+<li><strong>ペイントを開始:</strong> ツールがモデルを自動スキャンし、そのまま3Dプレビューが表示されます。Swatchを選び、色を指定して、モデル上をクリックまたはドラッグすると直接ペイントできます。</li>
+</ol>
+<hr class="divider"/>
+<h2>仕組みをステップごとに解説</h2>
+<p>ツールが誤って元ファイルを変更することはありません。常にコピー上で作業し、保存ボタンを押すまで何も保存されません。基本的な流れは次のとおりです。</p>
+<ol>
+<li><strong>モデルを選ぶ:</strong> リカラーしたいオブジェクトまたはモデルをツールウィンドウへドラッグします。</li>
+<li><strong>スキャン:</strong> ツールがモデルの現在の色を解析し、表面を「Swatch」と呼ばれるカラーグループの一覧に整理します。1つずつ、または複数をまとめて編集できます。</li>
+<li><strong>ペイント:</strong> 3Dプレビュー上でモデルを直接クリック・ドラッグしながら、新しい色のペイント、滑らかなカラーグラデーション、木や金属のような表面表現、エッジのスムージング、発光、自然な風の揺れなどを設定できます。</li>
+<li><strong>保存:</strong> 仕上がりに満足したら、変更内容を新しいゲーム対応モデルとして保存します。</li>
+</ol>
+<h2>モデルのスキャンと保存方法の選択</h2>
+<p>ペイントする前に、ツールがモデルの現在のカラー情報を読み取る必要があります。読み取り方法と保存方法にはそれぞれ複数の選択肢があります。</p>
+<h3>モデルのカラー情報を読み取る方法</h3>
+<table>
+<thead>
+<tr>
+<th style="width: 25%;">項目</th>
+<th>機能と使用する場面</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Texture Palette (デフォルト)</strong></td>
+<td>モデルにすでに適用されているカラーテクスチャを解析し、一致する色ごとに表面をグループ化します。SyntyやPolygon系パックなど、多くのスタイライズドモデルにはこの方法が適しています。</td>
+</tr>
+<tr>
+<td><strong>Vertex Colors</strong></td>
+<td>画像ではなく、モデル表面に直接保存されている頂点カラーを読み取ります。BlenderやZBrushなどで作成されたモデルや、このツールですでに保存したモデルを再度開いて編集を続ける場合に使用します。</td>
+</tr>
+<tr>
+<td><strong>Material Colors</strong></td>
+<td>テクスチャもペイント済みカラーもなく、カラーホイールで選んだ単色マテリアルだけを使用しているモデル向けです。このモードでは、そのフラットカラーを読み取ります。</td>
+</tr>
+</tbody>
+</table>
+<p>スキャン方法は、次の2つの追加オプションで調整できます。 <strong>Combine Similar Colors</strong> (<code>Alt+C</code>) は、ほぼ同じ色を1つのグループへ統合し、わずかな違いしかない色を個別に編集する手間を減らします。 <strong>Split Disconnected Islands</strong> (<code>Alt+I</code>) は、同じ色を共有していても物理的に離れている部分（例: 左右の腕）を、まとめずに個別編集可能なグループとして保持します。保存時には、最終的に同じ色になったグループが自動的に再統合され、効率のよい状態に保たれます。</p>
+<h3>追加の精度設定</h3>
+<p>モデルの読み取りと再構築の精度は、以下の設定でさらに調整できます。</p>
+<ul>
+<li><strong>Auto-Uncompress Textures:</strong> 一部の画像は容量削減のために圧縮されており、直接サンプリングすると色が少しぼやけたりブロック状に見えたりすることがあります。このオプションはスキャン中だけ一時的に圧縮を解除し、正確な色を取得できるようにします。圧縮済み画像を検出すると、ワンクリックの <strong>Re-Scan (Lossless)</strong> ボタンが表示され、フル品質で再スキャンできます。</li>
+<li><strong>Adaptive Tessellation:</strong> カラーを画像ではなくモデルへ直接保存する際、小さな文字、ロゴ、デカールなどの細部を維持する必要がある場合に、必要な場所だけへ自動的に追加ジオメトリを生成します。 <strong>Protect Smooth Surfaces</strong> は、ホイールのような自然な曲面が不要に細分化されるのを防ぎます。 <strong>Max Subdivision</strong> は追加できる細分化量の上限を設定し、 <strong>Color Threshold</strong> は、どの程度の色差があると追加細分化を行うかを設定します。ブロック状のハードサーフェスモデルで特に有効で、もともとディテールが少なくほぼ単色のモデルでは効果は限定的です。</li>
+<li><strong>Auto-Unwrap (Lossless):</strong> 一部のモデルには、平面画像を3D形状へ展開するためのきれいなUVレイアウトがありません。この機能は必要に応じて元ファイルを変更せずにクリーンなUVレイアウトを自動生成します。 <strong>Hard Edge Cutoff</strong> スライダーは、3D形状を平面へ展開するために必要なシームをどの程度積極的に追加するかを制御します。値を低くすると、より鋭い角へシームが配置されやすくなります。</li>
+<li><strong>Smooth Normals (パーツ単位):</strong> キャンプファイヤーの石や切り株のようなブロック状・低ディテールの表面で、追加ジオメトリを生成せずに光の反射を滑らかに見せます。変わるのはライティングの見え方だけで、どの保存方式でも利用できます。</li>
+</ul>
+<h3>保存結果の違い</h3>
+<table>
+<thead>
+<tr>
+<th style="width: 25%;">項目</th>
+<th>保存される内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Texture Coloring</strong></td>
+<td>従来型の方式です。モデルをリカラーし、元モデルと同様に新しい画像ファイルを生成します。古いプロジェクトや軽量構成を維持したいモバイルゲームに適しています。</td>
+</tr>
+<tr>
+<td><strong>Vertex Bake &amp; Pack (推奨)</strong></td>
+<td>Color、Metallic、Smoothness、AOなどの設定を別画像ではなくモデル自体へ直接保存します。画像を完全に省略でき、滑らかなカラーグラデーション、リアルタイムの風アニメーション、Smooth Normals、Zonesなどの追加機能を利用できます。</td>
+</tr>
+</tbody>
+</table>
+<hr class="divider"/>
+<h2>モデルのパーツを選択する方法</h2>
+<p>ツールには3種類の選択スコープとクイックショートカットがあります。ツールバーのボタンまたは <code>I</code>:</p>
+<div class="feature-grid">
+<div class="feature-box">
+<h4>Face</h4>
+<p>小さな三角形を1枚ずつ選択します。トリムラインや1つの発光ルーンなど、細部を正確に編集したい場合に適しています。</p>
+</div>
+<div class="feature-box">
+<h4>Island</h4>
+<p>画像上で連続した領域を共有する、接続されたUVパッチ（UV Island）全体を選択します。明確に分かれた領域をワンクリックでリカラーする場合に便利です。</p>
+</div>
+<div class="feature-box">
+<h4>Shell</h4>
+<p>防具プレート全体、剣、髪のまとまりなど、物理的に独立したパーツ全体をワンクリックで選択します。</p>
+</div>
+<div class="feature-box">
+<h4>Face Extract (<code>Q</code>)</h4>
+<p>モデル全体を分割することなく、カーソル下の表面だけを個別編集可能なパーツとして即座に分離します。</p>
+</div>
+</div>
+<hr class="divider"/>
+<h2>滑らかなカラーグラデーションと自然な風の揺れ</h2>
+<p>Vertex Bake &amp; Packモード（推奨）でのみ使用できます。 <strong>Gradient Paintツール (<code>G</code>)</strong> を使うと、モデル上をクリック＆ドラッグして、全体へ同じ値を適用する代わりに、色や設定を滑らかにブレンドできます。</p>
+<div class="feature-grid">
+<div class="feature-box">
+<h4>滑らかなグラデーション</h4>
+<p>クリックで開始点を設定し、ドラッグしてブレンドの方向と長さを指定します。モデルの大きさに関係なく正確に動作します。</p>
+<ul>
+<li><strong>Blend Mode:</strong> 既存の値とグラデーションをどのように合成するか選択します。 <code>Multiply</code> (暗くする)、 <code>Replace</code> (完全に置き換える)、または <code>SoftLight</code> (より自然にブレンドする)。</li>
+<li><strong>Alpha:</strong> グラデーション全体の強さを調整します。</li>
+<li><strong>Sharpness:</strong> 変化をどの程度滑らかまたは急にするかを調整します。</li>
+<li><strong>Clear:</strong> 現在選択している範囲からグラデーションを即座に削除します。</li>
+</ul>
+</div>
+<div class="feature-box">
+<h4>風の揺れをペイント</h4>
+<p>Wind設定へ切り替え、植物やプロップの根元から先端へドラッグすると、自然で段階的な揺れを設定できます。根元は静止し、先端ほど大きく揺れます。</p>
+<ul>
+<li><strong>ライブプレビュー:</strong> 保存前に「Simulate Wind」を有効にすると、プレビューウィンドウ上で揺れをリアルタイムに確認できます。</li>
+<li><strong>追加コストなし:</strong> この動きのデータはモデルへ直接保存され、ゲーム実行時に追加のテクスチャコストは発生しません。</li>
+</ul>
+</div>
+</div>
+<hr class="divider"/>
+<h2>Vertex Bake &amp; Packを使う理由</h2>
+<p>Vertex Bake &amp; Packはカラーとマテリアル設定をMeshへ直接保存するため、カラーテクスチャを必要としません。そのため、見た目の異なる大量のプロップを最小1つのマスターマテリアルで運用できます。Zonesでカラーバリエーションを制御する場合は、異なる色のコピーが数千個あってもまとめてバッチ処理できます。また、Gradient Paintを利用できる唯一のモードで、単一値を全体へ適用する代わりにカラーや設定をモデル上で滑らかにブレンドできます。</p>
+<div class="note">
+<strong>くぼみ部分のAmbient Occlusion (AO)について:</strong> テクスチャAOは画像からモデルへそのまま正確に転送するのが困難です。通常、画像にはモデルの頂点数で表現できる以上のディテールが含まれています。そのため画像から色をスキャンしてVertex Bake &amp; Packへ保存する場合、AOはまず <code>1.0</code> （追加のオクルージョンなし）から開始し、不正確な推測値は使用しません。あとから手動でペイントするか、下記の <strong>Raycast AO Baker</strong> を使用して実際の形状に基づく結果を計算できます。
+    </div>
+<div class="note">
+<strong>ペイントしたAOは見た目だけでなくスタイライズドシャドウにも影響:</strong> マテリアルで「Stylized Lighting」を有効にしている場合、ペイントまたはベイクしたAOはシャドウの見え方にも直接反映されます。たとえば目のくぼみや防具の凹部でAOを強め、単なる暗色表現ではなく、狙った場所へスタイライズドな影を配置できます。
+    </div>
+<hr class="divider"/>
+<h2>3Dプレビューウィンドウ</h2>
+<p>Unity通常のSceneビューではなく、ツール専用の3Dプレビューウィンドウを使用します。実際のゲームシーンへモデルを配置する前でも、そのままペイントできます。</p>
+<div class="feature-grid">
+<div class="feature-box">
+<h4>編集前 / 編集後</h4>
+<p>デフォルトでは編集後のモデルが表示されます。 <code>O</code> を押している間だけ元の未編集モデルを確認でき、離すと編集後の表示へ戻ります。</p>
+</div>
+<div class="feature-box">
+<h4>Scene内で比較</h4>
+<p> <code>B</code> を押すと、実際のゲームシーンへプレビューコピーを一時配置し、本来のライティングで並べて比較できます。ツールを閉じると自動的に削除されます。</p>
+</div>
+<div class="feature-box">
+<h4>自動回転</h4>
+<p> <code>T</code> （または <code>Space</code>) を押すとモデルがゆっくり回転し、あらゆる角度から見た目を確認できます。</p>
+</div>
+<div class="feature-box">
+<h4>実際のライティング</h4>
+<p>プレビューはプロジェクトの実際のライティング設定をリアルタイムで反映するため、MetallicやSmoothnessの見え方も正確に確認できます。</p>
+</div>
+<div class="feature-box">
+<h4>プレビューを非表示</h4>
+<p> <code>V</code> を押すと3Dウィンドウ全体を非表示にし、カラーグループ一覧の表示領域を広げられます。</p>
+</div>
+<div class="feature-box">
+<h4>カメラを同期</h4>
+<p> <strong>Sync Scene</strong> と <strong>Sync Game</strong> トグルを使用すると、SceneビューまたはGameビューのカメラをツールのプレビューカメラに合わせられます。</p>
+</div>
+<div class="feature-box">
+<h4>範囲選択</h4>
+<p> <code>Shift</code> を押しながらプレビュー内をドラッグして範囲を囲むと、各パーツを1つずつクリックせずに範囲内をまとめて選択できます。</p>
+</div>
+<div class="feature-box">
+<h4>風のライブプレビュー</h4>
+<p>Wind設定を表示中に「Simulate Wind」を有効にすると、植物やプロップの揺れをプレビュー内でリアルタイムに確認できます。</p>
+</div>
+</div>
+<h2>ツールバー＆ショートカット一覧</h2>
+<p>モデルをスキャンすると、プレビューウィンドウ下部のツールバーから以下の機能を利用できます。保存先フィールドなどのテキストボックスへ入力中は、ほとんどのショートカットが無効になります。</p>
+<table>
+<thead>
+<tr>
+<th style="width: 20%;">ツール</th>
+<th style="width: 15%;">ショートカット</th>
+<th>機能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Selection Scope</strong></td>
+<td><code>I</code></td>
+<td>次の選択モードを切り替えます: <strong>Face</strong> （単一の三角形）、 <strong>Island</strong> （接続されたUVパッチ）、 <strong>Shell</strong> （独立したパーツ全体）。</td>
+</tr>
+<tr>
+<td><strong>Face Extract</strong></td>
+<td><code>Q</code></td>
+<td>モデルの残りを分割せず、カーソル下の表面だけを独立したパーツへ分離します。</td>
+</tr>
+<tr>
+<td><strong>Paint Mode</strong></td>
+<td><code>P</code></td>
+<td>クリック＆ドラッグによるペイントを有効にし、ドラッグした場所へ選択中の色または設定を適用します。 <code>Shift</code> を押している間は、このモードがオフでもペイントできます。</td>
+</tr>
+<tr>
+<td><strong>Gradient Paint</strong></td>
+<td><code>G</code></td>
+<td>Vertex Bake &amp; Packモード限定。クリック＆ドラッグでカラーや設定を滑らかにブレンドします。</td>
+</tr>
+<tr>
+<td><strong>Eraser Mode</strong></td>
+<td><code>E</code></td>
+<td>Paint Modeが有効なときのみ使用できます。クリックした表面を元の色とデフォルト設定へ戻します。</td>
+</tr>
+<tr>
+<td><strong>Hover Select</strong></td>
+<td><code>Shift+Q</code></td>
+<td>クリックせず、カーソルを重ねるだけで対象を選択します。誤ってペイントすることもありません。 <code>Ctrl+Alt+Q</code> を押しながら使用すると、この方法で選択へ追加または選択から除外できます。</td>
+</tr>
+<tr>
+<td><strong>Pick Color</strong></td>
+<td><code>Ctrl+X</code></td>
+<td>スポイトのように、モデル上をクリックしてその色をブラシへコピーします。キャンセルするには <code>Esc</code> を押します。</td>
+</tr>
+<tr>
+<td><strong>Select All Swatches</strong></td>
+<td><code>Ctrl+A</code></td>
+<td>モデル上のペイント可能なすべてのパーツ（Swatch）を選択します。</td>
+</tr>
+<tr>
+<td><strong>Invert Selection</strong></td>
+<td><code>Ctrl+I</code></td>
+<td>未選択のものをすべて選択し、選択済みのものをすべて解除します。</td>
+</tr>
+<tr>
+<td><strong>Reset Selected</strong></td>
+<td><code>R</code> / <code></code></td>
+<td>Paint Modeがオフのときのみ使用できます。選択中のすべてを元の色と設定へ戻します。</td>
+</tr>
+<tr>
+<td><strong>Change Channel</strong></td>
+<td><code>Dropdown / Top Row</code></td>
+<td>ブラシが変更する内容とプレビュー表示を、Combined、Color、Metallic、Smoothness、AO、Emissive、Zones、Windから選択します。</td>
+</tr>
+<tr>
+<td><strong>Group Similar</strong></td>
+<td><code>Ctrl+G</code></td>
+<td>設定したToleranceスライダーに基づき、似た色を持つモデル上のすべてのSwatchを選択します。</td>
+</tr>
+<tr>
+<td><strong>Load Palette Color</strong></td>
+<td><code>Shift+1</code>-<code>Shift+0</code></td>
+<td>Colorチャンネルが有効なとき、保存済みCustom Paletteの10スロットのいずれかを選択中の対象へ即座に適用します。</td>
+</tr>
+<tr>
+<td><strong>Hide/Show Selected</strong></td>
+<td><code>H</code></td>
+<td>現在選択している対象を非表示にします。何も選択していない場合はモデル全体を非表示にします。</td>
+</tr>
+<tr>
+<td><strong>Full Rescan</strong></td>
+<td><code>Ctrl+Shift+R</code></td>
+<td>モデルを最初から再スキャンし、これまでの編集をすべて破棄します。Resetボタンと同じ動作です。</td>
+</tr>
+<tr>
+<td><strong>Paint Entire Object</strong></td>
+<td><code>Shift+Enter</code> または <code>Shift+P</code></td>
+<td>現在の色をモデル上のペイント可能なすべてのパーツへ一度に適用します。</td>
+</tr>
+<tr>
+<td><strong>Deselect All</strong></td>
+<td><code>Ctrl+D</code></td>
+<td>選択をすべて解除し、テキストボックスの入力フォーカスも外します。</td>
+</tr>
+<tr>
+<td><strong>Copy / Paste Color</strong></td>
+<td><code>Ctrl+C</code> / <code>Ctrl+V</code></td>
+<td>1つのパーツから色をコピーし、別のパーツまたは複数の選択対象へ適用します。</td>
+</tr>
+<tr>
+<td><strong>Show All</strong></td>
+<td><code>Shift+H</code></td>
+<td>非表示になっているすべてのパーツを再表示します。</td>
+</tr>
+<tr>
+<td><strong>Hide All Sub-Targets</strong></td>
+<td><code>Ctrl+H</code></td>
+<td>モデルのすべての独立パーツ（Renderer）を一度に非表示にします。</td>
+</tr>
+<tr>
+<td><strong>Swap Active Palette</strong></td>
+<td><code>Tab</code></td>
+<td>ウィンドウ幅が狭くCustom PaletteとImported Paletteを同時表示できない場合に、表示するパレットを切り替えます。両方を表示できる幅では何も起こりません。</td>
+</tr>
+<tr>
+<td><strong>Reset View to Combined</strong></td>
+<td>` (backtick)</td>
+<td>現在の表示内容に関係なく、プレビューのView ChannelをCombinedへ戻します。</td>
+</tr>
+<tr>
+<td><strong>Refresh Material / Preview</strong></td>
+<td><code>M</code></td>
+<td>モデル全体を再スキャンしたりペイント済みカラーを失ったりせず、現在のMaterial設定に合わせてプレビューを素早く更新します。</td>
+</tr>
+<tr>
+<td><strong>Refresh Footprint Audit</strong></td>
+<td><code>F</code></td>
+<td>このガイド後半で説明するMemory Footprintプレビューを更新します。この操作だけでは保存やエクスポートは行われません。</td>
+</tr>
+</tbody>
+</table>
+<div class="note">
+<strong>Undoは通常どおり動作:</strong> <code>Ctrl+Z</code> / <code>Cmd+Z</code> Unity標準のUndo履歴を使用するため、どのウィンドウにフォーカスがあっても動作します。ただし、このツール専用の履歴ではなくプロジェクト全体の直近操作を元に戻します。ペイント直後にSceneで別の操作をした場合は、まずその操作がUndoされ、その次にペイントストロークがUndoされます。
+    </div>
+<hr class="divider"/>
+<h2>Texel Density &amp; Smooth Normals</h2>
+<p>カラー編集パネルにあるこれらの設定では、パターンの見かけ上のサイズを統一し、モデルのエッジをどの程度丸くまたはシャープに見せるか調整できます。</p>
+<div class="feature-grid">
+<div class="feature-box">
+<h4>Texel Density</h4>
+<p>木目や布の織り目などのパターンが、モデルの場所によって伸びたり縮んだりせず、同じ見かけのサイズになるようにします。 <strong>Calculate &amp; Assign Scale</strong> と <strong>Auto-Normalize Scale</strong> ボタンで自動計算できます。</p>
+</div>
+<div class="feature-box">
+<h4>Smooth Normals &amp; Angle Threshold</h4>
+<p>選択中のパーツでSmooth Normalsを有効にすると、見た目を制御する角度スライダー（0°〜180°）が表示されます。</p>
+<ul>
+<li><code>0°</code> - 元のブロック状でフラットな面構成をそのまま維持します。</li>
+<li><code>10°-60°</code> - 小さな折れ目だけを穏やかに滑らかにし、鋭い角は維持します。</li>
+<li><code>120°-180°</code> - 急な角度も丸め、柔らかく滑らかな曲面に見せます。</li>
+</ul>
+</div>
+</div>
+<div class="note">
+<strong>どのスケールでも正確:</strong> 巨大なドラゴン、小さな犬、ごく小さなキャンプファイヤーなど、インポート時のスケールに関係なくSmooth NormalsとGradientは正確に計算されます。
+    </div>
+<hr class="divider"/>
+<h2>ワンクリックのマテリアル表現（Feature ID）</h2>
+<p>Vertex Bake &amp; Packモードで保存する場合、ディテールを手作業で描かなくても、ペイント済みパーツへワンクリックでリアルな表面表現を追加できます。</p>
+<p>パーツを選択し、 <strong>Feature ID</strong> ドロップダウンから以下の表現を選択します。</p>
+<ul>
+<li><code>Default (None)</code> - ペイントしたカラーと設定のみを使用し、追加の表面ディテールは適用しません。</li>
+<li><code>Wood</code> - 木材らしい色味と木目の表面パターンを追加し、カラーと表面ディテールの両方を変更します。</li>
+<li><code>Fur</code> -  <code>Wood</code> と同様に色味を追加しますが、Surface Normalパターンは追加しません。</li>
+<li><code>Bark, Steel, Copper, Cast Iron, Leather, Cloth, Stone, Rope, Foliage</code> - それぞれ傷、織り目、粒状感など独自のリアルな表面パターンを追加し、下地の色は変更しません。</li>
+</ul>
+<h3>マテリアル表現の微調整</h3>
+<p>Feature IDを選択すると、追加の調整項目が表示されます。</p>
+<ul>
+<li><strong>Detail Scale:</strong> 木目などのパターンを大きく、または小さくします。</li>
+<li><strong>Detail Rotation:</strong> パターンを回転します。木目が横向きになっている場合などに便利です。</li>
+<li><strong>Blend Detail:</strong> パターンがタイル状・反復的に見えないよう、モデル表面全体で滑らかにブレンドします。通常のエッジと鋭いシーム向けに個別の <strong>Face</strong> と <strong>Seam</strong> Strengthスライダーを使用できます。</li>
+<li><strong>Apply Wind:</strong> 表面ディテールへ揺れを追加します。Strengthスライダーで調整でき、より自然で方向性のある揺れにはGradient PaintのWindチャンネルも使用できます。</li>
+</ul>
+<div class="note">
+<strong>初回のみ設定が必要な場合があります:</strong> Materialで <code>_DETAIL</code> キーワードがまだ有効でない場合、Feature IDを選択すると警告と <strong>Enable Procedural Details</strong> ボタンが表示され、自動的に有効化できます。
+    </div>
+<hr class="divider"/>
+<h2>Zones（後から利用する領域タグ）</h2>
+<p>Vertex Bake &amp; Packモードでは、各パーツへ0〜7のZone IDを設定できます。ツール内で現在の見た目が変わるわけではなく、ゲーム側のコードやShaderで領域ごとに異なる処理を行うためのタグです。たとえば特定Zoneだけへランダムなカラーバリエーションを適用できます。</p>
+<ul>
+<li>Change ChannelをZonesへ切り替えると、実際のペイント色ではなくZoneごとに異なる色で各パーツを確認できます。</li>
+<li>パーツを選択した状態でZoneスライダー（0〜7）を動かすか、通常のカラーと同じようにプレビュー上で直接ペイントできます。このチャンネルが有効な間は、ブラシが色ではなくZone番号を適用します。</li>
+<li>Zone 7はデフォルト/フォールバック用です。独自のゲームロジックやShaderエフェクトで使用するZoneには0〜6を利用してください。</li>
+</ul>
+<div class="note">
+<strong>モデル上のカラーではなく画像を使用する場合:</strong> このZoneペイント機能はVertex Bake &amp; Packモード限定です。画像ベースのモデルでZoneが必要な場合は、 <code>VCCore</code> を非Vertex Colorモードへ設定してください。Zoneデータ専用の画像スロットを利用できます。
+    </div>
+<hr class="divider"/>
+<h2>カラーパレットの管理</h2>
+<p>横並びの2つのカラーグリッドを使って、複数モデル間で一貫した配色を維持できます。</p>
+<ul>
+<li><strong>Custom Palette（左）:</strong> 自分で設定できる18個のカラースロットです。PC上に保存され、すべてのプロジェクト間で維持されます。任意のスロットをクリックすると、その色をブラシへ読み込めます。</li>
+<li><strong>Imported Palette（右）:</strong> 現在のモデルをスキャンした際に検出されたカラーで自動的に埋まります。</li>
+<li><strong>Copyボタン:</strong> Imported PaletteのカラーをCustom Paletteへそのままコピーし、別モデルでも再利用できるようにします。</li>
+</ul>
+<p>また、 <strong>Export Palette (PNG)</strong> と <strong>Import Palette (PNG)</strong> ボタンでCustom Paletteを小さな画像ファイルとして保存・読み込みできます。バックアップやチーム内で配色を共有する際に便利です。</p>
+<hr class="divider"/>
+<h2>複数Materialを使用するモデル</h2>
+<p>モデルが複数のMaterialを使用している場合、独自の画像を持つ各Materialには名前付きの個別セクションが設定パネルへ表示されます。各セクションでBase ColorとMetallic / Smoothness / AO入力を個別に設定でき、MaterialのPBR Modeに応じて1枚のPacked MRAO Mapまたは個別のMetal、Smooth、AO Textureスロットを使用できます。空欄の項目はツールが自動検出した内容をそのまま使用します。</p>
+<hr class="divider"/>
+<h2>Raycast AO Baker</h2>
+<p>メインのペイントワークフローとは別のツールです。既存画像に頼らず、モデル周辺で光がどのように遮られるかをシミュレーションし、角やくぼみのリアルなAmbient Occlusion（AO）を計算します。</p>
+<ul>
+<li><strong>Rays Per Vertex:</strong> 各頂点で使用するライトサンプル数です。値を高くすると結果は滑らかになりますが、計算時間が長くなります。</li>
+<li><strong>Max Distance:</strong> シミュレーションされた光線を、遮られていないと判定するまでどの距離まで飛ばすかを設定します。</li>
+<li><strong>Intensity:</strong> 生成されるシェーディング全体の強さを調整します。</li>
+<li><strong>Blur Passes:</strong> 結果の粒状感を軽減します。</li>
+<li><strong>Bake Target:</strong> AOをモデルへ直接保存するか、別テクスチャへベイクするかを選択します（ <strong>Match Base Color</strong> ボタンで他の画像と同じ解像度へ自動設定できます）。</li>
+</ul>
+<p> <strong>Compute &amp; Bake Global Raycast AO</strong> をクリックして実行します。Texture Coloringモードで <strong>Optimize Palette Size</strong> が有効な場合、このツールは非表示になります。AO Bakeではモデルの各パーツに画像内の独立した領域が必要ですが、このオプションは容量削減のためその領域を統合します。壊れた結果を生成しないよう、この条件ではツール自体を非表示にしています。</p>
+<hr class="divider"/>
+<h2>作業内容の保存</h2>
+<p>変更内容に満足したら、ウィンドウ下部のボタンから保存します。表示されるボタンは作業対象によって異なります。</p>
+<ul>
+<li><strong>Apply to Scene Object:</strong> Sceneへすでに配置されているオブジェクトを編集している場合のみ表示されます。新しいバージョンをディスクへ保存し、元データのバックアップを残したうえで、Scene内のオブジェクトを新バージョンへ自動的に置き換えます。</li>
+<li><strong>Create New Version:</strong> 元のモデルには触れず、指定フォルダへ独立した新しいコピーを保存します。</li>
+</ul>
+<p>保存時のMaterialファイルの扱いは、別の設定で指定できます。</p>
+<ul>
+<li><strong>Make a New Copy Each Time:</strong> 保存するたびに新しいMaterialファイルを作成します。</li>
+<li><strong>Share One Copy:</strong> 同じセッション内の保存結果すべてで1つのMaterialファイルを共有します。</li>
+<li><strong>Reuse the Existing Material:</strong> 新しいファイルを作らず、すべての保存結果が元のMaterialを参照します。</li>
+<li><strong>Edit the Original Directly:</strong> 新しいファイルを作成せず、既存のMaterialファイル自体を直接変更します。</li>
+<li><strong>Leave It Alone:</strong> Materialの割り当てを一切変更しません。</li>
+</ul>
+<p>どの保存ボタンを使用しても、内部では次の処理が行われます。</p>
+<ol>
+<li>元モデルのコピーを作成します。</li>
+<li>ペイントしたカラーをそのコピーへ適用します。</li>
+<li>Metallic、Smoothness、AO設定をモデルへ効率的に保存します。</li>
+<li>設定したSmooth Normalsを適用します。</li>
+<li>新しいモデルと、該当する保存方式では新しい画像を、指定したフォルダへ保存します。</li>
+<li>適切なMaterialが設定済みの、すぐに使用できるバージョンを作成または更新します。</li>
+</ol>
+<div class="note">
+<strong>保存前にメモリ使用量を確認:</strong> Footprint Auditパネル（および <code>F</code> ショートカット）では、新しいバージョンのメモリ使用量を保存前にプレビューできます。保存後に初めて確認するのではなく、事前に削減量を把握できます。
+    </div>
+<hr class="divider"/>
+<h2>トラブルシューティング＆よくある質問</h2>
+<div class="troubleshooting-q">「Split Disconnected Islands」を有効にしましたが、個々のパーツを別々にペイントできません。</div>
+<div class="troubleshooting-a">「Group Similar」(<code>Ctrl+G</code>) がオフになっていることを確認してください。両方をオンにすると、分割後でも似た色のパーツが再びグループ化されます。</div>
+<div class="troubleshooting-q">植物や布へ風の揺れをペイントするには？</div>
+<div class="troubleshooting-a">Change ChannelをWindへ切り替え、Gradient Paint (<code>G</code>) を有効にして、植物や茎の根元をクリックし、先端へ向かってドラッグします。ツールバーの「Simulate Wind」をオンにすると、プレビュー内で揺れをリアルタイム確認できます。</div>
+<div class="troubleshooting-q">Face、Island、Shell選択の違いは？</div>
+<div class="troubleshooting-a"><strong>Face</strong> は小さな三角形を1枚ずつ選択し、精密な編集に向いています。 <strong>Island</strong> はモデル画像上で1つの連続領域を共有するパッチ全体を選択します。 <strong>Shell</strong> は髪のまとまりや防具プレートなど独立したパーツ全体をワンクリックで選択します。これらは <code>I</code> キーで切り替えられます。</div>
+<div class="troubleshooting-q">パーツを選択しても正しくハイライトされませんが、色の変更自体はできます。</div>
+<div class="troubleshooting-a">多くの場合、ミラーされたパーツが同じ画像領域を共有していることが原因です。モデルの新しいバージョンを作成し、それをターゲットとして使用してみてください。</div>
+<div class="troubleshooting-q">Smooth Normalsを有効にしても、ローポリの岩や丸太が丸く見えないのはなぜですか？</div>
+<div class="troubleshooting-a">ブロック状で低ディテールの形状では、面同士の角度が大きいことがあります（60°〜90°以上など）。Smooth Normalsの角度スライダーを <code>120°-180°</code>付近まで上げると、大きな角度も丸く見せられます。 <code>0°</code> では完全にフラットな見た目を維持します。</div>
+<div class="troubleshooting-q">モデル全体ではなく、一部のパーツだけ丸く見せられますか？</div>
+<div class="troubleshooting-a">はい。Smooth Normalsはパーツ（Swatch）ごとに個別設定できます。木材、岩、生物の体など有機的な部分だけを丸く見せ、金属の刃や防具などのハードサーフェス部分はシャープでフラットなまま維持できます。</div>
+<div class="troubleshooting-q">モデルをクリックしてペイントしましたが、何も起こりません。</div>
+<div class="troubleshooting-a">Eraser Modeが誤って有効になっていないか確認してください。また、変更したい内容に対応したChannelを表示しているか確認してください。たとえばColor Channel表示中にはMetallicをペイントできません。</div>
+<div class="troubleshooting-q">パーツにワンクリックのマテリアル表現（Feature ID）が表示されません。</div>
+<div class="troubleshooting-a">これらのオプションはVertex Bake &amp; Packモードでのみ表示されます。Texture Coloringモードでは通常の画像として保存する前提になるため、これらの項目は非表示になります。</div>
+<div class="troubleshooting-q">Undoしたら最後のブラシストロークではなく、Scene内の別操作が元に戻りました。</div>
+<div class="troubleshooting-a">Undoはこのツール専用履歴ではなく、Unity標準のプロジェクト全体の履歴を使用します。ペイント直後にSceneで別の操作を行った場合、その操作が先にUndoされます。続けてUndoすると次にペイントストロークが元に戻ります。</div>
+<div class="troubleshooting-q">保存したモデルが明るいピンク色になります。</div>
+<div class="troubleshooting-a">これは、ツールに必要なMaterial（例: <code>VCCore</code>）がプロジェクトに存在しないことを示します。パッケージ全体が正しくインポートされ、プロジェクトのレンダリング設定がツール要件と一致していることを確認してください。</div>
+<div class="troubleshooting-q">高ディテールモデルをペイントするとツールが遅く感じます。</div>
+<div class="troubleshooting-a">正確な選択のため、ツールはクリック位置を各表面に対してチェックします。そのため非常に高ディテールなモデルでは処理時間が少し長くなります。50,000 Triangleを超えるモデルでは、Combine Similar ColorsのToleranceを上げて個別Swatch数を減らしてみてください。</div>
+<hr class="divider"/>
+<h2 id="support">サポート＆ヘルプ</h2>
+<p>技術サポート、バグ報告、一般的な質問についてはContact Formからご連絡ください。問題が発生した際に最も確実なサポート方法です。</p>
+<p>同じフォームからカスタムのフリーランス作業についてもお問い合わせいただけます。たとえば外部3Dモデルをこのツール向けに調整したい場合や、ゲームの風エフェクト、LOD設定などのサポートが必要な場合に利用できます。</p>
+<div class="note">
+<strong>お問い合わせ:</strong><br/>
+        トラブルシューティング、バグ報告、ライセンスに関する質問、フリーランス案件については、 <strong><a href="https://dptgames.github.io/#contact">DPT Games HubのContact Form</a></strong>.
+    </div>
+<div class="note">
+<strong>コミュニティDiscord:</strong><br/>
+        直接サポートにはContact Formが最適ですが、 <strong><a href="https://discord.gg/EkQykfzP5X" target="_blank">Discord Server</a></strong> へ参加して、フィードバックを共有したり他のユーザーと交流したりすることもできます。
+    </div>
+</body>
+</html>
