@@ -56,8 +56,7 @@
         <a href="https://dptgames.github.io/" style="color: #38bdf8; margin-right: 15px;">&larr; DPT Games Homepage</a>
         <span style="color: #64748b;">|</span>
         <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Vertex Terrain Hub</a>
-        <a href="dpt-vertex-terrain-ui.html" style="color: #f8fafc; margin-right: 15px;">Vertex Terrain UI</a>
-        <a href="dpt-demo-suite-guide.html" style="color: #38bdf8; font-weight: bold;">Demo & Runtime Suite</a>
+        <a href="demo-components.html" style="color: #38bdf8; font-weight: bold;">Demo & Runtime Suite</a>
     </nav>
 
     <!-- HEADER & SUBTITLE -->
