@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>DPT Vertex Terrain - Demo Suite & Runtime Tools Guide</title>
+    <title>DPT Vertex 3D Terrain - Demo Suite & Runtime Tools Guide</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
@@ -55,14 +55,15 @@
     <nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
         <a href="https://dptgames.github.io/" style="color: #38bdf8; margin-right: 15px;">&larr; DPT Games Homepage</a>
         <span style="color: #64748b;">|</span>
-        <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Vertex Terrain Hub</a>
-        <a href="demo-components.html" style="color: #38bdf8; font-weight: bold;">Demo & Runtime Suite</a>
+        <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Vertex 3D Terrain Guide</a>
+        <a href="biomes.html" style="color: #f8fafc; margin-right: 15px;">Biomes Guide</a>
+        <a href="demo-components.html" style="color: #38bdf8; font-weight: bold;">Demo & Runtime Guide</a>
     </nav>
 
     <!-- HEADER & SUBTITLE -->
-    <h1>DPT_VertexTerrain - Demo Suite & Runtime Tools</h1>
+    <h1>DPT Vertex 3D Terrain - Demo Suite & Runtime Tools</h1>
     <div class="subtitle">Component & Integration Reference Guide<br>
-    <span style="font-size: 11pt; font-style: normal;">A comprehensive guide covering the runtime demonstration controllers, camera inspection rigs, and real-time biome raycast probing tools included with DPT Vertex Terrain.</span></div>
+    <span style="font-size: 11pt; font-style: normal;">A comprehensive guide covering the runtime demonstration controllers, camera inspection rigs, and real-time biome raycast probing tools included with DPT Vertex 3D Terrain.</span></div>
 
     <!-- QUICK NAVIGATION BOX -->
     <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
@@ -77,7 +78,7 @@
 
     <!-- SECTION ONE: DPT_DynamicBiomeDemoController -->
     <h2 id="dynamic-biome-controller">1. DPT_DynamicBiomeDemoController</h2>
-    <p>The <code>DPT_DynamicBiomeDemoController</code> is an in-editor and runtime driver component designed to modulate terrain shader properties on the fly. It exposes live controls for biome weights, wetness transitions, snow accumulation, and emissive pulse effects without requiring expensive mesh re-uploads or CPU vertex operations[cite: 6].</p>
+    <p>The <code>DPT_DynamicBiomeDemoController</code> is an in-editor and runtime driver component designed to modulate terrain shader properties on the fly. It exposes live controls for biome weights, wetness transitions, snow accumulation, and emissive pulse effects without requiring expensive mesh re-uploads or CPU vertex operations.</p>
 
     <h3>General & Target Setup</h3>
     <table>
@@ -94,13 +95,13 @@
             </tr>
             <tr>
                 <td><strong>Enable Dynamic Biomes</strong></td>
-                <td>Master boolean toggle mapped to <code>_Enable_Dynamic_Biomes</code>. When disabled, the terrain shader bypasses all live modifier calculations with zero ALU overhead[cite: 6].</td>
+                <td>Master boolean toggle mapped to <code>_Enable_Dynamic_Biomes</code>. When disabled, the terrain shader bypasses all live modifier calculations with zero ALU overhead.</td>
             </tr>
         </tbody>
     </table>
 
     <h3>Dynamic Slot Configuration</h3>
-    <p>The component exposes four configurable modifier channels corresponding to <code>_Dynamic_Biome_Slot1</code> through <code>_Dynamic_Biome_Slot4</code> and their paired <code>_Params</code> companion vectors[cite: 6, 7]:</p>
+    <p>The component exposes four configurable modifier channels corresponding to <code>_Dynamic_Biome_Slot1</code> through <code>_Dynamic_Biome_Slot4</code> and their paired <code>_Params</code> companion vectors:</p>
     <table>
         <thead>
             <tr>
@@ -111,31 +112,31 @@
         <tbody>
             <tr>
                 <td><strong>Active</strong></td>
-                <td>Toggles whether this individual slot modifier evaluates in the shader. (Note: Slot 1 is always active when the Master Switch is enabled)[cite: 6].</td>
+                <td>Toggles whether this individual slot modifier evaluates in the shader. (Note: Slot 1 is always active when the Master Switch is enabled).</td>
             </tr>
             <tr>
                 <td><strong>Target Biome ID</strong></td>
-                <td>The index of the biome to modulate (e.g., 0 for Lush Grass, 6 for Mountain Snow, 9 for Magma Crust)[cite: 3]. Set to <code>-1</code> or toggle off to disable[cite: 6].</td>
+                <td>The index of the biome to modulate (e.g., 0 for Lush Grass, 6 for Mountain Snow, 9 for Magma Crust). Set to <code>-1</code> or toggle off to disable.</td>
             </tr>
             <tr>
                 <td><strong>Weight Multiplier</strong></td>
-                <td>Scalar multiplier applied to the target biome's raw vertex weight before normalization[cite: 6]. <code>1.0</code> is neutral, <code>0.0</code> suppresses the biome entirely, and values above <code>1.0</code> force progressive expansion[cite: 6].</td>
+                <td>Scalar multiplier applied to the target biome's raw vertex weight before normalization. <code>1.0</code> is neutral, <code>0.0</code> suppresses the biome entirely, and values above <code>1.0</code> force progressive expansion.</td>
             </tr>
             <tr>
                 <td><strong>Smoothness Mult</strong></td>
-                <td>Multiplies glossiness and specular highlights on the target biome[cite: 6]. Ideal for simulating surface wetness, pooled water, or icy glaze[cite: 6].</td>
+                <td>Multiplies glossiness and specular highlights on the target biome. Ideal for simulating surface wetness, pooled water, or icy glaze.</td>
             </tr>
             <tr>
                 <td><strong>Normal Strength Mult</strong></td>
-                <td>Scales micro-bump relief on the target biome[cite: 6]. Lower values flatten surface bumps to mimic standing liquid[cite: 6].</td>
+                <td>Scales micro-bump relief on the target biome. Lower values flatten surface bumps to mimic standing liquid.</td>
             </tr>
             <tr>
                 <td><strong>Parallax Depth Mult</strong></td>
-                <td>Scales Parallax Occlusion Mapping extrusion depth[cite: 6]. Raising this parameter makes snow, volcanic rock, or foliage physically deeper in relief[cite: 6].</td>
+                <td>Scales Parallax Occlusion Mapping extrusion depth. Raising this parameter makes snow, volcanic rock, or foliage physically deeper in relief.</td>
             </tr>
             <tr>
                 <td><strong>Emissive Mult</strong></td>
-                <td>Direct multiplier for the biome's emissive tint and vein mask, driving glowing lava cracks or bioluminescence[cite: 6].</td>
+                <td>Direct multiplier for the biome's emissive tint and vein mask, driving glowing lava cracks or bioluminescence.</td>
             </tr>
         </tbody>
     </table>
@@ -169,7 +170,7 @@
     </table>
 
     <div class="perf">
-        <strong>Performance Note:</strong> This controller modifies material properties via standard <code>Material.SetVector</code> calls[cite: 6]. Because all data packs directly into the <code>UnityPerMaterial</code> constant buffer, it is 100% SRP Batcher compatible and produces zero additional draw calls or garbage collection allocations.
+        <strong>Performance Note:</strong> This controller modifies material properties via standard <code>Material.SetVector</code> calls. Because all data packs directly into the <code>UnityPerMaterial</code> constant buffer, it is 100% SRP Batcher compatible and produces zero additional draw calls or garbage collection allocations.
     </div>
 
     <!-- SECTION TWO: DPT_SurfaceRaycastTester -->
@@ -299,23 +300,23 @@
     <h2 id="runtime-architecture">4. Architecture & Data Flow</h2>
     <p>The demo suite relies on a decoupled, non-destructive architecture that keeps rendering and physics perfectly synchronized:</p>
     <ul>
-        <li><strong>Zero-Cost Mesh Geometry:</strong> Terrain meshes do not require <code>Read/Write Enabled</code> in their import settings[cite: 4]. Base vertex colors and weights remain strictly on the GPU, protecting memory budgets on consoles and mobile devices[cite: 4].</li>
-        <li><strong>Tri-Biome Runtime Ledger:</strong> When terrain is baked via <code>DPT_SurfaceDataBaker</code>, the system packs the three candidate biomes (<code>id0, id1, id2</code>) and their base unscaled weights (<code>w0, w1</code>) into contiguous byte arrays inside <code>DPT_TerrainSurfaceData</code>[cite: 9]. This requires only 5 bytes per triangle (~150 KB for a 30,000-triangle mesh).</li>
+        <li><strong>Zero-Cost Mesh Geometry:</strong> Terrain meshes do not require <code>Read/Write Enabled</code> in their import settings. Base vertex colors and weights remain strictly on the GPU, protecting memory budgets on consoles and mobile devices.</li>
+        <li><strong>Tri-Biome Runtime Ledger:</strong> When terrain is baked via <code>DPT_SurfaceDataBaker</code>, the system packs the three candidate biomes (<code>id0, id1, id2</code>) and their base unscaled weights (<code>w0, w1</code>) into contiguous byte arrays inside <code>DPT_TerrainSurfaceData</code>. This requires only 5 bytes per triangle (~150 KB for a 30,000-triangle mesh).</li>
         <li><strong>On-Demand Evaluation:</strong> When <code>DPT_SurfaceRaycastTester</code> hits a triangle, <code>DPT_TerrainSurfaceTarget</code> queries the material's current vector properties (<code>_Dynamic_Biome_Slot1</code>, etc.). It multiplies only the matching candidate weights for that single hit triangle and immediately returns the winner.</li>
-        <li><strong>Exact Visual/Audio Parity:</strong> If snow accumulates from a dusting to full coverage via <code>DPT_DynamicBiomeDemoController</code>, the raycast query dynamically transitions from returning Grass to returning Mountain Snow at the exact threshold where snow takes over visually[cite: 6].</li>
+        <li><strong>Exact Visual/Audio Parity:</strong> If snow accumulates from a dusting to full coverage via <code>DPT_DynamicBiomeDemoController</code>, the raycast query dynamically transitions from returning Grass to returning Mountain Snow at the exact threshold where snow takes over visually.</li>
     </ul>
 
     <!-- SECTION FIVE: TROUBLESHOOTING -->
     <h2 id="troubleshooting">5. Troubleshooting Notes</h2>
     
     <div class="troubleshooting-q">"The Raycast Tester reports 'None' or does not detect any surface."</div>
-    <div class="troubleshooting-a">Ensure the terrain GameObject has an active <code>MeshCollider</code> attached and that its physics layer is included in the <code>Raycast Layers</code> mask. Also verify that <code>DPT_TerrainSurfaceTarget</code> is present on the same GameObject and references a valid baked <code>DPT_TerrainSurfaceData</code> asset[cite: 9].</div>
+    <div class="troubleshooting-a">Ensure the terrain GameObject has an active <code>MeshCollider</code> attached and that its physics layer is included in the <code>Raycast Layers</code> mask. Also verify that <code>DPT_TerrainSurfaceTarget</code> is present on the same GameObject and references a valid baked <code>DPT_TerrainSurfaceData</code> asset.</div>
 
     <div class="troubleshooting-q">"Live Biome Modifiers are changing the visuals, but raycasts still return the old baked biome."</div>
-    <div class="troubleshooting-a">Re-bake the terrain using the updated <code>DPT_SurfaceDataBaker</code>[cite: 9]. Earlier versions only stored a single precomputed dominant byte per triangle, which lacked the multi-biome candidate arrays required for real-time runtime re-evaluation[cite: 9].</div>
+    <div class="troubleshooting-a">Re-bake the terrain using the updated <code>DPT_SurfaceDataBaker</code>. Earlier versions only stored a single precomputed dominant byte per triangle, which lacked the multi-biome candidate arrays required for real-time runtime re-evaluation.</div>
 
     <div class="troubleshooting-q">"Setting a Weight Multiplier to 0.0 makes other biomes disappear or cut off sharply."</div>
-    <div class="troubleshooting-a">In a multiplicative weighting pipeline, <code>1.0</code> represents neutral baseline coverage[cite: 6]. Setting a multiplier to <code>0.0</code> erases that biome completely from the face[cite: 6]. If that biome was blending with a secondary biome, the secondary biome will take 100% of the normalized weight[cite: 6]. To disable a dynamic slot without modifying underlying painted weights, uncheck the slot's active toggle or set its Target ID to <code>-1</code>[cite: 6].</div>
+    <div class="troubleshooting-a">In a multiplicative weighting pipeline, <code>1.0</code> represents neutral baseline coverage. Setting a multiplier to <code>0.0</code> erases that biome completely from the face. If that biome was blending with a secondary biome, the secondary biome will take 100% of the normalized weight. To disable a dynamic slot without modifying underlying painted weights, uncheck the slot's active toggle or set its Target ID to <code>-1</code>.</div>
 
     <div class="troubleshooting-q">"The on-screen control hint box overlaps the Raycast Tester HUD."</div>
     <div class="troubleshooting-a">The <code>DPT_Terrain_DemoCamera</code> overlay is anchored to the bottom-center of the viewport, while <code>DPT_SurfaceRaycastTester</code> renders in the top-left corner. Ensure both scripts are updated to the latest version to prevent viewport rect overlap.</div>
