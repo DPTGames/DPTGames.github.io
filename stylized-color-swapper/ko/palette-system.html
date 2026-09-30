@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<title>DPT Zone Variation &amp; Palette System - 한국어 레퍼런스 가이드</title>
+<style>
+        *, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body { font-family: 'Segoe UI', 'Malgun Gothic', 'Apple SD Gothic Neo', system-ui, sans-serif; color: #f8fafc; background-color: #0f172a; margin: 0; padding: 40px; font-size: 11pt; line-height: 1.5; }
+        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 35px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 25px; border-bottom: 1px solid #1e293b; padding-bottom: 5px; }
+        h4 { font-size: 11pt; color: #94a3b8; margin-top: 15px; font-style: italic; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        pre { padding: 12px; display: block; white-space: pre-wrap; border: 1px solid #1e293b; page-break-inside: avoid; }
+        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 25px; margin-bottom: 5px; page-break-after: avoid; }
+        .troubleshooting-a { margin-bottom: 15px; padding-left: 15px; border-left: 2px solid #334155; color: #cbd5e1; }
+        .divider { border: 0; height: 1px; background: #1e293b; margin: 40px 0; }
+        .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .feature-box { background: #1e293b; padding: 15px; border: 1px solid #334155; border-radius: 4px; }
+        .feature-box h4 { margin-top: 0; color: #7dd3fc; }
+ .note a {
+        color: #38bdf8;
+        text-decoration: none; 
+        transition: color 0.2s ease-in-out;
+    }
+
+    .note a:hover {
+        color: #7dd3fc;
+        text-decoration: underline; 
+    }
+    </style><link href="https://dptgames.github.io/stylized-color-swapper/palette-system.html" hreflang="en" rel="alternate"/><link href="https://dptgames.github.io/stylized-color-swapper/ja/palette-system.html" hreflang="ja" rel="alternate"/><link href="https://dptgames.github.io/stylized-color-swapper/ko/palette-system.html" hreflang="ko" rel="alternate"/>
+</head>
+<body>
+<nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;"><a href="../../index.html" style="color: #38bdf8; margin-right: 15px;">← DPT Games</a><span style="color: #64748b;">|</span><a href="index.html" style="color: #38bdf8; margin: 0 15px;">Stylized Color Swapper 한국어 가이드</a><span style="color: #64748b;">|</span><a href="../palette-system.html" style="color: #38bdf8; margin-left: 15px;">English</a><a href="../ja/palette-system.html" lang="ja" style="color: #38bdf8; margin-left: 10px;">日本語</a><span lang="ko" style="color: #f8fafc; margin-left: 10px;">한국어</span></nav>
+<h1>Zone Variation &amp; Palette System</h1>
+<div class="subtitle">VCCore 셰이더용 인스턴스별 컬러 변형</div>
+<p>이 시스템은 GPU Instancing을 유지하면서 개별 배치된 프롭마다 독립적인 컬러 변형을 제공합니다. MaterialPropertyBlock이나 오브젝트별 Material은 사용하지 않습니다. 대신 각 인스턴스의 색상 선택을 공유 Master Palette Texture와 매칭하고, VCCore 셰이더가 렌더링 시 읽는 하나의 Per-Instance 값으로 패킹합니다. 시스템은 세 가지 요소로 구성됩니다. 각 인스턴스에 추가하는 <code>DPT_ZoneVariation</code> 컴포넌트, Color-to-Index 검색을 수행하는 <code>DPT_PaletteMatcher</code> 유틸리티, 그리고 Master Palette Texture 자체를 생성하는 <code>DPT_PaletteGenerator</code> Editor Tool입니다.</p>
+<div class="note">
+<strong>Raw Color 대신 Palette Index를 사용하는 이유</strong> 인스턴스마다 Raw RGB를 패킹하는 것보다 공유 Palette의 작은 Index를 패킹하는 편이 더 적은 Bit를 사용합니다. 또한 모든 인스턴스가 정확히 동일한 제한된 색상 집합을 참조하므로 Unity의 GPU Resident Drawer Instancing 경로를 그대로 사용할 수 있습니다. MaterialPropertyBlock은 이 Batching을 깨뜨리기 때문에 이 시스템에서는 의도적으로 사용하지 않습니다.
+    </div>
+<hr class="divider"/>
+<h2>DPT_ZoneVariation 컴포넌트</h2>
+<p>VCCore 셰이더를 사용하는 프롭 인스턴스에 <code>DPT_ZoneVariation</code>을 추가하면 독립적인 컬러 변형을 적용할 수 있습니다. 4개의 Zone Color 필드(<strong>Zone 0–3</strong>)와 오브젝트 전체에 적용되는 하나의 <strong>Emissive</strong> 강도 슬라이더를 제공합니다.</p>
+<ul>
+<li><strong>Zone 0–3 Colors:</strong> 각 색상은 오브젝트의 Master Palette Texture에서 가장 가까운 항목과 매칭되고 6-bit Index로 패킹됩니다. 아래 Packing Reference를 참고하세요. Zone 0은 셰이더가 인식하지 못하는 Zone ID에 대한 Fallback Color로도 사용됩니다.</li>
+<li><strong>Emissive:</strong> 해당 인스턴스의 4개 Zone 전체에 동일하게 적용되는 0–1 강도 값입니다.</li>
+<li><strong>Update Every Frame:</strong> 기본값은 Off입니다. Runtime 중 Zone Color가 실제로 변경되는 경우, 예를 들어 Damage State에 따라 색상이 바뀌는 경우에만 켜세요. 정적 프롭에서는 바뀌지 않는 값을 계속 확인하는 CPU Overhead만 추가되므로 꺼두는 것이 좋습니다.</li>
+</ul>
+<p>컴포넌트는 제어할 Renderer와 Child Renderer를 자동으로 찾으며, Inspector에서 값을 수정할 때(<code>OnValidate</code>) 또는 오브젝트가 Enable될 때 값을 다시 적용합니다. Play Mode에서 <strong>Update Every Frame</strong>이 Off라면 <code>Start</code>에서 한 번 값을 적용한 뒤 스스로 비활성화됩니다. 따라서 아무 작업도 하지 않으면서 매 Frame Tick하지 않습니다.</p>
+<div class="warning">
+<strong>VCCore 셰이더가 필요합니다:</strong> DPT_ZoneVariation은 대상 Renderer 중 하나라도 <code>_ZonesPalette</code> 프로퍼티가 있는 Material을 사용하는지 확인합니다. 하나도 없다면 Runtime에서 한 번 경고를 출력하며, 패킹된 값을 읽을 셰이더가 없기 때문에 시각적인 효과도 없습니다.
+    </div>
+<h3>Editor 정리</h3>
+<p>Editor에서 Play Mode가 아닌 상태로 컴포넌트를 제거하거나 삭제하면 인스턴스의 Packed Value를 0으로 되돌려, 컴포넌트가 사라진 뒤에도 이전 Variation이 Renderer에 남아 표시되는 것을 방지합니다.</p>
+<hr class="divider"/>
+<h2>Palette Matching 작동 방식</h2>
+<p><code>DPT_PaletteMatcher.FindNearestIndex</code>는 Target Color와 Palette Texture를 받아 Palette에서 가장 가까운 색상의 Index를 반환합니다. 거리 계산에는 단순 Euclidean Distance가 아니라 Rec.601 Luma Weight의 Channel Difference(R/G/B = 0.299 / 0.587 / 0.114)를 사용하므로 지각적으로 더 가까운 색상이 우선됩니다. 이는 VCCore 파이프라인의 Luminance 계산과 동일한 Weighting입니다.</p>
+<p>Palette Pixel Data는 첫 Lookup 이후 Texture별로 Cache됩니다. 따라서 동일한 Palette에 반복적으로 매칭할 때, 예를 들어 하나의 인스턴스에서 4개의 Zone Color를 매칭할 때마다 Texture를 다시 읽지 않습니다. Palette Texture의 Import Settings에서 <strong>Read/Write Enabled</strong>가 활성화되지 않은 경우에도 실패하지 않고 GPU Blit + Readback 방식으로 Pixel Data를 가져옵니다.</p>
+<div class="note">
+<strong>Cache 무효화:</strong> Palette Texture를 재생성하거나 다시 Import한 경우 <code>DPT_PaletteMatcher.ClearCache()</code> 를 호출하거나 특정 Texture를 전달해 이후 매칭이 오래된 Cache 대신 업데이트된 Palette를 읽도록 하세요.
+    </div>
+<hr class="divider"/>
+<h2>Master Palette 생성</h2>
+<p>Generator는 <strong>Tools → DPTTools → Tools → Generate Palette</strong> 메뉴에서 엽니다. 64색 Master Palette를 Color Space를 가로지르는 단일 Gradient 경로가 아니라 R/G/B 전체에 분포된 Full-Gamut Lattice로 생성합니다. 따라서 결과 Palette는 한 줄이 아니라 Color Cube 전체를 실제로 커버합니다.</p>
+<ul>
+<li><strong>Red / Green / Blue Weight sliders:</strong> 총 6개의 Index Bit 중 각 Channel에 얼마만큼 할당할지 제어합니다. Weight가 높을수록 해당 Channel의 Shade Level은 늘어나지만 다른 Channel에 할당되는 범위는 줄어듭니다.</li>
+<li><strong>Reset to VCCore Luma Weights:</strong> Weight를 0.299 / 0.587 / 0.114로 설정해 Palette/Matching 파이프라인의 지각 기반 Weighting과 일치시킵니다.</li>
+<li><strong>Reset to Uniform:</strong> 세 Weight를 동일하게 설정해 지각적 중요도와 관계없이 각 Channel에 같은 수의 Shade Level을 제공합니다.</li>
+<li><strong>Bake to PNG:</strong> 현재 64색 Strip을 지정한 파일 이름으로 Project의 Assets 폴더에 저장합니다.</li>
+</ul>
+<p>Weight Slider를 조절하면 Preview Strip과 "Resulting levels per channel" 표시가 실시간으로 갱신되어 Bake 전에 각 Channel에 몇 단계의 Shade가 할당되는지 정확히 확인할 수 있습니다.</p>
+<hr class="divider"/>
+<h2>RSUV Packing 레퍼런스</h2>
+<p>각 인스턴스의 4개 Zone Index와 Emissive Intensity는 GPU Resident Drawer의 Per-Instance User Value(RSUV)에 기록되는 하나의 32-bit 값으로 패킹됩니다. 이것이 MaterialPropertyBlock 없이 전체 시스템을 Instancing 호환으로 만드는 핵심입니다.</p>
+<table>
+<thead>
+<tr>
+<th style="width: 25%;">Bits</th>
+<th style="width: 25%;">Field</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0–5</code></td>
+<td>Zone 0 Index</td>
+<td>64색 Master Palette를 참조하는 6-bit Index(0–63).</td>
+</tr>
+<tr>
+<td><code>6–11</code></td>
+<td>Zone 1 Index</td>
+<td>6-bit Palette Index.</td>
+</tr>
+<tr>
+<td><code>12–17</code></td>
+<td>Zone 2 Index</td>
+<td>6-bit Palette Index.</td>
+</tr>
+<tr>
+<td><code>18–23</code></td>
+<td>Zone 3 Index</td>
+<td>6-bit Palette Index.</td>
+</tr>
+<tr>
+<td><code>24–31</code></td>
+<td>Emissive</td>
+<td>8-bit Intensity(0–255). 최하위 Bit는 항상 1로 강제됩니다.</td>
+</tr>
+</tbody>
+</table>
+<div class="note">
+<strong>Packed Value가 0이 될 수 없는 이유:</strong> Emissive Byte의 최하위 Bit는 항상 1로 강제되며 전체 Packed Value가 정확히 0이 되는 경우에도 1로 보정됩니다. 이를 통해 모든 값이 기본 상태인 인스턴스(Zone 0, Emission 없음)와 Per-Instance Value 자체가 설정되지 않은 인스턴스를 구분할 수 있습니다.
+    </div>
+<hr class="divider"/>
+<h2>Canvas Blending &amp; Replacement Controls (Tint vs. Recolor)</h2>
+<p>VCCore 셰이더에는 인스턴스 Variation이 Bake된 Vertex Color나 Ambient Occlusion 같은 기본 Surface Canvas와 어떻게 결합되는지 제어하는 Blend Strength가 있습니다.</p>
+<ul>
+<li><strong>Tint Replacement Strength (<code>_Tint_Blend</code>):</strong> Material Inspector의 Shader Variation Controls에서 설정합니다. <code>0</code>에서는 일반 Shader Variation이 Multiplier로 작동해 원본 Vertex Color에 Tint를 적용하면서 Bake된 Shadow를 유지합니다. <code>1</code>에서는 Vertex Color Canvas를 Flat White Base로 완전히 대체해 완전한 Recolor를 수행합니다.</li>
+<li><strong>Zone Replacement Strength (<code>_Zone_Blend</code>):</strong> Zones Palette &amp; Controls Foldout에서 설정합니다. <code>0</code>에서는 Zone Variation이 원래 Bake된 Vertex Shadow 위에 Tint로 적용되고, <code>1</code>에서는 Clean White Canvas로 완전히 덮어 Flat Palette Swatch처럼 사용합니다.</li>
+</ul>
+<p>Scripted Variation을 사용하지 않거나 기본값으로 남아 있는 인스턴스는 이러한 Blend를 자동으로 우회해 원본 Asset Data를 그대로 유지합니다.</p>
+<hr class="divider"/>
+<h2>문제 해결 &amp; FAQ</h2>
+<div class="troubleshooting-q">게임에서 DPT_ZoneVariation 색상이 적용되지 않습니다.</div>
+<div class="troubleshooting-a">Console에 "no renderer using the custom VCCore shader" 경고가 있는지 확인하세요. 해당 오브젝트 아래의 Renderer가 <code>_ZonesPalette</code> 프로퍼티가 있는 Material을 하나도 사용하지 않는다는 의미입니다. VCCore Material을 할당하면 해결됩니다.</div>
+<div class="troubleshooting-q">Palette를 다시 생성한 뒤 모든 Zone Color가 잘못 보입니다.</div>
+<div class="troubleshooting-a">Palette Index는 매칭에 사용한 정확한 Palette Texture를 기준으로만 의미가 있습니다. Palette를 다시 생성하면 각 Index의 색상이 바뀌므로 기존 <code>DPT_ZoneVariation</code> 인스턴스가 새 Layout을 기준으로 다시 해석됩니다. Palette를 교체한 뒤 Zone Color를 다시 선택하거나 <code>ApplyVariation</code>을 다시 실행하세요. 새 Texture Asset을 만들지 않고 기존 Asset을 교체했다면 <code>DPT_PaletteMatcher.ClearCache()</code>도 호출해야 합니다.</div>
+<div class="troubleshooting-q">"Update Every Frame"을 켜야 하나요?</div>
+<div class="troubleshooting-a">Gameplay 중 Zone Color가 실제로 변경되는 경우, 예를 들어 Damage State나 Faction Recoloring이 있을 때만 켜세요. 정적인 Set Dressing 프롭에서는 끄는 것이 좋습니다. Editor에서 값을 수정하면 컴포넌트가 자동으로 다시 적용합니다.</div>
+<hr class="divider"/>
+<h2 id="support">지원, 문의 &amp; 커스텀 통합</h2>
+<p>기술 지원, Bug Report, Asset 설정 도움 및 일반 지원은 Contact Form을 통해 문의해 주세요. 패키지 사용 중 발생하는 문제에 대해 도움을 받을 수 있는 가장 확실한 방법입니다.</p>
+<p>같은 Form을 통해 커스텀 Freelance Technical Art 작업도 문의할 수 있습니다. 외부 3D 모델을 DPT 시스템에 통합하거나 맞춤 Vertex Data Packing, Procedural Wood Grain Mapping, GPU Wind System, 게임용 LOD 구성 등이 필요하다면 프로젝트 요구 사항을 문의해 주세요.</p>
+<div class="note">
+<strong>문의:</strong><br/>
+    문제 해결, Bug Report, Publisher Licensing 및 Freelance 문의는 <strong><a href="https://dptgames.github.io/#contact">DPT Games Hub의 Contact Form</a></strong>.
+</div>
+<div class="note">
+<strong>DPT Community Discord:</strong><br/>
+    문제에 대한 직접 지원은 Contact Form이 가장 좋지만 Feedback 공유와 다른 사용자와의 교류를 위해 <strong><a href="https://discord.gg/EkQykfzP5X" target="_blank">Discord 서버</a></strong> 에도 참여할 수 있습니다.
+</div>
+</body>
+</html>
