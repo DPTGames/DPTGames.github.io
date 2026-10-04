@@ -1,345 +1,166 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>DPT Vertex 3D Terrain - Demo Suite & Runtime Tools Guide</title>
-    <style>
-        *, *::before, *::after { box-sizing: border-box; }
-        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            color: #f8fafc;
-            background-color: #0f172a;
-            margin: 0; padding: 40px;
-            font-size: 11pt; line-height: 1.5;
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Try the example components and connect terrain surfaces to your own gameplay."><link rel="alternate" hreflang="en" href="demo-components.html"><link rel="alternate" hreflang="ja" href="ja/demo-components.html"><title>Demo &amp; Runtime Guide | DPT Games</title><style>
+:root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
+main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
+.site-nav{display:flex;flex-wrap:wrap;gap:8px 20px;border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:32px;font-size:.92rem}.site-nav [aria-current]{color:white;font-weight:700}
+.language-nav{display:flex;gap:10px;flex-wrap:wrap;margin:-12px 0 28px}.language-nav a{display:inline-block;padding:6px 16px;border:1px solid var(--border);border-radius:6px;text-decoration:none}.language-nav [aria-current]{color:#0f172a;background:var(--accent);border-color:var(--accent);font-weight:700}html[lang="ja"] body{line-height:1.85;line-break:strict}html[lang="ja"] th,html[lang="ja"] td{overflow-wrap:anywhere}
+h1,h2,h3,h4{line-height:1.25;color:var(--accent)}h1{font-size:2.25rem;margin:0 0 14px}h2{font-size:1.65rem;margin:48px 0 18px;padding-top:12px;border-top:1px solid var(--border)}h3{font-size:1.22rem;margin:30px 0 12px}h4{font-size:1.06rem}
+p{margin:12px 0 18px}li{margin:7px 0}ul,ol{padding-left:25px}.lead{font-size:1.18rem;color:var(--muted);max-width:850px}.intro{margin:28px 0}.toc{background:var(--panel);padding:20px 24px;border:1px solid var(--border);border-radius:9px;margin:28px 0}.toc h2{margin:0 0 10px;padding:0;border:0;font-size:1.15rem}.toc ul{columns:2;column-gap:36px;margin:0}.toc li{break-inside:avoid}
+.callout,.example{background:var(--panel);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:14px 20px;margin:22px 0}.example{border-color:#a3e635}.callout p:last-child,.example p:last-child{margin-bottom:0}.callout p:first-child,.example p:first-child{margin-top:0}
+.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--border);border-radius:7px}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--border)}thead{background:#25354c}th{color:#f8fafc}td:first-child{font-weight:600;min-width:145px}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#172238}
+code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background:#27354c;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}kbd{white-space:nowrap;border:1px solid #50617a}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#09111f;border:1px solid var(--border);padding:20px;border-radius:7px}pre code{background:transparent;padding:0}
+.back-top{font-size:.88rem}.table-hint{display:none;color:var(--muted);font-size:.9rem}.footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);margin-top:34px;padding-top:16px}details{background:var(--panel);padding:14px 18px;border:1px solid var(--border);border-radius:7px;margin:16px 0}summary{cursor:pointer;font-weight:600;color:var(--accent)}.alias{display:block;scroll-margin-top:24px}
+@media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
+@media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
+</style></head>
+<body><main id="top"><nav class="site-nav" aria-label="Documentation"><a href="https://dptgames.github.io/">DPT Games homepage</a><a href="index.html">Vertex 3D Terrain Guide</a><a href="biomes.html">Biomes Guide</a><a href="terrain-material-settings.html">Terrain Material Settings</a><a href="demo-components.html" aria-current="page">Demo & Runtime Guide</a></nav><nav class="language-nav" aria-label="Language"><a href="demo-components.html" lang="en" hreflang="en" aria-current="page">English</a><a href="ja/demo-components.html" lang="ja" hreflang="ja">日本語</a></nav><header><h1>Demo & Runtime Guide</h1><p class="lead">Try the example components and connect terrain surfaces to your own gameplay.</p></header><nav class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#quick-start">Try the demo and identify its parts</a></li><li><a href="#dynamic-biome-controller">Dynamic Biome Demo Controller</a></li><li><a href="#surface-raycast-tester">Surface Raycast Tester</a></li><li><a href="#terrain-demo-camera">Terrain Demo Camera</a></li><li><a href="#runtime-architecture">Use surface data in gameplay</a></li><li><a href="#query-limits">How closely does a query match the picture?</a></li><li><a href="#troubleshooting">Runtime and demo problems</a></li><li><a href="#support">Support</a></li></ul></nav><p class="table-hint">On a small screen, scroll wide tables sideways to read every column.</p><div class="intro"><p>The demo components let you inspect a terrain, experiment with live material effects, and test which biome a physics raycast reports. They are examples you can learn from and adapt; they do not provide a complete character controller, weather system or footstep audio system.</p><p>You do not need to write code to try the demo. The integration example later in this page is for developers who want to use surface information in their own gameplay.</p></div>
+
+<h2 id="quick-start">Try the demo and identify its parts</h2>
+<ol><li>Open <code>Assets/DPTGames/Vertex_Terrain/VertexTerrain_Demo/VertexTerrain_DemoScene.unity</code>.</li><li>Find the terrain renderer and inspect its material and biome library. Read the IDs of the surfaces in that library.</li><li>Find the Dynamic Biome Demo Controller. Check its assigned material, target IDs and enabled simulations before entering Play mode.</li><li>Enter Play mode and use the demo camera to inspect a few painted surfaces.</li><li>Try one material simulation at a time so its effect is clear.</li><li>Use the Surface Raycast Tester to inspect reported IDs and names. Compare it with the appearance on a pure patch and near a blend.</li></ol>
+<div class="table-wrap"><table><thead><tr><th>Component / asset</th><th>Its job</th><th>Needed for your own game?</th></tr></thead><tbody>
+<tr><td>Dynamic Biome Demo Controller</td><td>Writes live settings to a terrain material and offers example animations.</td><td>Optional. Use your own controller if your weather or gameplay has different rules.</td></tr>
+<tr><td>Surface Raycast Tester</td><td>Displays a physics hit and the biome returned for it.</td><td>Optional debugging tool. Your gameplay can call the same surface-query API directly.</td></tr>
+<tr><td>Terrain Demo Camera</td><td>Provides free camera movement for inspection.</td><td>Optional. Replace it with your own player/camera system.</td></tr>
+<tr><td>Terrain Surface Data</td><td>The baked triangle-to-biome information.</td><td>Required for the supplied triangle-based biome query.</td></tr>
+<tr><td>Terrain Surface Target</td><td>Links a renderer to its baked data and evaluates the surface query.</td><td>Use it on the terrain you want the supplied query to recognise.</td></tr>
+</tbody></table></div>
+
+<h2 id="dynamic-biome-controller">Dynamic Biome Demo Controller</h2>
+<p>Add <strong>DPT → Dynamic Biome Demo Controller</strong> to an object and assign Terrain Material. If left empty, the component can resolve the shared material from a Renderer on that same object. An empty object without a Renderer needs an explicit material reference.</p>
+<p>This controller edits the material it is given. It does not automatically create a private material instance. Use a separate material if you want one terrain to change independently.</p>
+<h3>Understand Pull, Push and synchronisation</h3>
+<div class="table-wrap"><table><thead><tr><th>Control / action</th><th>Direction of the change</th><th>When to use it</th></tr></thead><tbody>
+<tr><td>Pull Settings From Material</td><td>Material → component.</td><td>Adopt a setup you already made in the material inspector. This replaces the component’s corresponding slot settings.</td></tr>
+<tr><td>Push Settings To Material</td><td>Component → material.</td><td>Apply the component’s current settings. Assign/resolve the material first. This replaces the corresponding material settings.</td></tr>
+<tr><td>Pull From Material On Play</td><td>Imports an existing live setup when entering Play mode, when that setup is detected.</td><td>Enabled by default so a configured material can supply the starting state. Recheck component settings after the import if they differ from what you expected.</td></tr>
+<tr><td>Sync In Edit Mode</td><td>Inspector edits on the component write back to the material outside Play mode.</td><td>Off by default. Keep it off while adjusting the material directly; turn it on when the component should drive the setup.</td></tr>
+<tr><td>Enable Dynamic Biomes</td><td>Sets the material’s master live-biome switch when settings are pushed.</td><td>Use with each slot’s Active switch. Master enabled does not force Slot 1 to be active.</td></tr>
+</tbody></table></div>
+<p>The Pull and Push actions are available from the component’s context menu. At runtime, the demo pushes continuously while a simulation is active. With all simulations off, changing its fields from your own script does not automatically push every frame: call <code>PushMaterialProperties()</code> after making your changes.</p>
+<div class="example"><p><strong>A predictable editing workflow:</strong> finish a setup in the material inspector, Pull it into the component, then choose whether the material or the component should drive future edits. Avoid repeatedly editing both while a simulation or edit-mode sync is overwriting one of them.</p></div>
+<h3>Configure the four slots</h3>
+<p>Each slot can target up to three biome IDs. Slot 1 is simply the slot used by two of the demonstration animations; it has no permanent always-active rule. The example IDs stored in the component are demo defaults, not a guarantee that those surfaces exist in your library.</p>
+<div class="table-wrap"><table><thead><tr><th>Setting</th><th>Meaning</th><th>Useful starting value</th></tr></thead><tbody>
+<tr><td>Active / Target Biome IDs</td><td>Chooses which existing surfaces the slot affects.</td><td>Activate only the slot you are testing and enter IDs from your library. Use Active to disable it; −1 is not a disable ID.</td></tr>
+<tr><td>Weight Multiplier: 0–5</td><td>Changes the targeted surfaces’ contributions in an existing painted mixture.</td><td>1 preserves their weights. It cannot introduce a biome that was not painted into the area.</td></tr>
+<tr><td>Smoothness / Normal / Parallax: 0–3</td><td>Multiplies those surface responses for the target IDs.</td><td>1 preserves the response. Start with small changes around 1.</td></tr>
+<tr><td>Emissive: 0–10</td><td>Multiplies the source’s glow.</td><td>1 preserves it. The targeted surface must have an emissive contribution for patterned glow to appear.</td></tr>
+<tr><td>Flow</td><td>Enables moving texture detail, its heading, speed and optional back-and-forth motion.</td><td>Start with a slow positive speed. Negative speed reverses the motion; zero is static.</td></tr>
+<tr><td>Dusting</td><td>Chooses an overlay biome, strength and upward-facing slope threshold.</td><td>Use the underlying ground IDs as slot targets, the snow/dust ID as the overlay, and paint a dusting mask on the terrain first.</td></tr>
+</tbody></table></div>
+<p>For the full meaning of live weights, flow, slope thresholds and painted masks, see <a href="terrain-material-settings.html#live-biomes">Terrain Material Settings</a>. The demo component does not expose the material’s Waterfall Projection flag and can clear it when pushing slot data.</p>
+<h3>What the demonstration animations actually change</h3>
+<div class="table-wrap"><table><thead><tr><th>Simulation</th><th>Actual behaviour</th><th>Required setup</th></tr></thead><tbody>
+<tr><td>Winter Snowstorm</td><td>Enables Slot 1 dusting and cycles its strength between 0 and 1.8. It does not itself animate Slot 1’s weight.</td><td>Activate Slot 1, target the receiving ground IDs, choose a snow overlay ID and paint the dusting mask. Weather Cycle Speed controls the cycle rate.</td></tr>
+<tr><td>River Level</td><td>Cycles Slot 1’s weight multiplier between 0 and 2.5.</td><td>Paint a mixture containing the targeted river biome. This changes surface contribution, not actual water height or terrain geometry.</td></tr>
+<tr><td>Emissive Pulse</td><td>Activates Slot 4 and cycles its emissive multiplier from 0.5 to 8.5.</td><td>Target an emissive biome in Slot 4. Pulse Speed changes the cycle rate; post-processing bloom is separate.</td></tr>
+</tbody></table></div>
+<p>The cycle speed values control the sine-wave demonstration timing, not a physical weather duration or flow speed. Begin with one animation to understand it, then combine effects deliberately.</p>
+<p>When disabled during Play mode, the controller restores the startup values of Slot 1 weight, Slot 1 dusting strength and Slot 4 emissive multiplier. It does not restore every changed flag, ID or material setting. Keep a known baseline and compare the material after experimenting.</p>
+
+<h2 id="surface-raycast-tester">Surface Raycast Tester</h2>
+<p>A raycast asks Unity, “What collider is along this line?” The tester displays that hit and then asks the terrain’s surface target for a biome. These are separate steps: hitting a collider does not mean it has terrain surface data.</p>
+<h3>Set up a probe on your own terrain</h3>
+<ol><li>Finish a small painted test terrain and save its mesh.</li><li>Give it a MeshCollider whose triangle layout matches the mesh you are baking.</li><li>Use <strong>Bake Surface Data</strong> in the terrain tool.</li><li>Check that <strong>DPT → Terrain Surface Target</strong> is on the appropriate terrain object, with the baked Surface Data asset assigned. It requires a Renderer.</li><li>Create a separate empty object above the terrain and add <strong>DPT → Surface Raycast Tester</strong>.</li><li>Choose Downward Probe, a sufficient Max Ray Distance and a layer mask that includes the terrain collider.</li><li>Enable Scene Gizmos or Game HUD and check the hit object, triangle index, biome ID and name. Move the probe between two clearly different painted areas.</li></ol>
+<div class="table-wrap"><table><thead><tr><th>Setting</th><th>Meaning</th><th>Common mistake</th></tr></thead><tbody>
+<tr><td>Downward Probe</td><td>Casts along world-down from the tester object.</td><td>It does not automatically follow a planet’s gravity direction. Use a suitable forward/custom ray for that setup.</td></tr>
+<tr><td>Transform Forward</td><td>Casts along the object’s local forward direction, +Z.</td><td>The object may be pointing away from the terrain. Rotate it and inspect the gizmo line.</td></tr>
+<tr><td>Mouse Cursor</td><td>Casts through the pointer using the main camera, with a Scene view camera fallback in the editor.</td><td>Check that a suitable camera exists. If none is available, the tester falls back to a downward ray.</td></tr>
+<tr><td>Max Ray Distance: 1–500</td><td>The furthest distance the probe can hit.</td><td>A short ray above a high terrain cannot reach it. Increasing distance will not fix an excluded layer.</td></tr>
+<tr><td>Raycast Layers</td><td>Which collider layers can be hit.</td><td>Another collider may intercept the ray. Use a terrain-only layer mask while debugging.</td></tr>
+<tr><td>Override Surface Data</td><td>Reads a specific baked asset directly instead of resolving the hit object’s surface target.</td><td>Leave empty for the normal target-based live query. An override uses static data and must match the hit mesh; assigning one asset for unrelated terrains gives misleading results.</td></tr>
+<tr><td>Scene Gizmos</td><td>Shows the probe and hit in Scene view.</td><td>Also check Unity’s Scene view gizmo visibility.</td></tr>
+<tr><td>Game HUD</td><td>Shows the hit result in Game view.</td><td>It is a debug display, not a player interaction UI.</td></tr>
+<tr><td>Log Clicks To Console</td><td>Logs the current hit when the left mouse button is pressed.</td><td>A click reports the current probe result; it does not change a downward probe into a pointer ray.</td></tr>
+</tbody></table></div>
+<h3>Read the result</h3>
+<p><strong>Hit Object</strong> is the collider that intercepted the ray. <strong>Triangle Index</strong> identifies the triangle used for the lookup. <strong>Biome ID and Name</strong> are the surface query result. <strong>Hit Point, Normal and Distance</strong> describe the physical intersection.</p>
+<p>If a collider is hit but the biome is unknown, check for the surface target and its data. A box or sphere collider is not a replacement for a matching terrain MeshCollider in a triangle-based lookup. Do not treat a negative or otherwise invalid triangle index as a valid terrain query.</p>
+
+<h2 id="terrain-demo-camera">Terrain Demo Camera</h2>
+<p>Add <strong>DPT → Terrain Demo Camera</strong> to your inspection camera. It provides free movement and mouse look. It does not supply walking physics, collision avoidance, grounded movement or planet gravity.</p>
+<div class="table-wrap"><table><thead><tr><th>Input</th><th>Action</th></tr></thead><tbody>
+<tr><td>W / A / S / D</td><td>Move forward, left, backward and right relative to the camera.</td></tr>
+<tr><td>Space</td><td>Move up in world space.</td></tr>
+<tr><td>Ctrl or C</td><td>Move down in world space.</td></tr>
+<tr><td>Hold right mouse button</td><td>Look around with the mouse.</td></tr>
+<tr><td>Hold Shift</td><td>Multiply movement speed for faster travel.</td></tr>
+</tbody></table></div>
+<p>Movement Speed sets the ordinary travel rate, Fast Multiplier sets the Shift boost, and Mouse Sensitivity changes the look response. The optional controls overlay is useful while learning. Use a slower speed when examining a small feature and a faster one when crossing a large terrain.</p>
+<p>The camera can pass through the terrain because it is an inspection rig. Replace it with your own gameplay controller when testing whether a bridge, cave or staircase is traversable.</p>
+
+<h2 id="runtime-architecture">Use surface data in gameplay</h2>
+<p>The intended flow is: <strong>paint terrain → bake its surface data → link that data to the terrain → raycast the matching collider → read a biome ID → choose your gameplay response</strong>.</p>
+<p>The baked asset records representative biome information per triangle, including candidate IDs and weights used for live reweighting. The surface target reads that information and the terrain material’s current modifiers. It returns one biome ID for a hit, rather than a full texture or a list of every visible surface.</p>
+<h3>A small integration example</h3>
+<p>Save the following as <code>TerrainSurfaceProbe.cs</code> and add it to an object above your test terrain. Set its terrain layer mask and distance. Use <strong>Read Surface</strong> from the component context menu to perform one query. The Console message is only an example; replace it with your own sound, particle or movement lookup when connecting gameplay.</p>
+<pre><code>using UnityEngine;
+using DPT.VertexTerrain;
+
+public class TerrainSurfaceProbe : MonoBehaviour
+{
+    public LayerMask terrainLayers = ~0;
+    public float distance = 2f;
+
+    [ContextMenu("Read Surface")]
+    public void ReadSurface()
+    {
+        if (!Physics.Raycast(transform.position, Vector3.down,
+                out RaycastHit hit, distance, terrainLayers))
+        {
+            Debug.Log("No collider within the probe distance.");
+            return;
         }
-        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
-        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
-        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
-        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
-        p { margin: 0 0 12px 0; }
-        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
-        tr { page-break-inside: avoid; }
-        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
-        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
-        td { background-color: #0f172a; }
-        td strong { color: #bae6fd; }
-        td code { font-size: 9.5pt; }
-        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
-        li { margin-bottom: 6px; }
-        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
-        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        .perf { background-color: #0c1f12; border-left: 4px solid #4ade80; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        .tip { background-color: #1a1a2e; border-left: 4px solid #a78bfa; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
-        code { padding: 2px 5px; }
-        pre { padding: 12px; margin: 10px 0; overflow-x: auto; line-height: 1.6; }
-        .divider { border: none; border-top: 1px solid #1e293b; margin: 30px 0; }
-        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 15px; margin-bottom: 5px; page-break-after: avoid; }
-        .troubleshooting-a { margin-bottom: 15px; }
-        .note a {
-            color: #38bdf8;
-            text-decoration: none; 
-            transition: color 0.2s ease-in-out;
+
+        if (hit.triangleIndex &lt; 0)
+        {
+            Debug.Log("This collider has no usable terrain triangle index.");
+            return;
         }
-        .note a:hover {
-            color: #7dd3fc;
-            text-decoration: underline; 
+
+        if (DPT_TerrainSurfaceTarget.TryGetHitBiome(
+                hit, out int biomeID, out string biomeName))
+        {
+            Debug.Log($"Surface: {biomeName} (ID {biomeID})");
+            // Choose your project's response using biomeID.
         }
-    </style>
-</head>
-<body>
+        else
+        {
+            Debug.Log("The hit has no linked terrain surface data.");
+        }
+    }
+}</code></pre>
+<p>For footsteps, call your query at the time a footstep occurs, using the appropriate foot or character position. Map the returned ID to your own audio/effects table. Keep that table in step with library changes; biome names are helpful labels, but library IDs are the numeric values the query returns.</p>
+<p>For a planet or custom gravity system, replace the example’s world-down direction with your game’s local gravity direction. The tool does not infer that direction for this script.</p>
+<h3>When to rebake</h3>
+<ul><li>After repainting areas that your gameplay will query.</li><li>After adding, deleting or reordering biomes when this changes the IDs used by the data.</li><li>After subdivision, deletion, tunnel creation, simplification or another operation that changes triangles.</li><li>After other geometry changes that affect the bake or its representative surface information.</li><li>When switching to a different collider mesh, including a simplified LOD collider.</li></ul>
+<p>Ordinary supported live material multipliers can be evaluated without repainting or rebuilding the triangle data, because the target reads them at query time. They still operate on the baked candidates; they cannot recover newly painted information from a stale bake.</p>
 
-    <!-- TOP NAVIGATION BAR -->
-    <nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
-        <a href="https://dptgames.github.io/" style="color: #38bdf8; margin-right: 15px;">&larr; DPT Games Homepage</a>
-        <span style="color: #64748b;">|</span>
-        <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Vertex 3D Terrain Guide</a>
-        <a href="biomes.html" style="color: #f8fafc; margin-right: 15px;">Biomes Guide</a>
-        <a href="demo-components.html" style="color: #38bdf8; margin-left: 15px; font-weight: bold;">Demo & Runtime Guide</a>
-              <a href="terrain-material-settings.html" style="color: #38bdf8; font-weight: bold;">Terrain Material Settings</a>
-    </nav>
+<h2 id="query-limits">How closely does a query match the picture?</h2>
+<p>The supplied query is useful for choosing a representative terrain surface, but it is <strong>not a pixel-perfect sample of what the shader renders</strong>. Test it against your gameplay needs rather than promising that every edge or snow patch returns exactly what is visible beneath the cursor.</p>
+<div class="table-wrap"><table><thead><tr><th>Situation</th><th>What the query does</th><th>What this means for gameplay</th></tr></thead><tbody>
+<tr><td>Several biomes on one triangle</td><td>Returns one representative ID. The static bake uses its coverage/priority rule; live reweighting chooses from stored candidate weights.</td><td>A very small painted patch or a blend edge may not return a different ID at every point.</td></tr>
+<tr><td>Height-blended shader detail</td><td>Does not reproduce every per-pixel height/detail blend.</td><td>The visible mixture can differ locally from the triangle’s representative surface.</td></tr>
+<tr><td>Live weight changes</td><td>Reweights baked candidate surfaces using material slot multipliers.</td><td>It cannot choose a newly painted candidate absent from the bake.</td></tr>
+<tr><td>Dusting</td><td>Uses a simplified world-up slope/strength test. It does not include the shader’s painted dusting mask.</td><td>It can report the overlay where the visible masked overlay is absent. Validate this before using it for snow-specific movement or footsteps.</td></tr>
+<tr><td>Override Surface Data on the tester</td><td>Reads the baked asset directly.</td><td>This bypasses the target’s live material evaluation. Clear the override to test the normal live path.</td></tr>
+<tr><td>Different collider topology</td><td>The hit triangle index refers to the collider, not necessarily the visible render mesh.</td><td>The bake must match that collider’s triangle order. A simplified LOD2 collider cannot safely use an unrelated original-mesh mapping.</td></tr>
+</tbody></table></div>
+<p>If your gameplay needs exact small patches, local gravity-aware snow or precise per-pixel coverage, build and validate an appropriate query for those rules. The supplied components are a starting point with the limits described above.</p>
 
-    <!-- HEADER & SUBTITLE -->
-    <h1>DPT Vertex 3D Terrain - Demo Suite & Runtime Tools</h1>
-    <div class="subtitle">Component & Integration Reference Guide<br>
-    <span style="font-size: 11pt; font-style: normal;">A comprehensive guide covering the runtime demonstration controllers, camera inspection rigs, and real-time biome raycast probing tools included with DPT Vertex 3D Terrain.</span></div>
-
-    <!-- QUICK NAVIGATION BOX -->
-    <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
-        <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
-        <a href="#dynamic-biome-controller" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Dynamic Biome Demo Controller</a>
-        <a href="#surface-raycast-tester" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">2. Surface Raycast Tester</a>
-        <a href="#terrain-demo-camera" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">3. Terrain Demo Camera</a>
-        <a href="#runtime-architecture" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">4. Architecture & Data Flow</a>
-        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">5. Troubleshooting Notes</a>
-        <a href="#support" style="color: #a5f3fc; text-decoration: none;">6. Support</a>
-    </div>
-
-    <!-- SECTION ONE: DPT_DynamicBiomeDemoController -->
-    <h2 id="dynamic-biome-controller">1. DPT_DynamicBiomeDemoController</h2>
-    <p>The <code>DPT_DynamicBiomeDemoController</code> is an in-editor and runtime driver component designed to modulate terrain shader properties on the fly. It exposes live controls for biome weights, wetness transitions, snow accumulation, and emissive pulse effects without requiring expensive mesh re-uploads or CPU vertex operations.</p>
-
-    <h3>General & Target Setup</h3>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 30%;">Property</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Terrain Material</strong></td>
-                <td>The material instance to control. If left unassigned, the component automatically resolves the <code>sharedMaterial</code> from the local <code>Renderer</code> component on Awake.</td>
-            </tr>
-            <tr>
-                <td><strong>Enable Dynamic Biomes</strong></td>
-                <td>Master boolean toggle mapped to <code>_Enable_Dynamic_Biomes</code>. When disabled, the terrain shader bypasses all live modifier calculations with zero ALU overhead.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h3>Dynamic Slot Configuration</h3>
-    <p>The component exposes four configurable modifier channels corresponding to <code>_Dynamic_Biome_Slot1</code> through <code>_Dynamic_Biome_Slot4</code> and their paired <code>_Params</code> companion vectors:</p>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 30%;">Setting</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Active</strong></td>
-                <td>Toggles whether this individual slot modifier evaluates in the shader. (Note: Slot 1 is always active when the Master Switch is enabled).</td>
-            </tr>
-            <tr>
-                <td><strong>Target Biome ID</strong></td>
-                <td>The index of the biome to modulate (e.g., 0 for Lush Grass, 6 for Mountain Snow, 9 for Magma Crust). Set to <code>-1</code> or toggle off to disable.</td>
-            </tr>
-            <tr>
-                <td><strong>Weight Multiplier</strong></td>
-                <td>Scalar multiplier applied to the target biome's raw vertex weight before normalization. <code>1.0</code> is neutral, <code>0.0</code> suppresses the biome entirely, and values above <code>1.0</code> force progressive expansion.</td>
-            </tr>
-            <tr>
-                <td><strong>Smoothness Mult</strong></td>
-                <td>Multiplies glossiness and specular highlights on the target biome. Ideal for simulating surface wetness, pooled water, or icy glaze.</td>
-            </tr>
-            <tr>
-                <td><strong>Normal Strength Mult</strong></td>
-                <td>Scales micro-bump relief on the target biome. Lower values flatten surface bumps to mimic standing liquid.</td>
-            </tr>
-            <tr>
-                <td><strong>Parallax Depth Mult</strong></td>
-                <td>Scales Parallax Occlusion Mapping extrusion depth. Raising this parameter makes snow, volcanic rock, or foliage physically deeper in relief.</td>
-            </tr>
-            <tr>
-                <td><strong>Emissive Mult</strong></td>
-                <td>Direct multiplier for the biome's emissive tint and vein mask, driving glowing lava cracks or bioluminescence.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h3>Simulation Presets</h3>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 30%;">Feature</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Animate Snow Accumulation</strong></td>
-                <td>When enabled in Play mode, runs a sine-wave simulation that continuously transitions Slot 1 from a light dusting (0.0x weight) to a deep snow blanket (3.5x weight with increased parallax relief).</td>
-            </tr>
-            <tr>
-                <td><strong>Snow Cycle Speed</strong></td>
-                <td>Controls the oscillation frequency of the snow accumulation and melting weather loop.</td>
-            </tr>
-            <tr>
-                <td><strong>Animate Emissive Pulse</strong></td>
-                <td>When enabled in Play mode, applies a rhythmic glow animation to Slot 4 (targeted to Magma Crust by default) to simulate volcanic activity.</td>
-            </tr>
-            <tr>
-                <td><strong>Pulse Speed</strong></td>
-                <td>Sets the pulse frequency of the emissive sine wave.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="perf">
-        <strong>Performance Note:</strong> This controller modifies material properties via standard <code>Material.SetVector</code> calls. Because all data packs directly into the <code>UnityPerMaterial</code> constant buffer, it is 100% SRP Batcher compatible and produces zero additional draw calls or garbage collection allocations.
-    </div>
-
-    <!-- SECTION TWO: DPT_SurfaceRaycastTester -->
-    <h2 id="surface-raycast-tester">2. DPT_SurfaceRaycastTester</h2>
-    <p><code>DPT_SurfaceRaycastTester</code> is a multi-mode diagnostic and probing utility. It performs real-time raycasts against terrain geometry, queries the baked <code>DPT_TerrainSurfaceData</code> ledger through <code>DPT_TerrainSurfaceTarget</code>, and resolves the current dominant biome—factoring in active live weather and growth modifiers.</p>
-
-    <h3>Raycast & Probing Configuration</h3>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 30%;">Property</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Raycast Mode</strong></td>
-                <td>Selects the probing origin and direction:<br>
-                &bull; <code>DownwardProbe</code>: Casts straight down (-Y) from the GameObject transform (standard for player footsteps).<br>
-                &bull; <code>TransformForward</code>: Casts along the forward vector (+Z) of the transform.<br>
-                &bull; <code>MouseCursor</code>: Casts rays from the scene/main camera through the mouse pointer for point-and-click inspection.</td>
-            </tr>
-            <tr>
-                <td><strong>Max Ray Distance</strong></td>
-                <td>Maximum distance (in meters) the ray will travel before reporting a miss. Default: <code>50m</code>.</td>
-            </tr>
-            <tr>
-                <td><strong>Raycast Layers</strong></td>
-                <td><code>LayerMask</code> filter used to ensure rays only hit terrain colliders while ignoring triggers, props, or actors.</td>
-            </tr>
-            <tr>
-                <td><strong>Override Surface Data</strong></td>
-                <td>Optional field allowing you to manually assign a <code>DPT_TerrainSurfaceData</code> asset directly, bypassing the target component on the hit collider.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h3>HUD & Visualization Settings</h3>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 30%;">Setting</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Show Scene Gizmos</strong></td>
-                <td>Draws green impact lines, cyan surface normal rays, and Scene view handle tags displaying the hit triangle and biome metadata.</td>
-            </tr>
-            <tr>
-                <td><strong>Show Game HUD</strong></td>
-                <td>Renders an immediate-mode on-screen GUI box in the top-left corner displaying the hit object, triangle index, resolved biome name, and world normal.</td>
-            </tr>
-            <tr>
-                <td><strong>Log Clicks to Console</strong></td>
-                <td>When enabled, left-clicking while aiming at a valid terrain surface prints full debug telemetry to the Unity Console.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="tip">
-        <strong>Tip for Footstep Setup:</strong> In your final game, replace this tester with a call to <code>DPT_TerrainSurfaceTarget.TryGetHitBiome(hit, out int biomeID, out string biomeName)</code> inside your player movement or animation event scripts. It executes in ~10 nanoseconds with zero GC allocation.
-    </div>
-
-    <!-- SECTION THREE: DPT_Terrain_DemoCamera -->
-    <h2 id="terrain-demo-camera">3. DPT_Terrain_DemoCamera</h2>
-    <p>The <code>DPT_Terrain_DemoCamera</code> is a free-fly inspection camera rig designed for showcasing expansive terrains. It features dual-input support (compatible with both the legacy Input Manager and the new Input System package) and provides smooth translation, vertical elevation, and mouse-look navigation.</p>
-
-    <h3>Camera Properties</h3>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 30%;">Property</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Movement Speed</strong></td>
-                <td>Base translational fly speed in meters per second. Default: <code>10m/s</code>.</td>
-            </tr>
-            <tr>
-                <td><strong>Fast Movement Multiplier</strong></td>
-                <td>Speed boost multiplier engaged when holding down the <code>Left Shift</code> key. Default: <code>2.5x</code>.</td>
-            </tr>
-            <tr>
-                <td><strong>Look Sensitivity</strong></td>
-                <td>Rotation multiplier for mouse look navigation while holding the right mouse button.</td>
-            </tr>
-            <tr>
-                <td><strong>Show Controls Overlay</strong></td>
-                <td>Displays a clean, non-intrusive control hint bar centered along the bottom edge of the screen.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h3>Default Input Mappings</h3>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 30%;">Control</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>W / A / S / D</strong></td>
-                <td>Fly Forward, Strafe Left, Fly Backward, Strafe Right.</td>
-            </tr>
-            <tr>
-                <td><strong>Space / Left Ctrl (or C)</strong></td>
-                <td>Elevate Upward (+Y) / Lower Downward (-Y).</td>
-            </tr>
-            <tr>
-                <td><strong>Right Mouse Button (Hold)</strong></td>
-                <td>Engage mouselook rotation (pitch is clamped between -85&deg; and +85&deg; to prevent gimbal lock).</td>
-            </tr>
-            <tr>
-                <td><strong>Left Shift (Hold)</strong></td>
-                <td>Engage boost mode for fast traversal across large landscape chunks.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- SECTION FOUR: ARCHITECTURE & DATA FLOW -->
-    <h2 id="runtime-architecture">4. Architecture & Data Flow</h2>
-    <p>The demo suite relies on a decoupled, non-destructive architecture that keeps rendering and physics perfectly synchronized:</p>
-    <ul>
-        <li><strong>Zero-Cost Mesh Geometry:</strong> Terrain meshes do not require <code>Read/Write Enabled</code> in their import settings. Base vertex colors and weights remain strictly on the GPU, protecting memory budgets on consoles and mobile devices.</li>
-        <li><strong>Tri-Biome Runtime Ledger:</strong> When terrain is baked via <code>DPT_SurfaceDataBaker</code>, the system packs the three candidate biomes (<code>id0, id1, id2</code>) and their base unscaled weights (<code>w0, w1</code>) into contiguous byte arrays inside <code>DPT_TerrainSurfaceData</code>. This requires only 5 bytes per triangle (~150 KB for a 30,000-triangle mesh).</li>
-        <li><strong>On-Demand Evaluation:</strong> When <code>DPT_SurfaceRaycastTester</code> hits a triangle, <code>DPT_TerrainSurfaceTarget</code> queries the material's current vector properties (<code>_Dynamic_Biome_Slot1</code>, etc.). It multiplies only the matching candidate weights for that single hit triangle and immediately returns the winner.</li>
-        <li><strong>Exact Visual/Audio Parity:</strong> If snow accumulates from a dusting to full coverage via <code>DPT_DynamicBiomeDemoController</code>, the raycast query dynamically transitions from returning Grass to returning Mountain Snow at the exact threshold where snow takes over visually.</li>
-    </ul>
-
-    <!-- SECTION FIVE: TROUBLESHOOTING -->
-    <h2 id="troubleshooting">5. Troubleshooting Notes</h2>
-    
-    <div class="troubleshooting-q">"The Raycast Tester reports 'None' or does not detect any surface."</div>
-    <div class="troubleshooting-a">Ensure the terrain GameObject has an active <code>MeshCollider</code> attached and that its physics layer is included in the <code>Raycast Layers</code> mask. Also verify that <code>DPT_TerrainSurfaceTarget</code> is present on the same GameObject and references a valid baked <code>DPT_TerrainSurfaceData</code> asset.</div>
-
-    <div class="troubleshooting-q">"Live Biome Modifiers are changing the visuals, but raycasts still return the old baked biome."</div>
-    <div class="troubleshooting-a">Re-bake the terrain using the updated <code>DPT_SurfaceDataBaker</code>. Earlier versions only stored a single precomputed dominant byte per triangle, which lacked the multi-biome candidate arrays required for real-time runtime re-evaluation.</div>
-
-    <div class="troubleshooting-q">"Setting a Weight Multiplier to 0.0 makes other biomes disappear or cut off sharply."</div>
-    <div class="troubleshooting-a">In a multiplicative weighting pipeline, <code>1.0</code> represents neutral baseline coverage. Setting a multiplier to <code>0.0</code> erases that biome completely from the face. If that biome was blending with a secondary biome, the secondary biome will take 100% of the normalized weight. To disable a dynamic slot without modifying underlying painted weights, uncheck the slot's active toggle or set its Target ID to <code>-1</code>.</div>
-
-    <div class="troubleshooting-q">"The on-screen control hint box overlaps the Raycast Tester HUD."</div>
-    <div class="troubleshooting-a">The <code>DPT_Terrain_DemoCamera</code> overlay is anchored to the bottom-center of the viewport, while <code>DPT_SurfaceRaycastTester</code> renders in the top-left corner. Ensure both scripts are updated to the latest version to prevent viewport rect overlap.</div>
-
-    <hr class="divider">
-
-    <!-- SUPPORT SECTION -->
-    <h2 id="support">Support, Contact & Custom Integration</h2>
-
-    <p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form. This is the primary and most reliable way to get help with any problems you encounter with the packages.</p>
-
-    <p>You can also use this form to inquire about custom freelance technical art services. If your project requires external 3D models to be integrated into the DPT ecosystem—including bespoke vertex-data packing, procedural wood grain mapping, GPU wind systems, or game-ready LOD budgeting—get in touch to discuss your specific needs and availability.</p>
-
-    <div class="note">
-        <strong>Email Contact (Preferred for all Support):</strong><br>
-        For troubleshooting, bug reports, publisher licensing, and freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
-    </div>
-
-    <div class="note">
-        <strong>DPT Community Discord:</strong><br>
-        While the contact form is the best way to get direct help with issues, you are also welcome to join the <strong><a href="https://discord.gg/EkQykfzP5X" target="_blank">Discord Server</a></strong> to share feedback and connect with other users.
-    </div>
-
-</body>
-</html>
+<h2 id="troubleshooting">Runtime and demo problems</h2>
+<div class="table-wrap"><table><thead><tr><th>Symptom</th><th>What to check</th></tr></thead><tbody>
+<tr><td>The demo controller does nothing</td><td>Assign the terrain material, enable the master switch and relevant slot, use current target IDs, and Push the settings. Check for a source contribution to modify.</td></tr>
+<tr><td>My component settings change on entering Play mode</td><td>Pull From Material On Play can import the existing material setup. Decide which should supply the baseline before testing.</td></tr>
+<tr><td>Material edits immediately revert</td><td>Check Sync In Edit Mode and active runtime simulations. Use one driving source while making a setup.</td></tr>
+<tr><td>A runtime script changes fields but the picture stays the same</td><td>With no simulation running, call PushMaterialProperties after changing the component. Also confirm its material reference.</td></tr>
+<tr><td>Snowstorm animation has no visible snow</td><td>Check Slot 1 Active, receiving ground IDs, snow overlay ID, painted dusting mask and slope threshold. The animation only cycles strength and enables dusting.</td></tr>
+<tr><td>River Level does not raise the water</td><td>It changes Slot 1’s painted weight contribution. It does not move a water mesh or simulate a physical level.</td></tr>
+<tr><td>The probe reports a hit but no biome</td><td>Check the collider’s layer, surface target and assigned bake. Use a matching MeshCollider and a valid triangle index.</td></tr>
+<tr><td>The wrong name or ID is reported</td><td>Clear an inappropriate override, rebake current surface data, recheck library IDs and match the collider topology. Compare a pure patch before testing blend boundaries.</td></tr>
+<tr><td>The probe misses on a planet</td><td>Downward Probe is world-down. Use Transform Forward aimed at the surface, or a ray based on your game’s gravity.</td></tr>
+<tr><td>Several terrain objects change together</td><td>The controller can be editing a shared material. Use independent materials when separate behaviour is intended.</td></tr>
+<tr><td>The demo camera passes through a bridge</td><td>It has no collision controller. Test traversal using your gameplay character and the actual terrain collider.</td></tr>
+</tbody></table></div>
+<h2 id="support">Support</h2><p>If you need help, describe the result you expected, the control you used, and what appeared instead. Include your Unity version, the selected surface pipeline, and a screenshot of the relevant settings. For a runtime query problem, also include the collider type and when you last baked surface data.</p><p>Use the <a href="https://dptgames.github.io/#contact">DPT Games contact form</a> or join the <a href="https://discord.gg/EkQykfzP5X">DPT Games Discord</a>.</p><p class="back-top"><a href="#top">Back to top</a></p><footer class="footer">DPT Vertex 3D Terrain documentation · English control names are used throughout. Choose English or 日本語 at the top of the editor window to change the tool’s interface language.</footer></main></body></html>
