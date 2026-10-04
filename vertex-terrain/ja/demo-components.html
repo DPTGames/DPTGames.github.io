@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="付属のコンポーネントを試し、地形の地表情報を自分のゲームプレイに使います。"><link rel="alternate" hreflang="en" href="../demo-components.html"><link rel="alternate" hreflang="ja" href="demo-components.html"><title>デモ・ランタイムガイド | DPT Games</title><style>
+:root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
+main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
+.site-nav{display:flex;flex-wrap:wrap;gap:8px 20px;border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:32px;font-size:.92rem}.site-nav [aria-current]{color:white;font-weight:700}
+.language-nav{display:flex;gap:10px;flex-wrap:wrap;margin:-12px 0 28px}.language-nav a{display:inline-block;padding:6px 16px;border:1px solid var(--border);border-radius:6px;text-decoration:none}.language-nav [aria-current]{color:#0f172a;background:var(--accent);border-color:var(--accent);font-weight:700}html[lang="ja"] body{line-height:1.85;line-break:strict}html[lang="ja"] th,html[lang="ja"] td{overflow-wrap:anywhere}
+h1,h2,h3,h4{line-height:1.25;color:var(--accent)}h1{font-size:2.25rem;margin:0 0 14px}h2{font-size:1.65rem;margin:48px 0 18px;padding-top:12px;border-top:1px solid var(--border)}h3{font-size:1.22rem;margin:30px 0 12px}h4{font-size:1.06rem}
+p{margin:12px 0 18px}li{margin:7px 0}ul,ol{padding-left:25px}.lead{font-size:1.18rem;color:var(--muted);max-width:850px}.intro{margin:28px 0}.toc{background:var(--panel);padding:20px 24px;border:1px solid var(--border);border-radius:9px;margin:28px 0}.toc h2{margin:0 0 10px;padding:0;border:0;font-size:1.15rem}.toc ul{columns:2;column-gap:36px;margin:0}.toc li{break-inside:avoid}
+.callout,.example{background:var(--panel);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:14px 20px;margin:22px 0}.example{border-color:#a3e635}.callout p:last-child,.example p:last-child{margin-bottom:0}.callout p:first-child,.example p:first-child{margin-top:0}
+.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--border);border-radius:7px}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--border)}thead{background:#25354c}th{color:#f8fafc}td:first-child{font-weight:600;min-width:145px}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#172238}
+code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background:#27354c;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}kbd{white-space:nowrap;border:1px solid #50617a}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#09111f;border:1px solid var(--border);padding:20px;border-radius:7px}pre code{background:transparent;padding:0}
+.back-top{font-size:.88rem}.table-hint{display:none;color:var(--muted);font-size:.9rem}.footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);margin-top:34px;padding-top:16px}details{background:var(--panel);padding:14px 18px;border:1px solid var(--border);border-radius:7px;margin:16px 0}summary{cursor:pointer;font-weight:600;color:var(--accent)}.alias{display:block;scroll-margin-top:24px}
+@media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
+@media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
+</style></head>
+<body><main id="top"><nav class="site-nav" aria-label="ドキュメント"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a href="index.html">Vertex 3D Terrain ガイド</a><a href="biomes.html">バイオームガイド</a><a href="terrain-material-settings.html">地形マテリアル設定</a><a href="demo-components.html" aria-current="page">デモ・ランタイムガイド</a></nav><nav class="language-nav" aria-label="言語"><a href="../demo-components.html" lang="en" hreflang="en">English</a><a href="demo-components.html" lang="ja" hreflang="ja" aria-current="page">日本語</a></nav><header><h1>デモ・ランタイムガイド</h1><p class="lead">付属のコンポーネントを試し、地形の地表情報を自分のゲームプレイに使います。</p></header><nav class="toc" aria-label="このページの内容"><h2>このページの内容</h2><ul><li><a href="#quick-start">デモを試し、各部品を確認する</a></li><li><a href="#dynamic-biome-controller">Dynamic Biome Demo Controller</a></li><li><a href="#surface-raycast-tester">Surface Raycast Tester</a></li><li><a href="#terrain-demo-camera">Terrain Demo Camera</a></li><li><a href="#runtime-architecture">サーフェスデータをゲームプレイに使う</a></li><li><a href="#query-limits">問い合わせは見た目とどこまで一致するか</a></li><li><a href="#troubleshooting">実行時・デモの問題</a></li><li><a href="#support">サポート</a></li></ul></nav><p class="table-hint">小さい画面では、幅の広い表を横にスクロールするとすべての列を読めます。</p><div class="intro"><p>デモのコンポーネントでは、地形の確認、ライブマテリアル効果の実験、物理レイキャストが返すバイオームの検証ができます。参考にして変更できる例であり、完成したキャラクター制御、天候、足音システムではありません。</p><p>デモを試すだけならコードを書く必要はありません。後半の連携例は、地表情報を自分のゲームプレイに使いたい開発者向けです。</p></div>
+
+<h2 id="quick-start">デモを試し、各部品を確認する</h2>
+<ol><li><code>Assets/DPTGames/Vertex_Terrain/VertexTerrain_Demo/VertexTerrain_DemoScene.unity</code> を開きます。</li><li>地形の Renderer、マテリアル、ライブラリを確認し、その地表の ID を調べます。</li><li>Dynamic Biome Demo Controller を探し、Play モードに入る前にマテリアル、対象 ID、有効なシミュレーションを確認します。</li><li>Play モードでデモカメラを動かし、塗られた地表を確認します。</li><li>効果が分かるよう、マテリアルのシミュレーションは一つずつ試します。</li><li>Surface Raycast Tester で ID と名前を確認します。一種類だけの場所と、混ざった境界で見た目を比較します。</li></ol>
+<div class="table-wrap"><table><thead><tr><th>コンポーネント・アセット</th><th>役割</th><th>自分のゲームに必要か</th></tr></thead><tbody>
+<tr><td>Dynamic Biome Demo Controller</td><td>地形マテリアルにライブ設定を書き込み、例のアニメーションを動かします。</td><td>任意です。天候やゲームのルールに合わせて独自制御を作れます。</td></tr>
+<tr><td>Surface Raycast Tester</td><td>物理ヒットと、その場所のバイオームを表示します。</td><td>任意の検証ツールです。ゲーム側から同じ問い合わせ API を直接使えます。</td></tr>
+<tr><td>Terrain Demo Camera</td><td>確認用の自由移動カメラです。</td><td>任意です。自分のプレイヤーやカメラに置き換えられます。</td></tr>
+<tr><td>Terrain Surface Data</td><td>ベイクした三角形とバイオームの対応です。</td><td>付属の三角形ベースの問い合わせに必要です。</td></tr>
+<tr><td>Terrain Surface Target</td><td>Renderer とベイクしたデータを結び、問い合わせを処理します。</td><td>付属の問い合わせで認識したい地形に使います。</td></tr>
+</tbody></table></div>
+
+<h2 id="dynamic-biome-controller">Dynamic Biome Demo Controller</h2>
+<p>オブジェクトに <strong>DPT → Dynamic Biome Demo Controller</strong> を追加し、Terrain Material を指定します。未指定の場合、同じオブジェクトの Renderer から共有マテリアルを取得できます。Renderer のない空オブジェクトでは、明示的なマテリアル参照が必要です。</p>
+<p>このコントローラーは、渡されたマテリアルを編集します。専用インスタンスを自動作成するわけではありません。一つの地形だけ独立させたい場合は、別のマテリアルを使います。</p>
+<h3>Pull、Push、同期の違い</h3>
+<div class="table-wrap"><table><thead><tr><th>項目・操作</th><th>変更の向き</th><th>用途</th></tr></thead><tbody>
+<tr><td>Pull Settings From Material</td><td>マテリアル → コンポーネント。</td><td>マテリアルで作った設定を取り込みます。対応するスロットの値は置き換わります。</td></tr>
+<tr><td>Push Settings To Material</td><td>コンポーネント → マテリアル。</td><td>現在のコンポーネント設定を適用します。先にマテリアルを指定・取得してください。対応するマテリアル設定を置き換えます。</td></tr>
+<tr><td>Pull From Material On Play</td><td>Play モード開始時、既存のライブ設定が検出された場合に取り込みます。</td><td>初期状態は有効です。予想と違う場合は、取り込み後のコンポーネントを確認します。</td></tr>
+<tr><td>Sync In Edit Mode</td><td>Play モード外でのコンポーネントの編集を、マテリアルへ反映します。</td><td>初期状態は無効です。マテリアルを直接調整中は無効にし、コンポーネントを基準にする場合は有効にします。</td></tr>
+<tr><td>Enable Dynamic Biomes</td><td>Push 時に、マテリアル全体のライブスイッチを設定します。</td><td>各スロットの Active と合わせて使います。全体を有効にしても Slot 1 が強制的に有効になるわけではありません。</td></tr>
+</tbody></table></div>
+<p>Pull と Push はコンポーネントのコンテキストメニューから使えます。実行中は、シミュレーションが有効な間、継続して Push します。すべて無効なら、自分のスクリプトでフィールドを変えても毎フレーム反映されません。変更後に <code>PushMaterialProperties()</code> を呼びます。</p>
+<div class="example"><p><strong>分かりやすい進め方：</strong>マテリアル側で設定を仕上げ、Pull で取り込んでから、今後どちらを基準にするか決めます。シミュレーションや編集モード同期が動く間に、両方を繰り返し編集しないようにします。</p></div>
+<h3>四つのスロットを設定する</h3>
+<p>各スロットは最大三つの ID を対象にできます。Slot 1 は二つのデモアニメーションが使うスロットで、常時有効という特別なルールはありません。コンポーネントの初期 ID はデモ用です。自分のライブラリに同じ地表があるとは限りません。</p>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>意味</th><th>最初の値の目安</th></tr></thead><tbody>
+<tr><td>Active / Target Biome IDs</td><td>影響を与える既存の地表を選びます。</td><td>試すスロットだけを有効にし、自分の ID を指定します。無効化は Active を使います。−1 は無効化 ID ではありません。</td></tr>
+<tr><td>Weight Multiplier：0～5</td><td>塗られた混合内で、対象地表の寄与を変えます。</td><td>1 は重みを維持します。塗っていないバイオームを追加することはできません。</td></tr>
+<tr><td>Smoothness / Normal / Parallax：0～3</td><td>対象地表の各反応に掛ける倍率です。</td><td>1 は元の反応です。1 付近の小さな変更から試します。</td></tr>
+<tr><td>Emissive：0～10</td><td>元の発光の倍率です。</td><td>1 は維持です。模様の発光には、元の地表に発光情報が必要です。</td></tr>
+<tr><td>Flow</td><td>テクスチャの動き、方向、速さ、往復を指定します。</td><td>遅い正の速度から始めます。負なら逆方向、0 は静止です。</td></tr>
+<tr><td>Dusting</td><td>上に重ねるバイオーム、強さ、上向きの傾斜しきい値を指定します。</td><td>下地をスロットの対象にし、雪・ほこりを重ねる ID にします。地形には先にマスクを塗ります。</td></tr>
+</tbody></table></div>
+<p>重み、流れ、傾斜、マスクの詳しい意味は、<a href="terrain-material-settings.html#live-biomes">地形マテリアル設定</a>を参照してください。デモには Waterfall Projection の項目がなく、Push するとマテリアルのフラグを解除することがあります。</p>
+<h3>デモアニメーションが実際に変えるもの</h3>
+<div class="table-wrap"><table><thead><tr><th>シミュレーション</th><th>実際の動作</th><th>必要な準備</th></tr></thead><tbody>
+<tr><td>Winter Snowstorm</td><td>Slot 1 のダスティングを有効にし、強さを 0～1.8 で変化させます。Slot 1 の重み自体は動かしません。</td><td>Slot 1 を有効にし、受け側の ID と雪の ID、地形のマスクを設定します。Weather Cycle Speed が周期の速さです。</td></tr>
+<tr><td>River Level</td><td>Slot 1 の重み倍率を 0～2.5 で変化させます。</td><td>対象の川バイオームを含む混合を塗ります。地表の寄与を変えるもので、水位や形状は変えません。</td></tr>
+<tr><td>Emissive Pulse</td><td>Slot 4 を有効にし、発光倍率を 0.5～8.5 で変化させます。</td><td>Slot 4 で発光バイオームを対象にします。Pulse Speed は周期の速さ、Bloom は別の設定です。</td></tr>
+</tbody></table></div>
+<p>周期の速度は、正弦波のデモの時間変化を調整します。物理的な天候の長さや、流れの速さではありません。一つずつ試して理解してから、意図を持って組み合わせてください。</p>
+<p>Play モード中に無効にすると、Slot 1 の重みとダスティング強さ、Slot 4 の発光倍率は開始時の値へ戻ります。変更したすべてのフラグ、ID、マテリアル設定が戻るわけではありません。既知の基準を残し、実験後のマテリアルを比較します。</p>
+
+<h2 id="surface-raycast-tester">Surface Raycast Tester</h2>
+<p>レイキャストは、Unity に「この線上にどのコライダーがあるか」を問い合わせます。テスターはヒットを表示し、次に地形の Surface Target にバイオームを問い合わせます。二つは別の処理です。コライダーに当たっても、サーフェスデータがあるとは限りません。</p>
+<h3>自分の地形にプローブを置く</h3>
+<ol><li>小さなテスト地形を塗り、メッシュを保存します。</li><li>ベイクするメッシュと同じ三角形配置の MeshCollider を用意します。</li><li>地形ツールの <strong>Bake Surface Data</strong> を使います。</li><li>適切な地形オブジェクトに <strong>DPT → Terrain Surface Target</strong> があり、ベイクした Surface Data が指定されていることを確認します。Renderer も必要です。</li><li>地形の上に別の空オブジェクトを作り、<strong>DPT → Surface Raycast Tester</strong> を追加します。</li><li>Downward Probe、十分な Max Ray Distance、地形のコライダーを含むレイヤーマスクを指定します。</li><li>Scene Gizmos か Game HUD を有効にし、対象、三角形番号、ID、名前を確認します。異なる地表間でプローブを動かして比較します。</li></ol>
+<div class="table-wrap"><table><thead><tr><th>設定</th><th>意味</th><th>よくある間違い</th></tr></thead><tbody>
+<tr><td>Downward Probe</td><td>オブジェクトからワールド下方向に飛ばします。</td><td>惑星の重力方向には自動追従しません。向きを合わせた前方レイや独自のレイを使います。</td></tr>
+<tr><td>Transform Forward</td><td>オブジェクトのローカル前方、+Z に飛ばします。</td><td>地形と反対を向いている場合があります。回転させ、ギズモの線を確認します。</td></tr>
+<tr><td>Mouse Cursor</td><td>メインカメラからポインター方向へ飛ばします。エディターでは Scene ビューのカメラを代わりに使えます。</td><td>適したカメラが必要です。使えるカメラがなければ下向きのレイに戻ります。</td></tr>
+<tr><td>Max Ray Distance：1～500</td><td>ヒットできる最大距離です。</td><td>高い位置の短いレイは届きません。除外したレイヤーは距離を伸ばしても検出できません。</td></tr>
+<tr><td>Raycast Layers</td><td>ヒットするコライダーのレイヤーです。</td><td>別のコライダーが先に当たる場合があります。検証中は地形専用のマスクが便利です。</td></tr>
+<tr><td>Override Surface Data</td><td>当たった対象の Surface Target の代わりに、指定したベイクを直接読みます。</td><td>通常のライブ問い合わせでは空にします。指定したデータは静的で、ヒットしたメッシュと一致する必要があります。無関係な地形に同じデータを使うと誤った結果になります。</td></tr>
+<tr><td>Scene Gizmos</td><td>Scene ビューにプローブとヒットを表示します。</td><td>Unity 側のギズモ表示も確認します。</td></tr>
+<tr><td>Game HUD</td><td>Game ビューにヒット結果を表示します。</td><td>検証用の表示で、プレイヤー向けの操作 UI ではありません。</td></tr>
+<tr><td>Log Clicks To Console</td><td>左クリック時に現在のヒットを記録します。</td><td>クリックしても、下向きプローブがポインターのレイに変わるわけではありません。</td></tr>
+</tbody></table></div>
+<h3>結果の読み方</h3>
+<p><strong>Hit Object</strong> はレイを受けたコライダー、<strong>Triangle Index</strong> は参照する三角形番号です。<strong>Biome ID と Name</strong> が地表の結果、<strong>Hit Point、Normal、Distance</strong> は交点、法線、距離です。</p>
+<p>当たっているのにバイオームが不明なら、Surface Target とデータを確認します。BoxCollider や SphereCollider は、この三角形ベースの処理で一致した地形 MeshCollider の代わりにはなりません。負の値など無効な三角形番号を、有効な問い合わせとして扱わないでください。</p>
+
+<h2 id="terrain-demo-camera">Terrain Demo Camera</h2>
+<p>確認用カメラに <strong>DPT → Terrain Demo Camera</strong> を追加します。自由移動とマウス視点操作ができます。歩行の物理、衝突回避、接地、惑星の重力は提供しません。</p>
+<div class="table-wrap"><table><thead><tr><th>入力</th><th>動作</th></tr></thead><tbody>
+<tr><td>W / A / S / D</td><td>カメラ基準で前、左、後ろ、右へ移動します。</td></tr>
+<tr><td>Space</td><td>ワールド上方向へ移動します。</td></tr>
+<tr><td>Ctrl または C</td><td>ワールド下方向へ移動します。</td></tr>
+<tr><td>右マウスボタンを押す</td><td>マウスで見回します。</td></tr>
+<tr><td>Shift を押す</td><td>移動速度に倍率を掛けて高速移動します。</td></tr>
+</tbody></table></div>
+<p>Movement Speed は通常の速度、Fast Multiplier は Shift の倍率、Mouse Sensitivity は視点の感度です。操作表示は、覚える間に便利です。小さな形状の確認では遅く、大きな地形を移動するときは速くします。</p>
+<p>確認用カメラには衝突制御がないため、地形を通り抜けます。橋、洞窟、階段を実際に移動できるかは、自分のゲームプレイ用コントローラーで確認します。</p>
+
+<h2 id="runtime-architecture">サーフェスデータをゲームプレイに使う</h2>
+<p>基本の流れは、<strong>地形を塗る → サーフェスデータをベイクする → 地形に関連付ける → 一致するコライダーへレイを飛ばす → ID を読む → ゲーム側の反応を選ぶ</strong>です。</p>
+<p>ベイクしたアセットは、ライブの重み変更に使う候補 ID と重みを含め、三角形ごとの代表的な地表情報を記録します。Surface Target は、その情報とマテリアルの現在の修正を読みます。一回のヒットに一つの ID を返すもので、テクスチャ全体や見えているすべての素材の一覧を返すものではありません。</p>
+<h3>小さな連携例</h3>
+<p>以下を <code>TerrainSurfaceProbe.cs</code> として保存し、テスト地形の上のオブジェクトに追加します。地形のレイヤーと距離を設定し、コンポーネントのメニューの <strong>Read Surface</strong> で一回問い合わせます。Console 出力は例です。ゲームに組み込むときは、自分の音、パーティクル、移動設定の参照に置き換えてください。</p>
+<pre><code>using UnityEngine;
+using DPT.VertexTerrain;
+
+public class TerrainSurfaceProbe : MonoBehaviour
+{
+    public LayerMask terrainLayers = ~0;
+    public float distance = 2f;
+
+    [ContextMenu(&quot;Read Surface&quot;)]
+    public void ReadSurface()
+    {
+        if (!Physics.Raycast(transform.position, Vector3.down,
+                out RaycastHit hit, distance, terrainLayers))
+        {
+            Debug.Log(&quot;指定距離内にコライダーがありません。&quot;);
+            return;
+        }
+
+        if (hit.triangleIndex &lt; 0)
+        {
+            Debug.Log(&quot;このコライダーには有効な地形の三角形番号がありません。&quot;);
+            return;
+        }
+
+        if (DPT_TerrainSurfaceTarget.TryGetHitBiome(
+                hit, out int biomeID, out string biomeName))
+        {
+            Debug.Log($&quot;地表: {biomeName} (ID {biomeID})&quot;);
+            // biomeID を使って、ゲーム側の処理を選びます。
+        }
+        else
+        {
+            Debug.Log(&quot;当たった対象に地形のサーフェスデータがありません。&quot;);
+        }
+    }
+}</code></pre>
+<p>足音では、足音が発生するタイミングに、足やキャラクターの適した位置から問い合わせます。返った ID を、自分の音・効果の表に対応させます。ライブラリ変更後はその表も更新してください。名前は確認に便利ですが、問い合わせが返す数値はライブラリの ID です。</p>
+<p>惑星や独自の重力では、例のワールド下方向を、自分のゲームの局所的な重力方向に置き換えます。このスクリプトで、その方向が自動推定されるわけではありません。</p>
+<h3>再ベイクするタイミング</h3>
+<ul><li>ゲームプレイで問い合わせる場所を塗り直した後。</li><li>バイオームの追加、削除、並べ替えにより、データで使う ID が変わった後。</li><li>分割、削除、トンネル生成、簡略化などで三角形が変わった後。</li><li>その他の形状変更により、ベイクや代表的な地表情報に影響した後。</li><li>簡略化した LOD コライダーなど、別のコライダーメッシュへ切り替えたとき。</li></ul>
+<p>通常の対応するライブ倍率は、問い合わせ時に読まれるため、毎回塗り直したり三角形データを作り直したりする必要はありません。ただし、候補はベイク済みのものです。古いベイクから、新しく塗った情報を読み出すことはできません。</p>
+
+<h2 id="query-limits">問い合わせは見た目とどこまで一致するか</h2>
+<p>付属の問い合わせは代表的な地表の選択に役立ちますが、<strong>シェーダーが描く画素を完全に取得するものではありません。</strong>すべての境界や雪の領域で、カーソル下の見た目と正確に一致すると考えず、自分のゲームの要件で確認します。</p>
+<div class="table-wrap"><table><thead><tr><th>状況</th><th>問い合わせの動作</th><th>ゲームプレイへの影響</th></tr></thead><tbody>
+<tr><td>一つの三角形に複数の地表</td><td>一つの代表 ID を返します。静的ベイクは被覆・優先度のルール、ライブは保存した候補の重みを使います。</td><td>非常に小さな領域や境界では、位置ごとに別の ID が返るとは限りません。</td></tr>
+<tr><td>高さで混ざる細部</td><td>画素単位の高さ・細部のブレンドをすべて再現しません。</td><td>局所的な見た目と、三角形の代表地表が異なる場合があります。</td></tr>
+<tr><td>ライブの重み変更</td><td>マテリアルの倍率で、ベイクした候補を再評価します。</td><td>ベイクにない、新しく塗った候補は選べません。</td></tr>
+<tr><td>ダスティング</td><td>ワールド上方向の傾斜と強さで簡略判定します。塗ったマスクは含みません。</td><td>見た目の被覆がない場所でも、雪などの ID が返ることがあります。移動や足音に使う前に確認します。</td></tr>
+<tr><td>テスターの Override Surface Data</td><td>ベイクしたアセットを直接読みます。</td><td>Surface Target のライブ評価を通りません。通常のライブ処理を試す場合は解除します。</td></tr>
+<tr><td>別のコライダーのトポロジー</td><td>三角形番号はコライダーのもので、描画メッシュとは限りません。</td><td>ベイクをその三角形順序に合わせる必要があります。簡略化した LOD2 に、別の元メッシュの対応をそのまま使わないでください。</td></tr>
+</tbody></table></div>
+<p>正確な小領域、局所重力に合う雪、画素単位の被覆がゲームに必要なら、そのルール用の問い合わせを作り、検証してください。付属コンポーネントは、ここで説明した制約を持つ出発点です。</p>
+
+<h2 id="troubleshooting">実行時・デモの問題</h2>
+<div class="table-wrap"><table><thead><tr><th>症状</th><th>確認すること</th></tr></thead><tbody>
+<tr><td>デモコントローラーが何も変えない</td><td>マテリアル、全体とスロットの有効状態、現在の ID を確認し、Push します。変更できる元の寄与があるかも確認します。</td></tr>
+<tr><td>Play 開始時にコンポーネントの値が変わる</td><td>Pull From Material On Play が既存設定を取り込むことがあります。どちらを基準にするか先に決めます。</td></tr>
+<tr><td>マテリアルの編集がすぐ戻る</td><td>Sync In Edit Mode と実行中のシミュレーションを確認します。設定中は一方を基準にします。</td></tr>
+<tr><td>スクリプトで値を変えても見た目が変わらない</td><td>シミュレーションがない場合、変更後に PushMaterialProperties を呼びます。マテリアル参照も確認します。</td></tr>
+<tr><td>雪嵐を動かしても雪がない</td><td>Slot 1 の Active、下地の ID、雪の ID、マスク、傾斜を確認します。アニメーションは強さを変え、ダスティングを有効にするだけです。</td></tr>
+<tr><td>River Level で水位が上がらない</td><td>Slot 1 の塗られた重みを変える例です。水メッシュや物理的な高さは変えません。</td></tr>
+<tr><td>ヒットしてもバイオームが出ない</td><td>レイヤー、Surface Target、ベイクを確認します。一致する MeshCollider と有効な三角形番号が必要です。</td></tr>
+<tr><td>名前や ID が違う</td><td>不適切な Override を解除し、再ベイクします。ID とコライダーの順序を確認し、混合境界より先に一種類の地表で試します。</td></tr>
+<tr><td>惑星でレイが外れる</td><td>Downward Probe はワールド下方向です。地表に向けた Transform Forward や、ゲームの重力に合うレイを使います。</td></tr>
+<tr><td>複数の地形が一緒に変わる</td><td>共有マテリアルを編集している場合があります。別々の動作には独立したマテリアルを使います。</td></tr>
+<tr><td>デモカメラが橋を通り抜ける</td><td>衝突制御がありません。実際の地形コライダーとゲーム用キャラクターで移動を試します。</td></tr>
+</tbody></table></div>
+<h2 id="support">サポート</h2><p>相談するときは、期待した結果、使った項目、実際に起きたことを説明してください。Unity のバージョン、選択したパイプライン、関連する設定のスクリーンショットも添えます。実行時の問い合わせの問題では、コライダーの種類と、最後にサーフェスデータをベイクした時期も記載してください。</p><p><a href="https://dptgames.github.io/#contact">DPT Games お問い合わせフォーム</a>、または <a href="https://discord.gg/EkQykfzP5X">DPT Games Discord</a> をご利用ください。</p><p class="back-top"><a href="#top">ページの先頭へ</a></p><footer class="footer">DPT Vertex 3D Terrain ドキュメント · 操作項目を見つけやすいよう、英語の項目名も併記しています。エディター上部の English / 日本語で、ツールの表示言語を切り替えられます。</footer></main></body></html>
