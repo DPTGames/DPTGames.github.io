@@ -1,485 +1,127 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Vertex 3D Terrain - Terrain Material Settings Guide</title>
-    <style>
-        *, *::before, *::after { box-sizing: border-box; }
-        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            color: #f8fafc;
-            background-color: #0f172a;
-            margin: 0; padding: 40px;
-            font-size: 11pt; line-height: 1.5;
-        }
-        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
-        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
-        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
-        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
-        h4 { font-size: 11.5pt; color: #bae6fd; margin-top: 16px; }
-        p { margin: 0 0 12px 0; }
-        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
-        tr { page-break-inside: avoid; }
-        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
-        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
-        td { background-color: #0f172a; }
-        td strong { color: #bae6fd; }
-        td code { font-size: 9.5pt; }
-        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
-        li { margin-bottom: 6px; }
-        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
-        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        .perf { background-color: #0c1f12; border-left: 4px solid #4ade80; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        .tip { background-color: #1a1a2e; border-left: 4px solid #a78bfa; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
-        code { padding: 2px 5px; }
-        pre { padding: 12px; margin: 10px 0; overflow-x: auto; line-height: 1.6; }
-        .divider { border: none; border-top: 1px solid #1e293b; margin: 30px 0; }
-        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 15px; margin-bottom: 5px; page-break-after: avoid; }
-        .troubleshooting-a { margin-bottom: 15px; }
-        .note a {
-            color: #38bdf8;
-            text-decoration: none;
-            transition: color 0.2s ease-in-out;
-        }
-        .note a:hover {
-            color: #7dd3fc;
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <!-- TOP NAVIGATION BAR -->
-    <nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
-        <a href="https://dptgames.github.io/" style="color: #38bdf8; margin-right: 15px;">&larr; DPT Games Homepage</a>
-        <span style="color: #64748b;">|</span>
-        <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Vertex 3D Terrain Guide</a>
-        <a href="biomes.html" style="color: #f8fafc; margin-right: 15px;">Biomes Guide</a>
-        <a href="demo-components.html" style="color: #f8fafc; margin-right: 15px;">Demo & Runtime Guide</a>
-        <a href="terrain-material-settings.html" style="color: #38bdf8; font-weight: bold;">Terrain Material Settings</a>
-    </nav>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Adjust the appearance of a whole terrain and control live biome effects."><link rel="alternate" hreflang="en" href="terrain-material-settings.html"><link rel="alternate" hreflang="ja" href="ja/terrain-material-settings.html"><title>Terrain Material Settings | DPT Games</title><style>
+:root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
+main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
+.site-nav{display:flex;flex-wrap:wrap;gap:8px 20px;border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:32px;font-size:.92rem}.site-nav [aria-current]{color:white;font-weight:700}
+.language-nav{display:flex;gap:10px;flex-wrap:wrap;margin:-12px 0 28px}.language-nav a{display:inline-block;padding:6px 16px;border:1px solid var(--border);border-radius:6px;text-decoration:none}.language-nav [aria-current]{color:#0f172a;background:var(--accent);border-color:var(--accent);font-weight:700}html[lang="ja"] body{line-height:1.85;line-break:strict}html[lang="ja"] th,html[lang="ja"] td{overflow-wrap:anywhere}
+h1,h2,h3,h4{line-height:1.25;color:var(--accent)}h1{font-size:2.25rem;margin:0 0 14px}h2{font-size:1.65rem;margin:48px 0 18px;padding-top:12px;border-top:1px solid var(--border)}h3{font-size:1.22rem;margin:30px 0 12px}h4{font-size:1.06rem}
+p{margin:12px 0 18px}li{margin:7px 0}ul,ol{padding-left:25px}.lead{font-size:1.18rem;color:var(--muted);max-width:850px}.intro{margin:28px 0}.toc{background:var(--panel);padding:20px 24px;border:1px solid var(--border);border-radius:9px;margin:28px 0}.toc h2{margin:0 0 10px;padding:0;border:0;font-size:1.15rem}.toc ul{columns:2;column-gap:36px;margin:0}.toc li{break-inside:avoid}
+.callout,.example{background:var(--panel);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:14px 20px;margin:22px 0}.example{border-color:#a3e635}.callout p:last-child,.example p:last-child{margin-bottom:0}.callout p:first-child,.example p:first-child{margin-top:0}
+.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--border);border-radius:7px}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--border)}thead{background:#25354c}th{color:#f8fafc}td:first-child{font-weight:600;min-width:145px}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#172238}
+code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background:#27354c;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}kbd{white-space:nowrap;border:1px solid #50617a}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#09111f;border:1px solid var(--border);padding:20px;border-radius:7px}pre code{background:transparent;padding:0}
+.back-top{font-size:.88rem}.table-hint{display:none;color:var(--muted);font-size:.9rem}.footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);margin-top:34px;padding-top:16px}details{background:var(--panel);padding:14px 18px;border:1px solid var(--border);border-radius:7px;margin:16px 0}summary{cursor:pointer;font-weight:600;color:var(--accent)}.alias{display:block;scroll-margin-top:24px}
+@media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
+@media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
+</style></head>
+<body><main id="top"><nav class="site-nav" aria-label="Documentation"><a href="https://dptgames.github.io/">DPT Games homepage</a><a href="index.html">Vertex 3D Terrain Guide</a><a href="biomes.html">Biomes Guide</a><a href="terrain-material-settings.html" aria-current="page">Terrain Material Settings</a><a href="demo-components.html">Demo & Runtime Guide</a></nav><nav class="language-nav" aria-label="Language"><a href="terrain-material-settings.html" lang="en" hreflang="en" aria-current="page">English</a><a href="ja/terrain-material-settings.html" lang="ja" hreflang="ja">日本語</a></nav><header><h1>Terrain Material Settings</h1><p class="lead">Adjust the appearance of a whole terrain and control live biome effects.</p></header><nav class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#setup">Find the right material and start safely</a></li><li><a href="#global-surface">Global surface controls</a></li><li><a href="#distance-fades">Quality fade controls</a></li><li><a href="#anti-tiling">Break up repeated textures</a></li><li><a href="#live-biomes">Live biome modifiers: change selected surfaces</a></li><li><a href="#flow">Animate surface flow</a></li><li><a href="#dusting">Add snow or dust with a painted mask</a></li><li><a href="#workflows">Three practical material workflows</a></li><li><a href="#troubleshooting">When a material effect is missing or wrong</a></li><li><a href="#support">Support</a></li></ul></nav><p class="table-hint">On a small screen, scroll wide tables sideways to read every column.</p><div class="intro"><p>The terrain material controls the final appearance of the objects that use it. A biome preset describes one surface; material settings adjust the overall look or add live effects to selected biome IDs.</p><p>Use the biome inspector to fix one rock or grass preset. Use the material when you want a broader change, such as weaker normal detail across the terrain, less distant variation, or an animated effect on a group of painted surfaces.</p></div>
 
-    <!-- HEADER & SUBTITLE -->
-    <h1>Vertex 3D Terrain - Terrain Material Settings</h1>
-    <div class="subtitle">Material Reference Guide<br>
-    <span style="font-size: 11pt; font-style: normal;">A practical reference for the terrain-specific controls exposed by the Vertex 3D Terrain material. This page covers global biome rendering, distance fades, anti-tiling and live biome modifiers without documenting the internal shader implementation.</span></div>
+<h2 id="setup">Find the right material and start safely</h2>
+<ol><li>Select the terrain’s MeshRenderer and open its assigned material.</li><li>For the Terrain Atlas workflow, check that it uses the dedicated <strong>SH_DPT_VCTerrain</strong> shader. The supplied terrain material is DPT_VCTerrain_Mat.</li><li>Confirm that its compiled colour-ramp atlas, detail texture array and biome count come from the intended library. Use the terrain tool’s texture compilation workflow to refresh them.</li><li>Paint a small test area containing a few representative surfaces.</li><li>Begin with ordinary global multipliers around 1. Change one control, compare the test area, and return it to the previous value if it does not help.</li><li>If this terrain needs independent settings, give it its own material or use Make Standalone Copy before making broad changes.</li></ol>
+<p>The dedicated inspector enables the terrain surface setup for you. The generated atlas, array and biome count are linked outputs of the library workflow; replacing one arbitrarily can make the material’s inputs disagree.</p>
+<div class="callout"><p><strong>Shared material means shared changes.</strong> Every renderer using the same material can change when you edit it. The demo controller also writes to its assigned material or the renderer’s shared material. Duplicating a scene object does not automatically isolate its material.</p></div>
+<h3>Which level should you edit?</h3>
+<div class="table-wrap"><table><thead><tr><th>Goal</th><th>Best starting point</th></tr></thead><tbody>
+<tr><td>One biome is too shiny</td><td>That biome’s Smoothness and source maps in the <a href="biomes.html#surface-settings">biome inspector</a>.</td></tr>
+<tr><td>All textured surfaces need weaker bumps</td><td>Global normal strength on the material.</td></tr>
+<tr><td>A selected rock should become glossier during rain</td><td>A live slot targeting that rock ID, with a smoothness override.</td></tr>
+<tr><td>The mesh needs a deeper river channel</td><td>The terrain’s geometry/path tools. Parallax and flow will not create a physical channel.</td></tr>
+<tr><td>A distant texture pattern is too busy</td><td>The quality fade controls, anti-tiling setup and texture scale.</td></tr>
+</tbody></table></div>
 
-    <div class="note">
-        <strong>Scope:</strong> This guide covers the <strong>Terrain Surfaces &amp; Biomes</strong> controls that are specific to Vertex 3D Terrain. Shared material features such as general lighting, wind and other core material controls are documented separately.
-    </div>
+<h2 id="global-surface">Global surface controls</h2>
+<p>These controls influence the terrain’s surface rendering. Their final effect also depends on the biome’s own settings and compiled maps. A neutral multiplier does not guarantee that the source surface itself is neutral.</p>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>What you see when increased</th><th>When to lower it</th></tr></thead><tbody>
+<tr><td>Detail Tiling Scale</td><td>More repeats and smaller-looking texture details across the material.</td><td>When grain, cracks or stones look too small. It multiplies biome tiling, rather than resizing the terrain.</td></tr>
+<tr><td>Surface Normal Strength</td><td>Stronger lighting bumps.</td><td>When details look noisy, harsh or inflated. It changes shading, not the shape.</td></tr>
+<tr><td>Surface Metallic Strength</td><td>A stronger metallic response where the source setup permits it.</td><td>When ordinary ground looks like metal. Fix a wrong metallic input or channel mapping at the biome level too.</td></tr>
+<tr><td>Surface Smoothness Strength</td><td>More polished-looking highlights.</td><td>When broad areas look wet or plastic. Inspect several biomes so you do not fix one and spoil another.</td></tr>
+<tr><td>Surface AO Strength</td><td>Stronger shading from the material’s occlusion data.</td><td>When crevices are too dark. This is separate from scene shadows and the Direct Vertex Color AO bake.</td></tr>
+<tr><td>Surface Emissive Strength</td><td>Stronger output from emissive surfaces.</td><td>When glow overpowers the surface detail. A source without useful emission will not gain patterned glowing cracks from a multiplier alone.</td></tr>
+<tr><td>Surface Height Contrast</td><td>More pronounced height-based competition at biome transitions.</td><td>When blends look harsh or broken into excessive detail. “Height” here refers to surface detail, not mountain elevation.</td></tr>
+<tr><td>Parallax Extrusion</td><td>A stronger illusion of recessed and raised texture detail.</td><td>When relief distorts at shallow angles. Zero bypasses that parallax contribution. No terrain vertices or colliders move.</td></tr>
+</tbody></table></div>
+<div class="example"><p><strong>If a whole terrain looks too busy:</strong> first reduce global normal strength a little, inspect parallax from the game camera, then check texture tiling. Do not immediately lower every biome’s settings; you may only need a material-level adjustment.</p></div>
 
-    <!-- QUICK NAVIGATION BOX -->
-    <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
-        <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
-        <a href="#setup" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">1. Terrain Surface Setup</a>
-        <a href="#global-surface" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">2. Global Surface Controls</a>
-        <a href="#distance-fades" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">3. Distance Fades</a>
-        <a href="#anti-tiling" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">4. Anti-Tiling</a>
-        <a href="#live-biomes" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">5. Live Biome Modifiers</a>
-        <a href="#flow" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">6. Flow &amp; Waterfalls</a>
-        <a href="#dusting" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">7. Dusting</a>
-        <a href="#workflows" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">8. Example Workflows</a>
-        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">9. Troubleshooting</a>
-        <a href="#support" style="color: #a5f3fc; text-decoration: none;">Support</a>
-    </div>
+<h2 id="distance-fades">Quality fade controls</h2>
+<p>Parallax, Anti-Tiling, Seam Blend and Normal Fade controls reduce their respective effects as the detail becomes smaller on screen. This can reduce distant visual noise and avoid spending as much work on detail that is difficult to see.</p>
+<p><strong>Although the labels say “Distance”, treat these as fade scales, not exact metre cutoffs.</strong> The shader also responds to the size of the surface detail within a screen pixel. Camera field of view, display resolution and the view angle can change where the fade becomes noticeable.</p>
+<div class="table-wrap"><table><thead><tr><th>Fade</th><th>What fades</th><th>How to tune it</th></tr></thead><tbody>
+<tr><td>Parallax Fade Distance</td><td>The depth illusion in texture detail.</td><td>Raise it to retain relief farther into the view; lower it if distant relief is unnecessary or distracting.</td></tr>
+<tr><td>Anti-Tiling Fade Distance</td><td>Procedural variation that breaks repetition.</td><td>Keep enough for visible mid-distance repetition, then compare the far terrain for noise.</td></tr>
+<tr><td>Seam Blend Fade Distance</td><td>Blending between texture projections.</td><td>Check steep surfaces and projection joins while adjusting it. This does not control geometric tile welding.</td></tr>
+<tr><td>Normal Fade Distance</td><td>Fine normal-map lighting detail.</td><td>Lower it if far surfaces shimmer or look grainy; raise it if important detail disappears too early.</td></tr>
+</tbody></table></div>
+<p>Very small or zero fade scales remove or sharply restrict the relevant contribution. Judge them from the actual game camera, including its normal resolution and field of view. Keep the biome’s own strength and the global strength consistent with what you want to retain.</p>
 
-    <!-- SETUP -->
-    <h2 id="setup">1. Terrain Surface Setup</h2>
-    <p>Open the material and expand <strong>Terrain Surfaces &amp; Biomes</strong>. The terrain-specific controls appear when <strong>Enable Surfaces (Biomes)</strong> is enabled.</p>
+<h2 id="anti-tiling">Break up repeated textures</h2>
+<p>Anti-tiling adds variation so the same texture is less obvious when repeated over a large area. First enable or increase <strong>Anti-Tiling on the relevant biome</strong>. The material controls shape that variation; they will not show the intended effect on a biome whose anti-tiling contribution is zero.</p>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>Meaning</th><th>Useful approach</th></tr></thead><tbody>
+<tr><td>Rotation Patch Scale</td><td>The spatial scale of regions with different detail orientation.</td><td>Compare the patch size against the source pattern. Avoid conspicuous orientation changes on textures that must follow a direction.</td></tr>
+<tr><td>Color Patch Scale</td><td>The frequency of broad colour-variation regions. Higher values make the variation more frequent and its patches smaller.</td><td>Start with broad, restrained patches; increase frequency only if the material needs smaller variation.</td></tr>
+<tr><td>Color Ramp Shift</td><td>How much procedural variation shifts the sample along the biome’s colour ramp.</td><td>Use a small amount for related shades. This does not rotate hue like the biome’s Hue transform.</td></tr>
+<tr><td>Brightness Contrast</td><td>The strength of brightness variation.</td><td>Increase gradually. Strong contrast can look like painted stains or obscure the original material.</td></tr>
+</tbody></table></div>
+<p>Also check the source texture’s obvious landmarks and tiling scale. Anti-tiling works best with a sensible source and subtle variation. For intentional stripes, grain direction or flowing channels, reduce variation if it fights the pattern.</p>
 
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 30%;">Property</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Enable Surfaces (Biomes)</strong></td>
-                <td>Turns the terrain biome surface system on or off for this material.</td>
-            </tr>
-            <tr>
-                <td><strong>Ground Color Ramp Atlas</strong></td>
-                <td>Generated biome color data used by the terrain material. This is normally assigned by Vertex 3D Terrain and should not need to be edited by hand.</td>
-            </tr>
-            <tr>
-                <td><strong>Ground Detail Array</strong></td>
-                <td>Generated terrain detail data shared by the compiled biomes. This is also normally managed automatically.</td>
-            </tr>
-            <tr>
-                <td><strong>Total Grounds Count</strong></td>
-                <td>The number of compiled biome entries available to the material. Treat this as generated library data rather than an artistic control.</td>
-            </tr>
-        </tbody>
-    </table>
+<h2 id="live-biomes">Live biome modifiers: change selected surfaces</h2>
+<p>Enable Live/Dynamic Biomes to use the four modifier slots. A slot is a group of material adjustments targeting up to three biome IDs. It can change their relative blend weight, surface properties, flow or dusting without repainting the mesh.</p>
+<ol><li>Find the current numeric IDs in your biome library.</li><li>Enable the master live-biome switch.</li><li>Activate one slot and set its target count and IDs.</li><li>Leave Weight Multiplier and surface multipliers at 1 initially.</li><li>Change one value and inspect both a pure patch and a border where that biome mixes with another.</li></ol>
+<div class="table-wrap"><table><thead><tr><th>Slot control</th><th>Meaning</th><th>What to remember</th></tr></thead><tbody>
+<tr><td>Active</td><td>Enables that slot’s targets.</td><td>All four slots, including Slot 1, can be inactive. Use this switch to disable a slot.</td></tr>
+<tr><td>Target Biomes</td><td>The number of IDs in the slot, from one to three when active.</td><td>Use the current library’s IDs. −1 is not a disable value; IDs are clamped into the supported range.</td></tr>
+<tr><td>Weight Multiplier: 0–5</td><td>Changes how strongly each targeted biome participates in an existing blend.</td><td>1 preserves its weight, 0 removes its contribution, above 1 favours it relative to other painted surfaces.</td></tr>
+<tr><td>Smoothness override: 0–3</td><td>A multiplier on the targeted surface’s smoothness.</td><td>1 preserves the starting response; try values above 1 for a glossier appearance.</td></tr>
+<tr><td>Normal override: 0–3</td><td>A multiplier on its normal detail.</td><td>1 preserves it; lower values flatten the shading detail.</td></tr>
+<tr><td>Parallax override: 0–3</td><td>A multiplier on its apparent texture depth.</td><td>Use gently and inspect at shallow angles. It still does not alter collision.</td></tr>
+<tr><td>Emissive override: 0–10</td><td>A multiplier on its glow.</td><td>Use for existing emissive detail. A zero source contribution cannot be restored by multiplying it.</td></tr>
+</tbody></table></div>
+<h3>What changing a weight can and cannot do</h3>
+<p>Imagine a border painted as 50% grass and 50% rock. Giving rock a multiplier of 2 makes its contribution twice as strong before the blend is normalised, so that border tends toward rock. A pure grass area containing no rock weight does not become rock merely because the rock multiplier increases.</p>
+<p>Weights change a mixture already present on the terrain. They do not create new terrain height, move a shoreline or flood a depression with a water volume. Removing the only contributing biome from a pure patch is also not a useful way to create a new surface; paint an alternative first.</p>
+<p>For your first setup, target each biome from only one slot. Overlapping slot targets can combine weight changes and make the result harder to predict. Disable slots one at a time if the outcome is confusing.</p>
 
-    <div class="warning"><strong>Generated fields:</strong> If the Color Ramp Atlas, Detail Array or biome count are missing or incorrect, rebuild or reassign the Ground Library through the terrain tools rather than trying to repair those values manually in the material.</div>
+<h2 id="flow">Animate surface flow</h2>
+<p>Flow moves the appearance of a targeted surface over time. It is useful for a river-like material, lava or another moving detail. It does not move vertices, particles or characters and does not supply a water simulation.</p>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>Meaning</th><th>Example</th></tr></thead><tbody>
+<tr><td>Enable Flow</td><td>Turns on animation for the slot’s targeted biomes.</td><td>Target the ID of your painted river surface.</td></tr>
+<tr><td>Direction / heading</td><td>The direction in the surface’s texture coordinate space.</td><td>0° is +U, 90° is +V, 180° is −U and 270° is −V. Treat compass descriptions as texture-direction aids, not guaranteed geographic directions on every mesh.</td></tr>
+<tr><td>Flow Speed: −1–1</td><td>The rate of the texture animation.</td><td>0 is static; a negative value reverses it. This is not a physical speed in metres per second.</td></tr>
+<tr><td>Back and Forth</td><td>Oscillates the motion rather than continuously streaming.</td><td>Try for a tide-like or gently shifting surface.</td></tr>
+<tr><td>Waterfall Projection</td><td>Uses the material’s waterfall-oriented projection behaviour.</td><td>Useful for downward-looking flow on suitable geometry. It is based on world-up conventions, so check it on curved or differently oriented worlds.</td></tr>
+</tbody></table></div>
+<p>Compare flow with anti-tiling enabled and disabled. Strong rotation variation can conflict with an intentional flow direction. The demo controller does not expose Waterfall Projection and can clear that setting when it pushes its slot data; use the material directly for that setup unless your own controller preserves it.</p>
 
-    <!-- GLOBAL SURFACE -->
-    <h2 id="global-surface">2. Global Surface Controls</h2>
-    <p>These settings affect the appearance of all terrain biomes using this material. Per-biome values still define the character of each surface; these controls act as overall material-level multipliers or adjustments.</p>
+<h2 id="dusting">Add snow or dust with a painted mask</h2>
+<p>Dusting overlays one biome onto another. It combines three decisions: <strong>where you painted a dusting mask</strong>, <strong>which base biomes the slot targets</strong>, and <strong>which slopes pass the threshold</strong>. Enabling the material effect alone does not coat every unmasked surface.</p>
+<ol><li>Create or choose the overlay biome, such as snow. Note its ID and the IDs of the ground surfaces that should receive it.</li><li>On the terrain, use the Dusting tool to paint or fill the areas where the overlay is allowed.</li><li>Enable live biomes and activate a material slot targeting the underlying ground IDs.</li><li>Enable that slot’s Dusting Layer and set Dusting Biome ID to the snow/dust preset.</li><li>Start with a moderate strength and a low slope threshold. Inspect a masked flat patch first.</li><li>Raise the slope threshold to restrict the effect to flatter upward-facing areas. Adjust strength to choose how much of the permitted overlay appears.</li></ol>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>Meaning</th><th>Typical use</th></tr></thead><tbody>
+<tr><td>Dusting Biome ID</td><td>The library surface sampled for the overlay.</td><td>Choose the snow ID here, while the slot targets the rock/grass beneath it.</td></tr>
+<tr><td>Strength: 0–2</td><td>The intensity of the overlay within the eligible mask.</td><td>0 removes it; increasing it gives stronger coverage. It does not add physical snow thickness.</td></tr>
+<tr><td>Slope Threshold: 0–1</td><td>How upward-facing the surface must be. It is a normalised facing threshold, not an angle in degrees.</td><td>Near 0 permits a wider range of orientations; higher values favour flatter upward-facing faces. The boundary is softened.</td></tr>
+</tbody></table></div>
+<p>Dusting uses world-up facing. On a planet, a surface on its side is not treated as “up” merely because it points away from the planet’s centre. Inspect the rule around the entire object if that distinction matters to your scene.</p>
+<p>The overlay changes appearance only. It does not build a snow mesh, raise collision, or automatically create slippery physics. Gameplay surface queries use a simplified dusting rule and do not reproduce the shader’s painted-mask result exactly; see <a href="demo-components.html#query-limits">query accuracy</a> before relying on the returned ID for gameplay.</p>
 
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 28%;">Property</th>
-                <th style="width: 18%;">Typical Use</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Detail Tiling Scale</strong></td>
-                <td>Overall texture scale</td>
-                <td>Changes the global tiling frequency of biome surface detail. Use this only when the entire terrain material needs to appear larger or smaller in scale.</td>
-            </tr>
-            <tr>
-                <td><strong>Surface Normal Strength</strong></td>
-                <td>Bump intensity</td>
-                <td>Global multiplier for terrain normal detail. Lower it for a softer surface or increase it when the terrain needs stronger small-scale relief.</td>
-            </tr>
-            <tr>
-                <td><strong>Surface Metallic Strength</strong></td>
-                <td>Metal response</td>
-                <td>Global multiplier for metallic response across terrain biomes.</td>
-            </tr>
-            <tr>
-                <td><strong>Surface Smoothness Strength</strong></td>
-                <td>Gloss / wet look</td>
-                <td>Global multiplier for terrain smoothness. Higher values make reflective surfaces read more strongly.</td>
-            </tr>
-            <tr>
-                <td><strong>Surface AO Strength</strong></td>
-                <td>Crevice shading</td>
-                <td>Controls the overall strength of terrain ambient occlusion shading.</td>
-            </tr>
-            <tr>
-                <td><strong>Surface Emissive Strength</strong></td>
-                <td>Lava, glow, magical surfaces</td>
-                <td>Global multiplier for emissive regions used by terrain biomes.</td>
-            </tr>
-            <tr>
-                <td><strong>Surface Height Contrast</strong></td>
-                <td>Biome blend definition</td>
-                <td>Controls how strongly height information influences transitions between blended terrain biomes. Increase it for more defined material boundaries; reduce it for softer blending.</td>
-            </tr>
-            <tr>
-                <td><strong>Parallax Extrusion Scale</strong></td>
-                <td>Perceived depth</td>
-                <td>Controls the apparent physical depth of terrain detail. The Inspector range is 0 to 1. Set it to 0 when parallax depth is not required.</td>
-            </tr>
-        </tbody>
-    </table>
+<h2 id="workflows">Three practical material workflows</h2>
+<h3>Make selected ground look wet</h3>
+<ol><li>Paint the ground and confirm its ordinary biome appearance.</li><li>Activate a live slot targeting those ground IDs.</li><li>Keep Weight Multiplier at 1 so you are changing the material response rather than the distribution.</li><li>Increase smoothness gently. Adjust the source biome’s colour in a duplicate if you also need a darker base look.</li><li>Inspect highlights under your scene’s lighting. This is a wet-looking surface effect; puddles and rain behaviour need their own setup.</li></ol>
+<h3>Make a river look animated</h3>
+<ol><li>Use the Path tool to shape a channel if you need a real bed.</li><li>Paint a river surface along it, choosing a texture and scale suitable for the width.</li><li>Target that biome with one active live slot and enable Flow.</li><li>Start with a low speed. Change heading until the detail moves along the intended route.</li><li>Inspect bends and changes of projection. Add dedicated water geometry or gameplay behaviour separately if your scene needs it.</li></ol>
+<h3>Fade a seasonal snow overlay in and out</h3>
+<ol><li>Paint a dusting mask and configure the base targets, snow ID and slope threshold.</li><li>Test at Strength 0 and around 1 to establish both ends of the appearance.</li><li>Animate the strength in your own controller or use the demo’s snow cycle to explore it.</li><li>Check shared-material scope so the effect changes only the intended terrain group.</li><li>Compare the runtime tester with the visual result if you also change footsteps or surface effects.</li></ol>
 
-    <div class="tip"><strong>Recommended order:</strong> Set the biome itself up correctly first, then use these global controls for final material-wide balancing. Avoid compensating for one badly configured biome by changing a global multiplier that affects every other biome.</div>
-
-    <!-- DISTANCE FADES -->
-    <h2 id="distance-fades">3. Distance Fade Controls</h2>
-    <p>Distance fades reduce expensive or high-frequency detail as it becomes less useful on screen. Each slider ranges from 0 to 50 world units.</p>
-
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 30%;">Property</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Parallax Fade Distance</strong></td>
-                <td>Controls how far from the camera parallax depth remains active before fading away. Keep this only as high as needed for the expected close-up camera distance.</td>
-            </tr>
-            <tr>
-                <td><strong>Anti-Tiling Fade Distance</strong></td>
-                <td>Controls the distance over which anti-tiling variation remains active. Distant terrain usually needs less variation processing.</td>
-            </tr>
-            <tr>
-                <td><strong>Seam Blend Fade Distance</strong></td>
-                <td>Controls the distance used for terrain seam blending and distant projection support.</td>
-            </tr>
-            <tr>
-                <td><strong>Normal Fade Distance</strong></td>
-                <td>Controls how far detailed terrain normals remain fully active before fading at distance.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="perf"><strong>Performance:</strong> Lower fade distances reduce the amount of expensive detail evaluated on distant terrain. Increase a fade only when the visual improvement is noticeable at that distance.</div>
-    <div class="note"><strong>0 values:</strong> The Inspector treats 0 as the disabled setting for the corresponding distance effect.</div>
-
-    <!-- ANTI TILING -->
-    <h2 id="anti-tiling">4. Anti-Tiling Controls</h2>
-    <p>Anti-tiling breaks up obvious texture repetition across large surfaces. These controls are intentionally broad artistic adjustments rather than per-biome replacement settings.</p>
-
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 30%;">Property</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Rotation Patch Scale</strong></td>
-                <td>Controls the size of regions used to vary the orientation of repeating surface detail. Use larger regions for broad variation and smaller regions when repetition is obvious over short distances.</td>
-            </tr>
-            <tr>
-                <td><strong>Color Patch Scale</strong></td>
-                <td>Controls the size of the terrain's broad color-variation regions.</td>
-            </tr>
-            <tr>
-                <td><strong>Color Ramp Shift</strong></td>
-                <td>Controls how strongly the terrain's biome colors vary between those regions.</td>
-            </tr>
-            <tr>
-                <td><strong>Brightness Contrast</strong></td>
-                <td>Controls the difference between lighter and darker variation regions.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="tip"><strong>Tip:</strong> Anti-tiling works best when it is subtle. If the variation itself becomes easy to see, reduce the strength or increase the patch size until it stops drawing attention.</div>
-
-    <!-- LIVE BIOMES -->
-    <h2 id="live-biomes">5. Live Biome Modifiers</h2>
-    <p><strong>Enable Live Biome Modifiers</strong> exposes four material-level modifier slots. These are designed for temporary or runtime-style appearance changes without editing the underlying biome preset.</p>
-
-    <div class="note"><strong>Important:</strong> Live modifiers only affect biomes targeted by their biome ID. They do not replace the source biome settings stored in the Ground Library.</div>
-
-    <h3>Modifier Slots</h3>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 28%;">Control</th>
-                <th style="width: 18%;">Range</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Modifier Slot 1-4</strong></td>
-                <td>On / Off</td>
-                <td>Enables or disables that live modifier group.</td>
-            </tr>
-            <tr>
-                <td><strong>Target Biomes</strong></td>
-                <td>1-3</td>
-                <td>Sets how many biome IDs the slot affects. One slot can target up to three biomes at the same time.</td>
-            </tr>
-            <tr>
-                <td><strong>Target Biome 1-3</strong></td>
-                <td>ID 0-255</td>
-                <td>Biome IDs affected by the slot. Use the IDs shown by the Vertex 3D Terrain biome tools.</td>
-            </tr>
-            <tr>
-                <td><strong>Weight Multiplier</strong></td>
-                <td>0-5</td>
-                <td>Changes how strongly the targeted biome contributes when blended with other biomes. 1 leaves the blend unchanged, values below 1 reduce its influence, and values above 1 increase it.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h3>Surface Overrides</h3>
-    <p>Surface Overrides temporarily multiply selected appearance properties for all biome IDs targeted by the slot.</p>
-
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 30%;">Property</th>
-                <th style="width: 18%;">Range</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Smoothness Mult</strong></td>
-                <td>0-3</td>
-                <td>Multiplies the targeted biome's smoothness. Useful for making a surface look temporarily wetter, glossier or duller.</td>
-            </tr>
-            <tr>
-                <td><strong>Normal Strength Mult</strong></td>
-                <td>0-3</td>
-                <td>Multiplies the normal strength of the targeted biome.</td>
-            </tr>
-            <tr>
-                <td><strong>Parallax Depth Mult</strong></td>
-                <td>0-3</td>
-                <td>Multiplies the targeted biome's parallax depth.</td>
-            </tr>
-            <tr>
-                <td><strong>Emissive Mult</strong></td>
-                <td>0-10</td>
-                <td>Multiplies emissive output for the targeted biome. Useful for effects such as lava, magical surfaces or pulsing glow.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="tip"><strong>Example:</strong> To make several rocky biomes look wet during rain, place their biome IDs in one modifier slot, increase Smoothness Mult, and leave the source biome presets unchanged.</div>
-
-    <!-- FLOW -->
-    <h2 id="flow">6. UV Flow Animation & Waterfall Projection</h2>
-    <p>Each live modifier slot can animate the surface detail of its targeted biomes. This is useful for water, lava, magical energy, flowing slime and other moving terrain surfaces.</p>
-
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 28%;">Control</th>
-                <th style="width: 18%;">Range</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Enable Flow</strong></td>
-                <td>On / Off</td>
-                <td>Enables animated surface movement for the biome IDs targeted by this modifier slot.</td>
-            </tr>
-            <tr>
-                <td><strong>Back and Forth</strong></td>
-                <td>On / Off</td>
-                <td>Switches from continuous movement to an oscillating motion. This is useful for shores, lakes and other surfaces that should surge rather than continually scroll in one direction.</td>
-            </tr>
-            <tr>
-                <td><strong>Waterfall Projection</strong></td>
-                <td>On / Off</td>
-                <td>Enables the special waterfall treatment for steep world-up surfaces. Leave this disabled for ordinary flow, curved terrain and planetoids.</td>
-            </tr>
-            <tr>
-                <td><strong>Compass Heading</strong></td>
-                <td>0-359°</td>
-                <td>Sets the flow direction. 0° = East, 90° = North, 180° = West and 270° = South.</td>
-            </tr>
-            <tr>
-                <td><strong>Flow Speed</strong></td>
-                <td>-1 to +1</td>
-                <td>Controls animation speed. Negative values reverse the direction.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="warning"><strong>Planetoids:</strong> Waterfall Projection is based on normal world-up terrain. Keep it disabled on planetoids. Normal flow can still be used without the waterfall option.</div>
-
-    <div class="tip"><strong>Water workflow:</strong> For a lake feeding a waterfall, use the same water biome for normal flow and enable Waterfall Projection only where that material setup is intended to run over steep terrain. If you need different speeds or behaviour, a duplicated biome can be used as a dedicated waterfall variant.</div>
-
-    <!-- DUSTING -->
-    <h2 id="dusting">7. Dusting Layer</h2>
-    <p>Dusting allows another biome to coat the targeted biome where dusting data has been painted. Typical uses include snow over grass or rock, ice over water, ash over soil, or sand collecting over another surface.</p>
-
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 28%;">Control</th>
-                <th style="width: 18%;">Range</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Enable Dusting</strong></td>
-                <td>On / Off</td>
-                <td>Turns dusting on for the biome IDs targeted by this live modifier slot.</td>
-            </tr>
-            <tr>
-                <td><strong>Dusting Biome ID</strong></td>
-                <td>Biome ID</td>
-                <td>The biome that will appear as the coating material, for example Snow over Grass.</td>
-            </tr>
-            <tr>
-                <td><strong>Dusting Strength</strong></td>
-                <td>0-2</td>
-                <td>Controls the intensity of the coating.</td>
-            </tr>
-            <tr>
-                <td><strong>Slope Threshold</strong></td>
-                <td>0-1</td>
-                <td>Controls which upward-facing slopes can hold the dusting. Lower values allow coating on more angles; higher values restrict it toward flatter upward-facing surfaces.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="tip"><strong>Snow example:</strong> Target the Grass and Rock biome IDs, set the Dusting Biome ID to Snow, then raise Slope Threshold if the snow is collecting too strongly on steep cliff faces.</div>
-
-    <!-- WORKFLOWS -->
-    <h2 id="workflows">8. Example Workflows</h2>
-
-    <h3>Wet Terrain During Rain</h3>
-    <ol>
-        <li>Enable <strong>Live Biome Modifiers</strong>.</li>
-        <li>Enable one modifier slot.</li>
-        <li>Add the biome IDs that should appear wet.</li>
-        <li>Leave <strong>Weight Multiplier</strong> at 1 unless the biome blend itself also needs to change.</li>
-        <li>Increase <strong>Smoothness Mult</strong>.</li>
-        <li>Optionally reduce or increase <strong>Normal Strength Mult</strong> to match the desired wet-surface look.</li>
-    </ol>
-
-    <h3>Animated Water</h3>
-    <ol>
-        <li>Target the water biome ID.</li>
-        <li>Enable <strong>Flow</strong>.</li>
-        <li>Set <strong>Compass Heading</strong> to the intended direction.</li>
-        <li>Adjust <strong>Flow Speed</strong>.</li>
-        <li>Enable <strong>Back and Forth</strong> for shoreline or lake-style movement.</li>
-        <li>Leave <strong>Waterfall Projection</strong> disabled unless the water is intended to run over steep world-up terrain.</li>
-    </ol>
-
-    <h3>Snow or Ash Accumulation</h3>
-    <ol>
-        <li>Target the base biomes that can receive the coating.</li>
-        <li>Enable <strong>Dusting</strong>.</li>
-        <li>Select the Snow, Ash or other coating biome ID.</li>
-        <li>Adjust <strong>Dusting Strength</strong>.</li>
-        <li>Use <strong>Slope Threshold</strong> to control how readily the coating remains on steep slopes.</li>
-    </ol>
-
-    <!-- TROUBLESHOOTING -->
-    <h2 id="troubleshooting">9. Troubleshooting Notes</h2>
-
-    <div class="troubleshooting-q">"My biome textures are missing or the terrain looks completely wrong."</div>
-    <div class="troubleshooting-a">Check that <strong>Ground Color Ramp Atlas</strong>, <strong>Ground Detail Array</strong> and <strong>Total Grounds Count</strong> contain the expected generated data. If they are missing, rebuild or reassign the biome library using Vertex 3D Terrain rather than manually constructing these fields.</div>
-
-    <div class="troubleshooting-q">"Parallax is too expensive or shimmers in the distance."</div>
-    <div class="troubleshooting-a">Reduce <strong>Parallax Extrusion Scale</strong> and/or lower <strong>Parallax Fade Distance</strong>. Distant surfaces generally do not benefit from full parallax depth.</div>
-
-    <div class="troubleshooting-q">"My terrain pattern is obviously repeating."</div>
-    <div class="troubleshooting-a">First make sure the biome's own scale is sensible. Then adjust <strong>Rotation Patch Scale</strong> and <strong>Color Patch Scale</strong>, followed by small amounts of <strong>Color Ramp Shift</strong> and <strong>Brightness Contrast</strong>.</div>
-
-    <div class="troubleshooting-q">"Live Biome Modifiers do nothing."</div>
-    <div class="troubleshooting-a">Confirm <strong>Enable Live Biome Modifiers</strong> is enabled, the modifier slot is active, and the correct biome ID is listed under Target Biomes. Also make sure the Weight Multiplier and the desired override are not set to neutral values.</div>
-
-    <div class="troubleshooting-q">"Flow is enabled but nothing moves."</div>
-    <div class="troubleshooting-a">Check that the slot targets the correct biome ID, <strong>Enable Flow</strong> is on, and <strong>Flow Speed</strong> is not 0. If testing a blended area, confirm that the targeted biome is actually contributing to that surface.</div>
-
-    <div class="troubleshooting-q">"The flow direction is backwards."</div>
-    <div class="troubleshooting-a">Change <strong>Compass Heading</strong> by 180°, or use the opposite sign on <strong>Flow Speed</strong> when a complete direction reversal is required.</div>
-
-    <div class="troubleshooting-q">"A planetoid is stretching like a waterfall."</div>
-    <div class="troubleshooting-a">Disable <strong>Waterfall Projection</strong> for that slot. Standard flow is suitable for curved terrain; Waterfall Projection is intended for world-up terrain and floating-island style waterfalls.</div>
-
-    <div class="troubleshooting-q">"Dusting appears on slopes where I do not want it."</div>
-    <div class="troubleshooting-a">Increase <strong>Slope Threshold</strong> so the dusting favours flatter upward-facing terrain. Reduce <strong>Dusting Strength</strong> if the coating is also too dominant.</div>
-
-    <div class="troubleshooting-q">"Changing a live modifier permanently changed my biome."</div>
-    <div class="troubleshooting-a">Live modifier controls are material-level overrides. To permanently change the biome preset itself, edit the biome through the Vertex 3D Terrain biome tools instead.</div>
-
-    <hr class="divider">
-    <h2 id="support">Support, Contact & Custom Integration</h2>
-
-    <p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form. This is the primary and most reliable way to get help with any problems you encounter with the packages.</p>
-
-    <p>You can also use this form to inquire about custom freelance technical art services. If your project requires external 3D models or terrain content to be integrated into the DPT ecosystem, get in touch to discuss your specific requirements and availability.</p>
-
-    <div class="note">
-        <strong>Email Contact:</strong><br>
-        For troubleshooting, bug reports, publisher licensing, and freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
-    </div>
-
-    <div class="note">
-        <strong>DPT Community Discord:</strong><br>
-        While the contact form is the best way to get direct help with issues, you are also welcome to join the <strong><a href="https://discord.gg/EkQykfzP5X" target="_blank">Discord Server</a></strong> to share feedback and connect with other users.
-    </div>
-
-</body>
-</html>
+<h2 id="troubleshooting">When a material effect is missing or wrong</h2>
+<div class="table-wrap"><table><thead><tr><th>Symptom</th><th>Check in this order</th></tr></thead><tbody>
+<tr><td>Editing the material does nothing</td><td>Confirm the selected renderer uses that material and the correct terrain shader. Check whether a controller is overwriting the settings.</td></tr>
+<tr><td>The wrong biome changes</td><td>Check IDs in the current library. Reordering or deleting presets can invalidate separately stored target IDs.</td></tr>
+<tr><td>A live slot has no effect</td><td>Check master switch, Active, target count and IDs. For weights, the targeted biome must already contribute in the painted area. For overrides, check source data and global settings.</td></tr>
+<tr><td>Snow does not appear</td><td>Check the painted dusting mask, the underlying target IDs, overlay ID, enable switches, strength and slope threshold. Start on a masked upward-facing flat area.</td></tr>
+<tr><td>Flow goes the wrong way</td><td>Adjust texture-space heading or reverse speed. Check projection changes and anti-tiling rotation; the heading is not guaranteed to follow world north.</td></tr>
+<tr><td>Waterfall Projection keeps switching off</td><td>Check whether the demo controller is pushing slots. Its current slot representation does not preserve the material’s waterfall flag.</td></tr>
+<tr><td>The terrain looks correct nearby but changes far away</td><td>Review quality fade scales, mipmaps and camera settings. Fade labels are not exact metre distances.</td></tr>
+<tr><td>A visible tile crack remains at maximum Seam Blend</td><td>Inspect the geometry and tile joins. Seam Blend changes texture projection transitions, not mesh connectivity.</td></tr>
+<tr><td>The shader reports snow but I cannot see it</td><td>If you mean a gameplay query, remember the runtime dusting test does not include the painted mask. It is an approximation, not a pixel sample.</td></tr>
+<tr><td>Several terrains change together</td><td>Inspect their shared material references. Assign separate materials or make standalone copies where the effect should be independent.</td></tr>
+</tbody></table></div>
+<h2 id="support">Support</h2><p>If you need help, describe the result you expected, the control you used, and what appeared instead. Include your Unity version, the selected surface pipeline, and a screenshot of the relevant settings. For a runtime query problem, also include the collider type and when you last baked surface data.</p><p>Use the <a href="https://dptgames.github.io/#contact">DPT Games contact form</a> or join the <a href="https://discord.gg/EkQykfzP5X">DPT Games Discord</a>.</p><p class="back-top"><a href="#top">Back to top</a></p><footer class="footer">DPT Vertex 3D Terrain documentation · English control names are used throughout. Choose English or 日本語 at the top of the editor window to change the tool’s interface language.</footer></main></body></html>
