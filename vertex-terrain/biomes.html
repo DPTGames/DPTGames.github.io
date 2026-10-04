@@ -1,365 +1,139 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>DPT Vertex 3D Terrain - Biome Setup & Reference Guide</title>
-    <style>
-        *, *::before, *::after { box-sizing: border-box; }
-        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            color: #f8fafc;
-            background-color: #0f172a;
-            margin: 0; padding: 40px;
-            font-size: 11pt; line-height: 1.5;
-        }
-        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
-        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
-        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
-        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
-        h4 { font-size: 11.5pt; color: #bae6fd; margin-top: 16px; }
-        p { margin: 0 0 12px 0; }
-        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
-        tr { page-break-inside: avoid; }
-        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
-        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
-        td { background-color: #0f172a; }
-        td strong { color: #bae6fd; }
-        td code { font-size: 9.5pt; }
-        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
-        li { margin-bottom: 6px; }
-        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
-        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        .perf { background-color: #0c1f12; border-left: 4px solid #4ade80; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        .tip { background-color: #1a1a2e; border-left: 4px solid #a78bfa; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
-        code { padding: 2px 5px; }
-        pre { padding: 12px; margin: 10px 0; overflow-x: auto; line-height: 1.6; }
-        .divider { border: none; border-top: 1px solid #1e293b; margin: 30px 0; }
-        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 15px; margin-bottom: 5px; page-break-after: avoid; }
-        .troubleshooting-a { margin-bottom: 15px; }
-        .note a { color: #38bdf8; text-decoration: none; transition: color 0.2s ease-in-out; }
-        .note a:hover { color: #7dd3fc; text-decoration: underline; }
-        .quick-step { background-color: #111c2e; border: 1px solid #334155; border-radius: 5px; padding: 11px 13px; margin: 8px 0; page-break-inside: avoid; }
-        .quick-step strong { color: #bae6fd; }
-        .small { color: #94a3b8; font-size: 9.5pt; }
-        .good { color: #86efac; }
-    </style>
-</head>
-<body>
-
-    <!-- TOP NAVIGATION BAR -->
-    <nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
-        <a href="https://dptgames.github.io/" style="color: #38bdf8; margin-right: 15px;">&larr; DPT Games Homepage</a>
-        <span style="color: #64748b;">|</span>
-        <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Vertex 3D Terrain Guide</a>
-        <a href="biomes.html" style="color: #f8fafc; margin-right: 15px;">Biomes Guide</a>
-        <a href="demo-components.html" style="color: #38bdf8; font-weight: bold;">Demo & Runtime Guide</a>
-        <a href="terrain-material-settings.html" style="color: #38bdf8; font-weight: bold;">Terrain Material Settings</a>
-    </nav>
-
-    <!-- HEADER & SUBTITLE -->
-    <h1>DPT Vertex 3D Terrain - Biomes</h1>
-    <div class="subtitle">Biome Setup & Reference Guide<br>
-    <span style="font-size: 11pt; font-style: normal;">A practical guide to creating, importing, editing, duplicating and merging terrain biomes. It explains the controls you need to use without exposing the internal generation or rendering techniques behind the system.</span></div>
-
-    <div class="note">
-        <strong>Scope of this guide:</strong> This documentation focuses on the user workflow: what each setting does, what textures to supply, and how to create useful biome variations. Internal generation, packing and shader implementation details are intentionally not documented.
-    </div>
-
-    <!-- QUICK NAVIGATION BOX -->
-    <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.9;">
-        <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
-        <a href="#quick-start" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">1. Quick Start</a>
-        <a href="#creating-biomes" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">2. Creating Biomes</a>
-        <a href="#texture-inputs" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">3. Texture Inputs</a>
-        <a href="#color-ramp" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">4. Color Ramp</a>
-        <a href="#surface-settings" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">5. Surface Settings</a>
-        <a href="#variants" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">6. Variants & Duplication</a>
-        <a href="#merge" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">7. Merge Biomes</a>
-        <a href="#direct-mode" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">8. Direct Vertex Biomes</a>
-        <a href="#optimization" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">9. Optimization</a>
-        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 18px; text-decoration: none;">10. Troubleshooting</a>
-        <a href="#support" style="color: #a5f3fc; text-decoration: none;">Support</a>
-    </div>
-
-    <!-- QUICK START -->
-    <h2 id="quick-start">1. Quick Start</h2>
-    <p>A biome is a reusable terrain surface preset. A biome can define its color range, surface detail, normal appearance, metallic/smoothness response, emissive areas, tiling and other visual properties. Once created, it can be painted across terrain, floating islands and planetoids.</p>
-
-    <div class="quick-step"><strong>1. Create a biome.</strong> Use <strong>+ Folder Biome</strong> for the fastest setup, or <strong>+ New Biome</strong> if you want to assign the maps yourself.</div>
-    <div class="quick-step"><strong>2. Supply the source textures.</strong> At minimum, an Albedo/Base Color texture is recommended. Add Height, Normal and PBR maps when available.</div>
-    <div class="quick-step"><strong>3. Generate the surface.</strong> The tool creates the processed terrain detail and a matching Color Ramp automatically when a valid Source RGB texture is supplied.</div>
-    <div class="quick-step"><strong>4. Adjust the look.</strong> Tune Scale, AO Strength, Parallax, Normal, Smoothness, Metallic, Anti-Tiling and the Color Ramp until the biome matches your scene.</div>
-    <div class="quick-step"><strong>5. Create variations cheaply.</strong> Duplicate an existing biome and change its Color Ramp or surface settings instead of importing another copy of the same textures.</div>
-
-    <div class="tip"><strong>Recommended workflow:</strong> Build one accurate “master” biome from the original texture set first. Once it looks correct, duplicate it to make seasonal, dry, wet, darker, brighter or fantasy-colored variations.</div>
-
-    <!-- CREATING BIOMES -->
-    <h2 id="creating-biomes">2. Creating & Managing Biomes</h2>
-
-    <h3>Biome Palette</h3>
-    <p>Biomes appear as cards in the Terrain Biomes Palette. The card shows the biome name, ID, a ramp preview and a small summary of important settings. Clicking a card selects it for painting and opens it in the Biome Inspector.</p>
-
-    <table>
-        <thead><tr><th style="width: 30%;">Control</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><strong>+ New Biome</strong></td><td>Creates a new biome that can be configured manually.</td></tr>
-            <tr><td><strong>+ Folder Biome</strong></td><td>Creates a biome and automatically scans a selected texture folder for suitable maps. A folder can also be dragged directly onto this control.</td></tr>
-            <tr><td><strong>Auto Folder</strong></td><td>Populates or refreshes the currently selected biome from a texture folder.</td></tr>
-            <tr><td><strong>Duplicate</strong></td><td>Creates an independent copy of the biome settings while keeping the same source texture references. This is ideal for visual variants.</td></tr>
-            <tr><td><strong>Delete</strong></td><td>Removes the selected biome from the library. Remaining biome IDs are kept in a valid order automatically.</td></tr>
-            <tr><td><strong>Drag to Reorder</strong></td><td>Biome cards can be reordered in the palette. This is useful for keeping related surfaces together.</td></tr>
-            <tr><td><strong>Groups / 1-0 Hotkeys</strong></td><td>The quick palette is arranged in groups of ten biomes. Number keys 1-9 and 0 select the corresponding biome in the active group.</td></tr>
-        </tbody>
-    </table>
-
-    <h3>Auto Folder Naming</h3>
-    <p>The folder importer recognizes common texture naming conventions. Clear filenames make automatic setup more reliable.</p>
-    <table>
-        <thead><tr><th style="width: 30%;">Texture Type</th><th>Common Names</th></tr></thead>
-        <tbody>
-            <tr><td><strong>Albedo / Base Color</strong></td><td>Albedo, BaseColor, Diffuse, Color</td></tr>
-            <tr><td><strong>Normal</strong></td><td>Normal, Norm, NRM</td></tr>
-            <tr><td><strong>Height</strong></td><td>Height, Displacement, Detail, Bump</td></tr>
-            <tr><td><strong>Metallic</strong></td><td>Metallic, Metalness, Metal</td></tr>
-            <tr><td><strong>Smoothness / Roughness</strong></td><td>Smoothness, Gloss, Roughness, Rough</td></tr>
-            <tr><td><strong>Ambient Occlusion</strong></td><td>AO, Occlusion, AmbientOcclusion</td></tr>
-            <tr><td><strong>Emissive</strong></td><td>Emissive, Emission, Glow</td></tr>
-            <tr><td><strong>Packed PBR</strong></td><td>Common packed-map names such as MRAO, MaskMap or Packed are recognized where possible.</td></tr>
-        </tbody>
-    </table>
-
-    <div class="note"><strong>Note:</strong> Auto Folder also configures the imported textures for the role it detects. If a texture is not detected correctly, simply assign it manually in the Biome Inspector.</div>
-
-    <!-- TEXTURE INPUTS -->
-    <h2 id="texture-inputs">3. Texture Inputs & Generation</h2>
-
-    <h3>Primary Inputs</h3>
-    <table>
-        <thead><tr><th style="width: 30%;">Property</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><strong>Source RGB</strong></td><td>The full-color Albedo/Base Color source. This is the main source used when automatically generating the biome's Color Ramp and processed detail.</td></tr>
-            <tr><td><strong>Generated Tex</strong></td><td>The processed grayscale detail used by the terrain surface. It is normally created automatically and should usually be left to the tool.</td></tr>
-            <tr><td><strong>Invert Height</strong></td><td>Reverses the height interpretation. Use this if raised areas appear recessed, or recessed areas appear raised.</td></tr>
-            <tr><td><strong>Source Height</strong></td><td>The original imported height or displacement texture. It is kept as a source reference and does not replace the generated texture.</td></tr>
-            <tr><td><strong>Normal</strong></td><td>Optional normal map for fine surface bump detail.</td></tr>
-            <tr><td><strong>Emissive</strong></td><td>Optional mask for glowing regions such as lava cracks, crystals, runes or magical surfaces.</td></tr>
-        </tbody>
-    </table>
-
-    <div class="tip"><strong>Tip:</strong> A biome can still be useful without every map. Supply the maps you have; the system is designed to work with partial texture sets as well as complete PBR sets.</div>
-
-    <h3>PBR Mode</h3>
-    <p>Choose the input style that matches the texture package you are importing.</p>
-    <table>
-        <thead><tr><th style="width: 30%;">Property</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><strong>Separate Textures</strong></td><td>Use individual Metallic, Smoothness/Roughness and AO textures.</td></tr>
-            <tr><td><strong>Packed Texture</strong></td><td>Use a single packed PBR texture containing several surface channels.</td></tr>
-            <tr><td><strong>Mapping</strong></td><td>Select the packed layout that matches the source texture. Available layouts include standard Unity MRAO/MRAR, Unreal ORM and Custom.</td></tr>
-            <tr><td><strong>Packed PBR</strong></td><td>The packed PBR texture used when Packed Texture mode is selected.</td></tr>
-            <tr><td><strong>Metallic</strong></td><td>Optional metallic map used in Separate Textures mode.</td></tr>
-            <tr><td><strong>Smooth/Rough</strong></td><td>Optional smoothness or roughness texture used in Separate Textures mode.</td></tr>
-            <tr><td><strong>Roughness</strong></td><td>Enable this when the Smooth/Rough texture contains roughness rather than smoothness.</td></tr>
-            <tr><td><strong>AO</strong></td><td>Optional ambient occlusion source used when preparing the biome. It helps the generated result but does not need to remain as an additional standalone runtime texture.</td></tr>
-        </tbody>
-    </table>
-
-    <div class="warning"><strong>Packed map looks wrong?</strong> The most common cause is selecting the wrong channel mapping. Check the texture package documentation and choose the matching layout before adjusting Metallic or Smoothness strength.</div>
-
-    <!-- COLOR RAMP -->
-    <h2 id="color-ramp">4. Color Ramp, Auto Generate & Color Variants</h2>
-
-    <h3>Color Ramp</h3>
-    <p>The Color Ramp controls how the generated surface detail is colored. The left side represents darker/recessed detail and the right side represents brighter/raised detail. You can edit the keys manually at any time.</p>
-
-    <table>
-        <thead><tr><th style="width: 30%;">Control</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><strong>Color Ramp</strong></td><td>Edit the biome's colors directly. Use this for precise art direction or to correct a small part of an automatically generated ramp.</td></tr>
-            <tr><td><strong>Auto Generate</strong></td><td>Regenerates the Color Ramp and processed detail from the current Source RGB and any other useful source maps assigned to the biome.</td></tr>
-            <tr><td><strong>Fixed</strong></td><td>Uses stepped color bands instead of smooth interpolation. Leave it disabled for a smoothly blended ramp.</td></tr>
-        </tbody>
-    </table>
-
-    <div class="note"><strong>Auto Generate replaces manual ramp edits.</strong> If you have hand-edited the ramp and want to keep those edits, use the Ramp Transform controls for global color changes instead of regenerating.</div>
-
-    <h3>Ramp Transform</h3>
-    <p>Ramp Transform changes every color key together while preserving the existing relationships between the colors. It is particularly useful after duplicating a biome to create variants such as dry grass, autumn grass, scorched soil, cold stone or fantasy-colored surfaces.</p>
-
-    <table>
-        <thead><tr><th style="width: 30%;">Control</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><strong>Hue</strong></td><td>Range -1 to +1. Shifts all ramp colors around the color wheel. 0 leaves the hue unchanged.</td></tr>
-            <tr><td><strong>Saturation</strong></td><td>Range -1 to +1. Negative values reduce color intensity, 0 leaves it unchanged, and positive values make colors more saturated.</td></tr>
-            <tr><td><strong>Brightness</strong></td><td>Range -1 to +1. Darkens or brightens all ramp colors together while keeping their relative arrangement.</td></tr>
-            <tr><td><strong>Reset</strong></td><td>Restores the ramp to the state it was in before the current transform was started. This also preserves any manual ramp editing that had already been done before using the transform sliders.</td></tr>
-        </tbody>
-    </table>
-
-    <div class="tip"><strong>Example - Dry Grass:</strong> Duplicate the finished grass biome, rename the copy to “Dry Grass”, move Hue toward yellow/brown, lower Saturation slightly, then adjust Brightness if required. The underlying texture set can remain the same.</div>
-
-    <!-- SURFACE SETTINGS -->
-    <h2 id="surface-settings">5. Surface Appearance Settings</h2>
-    <p>These controls change how the selected biome appears in the scene. Most changes can be previewed immediately.</p>
-
-    <table>
-        <thead><tr><th style="width: 27%;">Property</th><th style="width: 18%;">Range</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><strong>Scale</strong></td><td>0.1 - 10</td><td>Controls how frequently the surface detail repeats across the terrain. Increase it for smaller, more frequent detail; decrease it for larger-looking texture features.</td></tr>
-            <tr><td><strong>AO Strength</strong></td><td>0 - 1</td><td>Controls the strength of the biome's ambient shadowing. Lower values flatten crevice shading; higher values make recessed detail read more strongly.</td></tr>
-            <tr><td><strong>Parallax</strong></td><td>0 - 2</td><td>Controls perceived surface depth. 0 is flat, 1 is the normal/default amount, and values above 1 exaggerate the depth.</td></tr>
-            <tr><td><strong>Normal</strong></td><td>0 - 2</td><td>Shown when a Normal map is assigned. 0 removes normal-map relief, 1 uses the normal amount, and higher values strengthen it.</td></tr>
-            <tr><td><strong>Smoothness</strong></td><td>0 - 1 or 0 - 2</td><td>Controls glossiness. When a smoothness source texture exists, values above 1 can boost the texture response.</td></tr>
-            <tr><td><strong>Metallic</strong></td><td>0 - 1 or 0 - 2</td><td>Controls metallic response. When a metallic source texture exists, values above 1 can boost the mapped response.</td></tr>
-            <tr><td><strong>Emissive</strong></td><td>0 - 1</td><td>Controls glow intensity for the biome's emissive regions.</td></tr>
-            <tr><td><strong>Pulse</strong></td><td>On / Off</td><td>Enables rhythmic emissive pulsing for the biome.</td></tr>
-            <tr><td><strong>Priority</strong></td><td>0 - 100</td><td>Used when determining which surface type should take precedence for gameplay-facing surface data such as footsteps, VFX, decals or physics. Higher values have greater priority.</td></tr>
-            <tr><td><strong>Anti-Tiling</strong></td><td>0 - 1</td><td>Breaks up obvious repetition. Start low and increase only as much as needed.</td></tr>
-            <tr><td><strong>Seam Blend</strong></td><td>0 - 1</td><td>Controls blending across difficult projection changes such as cliffs, cave entrances and sharp terrain angles. 0 is a hard transition; 1 applies full blending.</td></tr>
-        </tbody>
-    </table>
-
-    <div class="tip"><strong>Adjustment order:</strong> Get <strong>Scale</strong> right first, then tune <strong>Normal</strong> and <strong>Parallax</strong>, then adjust <strong>AO / Smoothness / Metallic</strong>. Use <strong>Anti-Tiling</strong> and <strong>Seam Blend</strong> after the basic surface already looks correct.</div>
-
-    <!-- VARIANTS -->
-    <h2 id="variants">6. Duplicating Biomes & Making Variants</h2>
-    <p>Duplicate is intended for creating new looks from an existing biome without needlessly importing another full texture set.</p>
-
-    <ol>
-        <li>Finish the original biome first.</li>
-        <li>Click <strong>Duplicate</strong>.</li>
-        <li>Rename the copy so its purpose is clear.</li>
-        <li>Use <strong>Ramp Transform</strong>, Smoothness, Metallic, AO, Parallax, Scale or other appearance settings to create the new look.</li>
-        <li>Only assign different source textures when the new biome genuinely needs different texture detail.</li>
-    </ol>
-
-    <div class="perf"><strong>Performance:</strong> Compatible duplicated biomes automatically reuse the same underlying texture data where possible. Their small per-biome appearance settings remain independent, allowing many visual variants without requiring a full duplicate of every source texture.</div>
-
-    <div class="note"><strong>Examples:</strong> Lush Grass &rarr; Dry Grass / Autumn Grass / Dark Grass; Stone &rarr; Warm Stone / Frosted Stone / Volcanic Stone; Sand &rarr; Wet Sand / Pale Sand / Red Desert Sand.</div>
-
-    <!-- MERGE -->
-    <h2 id="merge">7. Merging Two Biomes</h2>
-    <p>Select exactly two terrain biomes to display the Merge Biomes controls. A merge creates a <strong>new biome</strong>; the two source biomes are left unchanged.</p>
-
-    <table>
-        <thead><tr><th style="width: 30%;">Property</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><strong>Mix Ratio</strong></td><td>Controls the balance between the two source biomes. The range keeps at least 10% of each source so the minority material is not completely lost.</td></tr>
-            <tr><td><strong>Blend Softness</strong></td><td>Controls how wide the transition is where one material meets the other. 0 gives sharper boundaries; 1 gives broader blending.</td></tr>
-            <tr><td><strong>Patch Size</strong></td><td>Controls the overall scale of the generated material regions. Higher values create larger patches; lower values create smaller, busier areas.</td></tr>
-            <tr><td><strong>Irregularity</strong></td><td>Controls the shape of the patches. Lower values are smoother and rounder; higher values create more warped, varied boundaries.</td></tr>
-            <tr><td><strong>Merge into New Biome</strong></td><td>Creates the merged biome using the current settings. Repeating a merge creates a separate biome so different combinations can be compared safely.</td></tr>
-        </tbody>
-    </table>
-
-    <div class="tip"><strong>Natural-looking mixes:</strong> If the result feels too noisy, increase Patch Size and/or reduce Irregularity. If the border between materials is too hard, raise Blend Softness. If one material dominates too much, move Mix Ratio back toward the center.</div>
-
-    <div class="warning"><strong>Merged biomes are different from simple duplicates.</strong> A merge creates genuinely new combined surface data, so it should be treated as its own authored biome rather than as a cheap color-only variation.</div>
-
-    <!-- DIRECT MODE -->
-    <h2 id="direct-mode">8. Direct Vertex Biomes</h2>
-    <p>Direct Vertex Color mode is the lightweight alternative to texture-based Terrain Atlas biomes. Instead of using a source texture set, each biome is primarily driven by a direct color and its surface settings.</p>
-
-    <table>
-        <thead><tr><th style="width: 30%;">Property</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><strong>Direct RGB</strong></td><td>The base color painted directly into the terrain's vertex data.</td></tr>
-            <tr><td><strong>Auto Seam Blend</strong></td><td>Allows the tool to soften biome boundaries automatically where appropriate.</td></tr>
-            <tr><td><strong>Smoothness</strong></td><td>Controls whether the surface reads as matte or glossy.</td></tr>
-            <tr><td><strong>Metallic</strong></td><td>Controls the metallic response of the biome.</td></tr>
-            <tr><td><strong>AO Strength</strong></td><td>Controls ambient shadowing strength.</td></tr>
-            <tr><td><strong>Parallax</strong></td><td>Controls the amount of surface depth used by the active terrain material setup.</td></tr>
-            <tr><td><strong>Emissive / Pulse</strong></td><td>Controls glow strength and optional pulsing.</td></tr>
-            <tr><td><strong>Scale</strong></td><td>Controls the biome's detail scale where applicable.</td></tr>
-        </tbody>
-    </table>
-
-    <div class="note"><strong>When to use Direct Vertex Color:</strong> Choose it when you want a very lightweight stylized color workflow and do not need a unique texture set for each terrain surface.</div>
-
-    <!-- OPTIMIZATION -->
-    <h2 id="optimization">9. Library Quality & Optimization</h2>
-
-    <h3>Texture Array Export Settings</h3>
-    <p>The Biome Library also contains export settings for the compiled terrain textures. These are advanced project-wide settings rather than per-biome art controls.</p>
-
-    <table>
-        <thead><tr><th style="width: 30%;">Property</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><strong>Compile Resolution</strong></td><td><strong>Auto</strong> chooses an appropriate shared resolution from the supplied biome textures. Manual options are available from 256 up to 8192 when a project needs an explicit target.</td></tr>
-            <tr><td><strong>Compression Mode</strong></td><td>Choose high-quality compressed output to reduce memory use, or uncompressed RGBA32 when maximum source fidelity is more important than memory.</td></tr>
-            <tr><td><strong>Generate Mipmaps</strong></td><td>Normally recommended for terrain viewed at different distances. Mipmaps reduce distant texture shimmer and improve texture sampling at range.</td></tr>
-        </tbody>
-    </table>
-
-    <div class="perf"><strong>Keep variants cheap:</strong> If two biomes use the same texture set, duplicate the biome and change its ramp/settings rather than making another copy of those texture files. The system can reuse compatible texture data automatically.</div>
-
-    <div class="perf"><strong>Resolution:</strong> Higher is not always better. Choose enough resolution for the closest expected camera distance. Very high-resolution source maps increase memory and compilation time even when the visible improvement is small.</div>
-
-    <div class="perf"><strong>Anti-Tiling:</strong> Use only as much as required to hide repetition. It is an artistic correction, not a substitute for choosing a sensible texture scale.</div>
-
-    <!-- TROUBLESHOOTING -->
-    <h2 id="troubleshooting">10. Troubleshooting Notes</h2>
-
-    <div class="troubleshooting-q">"Auto Folder did not detect one of my maps."</div>
-    <div class="troubleshooting-a">Check that the filename contains a recognizable description such as Albedo/BaseColor, Normal, Height, Metallic, Roughness/Smoothness, AO or Emissive. If the source uses an unusual naming convention, assign that texture manually in the Biome Inspector.</div>
-
-    <div class="troubleshooting-q">"Auto Generate says I need a Source RGB texture."</div>
-    <div class="troubleshooting-a">Assign the biome's Albedo/Base Color texture to <strong>Source RGB</strong>, then run Auto Generate again.</div>
-
-    <div class="troubleshooting-q">"Raised areas look sunken, or cracks look raised."</div>
-    <div class="troubleshooting-a">Toggle <strong>Invert Height</strong>. If a Source RGB texture is assigned, the biome will regenerate using the corrected height direction.</div>
-
-    <div class="troubleshooting-q">"The automatically generated colors are close, but I want to art-direct them."</div>
-    <div class="troubleshooting-a">Edit individual Color Ramp keys for precise changes. For a broad color shift across the whole ramp, use <strong>Hue, Saturation and Brightness</strong> in Ramp Transform instead.</div>
-
-    <div class="troubleshooting-q">"I used Ramp Transform and want my manually edited ramp back."</div>
-    <div class="troubleshooting-a">Click <strong>Reset</strong>. It restores the ramp to the state captured before the current transform, including manual edits that existed before the sliders were moved.</div>
-
-    <div class="troubleshooting-q">"My packed PBR texture gives strange metallic or smoothness results."</div>
-    <div class="troubleshooting-a">Check <strong>PBR Mode</strong> is set to Packed Texture and confirm the <strong>Mapping</strong> matches the source package. If using separate maps instead, switch to Separate Textures and assign them individually.</div>
-
-    <div class="troubleshooting-q">"My roughness texture looks backwards."</div>
-    <div class="troubleshooting-a">In Separate Textures mode, enable the <strong>Roughness</strong> checkbox when the supplied map stores roughness rather than smoothness.</div>
-
-    <div class="troubleshooting-q">"The normal detail is too weak or too strong."</div>
-    <div class="troubleshooting-a">Adjust the <strong>Normal</strong> slider. 1 is the standard strength, 0 removes the normal-map effect, and values above 1 strengthen it.</div>
-
-    <div class="troubleshooting-q">"The surface looks too flat."</div>
-    <div class="troubleshooting-a">First check that a useful Source Height / Generated Tex exists. Then increase <strong>Parallax</strong> gradually. Also confirm Scale is sensible before exaggerating the depth.</div>
-
-    <div class="troubleshooting-q">"The texture repeats too obviously."</div>
-    <div class="troubleshooting-a">Adjust <strong>Scale</strong> first so the material is physically believable, then increase <strong>Anti-Tiling</strong> until the repeating pattern is less noticeable.</div>
-
-    <div class="troubleshooting-q">"I can see a transition line on cliffs or around cave entrances."</div>
-    <div class="troubleshooting-a">Increase <strong>Seam Blend</strong>. If the seam remains, check that the relevant Normal and source textures are assigned correctly and that the terrain has been updated after the change.</div>
-
-    <div class="troubleshooting-q">"My merged biome looks too spotty or noisy."</div>
-    <div class="troubleshooting-a">Increase <strong>Patch Size</strong>, lower <strong>Irregularity</strong>, or increase <strong>Blend Softness</strong>. These three controls have the largest effect on the overall shape and readability of the merge.</div>
-
-    <div class="troubleshooting-q">"I duplicated a biome just to make a different color. Will that duplicate all the heavy textures?"</div>
-    <div class="troubleshooting-a">Not when the duplicate continues to use the same compatible source texture set. Duplicated variants can reuse the underlying texture data while keeping their own ramp and appearance settings.</div>
-
-    <div class="troubleshooting-q">"I changed a source texture and the duplicate no longer behaves like the original."</div>
-    <div class="troubleshooting-a">That is expected. A duplicate only remains a lightweight variation while it continues to share the same source texture set. Assigning different detail, normal or PBR sources makes it a genuinely different surface.</div>
-
-    <hr class="divider">
-    <h2 id="support">Support, Contact & Custom Integration</h2>
-
-    <p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form. This is the primary and most reliable way to get help with any problems you encounter with the packages.</p>
-
-    <p>You can also use this form to inquire about custom freelance technical art services. If your project requires external 3D models or terrain content to be integrated into the DPT ecosystem, get in touch to discuss your specific requirements and availability.</p>
-
-    <div class="note">
-        <strong>Email Contact:</strong><br>
-        For troubleshooting, bug reports, publisher licensing, and freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
-    </div>
-
-    <div class="note">
-        <strong>DPT Community Discord:</strong><br>
-        While the contact form is the best way to get direct help with issues, you are also welcome to join the <strong><a href="https://discord.gg/EkQykfzP5X" target="_blank">Discord Server</a></strong> to share feedback and connect with other users.
-    </div>
-</body>
-</html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Create reusable surfaces and understand how textures, colours and blend settings work together."><link rel="alternate" hreflang="en" href="biomes.html"><link rel="alternate" hreflang="ja" href="ja/biomes.html"><title>Biomes Guide | DPT Games</title><style>
+:root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
+main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
+.site-nav{display:flex;flex-wrap:wrap;gap:8px 20px;border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:32px;font-size:.92rem}.site-nav [aria-current]{color:white;font-weight:700}
+.language-nav{display:flex;gap:10px;flex-wrap:wrap;margin:-12px 0 28px}.language-nav a{display:inline-block;padding:6px 16px;border:1px solid var(--border);border-radius:6px;text-decoration:none}.language-nav [aria-current]{color:#0f172a;background:var(--accent);border-color:var(--accent);font-weight:700}html[lang="ja"] body{line-height:1.85;line-break:strict}html[lang="ja"] th,html[lang="ja"] td{overflow-wrap:anywhere}
+h1,h2,h3,h4{line-height:1.25;color:var(--accent)}h1{font-size:2.25rem;margin:0 0 14px}h2{font-size:1.65rem;margin:48px 0 18px;padding-top:12px;border-top:1px solid var(--border)}h3{font-size:1.22rem;margin:30px 0 12px}h4{font-size:1.06rem}
+p{margin:12px 0 18px}li{margin:7px 0}ul,ol{padding-left:25px}.lead{font-size:1.18rem;color:var(--muted);max-width:850px}.intro{margin:28px 0}.toc{background:var(--panel);padding:20px 24px;border:1px solid var(--border);border-radius:9px;margin:28px 0}.toc h2{margin:0 0 10px;padding:0;border:0;font-size:1.15rem}.toc ul{columns:2;column-gap:36px;margin:0}.toc li{break-inside:avoid}
+.callout,.example{background:var(--panel);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:14px 20px;margin:22px 0}.example{border-color:#a3e635}.callout p:last-child,.example p:last-child{margin-bottom:0}.callout p:first-child,.example p:first-child{margin-top:0}
+.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--border);border-radius:7px}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--border)}thead{background:#25354c}th{color:#f8fafc}td:first-child{font-weight:600;min-width:145px}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#172238}
+code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background:#27354c;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}kbd{white-space:nowrap;border:1px solid #50617a}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#09111f;border:1px solid var(--border);padding:20px;border-radius:7px}pre code{background:transparent;padding:0}
+.back-top{font-size:.88rem}.table-hint{display:none;color:var(--muted);font-size:.9rem}.footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);margin-top:34px;padding-top:16px}details{background:var(--panel);padding:14px 18px;border:1px solid var(--border);border-radius:7px;margin:16px 0}summary{cursor:pointer;font-weight:600;color:var(--accent)}.alias{display:block;scroll-margin-top:24px}
+@media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
+@media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
+</style></head>
+<body><main id="top"><nav class="site-nav" aria-label="Documentation"><a href="https://dptgames.github.io/">DPT Games homepage</a><a href="index.html">Vertex 3D Terrain Guide</a><a href="biomes.html" aria-current="page">Biomes Guide</a><a href="terrain-material-settings.html">Terrain Material Settings</a><a href="demo-components.html">Demo & Runtime Guide</a></nav><nav class="language-nav" aria-label="Language"><a href="biomes.html" lang="en" hreflang="en" aria-current="page">English</a><a href="ja/biomes.html" lang="ja" hreflang="ja">日本語</a></nav><header><h1>Biomes Guide</h1><p class="lead">Create reusable surfaces and understand how textures, colours and blend settings work together.</p></header><nav class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#quick-start">Create a useful first biome</a></li><li><a href="#creating-biomes">The library and biome inspector</a></li><li><a href="#texture-inputs">Which texture goes in which field?</a></li><li><a href="#color-ramp">Colour ramps and ramp transforms</a></li><li><a href="#surface-settings">Understand each surface setting</a></li><li><a href="#variants">Make variants without losing a good preset</a></li><li><a href="#merge">Merge two surfaces into a new biome</a></li><li><a href="#direct-mode">Biomes in Direct Vertex Color</a></li><li><a href="#optimization">Texture quality, memory and shared assets</a></li><li><a href="#troubleshooting">Common biome problems</a></li><li><a href="#support">Support</a></li></ul></nav><p class="table-hint">On a small screen, scroll wide tables sideways to read every column.</p><div class="intro"><p>A biome is one reusable ground surface: grass, sand, snow, rock, metal, or another look you create. Painting chooses where that surface appears. The biome inspector chooses what the surface looks like.</p><p>A biome is not a terrain generator or a vegetation system. Naming a preset “Forest” does not place trees, and naming one “River” does not create flowing water geometry. You can use the presets as building blocks for those scenes.</p></div>
+
+<h2 id="quick-start">Create a useful first biome</h2>
+<ol><li>Choose a Biome Library and the Terrain Atlas pipeline in the terrain editor.</li><li>Add a biome and give it a clear name, such as Dry Sand or Dark Rock.</li><li>Assign its base-colour image to <strong>Source RGB</strong>. If you have a compatible texture set, Auto Folder can help populate its inputs; check each assignment afterwards.</li><li>For a first test, keep normal, metallic and emissive detail restrained. Set the generation strengths you want before using <strong>Auto Generate</strong>. A strength of zero excludes that generated map.</li><li>Check the generated texture and colour ramp. Paint a test patch large enough to inspect at your expected camera distance.</li><li>Adjust Scale for the texture size, then the ramp for colour. Add normal and PBR inputs if your surface needs them.</li><li>Inspect it in both light and shade, from close up and farther away. Duplicate the biome before experimenting with a very different look.</li></ol>
+<div class="example"><p><strong>Start with one clear goal:</strong> for matte sand, first get the colour and grain size right. Then add a modest normal effect. Keep metallic at zero and smoothness low. It is easier to judge each setting when you change one thing at a time.</p></div>
+
+<h2 id="creating-biomes">The library and biome inspector</h2>
+<p>The library is the palette shared by your terrain objects. The inspector edits the selected preset. Choose a biome card to see its settings; selecting several cards opens shared editing controls. A mixed-value field means the selected presets currently have different values.</p>
+<div class="table-wrap"><table><thead><tr><th>Action</th><th>What it does</th><th>When to use it</th></tr></thead><tbody>
+<tr><td>Add</td><td>Creates a new preset in the current pipeline’s list.</td><td>Use for a new surface that does not already have a suitable starting point.</td></tr>
+<tr><td>Biome Name</td><td>A human-readable label for the preset.</td><td>Use names that describe the appearance. User-created names are kept as entered when you change the editor language.</td></tr>
+<tr><td>Auto Folder</td><td>Helps find related texture inputs in the selected source’s folder.</td><td>Useful for an organised texture set. Verify the results, especially roughness versus smoothness and packed-channel layout.</td></tr>
+<tr><td>Duplicate</td><td>Copies the preset’s settings while retaining references to its source textures.</td><td>Make a lighter, darker, wetter-looking or differently rotated variant without importing the same files again.</td></tr>
+<tr><td>Delete</td><td>Removes a preset and updates the library’s indexing.</td><td>Check any separately stored biome IDs in gameplay components and rebake surface data where necessary.</td></tr>
+<tr><td>Reorder / swap</td><td>Changes the palette’s order and therefore its numeric IDs.</td><td>Organise the palette, then recheck explicit IDs used outside the editor workflow.</td></tr>
+<tr><td>Multi-selection</td><td>Lets you apply shared settings to several selected presets.</td><td>Adjust a family of rocks together. Changing a mixed field gives the selected presets the value you enter.</td></tr>
+</tbody></table></div>
+<p><strong>Names and IDs are different.</strong> A name helps you recognise a surface; an ID is its position in the current pipeline’s list. ID 6 might be snow in a demo library and rock in yours. Always read the IDs from your current library before configuring live slots or gameplay scripts.</p>
+<p>Editing a shared library can change several terrains at once. Use the terrain tool’s standalone-copy workflow when one result should keep its own material and texture assets.</p>
+
+<h2 id="texture-inputs">Which texture goes in which field?</h2>
+<p>Different images describe different parts of a surface. You do not need every map for every biome. A plain stylised surface may only need a colour source and a good ramp; a more detailed surface may benefit from normal and PBR maps.</p>
+<div class="table-wrap"><table><thead><tr><th>Input</th><th>What the image contains</th><th>What it changes</th></tr></thead><tbody>
+<tr><td>Source RGB</td><td>The original coloured base image, often called base colour, albedo or diffuse.</td><td>Provides source colour information for generating the biome’s detail and ramp. The finished surface is not simply this image pasted unchanged onto the mesh.</td></tr>
+<tr><td>Generated</td><td>The processed detail texture used by the terrain system.</td><td>Works with the ramp to produce the surface detail. Assign a suitable existing generated texture here only when you intend to supply that processed input yourself.</td></tr>
+<tr><td>Source Height</td><td>A greyscale image describing high and low parts of the material.</td><td>Feeds the generated height/detail workflow. It can support the illusion of relief and blending, but does not raise terrain vertices.</td></tr>
+<tr><td>Invert Height</td><td>Reverses which end of the source is treated as high or low.</td><td>Useful if crevices look raised or raised details look recessed. Compare a small patch before and after.</td></tr>
+<tr><td>Normal</td><td>A tangent-space normal map, usually with blue/purple colours.</td><td>Changes how small bumps catch the light. Import it as a Normal Map in Unity. It does not change collision or silhouette.</td></tr>
+<tr><td>AO</td><td>An ambient-occlusion map: sheltered areas are darker.</td><td>Adds material-scale shading in crevices. This is separate from baking geometry AO on a Direct Vertex Color terrain.</td></tr>
+<tr><td>Metallic</td><td>A mask showing which parts behave as metal.</td><td>Changes the material response. Most grass, soil, snow and stone should have little or no metallic response.</td></tr>
+<tr><td>Smoothness / Roughness</td><td>A map describing how polished or rough different parts are.</td><td>Changes the spread of highlights. Smoothness and roughness run in opposite directions; enable the roughness interpretation when that is the map you have.</td></tr>
+<tr><td>Emissive</td><td>A mask for areas that should glow.</td><td>Works with the emissive controls and compiled surface data. Use a defined glow mask for cracks or veins; emission does not create a light source for nearby objects by itself.</td></tr>
+<tr><td>Packed PBR</td><td>Several material masks stored in separate colour channels of one image.</td><td>Supplies multiple inputs through a single file. The channel mapping must match how the image was authored.</td></tr>
+</tbody></table></div>
+<h3>Separate textures or packed PBR?</h3>
+<p>Use <strong>Separate Textures</strong> when you have individual AO, metallic and smoothness/roughness maps. Use <strong>Packed Texture</strong> when the supplier has combined those masks into one image. The filename alone is not enough to establish its channel layout; check the texture set’s specification.</p>
+<div class="table-wrap"><table><thead><tr><th>Mapping</th><th>Red channel</th><th>Green channel</th><th>Blue channel</th><th>Alpha channel</th></tr></thead><tbody>
+<tr><td>Standard Unity MRAO</td><td>Metallic</td><td>AO</td><td>Not used for these masks</td><td>Smoothness</td></tr>
+<tr><td>Standard Unity MRAR</td><td>Metallic</td><td>AO</td><td>Not used for these masks</td><td>Roughness, inverted to smoothness</td></tr>
+<tr><td>Unreal ORM</td><td>AO</td><td>Roughness, inverted to smoothness</td><td>Metallic</td><td>Not used for these masks</td></tr>
+<tr><td>Custom</td><td>Metallic</td><td>Smoothness</td><td>AO</td><td>Not used for these masks</td></tr>
+</tbody></table></div>
+<p>Here, <strong>Custom</strong> means the listed fixed layout; it does not open a free-form channel picker. If your texture uses another layout, repack it or use separate source maps.</p>
+<h3>What Auto Generate changes</h3>
+<p>Auto Generate builds the processed surface inputs and the colour ramp from the source setup. The current Normal, AO, Smoothness, Metallic, Emissive and Parallax strengths influence what is generated; zero excludes the relevant map. Assigning a new Source RGB can also initialise generated detail and ramp information.</p>
+<p>Set your intended strengths first, generate, then inspect. If you excluded a map during generation and later decide you need it, regenerate from a suitable source. A shader multiplier cannot reveal useful detail that was never included.</p>
+<div class="callout"><p><strong>Before regenerating a finished biome:</strong> duplicate it if you want to keep its authored ramp. Auto Generate can replace colour work you made by hand. The ramp transform’s Reset button is not a general undo for all generation and texture assignments.</p></div>
+
+<h2 id="color-ramp">Colour ramps and ramp transforms</h2>
+<p>The colour ramp maps the biome’s detail values to colours. Its left side colours the darker or lower-valued parts of that detail; its right side colours the brighter or higher-valued parts. It can turn one rock detail source into brown sandstone, cold grey stone or a stylised blue surface.</p>
+<p>This is <strong>not a world-altitude gradient</strong>. Putting white at the right end does not automatically put snow on mountain peaks. Use the terrain’s <a href="index.html#gradients">Gradient tool</a> for a rule based on terrain height or slope.</p>
+<ol><li>Open the ramp editor and adjust the colour keys.</li><li>Use a dark colour for recessed detail and a lighter colour for highlighted detail as a starting point.</li><li>Add intermediate keys when the material needs several colour bands.</li><li>Compare the painted surface under normal scene lighting. A very narrow bright band can produce speckled highlights.</li><li>Enable Fixed for stepped colour changes, or leave it off for smooth transitions.</li></ol>
+<div class="table-wrap"><table><thead><tr><th>Transform</th><th>What it does</th><th>Starting point</th></tr></thead><tbody>
+<tr><td>Hue</td><td>Rotates the colours around the hue wheel. The range −1 to +1 corresponds to approximately −180° to +180°.</td><td>0 preserves the captured ramp’s hue. Small changes make related variants.</td></tr>
+<tr><td>Saturation</td><td>Reduces or increases colour intensity relative to the captured ramp.</td><td>0 preserves it; −1 removes colour; +1 doubles saturation before the colour limits are applied.</td></tr>
+<tr><td>Brightness</td><td>Darkens or lightens the ramp colours, subject to colour limits.</td><td>0 preserves the captured brightness. Try small changes rather than moving directly to an extreme.</td></tr>
+<tr><td>Reset</td><td>Restores the ramp baseline captured for the transform operation.</td><td>Use to undo those transform adjustments. It does not necessarily restore the original imported texture’s first generated ramp.</td></tr>
+</tbody></table></div>
+<p>Ramp transforms preserve the keys’ positions and alpha. If you want to change which detail values receive a colour, move or add keys rather than only changing Hue or Brightness.</p>
+<div class="example"><p><strong>Rock variation:</strong> duplicate a grey rock biome. Make one copy slightly warmer and darker using the ramp transforms. Keep their texture scale similar and rotate one copy by 90°. Painting both creates variation while retaining a consistent type of rock.</p></div>
+
+<h2 id="surface-settings">Understand each surface setting</h2>
+<p>These controls belong to the selected biome. The material has another set of global controls that can affect many biomes together. Get the individual surface looking right before using a global multiplier to change the entire terrain.</p>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>Lower value</th><th>Higher value</th><th>Useful guidance</th></tr></thead><tbody>
+<tr><td>Scale: 0.02–10</td><td>Larger-looking texture features and less frequent repetition.</td><td>Smaller-looking features and more repeats.</td><td>This is texture tiling, not the GameObject’s size. Compare it next to a character or another known-size object.</td></tr>
+<tr><td>Normal: 0–2</td><td>Flatter-looking lighting detail.</td><td>More pronounced lighting bumps.</td><td>The control is relevant when a normal source is assigned. Strong normals can make a surface noisy without improving the mesh shape.</td></tr>
+<tr><td>AO Strength: 0–1</td><td>Less material crevice shading.</td><td>Stronger crevice shading.</td><td>Avoid using AO to fix a lighting problem across the entire scene.</td></tr>
+<tr><td>Parallax: 0–2</td><td>Less apparent relief; zero removes that contribution.</td><td>Deeper-looking surface detail.</td><td>Inspect at a shallow viewing angle. It does not create steps, holes or collision depth.</td></tr>
+<tr><td>Smoothness</td><td>Broader, rougher-looking highlights.</td><td>Tighter, more polished highlights.</td><td>Without a map the range is 0–1; with a map it extends to 2. Around 1 preserves the mapped response; values above 1 push it toward a more uniformly smooth result.</td></tr>
+<tr><td>Metallic</td><td>Less metal-like response.</td><td>More metal-like response.</td><td>Without a map the range is 0–1; with a map it extends to 2. Above 1 expands the metal response rather than behaving as a simple neutral map multiplier.</td></tr>
+<tr><td>Emissive: 0–1</td><td>Less glow.</td><td>Stronger glow from the emissive setup.</td><td>Check the source mask and material’s emissive strength if it does nothing. Bloom is a separate scene/post-processing choice.</td></tr>
+<tr><td>Pulse</td><td>Off keeps the biome’s emission steady.</td><td>On enables its pulse behaviour.</td><td>Use for an animated glow. The runtime demo’s Slot 4 pulse is a separate material-control example.</td></tr>
+<tr><td>Rotation: 0°, 90°, 180°, 270°</td><td colspan="2">Changes the orientation of the biome’s texture detail.</td><td>Useful for matching a direction or varying copies of the same texture. It does not rotate the terrain mesh.</td></tr>
+<tr><td>Anti-Tiling: 0–1</td><td>Less procedural variation; zero removes this biome’s anti-tiling contribution.</td><td>More variation to disguise repeated detail.</td><td>Combine it with the material’s patch and colour controls. Excessive variation can obscure an intentional directional pattern.</td></tr>
+<tr><td>Seam Blend: 0–1</td><td>Less blending between texture projections.</td><td>Softer joins between projections.</td><td>Use for a visible projection transition. It cannot weld vertices or close a gap between terrain objects.</td></tr>
+<tr><td>Priority: 0–100</td><td>Lower preference when baking a representative gameplay biome.</td><td>Greater preference among sufficiently represented candidates.</td><td>It does not make the biome render in front. The static bake considers candidates with at least about 10% coverage; live weight-based queries use a different selection rule.</td></tr>
+</tbody></table></div>
+<p><strong>Keep visual and gameplay settings separate.</strong> Changing Priority may change the representative biome returned from baked surface data without changing the visible blend. If you use surface-based footsteps or effects, inspect the baked result with the raycast tester.</p>
+
+<h2 id="variants">Make variants without losing a good preset</h2>
+<p>Duplicate is the safest starting point for a related surface. The copies have their own settings while sharing references to their source images. Compatible copies can reuse compiled source data; you do not need a separate image import merely to change the ramp or rotation.</p>
+<ul><li><strong>Dry versus wet-looking rock:</strong> keep the source detail, darken the ramp slightly and increase smoothness on the wet-looking copy. This is an appearance change, not a physical wetness simulation.</li><li><strong>Clean versus worn stone:</strong> use the same base detail with different colours and restrained changes to normal/parallax.</li><li><strong>Repeated material with variation:</strong> create a few related ramps and rotations, then paint a weighted mix rather than duplicating an identical-looking preset many times.</li></ul>
+<p>When changing a setting for several variants, use multi-selection. Check which fields are mixed before editing them so you do not accidentally erase useful differences.</p>
+
+<h2 id="merge">Merge two surfaces into a new biome</h2>
+<p>Merge creates a new generated surface from <strong>exactly two selected biomes</strong>. It is useful when you want a reusable composite, such as stone with soil patches, rather than painting the two biomes separately everywhere. The source presets remain available.</p>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>Meaning</th><th>How to judge it</th></tr></thead><tbody>
+<tr><td>Mix Ratio: 0.1–0.9</td><td>The balance between the two inputs.</td><td>Near the middle gives a more balanced mix; moving toward an end favours one source. Check the preview to confirm which source is increasing.</td></tr>
+<tr><td>Softness: 0–1</td><td>How gradually the source patches meet.</td><td>Low values make distinct patches; high values soften their edges.</td></tr>
+<tr><td>Patch size</td><td>The size of the mixed regions.</td><td>Larger regions read as broad material patches; smaller regions read as scattered detail.</td></tr>
+<tr><td>Irregularity</td><td>How uneven the patch shapes are.</td><td>Use restrained values for rounded patches and higher values for more broken or jagged boundaries.</td></tr>
+</tbody></table></div>
+<p>Inspect the merged surface at its actual tiling scale. A pleasing preview may look busy when tiled tightly across a terrain. Use ordinary biome painting instead if you need to control exactly where the two source surfaces meet on the landform.</p>
+
+<h2 id="direct-mode">Biomes in Direct Vertex Color</h2>
+<p>Direct Vertex Color is a colour-based workflow with its own preset list. Use the biome’s base colour and the available direct-pipeline controls to build the look. The colours are stored with the mesh, so vertex density determines how detailed a painted transition can be.</p>
+<p>A texture normal, packed PBR image or parallax illusion from Terrain Atlas should not be expected to carry over as the same textured appearance. Choose this pipeline because you want its colour-based result, then inspect it under your scene lighting.</p>
+<p>For additional contact shading, use the Direct Vertex Color AO baker after finishing the major geometry. See <a href="index.html#section-four">saving and optimisation</a> for that workflow.</p>
+
+<h2 id="optimization">Texture quality, memory and shared assets</h2>
+<p>The library compiles source inputs into textures used by the terrain material. The compilation settings balance sharpness, memory use and platform support.</p>
+<div class="table-wrap"><table><thead><tr><th>Option</th><th>Effect</th><th>Practical choice</th></tr></thead><tbody>
+<tr><td>Resolution</td><td>Sets the compiled texture size, with Auto and explicit sizes from 256 up to 8192.</td><td>Start with a moderate size and inspect from the game camera. Higher resolution costs more memory; it cannot invent detail absent from the source.</td></tr>
+<tr><td>Compression</td><td>Uses the selected compiled format, including high-quality compressed options or RGBA32.</td><td>Compare detail and colour quality on the target platform. Uncompressed output generally uses more memory.</td></tr>
+<tr><td>Mipmaps</td><td>Provides lower-resolution versions for smaller on-screen texture detail.</td><td>Usually useful for terrain viewed over a range of distances. Compare distant shimmer and sharpness when changing this option.</td></tr>
+<tr><td>Unique sources</td><td>Different source sets can require additional compiled data.</td><td>Reuse a source for related variants where appropriate. Check actual compiled assets rather than estimating cost only from the number of biome cards.</td></tr>
+</tbody></table></div>
+<p>Library editing refreshes compiled data through the tool’s normal workflow. If the material appears out of sync, use Compile Terrain Textures and confirm that the terrain uses the intended library/material. Rebaking gameplay surface data is a different operation; compiling textures does not update a stale triangle-to-biome bake.</p>
+
+<h2 id="troubleshooting">Common biome problems</h2>
+<div class="table-wrap"><table><thead><tr><th>Problem</th><th>Likely checks</th></tr></thead><tbody>
+<tr><td>The imported colours do not match the finished surface</td><td>Check the generated detail and ramp. The source RGB feeds generation, while the ramp controls the resulting palette. Also inspect scene lighting and material multipliers.</td></tr>
+<tr><td>Raised details look recessed</td><td>Compare Invert Height, check the height source and reduce exaggerated parallax while testing.</td></tr>
+<tr><td>The surface is shiny or metallic everywhere</td><td>Check the PBR mapping, roughness interpretation and slider values. In mapped mode, values above 1 push toward a more uniform response.</td></tr>
+<tr><td>Normal detail is missing</td><td>Check the normal assignment/import type, biome strength, generation setup, global normal strength and normal fade controls.</td></tr>
+<tr><td>Auto Generate removed my colours</td><td>It can rebuild the ramp. Undo the generation if available or return to a saved/duplicated preset. Duplicate before regenerating an authored ramp.</td></tr>
+<tr><td>A colour ramp does not create a snow line</td><td>Use the terrain Gradient tool. The biome ramp colours local detail; it does not select terrain by world height.</td></tr>
+<tr><td>The pattern repeats obviously</td><td>Check Scale, enable the biome’s Anti-Tiling and adjust the material’s variation controls. Try related rotated/ramp variants as well.</td></tr>
+<tr><td>A map looks wrong after using Auto Folder</td><td>Verify every detected input and the packed-channel layout. A roughness map interpreted as smoothness reverses the intended result.</td></tr>
+<tr><td>Changing Priority does not change the visible surface</td><td>Priority is for choosing a representative baked gameplay biome. It is not a visual layer-order setting.</td></tr>
+<tr><td>A runtime effect changes the wrong surface</td><td>Recheck current biome IDs after adding, deleting or reordering presets. The demo’s example IDs are not names or universal constants.</td></tr>
+</tbody></table></div>
+<h2 id="support">Support</h2><p>If you need help, describe the result you expected, the control you used, and what appeared instead. Include your Unity version, the selected surface pipeline, and a screenshot of the relevant settings. For a runtime query problem, also include the collider type and when you last baked surface data.</p><p>Use the <a href="https://dptgames.github.io/#contact">DPT Games contact form</a> or join the <a href="https://discord.gg/EkQykfzP5X">DPT Games Discord</a>.</p><p class="back-top"><a href="#top">Back to top</a></p><footer class="footer">DPT Vertex 3D Terrain documentation · English control names are used throughout. Choose English or 日本語 at the top of the editor window to change the tool’s interface language.</footer></main></body></html>
