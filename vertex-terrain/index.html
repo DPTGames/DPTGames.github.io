@@ -1,272 +1,203 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Vertex 3D Terrain - Vertex 3D Terrain UI</title>
-    <style>
-        *, *::before, *::after { box-sizing: border-box; }
-        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            color: #f8fafc;
-            background-color: #0f172a;
-            margin: 0; padding: 40px;
-            font-size: 11pt; line-height: 1.5;
-        }
-        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
-        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
-        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
-        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
-        p { margin: 0 0 12px 0; }
-        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
-        tr { page-break-inside: avoid; }
-        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
-        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
-        td { background-color: #0f172a; }
-        td strong { color: #bae6fd; }
-        td code { font-size: 9.5pt; }
-        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
-        li { margin-bottom: 6px; }
-        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
-        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        .perf { background-color: #0c1f12; border-left: 4px solid #4ade80; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        .tip { background-color: #1a1a2e; border-left: 4px solid #a78bfa; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
-        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
-        code { padding: 2px 5px; }
-        pre { padding: 12px; margin: 10px 0; overflow-x: auto; line-height: 1.6; }
-        .divider { border: none; border-top: 1px solid #1e293b; margin: 30px 0; }
-        .troubleshooting-q { font-weight: bold; color: #bae6fd; margin-top: 15px; margin-bottom: 5px; page-break-after: avoid; }
-        .troubleshooting-a { margin-bottom: 15px; }
-        .note a {
-            color: #38bdf8;
-            text-decoration: none; 
-            transition: color 0.2s ease-in-out;
-        }
-        .note a:hover {
-            color: #7dd3fc;
-            text-decoration: underline; 
-        }
-    </style>
-</head>
-<body>
-    <nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
-        <a href="https://dptgames.github.io/" style="color: #38bdf8; margin-right: 15px;">&larr; DPT Games Homepage</a>
-        <span style="color: #64748b;">|</span>
-        <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Vertex 3D Terrain Guide</a>
-        <a href="biomes.html" style="color: #f8fafc; margin-right: 15px;">Biomes Guide</a>
-        <a href="demo-components.html" style="color: #38bdf8; font-weight: bold;">Demo & Runtime Guide</a>
-        <a href="terrain-material-settings.html" style="color: #38bdf8; font-weight: bold;">Terrain Material Settings</a>
-    </nav>
-    <h1>Vertex 3D Terrain UI</h1>
-    <div class="subtitle"Tool Guide<br>
-    <span style="font-size: 11pt; font-style: normal;">A Unity EditorWindow tool designed for real-time vertex-based terrain painting, organic sculpting, procedural gradient blending, spline path generation, multi-tile seamless terrains, and performance optimization.</span></div>
-    <div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
-        <strong style="color: #38bdf8; display: block; margin-bottom: 8px;">Quick Navigation Reference:</strong>
-        <a href="#section-one" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">1. Target &amp; Brush Settings</a>
-        <a href="#section-two" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">2. Core Architecture &amp; Tools</a>
-        <a href="#section-three" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">3. Multi-Tile Terrains</a>
-        <a href="#section-four" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">4. Performance Tips</a>
-        <a href="#troubleshooting" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">5. Troubleshooting</a>
-        <a href="#support" style="color: #a5f3fc; text-decoration: none;">6. Support</a>
-    </div>
-    <h2 id="section-one">1. Target &amp; Brush Settings</h2>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Build the shape, paint the surface, and prepare your terrain for a scene."><link rel="alternate" hreflang="en" href="index.html"><link rel="alternate" hreflang="ja" href="ja/index.html"><title>Vertex 3D Terrain Guide | DPT Games</title><style>
+:root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
+main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
+.site-nav{display:flex;flex-wrap:wrap;gap:8px 20px;border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:32px;font-size:.92rem}.site-nav [aria-current]{color:white;font-weight:700}
+.language-nav{display:flex;gap:10px;flex-wrap:wrap;margin:-12px 0 28px}.language-nav a{display:inline-block;padding:6px 16px;border:1px solid var(--border);border-radius:6px;text-decoration:none}.language-nav [aria-current]{color:#0f172a;background:var(--accent);border-color:var(--accent);font-weight:700}html[lang="ja"] body{line-height:1.85;line-break:strict}html[lang="ja"] th,html[lang="ja"] td{overflow-wrap:anywhere}
+h1,h2,h3,h4{line-height:1.25;color:var(--accent)}h1{font-size:2.25rem;margin:0 0 14px}h2{font-size:1.65rem;margin:48px 0 18px;padding-top:12px;border-top:1px solid var(--border)}h3{font-size:1.22rem;margin:30px 0 12px}h4{font-size:1.06rem}
+p{margin:12px 0 18px}li{margin:7px 0}ul,ol{padding-left:25px}.lead{font-size:1.18rem;color:var(--muted);max-width:850px}.intro{margin:28px 0}.toc{background:var(--panel);padding:20px 24px;border:1px solid var(--border);border-radius:9px;margin:28px 0}.toc h2{margin:0 0 10px;padding:0;border:0;font-size:1.15rem}.toc ul{columns:2;column-gap:36px;margin:0}.toc li{break-inside:avoid}
+.callout,.example{background:var(--panel);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:14px 20px;margin:22px 0}.example{border-color:#a3e635}.callout p:last-child,.example p:last-child{margin-bottom:0}.callout p:first-child,.example p:first-child{margin-top:0}
+.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--border);border-radius:7px}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--border)}thead{background:#25354c}th{color:#f8fafc}td:first-child{font-weight:600;min-width:145px}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#172238}
+code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background:#27354c;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}kbd{white-space:nowrap;border:1px solid #50617a}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#09111f;border:1px solid var(--border);padding:20px;border-radius:7px}pre code{background:transparent;padding:0}
+.back-top{font-size:.88rem}.table-hint{display:none;color:var(--muted);font-size:.9rem}.footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);margin-top:34px;padding-top:16px}details{background:var(--panel);padding:14px 18px;border:1px solid var(--border);border-radius:7px;margin:16px 0}summary{cursor:pointer;font-weight:600;color:var(--accent)}.alias{display:block;scroll-margin-top:24px}
+@media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
+@media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
+</style></head>
+<body><main id="top"><nav class="site-nav" aria-label="Documentation"><a href="https://dptgames.github.io/">DPT Games homepage</a><a href="index.html" aria-current="page">Vertex 3D Terrain Guide</a><a href="biomes.html">Biomes Guide</a><a href="terrain-material-settings.html">Terrain Material Settings</a><a href="demo-components.html">Demo & Runtime Guide</a></nav><nav class="language-nav" aria-label="Language"><a href="index.html" lang="en" hreflang="en" aria-current="page">English</a><a href="ja/index.html" lang="ja" hreflang="ja">日本語</a></nav><header><h1>Vertex 3D Terrain Guide</h1><p class="lead">Build the shape, paint the surface, and prepare your terrain for a scene.</p></header><nav class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#quick-start">Make your first terrain</a></li><li><a href="#section-one">Targets, libraries and brush settings</a></li><li><a href="#generators">Generate a starting shape</a></li><li><a href="#section-two">Geometry and surface tools</a></li><li><a href="#masks">Select faces and build a shape</a></li><li><a href="#gradients">Place surfaces by height, slope or direction</a></li><li><a href="#paths">Roads, riverbeds, steps, tunnels and bridges</a></li><li><a href="#section-three">Work across terrain tiles</a></li><li><a href="#section-four">Save and optimise your terrain</a></li><li><a href="#shortcuts">Keyboard and mouse reference</a></li><li><a href="#glossary">Terms used in these guides</a></li><li><a href="#troubleshooting">When the result is not what you expected</a></li><li><a href="#support">Support</a></li></ul></nav><p class="table-hint">On a small screen, scroll wide tables sideways to read every column.</p><div class="intro"><p>Vertex 3D Terrain edits a mesh inside Unity. You can raise hills, cut openings, build paths and paint different ground surfaces onto the same object. Because the terrain is a mesh, it can also form overhangs, floating islands and planets.</p><p>There are two jobs to keep separate: <strong>geometry tools change the shape</strong>; <strong>surface tools change its colour or material</strong>. Painting rock does not make a cliff. Increasing a normal or parallax setting makes a surface look more detailed without changing where a character can stand.</p></div>
 
-    <h3>Configuration Parameters</h3>
-    <p>Controls target pipeline workflows, active terrain meshes, and primary brush characteristics in the Inspector.</p>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 30%;">Property</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Pipeline Mode</strong></td>
-                <td>Switches the target between <strong>Terrain Atlas</strong> (texture-array based biomes rendered through the shared VCCore shader) and <strong>Direct Vertex Color</strong> (lightweight, texture-free biome blending baked straight into vertex data). Switching pipeline modes on an existing mesh automatically re-assigns the VCCore material and converts the mesh's vertex data to match the new mode.</td>
-            </tr>
-            <tr>
-                <td><strong>Target Terrain Object</strong></td>
-                <td>The active root GameObject containing the MeshFilter and MeshRenderer targeted for painting or sculpting in the SceneView. When working with a multi-tile terrain, tools will automatically discover and include neighboring tiles near the brush without needing to reassign this per tile.</td>
-            </tr>
-            <tr>
-                <td><strong>Radius</strong></td>
-                <td>The world-meter radius of the 3D interactive brush (adjustable via hotkeys <code>[</code> and <code>]</code> or Shift + ScrollWheel).</td>
-            </tr>
-            <tr>
-                <td><strong>Brush Flow / Opacity</strong></td>
-                <td>Defines the rate of color and weight application per stroke, ranging from smooth gradual feathering (0.01) to instantaneous replacement (1.0).</td>
-            </tr>
-            <tr>
-                <td><strong>Blend Sharpness</strong></td>
-                <td>Controls transition contrast between biomes, from soft gradual gradients (0.0) to crisp stylized borders (1.0).</td>
-            </tr>
-            <tr>
-                <td><strong>Dynamic Topology</strong></td>
-                <td>When enabled, automatically subdivides triangle edges that stretch beyond a configurable maximum length while sculpting or drawing spline paths, so raised terrain keeps clean, evenly-sized geometry instead of a handful of giant stretched triangles. Subdivision is throttled internally (both by cursor movement and by time) so continuous strokes stay responsive rather than re-triangulating on every tick.</td>
-            </tr>
-            <tr>
-                <td><strong>Pen / Tablet Input</strong></td>
-                <td>Graphics tablets and stylus pointers are supported alongside the mouse for brush placement, useful for freehand painting and sculpting passes that benefit from a more natural pointing device.</td>
-            </tr>
-        </tbody>
-    </table>
+<h2 id="quick-start">Make your first terrain</h2>
+<ol><li>Open <strong>Tools → DPT Games → Vertex 3D Terrain</strong>. Choose English or 日本語 at the top of the window.</li><li>Choose a <strong>Biome Library</strong>. This is the palette of surfaces you will paint. Use an existing library to learn the tool before building your own.</li><li>Choose a <strong>Pipeline Mode</strong>. Start with Terrain Atlas if you want textured ground. Choose Direct Vertex Color for a look based on vertex colours.</li><li>Open the terrain generator and begin with a small flat terrain or simple island. Use a modest resolution so you can practise quickly.</li><li>Make the generated mesh the active target. In Scene view, frame it and check that your brush preview appears on the surface.</li><li>Select <strong>Sculpt</strong>, use a broad radius and a low displacement rate, then drag to raise a hill. Hold Ctrl while sculpting to lower it. Use Smooth to soften the result.</li><li>Choose a biome, select <strong>Paint</strong>, and paint a patch. Reduce opacity to build up a blend gradually; use 1 for a strong replacement.</li><li>Try a second biome at the edge of the patch. Adjust the blend sharpness to compare a soft transition with a crisp border.</li><li>Save the terrain using the tool’s save/prefab controls, and save the Unity scene. Reopen the saved result and check the geometry and surface before continuing with a larger terrain.</li></ol>
+<div class="example"><p><strong>A useful first exercise:</strong> make a grassy hill, paint exposed rock on one side, then add a dirt path across it. This teaches you shape, surface and path tools without needing caves, extra tiles or runtime effects.</p></div>
 
-    <div class="tip"><strong>Tip:</strong> Use hotkeys <code>B</code>, <code>H</code>, <code>G</code>, <code>S</code>, and <code>P</code> to instantly toggle between Paint, Sculpt, Gradient, Smooth, and Path modes without using the UI buttons.</div>
+<h2 id="section-one">Targets, libraries and brush settings</h2>
+<h3>Choose what you are editing</h3>
+<p>The active terrain supplies the current mesh and settings. For a terrain made from several objects, use the target list to choose which objects can be painted or sculpted. <strong>Active</strong> and <strong>enabled for Paint/Sculpt</strong> serve different purposes: selecting one tile does not necessarily enable every neighbouring tile for editing.</p>
+<p>Add or register the terrain objects you need, refresh the list after changing your scene, and check the Paint/Sculpt switches before a stroke that crosses a boundary. A target should contain the mesh components used by the tool. A collider is also needed when you want physics raycasts to hit the terrain during gameplay.</p>
+<div class="table-wrap"><table><thead><tr><th>Setting</th><th>What it means</th><th>When to change it</th></tr></thead><tbody>
+<tr><td>Terrain Atlas</td><td>Uses the biome library’s compiled textures and colour ramps to render the painted ground.</td><td>Choose it for textured rock, sand, grass, water-like surfaces and material detail. The dedicated terrain shader is SH_DPT_VCTerrain.</td></tr>
+<tr><td>Direct Vertex Color</td><td>Stores the surface’s colour on the mesh vertices instead of using the atlas-based biome texture appearance.</td><td>Choose it for a simpler colour-based style. The number and position of vertices affect how much colour detail you can paint.</td></tr>
+<tr><td>Biome Library</td><td>A reusable collection of ground presets. The two pipelines have separate preset lists within the library.</td><td>Use one shared library for related terrain pieces; use a separate copy when their surfaces should evolve independently.</td></tr>
+<tr><td>Radius</td><td>The brush’s reach in world metres.</td><td>Use a large radius for broad landforms and a smaller radius for finishing. Link geometry and paint radii if both should cover the same area.</td></tr>
+<tr><td>Geometry speed / strength</td><td>How quickly a stroke moves the mesh.</td><td>Lower it for controlled changes. High values can make deep cuts or tall spikes in a short stroke.</td></tr>
+<tr><td>Paint opacity</td><td>How strongly the chosen surface replaces or mixes with the existing surface.</td><td>Low values allow repeated gentle passes; 1 applies the chosen surface strongly.</td></tr>
+<tr><td>Blend sharpness</td><td>The character of the border between painted biomes.</td><td>Lower it for gradual transitions; raise it for more distinct patches. It does not add mesh vertices.</td></tr>
+<tr><td>Brush shape</td><td>Circle, Square, Diamond or Noise Jitter changes the footprint of a stroke.</td><td>Circle is a useful starting point. Use straighter shapes for deliberate edges and jitter for less regular marks.</td></tr>
+<tr><td>Pen pressure</td><td>Can affect Strength, Radius or Both, with a minimum pressure floor.</td><td>Choose Strength for gradual tablet strokes; choose Radius when you want the brush to widen as you press.</td></tr>
+<tr><td>Preview colours</td><td>The editable geometry and paint colours identify the two brush footprints. Alpha changes the preview’s transparency.</td><td>Use a visible colour against your terrain. These colours do not change the painted biome.</td></tr>
+<tr><td>Worklight / Scene HUD</td><td>Extra working light and a compact view of the current tools.</td><td>Use them to inspect shape and avoid losing track of which tools are active. Also check the final result under your scene’s own lighting.</td></tr>
+</tbody></table></div>
+<p>Changing a pipeline changes how the terrain’s surface data is used. Save a copy before converting finished work, and compare its appearance afterwards. Texture detail from Terrain Atlas should not be expected to look identical in Direct Vertex Color.</p>
+<p>For the individual presets, texture inputs and library actions, see the <a href="biomes.html">Biomes Guide</a>. For controls that affect a whole material, see <a href="terrain-material-settings.html">Terrain Material Settings</a>.</p>
 
-    <h3>Ground / Biome Library</h3>
-    <p>Each terrain (or family of terrains) references a <strong>Biome Library</strong> asset — the palette of ground presets available to the Paint brush and gradient tools. Terrain Atlas and Direct Vertex Color pipelines each keep their own independent list of presets within the same library, since they carry different data (Terrain Atlas presets reference source textures; Direct Vertex Color presets store a flat base color instead).</p>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 30%;">Action</th>
-                <th>What it does</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Add</strong></td>
-                <td>Appends a new, blank ground preset to the active pipeline's list and opens it in the preset editor.</td>
-            </tr>
-            <tr>
-                <td><strong>Duplicate</strong></td>
-                <td>Clones the selected preset (including its ramp, textures, and PBR settings) as a starting point for a variant biome.</td>
-            </tr>
-            <tr>
-                <td><strong>Delete</strong></td>
-                <td>Removes a preset from the library and re-indexes the remaining presets. In Terrain Atlas mode this also triggers a recompile of the Micro Atlas and Detail Texture Array so the material stays in sync.</td>
-            </tr>
-            <tr>
-                <td><strong>Reorder / Swap</strong></td>
-                <td>Drag presets to reorder the palette, or swap two entries directly. Reordering updates preset IDs and any painted vertex/face data automatically remaps to the new indices.</td>
-            </tr>
-        </tbody>
-    </table>
-    <p>Per-preset authoring options include a color ramp (used for both albedo tinting and height-based blending), emissive color and intensity, ambient occlusion / parallax depth strength, normal strength, tiling scale, and anti-tiling patch rotation to break up obvious texture repetition at large tiling scales. PBR input can come from a single packed texture (with selectable channel layouts covering common Unity, and Unreal-style ORM packing conventions) or from separate metallic/smoothness maps.</p>
-    <div class="note"><strong>Note:</strong> The Micro Atlas and Detail Texture Array are regenerated automatically whenever the library changes in Terrain Atlas mode — you don't need to manually trigger a rebake after adding or editing a biome.</div>
+<h2 id="generators">Generate a starting shape</h2>
+<p>A generator gives you a starting mesh, not a finished landscape. Choose a shape close to your goal, then sculpt its silhouette and paint its surfaces.</p>
+<div class="table-wrap"><table><thead><tr><th>Starting shape</th><th>Good for</th><th>Things to check</th></tr></thead><tbody>
+<tr><td>Flat terrain / height presets</td><td>Ground planes and landscapes using shapes such as Island Mountain, River Valley and Crater Basin.</td><td>Overall size, subdivisions and the preset’s height. More subdivisions give finer edits but increase the mesh cost.</td></tr>
+<tr><td>Planet / Planetoid</td><td>A closed terrain surface that you can edit around several sides.</td><td>Single Mesh versus Multi Tile, and the single-mesh topology: Cube Sphere, Icosphere or UV Sphere. Use surface-oriented editing when world-up tools would give the wrong direction.</td></tr>
+<tr><td>Cube</td><td>A box-shaped base for terrain that wraps around several faces.</td><td>Face subdivisions and tile settings. Check corners and boundaries while sculpting.</td></tr>
+<tr><td>Floating island</td><td>A plateau with an underside, suitable for isolated landmasses.</td><td>Top outline, top height preset and underside profile. Circular, rounded-square and elongated outlines create different silhouettes; pointed, bowl-shaped, stepped and tapered bottoms have different purposes.</td></tr>
+</tbody></table></div>
+<p><strong>Resolution:</strong> start with enough vertices to support the features you need. Doubling density over a large area can increase the total mesh size quickly. High-density border options add support around generated boundaries; they are not a substitute for a suitable density throughout the editable area.</p>
+<p><strong>Placement:</strong> World Origin starts at the scene origin. Position Offset uses the supplied offset. Scene View Center places the result relative to your working view. Ground Snapped View uses the view’s horizontal position with a ground-plane height of Y = 0; it should not be treated as a general snap-to-any-terrain command.</p>
+<p>For floating islands, compare the top and underside in silhouette before adding surface detail. Edge rounding needs enough existing rows of geometry to show a smooth curve.</p>
 
-    <h2 id="section-two">2. Core Architecture &amp; Tool Modes</h2>
-    <ul>
-        <li><strong>Primary Tool Modes:</strong> Manages 8 distinct operational modes including Paint, Sculpt, Cave Digger, Gradient, Smooth, Clean-Up Brush, Path Splines, and Eyedropper sampling.</li>
-        <li><strong>Dynamic Topology &amp; Tessellation:</strong> Automatically subdivides and tessellates stretched polygon edges on-the-fly when edge lengths exceed the configured threshold during sculpting or path creation.</li>
-        <li><strong>Raycast AO Baker:</strong> Fires hemisphere raycasts per vertex to bake contact ambient occlusion directly into vertex data (UV2.x) for realistic crevice and shadow definition.</li>
-        <li><strong>Chunk Partitioning &amp; LODs:</strong> Slices large terrain meshes into N x N spatial grid partitions, automatically generating decimated LOD levels and native Unity LODGroup components.</li>
-    </ul>
+<h2 id="section-two">Geometry and surface tools</h2>
+<p>The tool has separate geometry and surface choices. Some brush tools can work together, so you can shape and paint during the same stroke. Path, Mask and Gradient use their own editing workflows. Look at the active buttons and Scene HUD before dragging.</p>
+<h3>Geometry tools: change the mesh</h3>
+<div class="table-wrap"><table><thead><tr><th>Tool</th><th>What happens</th><th>Useful example</th></tr></thead><tbody>
+<tr><td>Sculpt</td><td>Raises or lowers vertices along Up, Surface Normal or View Direction. Ctrl reverses the raise/lower direction.</td><td>Use Up for ordinary hills; Surface Normal for a planet or a wall; View Direction when working from a particular angle.</td></tr>
+<tr><td>Inflate</td><td>Pushes the surface outward along its local shape; the reversed stroke pulls it inward.</td><td>Thicken a rocky bulge or soften a depression.</td></tr>
+<tr><td>Smooth</td><td>Moves vertices toward a smoother arrangement.</td><td>Remove sharp bumps after sculpting. Repeated smoothing can soften details you meant to keep.</td></tr>
+<tr><td>Grab</td><td>Drags an affected patch of geometry.</td><td>Pull a ridge sideways or adjust a silhouette without rebuilding the whole landform.</td></tr>
+<tr><td>Cave</td><td>Edits the geometry for cavities, tunnels and overhangs, using dynamic topology.</td><td>Make an organic opening. Use a tunnel path when you need a planned route and cross-section.</td></tr>
+<tr><td>Clean-Up</td><td>Reduces unnecessary or uneven geometry in the brush area.</td><td>Tidy a region that became dense after repeated topology edits. Inspect its silhouette and painted borders afterwards.</td></tr>
+<tr><td>Path</td><td>Uses a curve with editable nodes to make roads, trenches, steps, tunnels or bridges.</td><td>Make a repeatable route with a controlled width. See <a href="#paths">Paths</a>.</td></tr>
+<tr><td>Mask</td><td>Selects faces before applying an operation to that region.</td><td>Raise a plateau, build a pillar or flatten a wall. See <a href="#masks">Face masks</a>.</td></tr>
+</tbody></table></div>
+<h3>Surface tools: change the appearance</h3>
+<div class="table-wrap"><table><thead><tr><th>Tool</th><th>What happens</th><th>Useful example</th></tr></thead><tbody>
+<tr><td>Paint</td><td>Applies the selected biome or weighted mix of selected biomes.</td><td>Add dirt to a path or scatter a controlled mix of rock and grass.</td></tr>
+<tr><td>Fill</td><td>Applies a surface across a connected region of the current biome.</td><td>Replace a continuous patch without brushing over every face.</td></tr>
+<tr><td>Smear</td><td>Pulls existing surface weights along the stroke.</td><td>Stretch a patch into streaks without choosing a new surface.</td></tr>
+<tr><td>Blend / Biome Blend</td><td>Softens existing biome transitions.</td><td>Break up a hard painted edge. It smooths surface weights, not the landform.</td></tr>
+<tr><td>Gradient</td><td>Places biomes using height, slope or a spatial direction.</td><td>Put snow near peaks or rock on steep faces. See <a href="#gradients">Gradients</a>.</td></tr>
+<tr><td>Eyedropper</td><td>Samples the surface under the cursor.</td><td>Continue painting with a biome that is already on the terrain.</td></tr>
+<tr><td>Dusting</td><td>Paints, blends, clears or fills a dusting mask used by the surface effect.</td><td>Mark where a snow or dust overlay is allowed. Configure its appearance in the <a href="terrain-material-settings.html#dusting">material’s dusting controls</a>.</td></tr>
+</tbody></table></div>
+<p>With a multi-biome brush, select the surfaces you want and set their relative weights. Equalize Weights gives them equal influence. Noise can make the distribution less uniform. Try a small test patch before applying a complex mix across the entire terrain.</p>
+<h3>Dynamic topology and normals</h3>
+<p><strong>Dynamic Topology</strong> adds geometry where an operation needs smaller triangles. Max Edge Length controls when an edge is considered too long: a lower value creates finer geometry and usually costs more processing and memory. It is used for cave/tunnel work and can be enabled for supported sculpting or painting workflows.</p>
+<p>Use it when large triangles prevent the shape you want. It will not turn every coarse mesh into an evenly dense grid. Check the wireframe after a large change, and use a reasonable threshold for the scale of your scene.</p>
+<p><strong>Flat and smooth normals</strong> change the lighting across faces. Flat normals emphasise individual polygons; smooth normals soften the lighting between them. This is separate from the Smooth brush, which moves the actual vertices.</p>
 
-    <h3>Tool Modes In Depth</h3>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 22%;">Mode</th>
-                <th>What it's for</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Paint</strong></td>
-                <td>Paints biome IDs and blend weights across triangle corners, blending multiple ground presets together at their borders according to Blend Sharpness.</td>
-            </tr>
-            <tr>
-                <td><strong>Sculpt</strong></td>
-                <td>Raise / lower geometry along the vertex normal. Includes a <strong>Grab</strong> action for freeform vertex dragging (useful for pulling out ridges or overhangs by hand) alongside standard raise/lower.</td>
-            </tr>
-            <tr>
-                <td><strong>Cave Digger (Carve)</strong></td>
-                <td>Digs tunnels, caves, and overhangs into the mesh. On multi-tile terrains, a carve that reaches a tile boundary can automatically detect and punch through into the neighboring tile so the tunnel continues seamlessly across the seam.</td>
-            </tr>
-            <tr>
-                <td><strong>Gradient</strong></td>
-                <td>Automatically blends biomes based on slope angle or height range, useful for laying down large-scale rules like "snow above X height" or "rock on slopes steeper than Y" in a single pass.</td>
-            </tr>
-            <tr>
-                <td><strong>Smooth</strong></td>
-                <td>Relaxes vertex positions toward their neighbors to soften sculpted detail. Smoothing passes run multi-threaded across the affected vertex groups for responsiveness on larger brushes.</td>
-            </tr>
-            <tr>
-                <td><strong>Clean-Up Brush</strong></td>
-                <td>Simplifies over-dense or messy geometry (for example, areas that accumulated a lot of dynamic-topology subdivision) back down to a cleaner triangle budget.</td>
-            </tr>
-            <tr>
-                <td><strong>Path Splines</strong></td>
-                <td>Lay down a spline in the SceneView (add, move, and delete nodes interactively) to paint a biome strip along a path or carve a trench/road profile following the curve.</td>
-            </tr>
-            <tr>
-                <td><strong>Eyedropper</strong></td>
-                <td>Samples the biome under the cursor and sets it as the active paint biome — a quick way to match an existing area without hunting through the palette.</td>
-            </tr>
-        </tbody>
-    </table>
+<h2 id="masks">Select faces and build a shape</h2>
+<ol><li>Enable Mask and choose a selection method: Brush for a painted area, Single Face for precise picks, or Flood Island for a connected region.</li><li>Select the faces that form your intended footprint. Hold Shift to remove faces from the selection.</li><li>Use Grow, Shrink or Invert to refine it. Select Slope uses a range in degrees; Select Biome Faces uses the chosen surface ID.</li><li>Choose an operation or a shape preset. Check the affected region before applying it.</li><li>Inspect the result from the side as well as above. Undo and refine the footprint or settings if needed.</li></ol>
+<div class="table-wrap"><table><thead><tr><th>Operation</th><th>Meaning</th><th>Practical guidance</th></tr></thead><tbody>
+<tr><td>Flat Plateau / extrusion</td><td>Displaces the selected region. Positive height raises it; negative height lowers it. Taper changes how the sides widen or narrow.</td><td>Taper 1 keeps straight sides, below 1 narrows inward, above 1 widens outward. World-up alignment is useful for upright plateaus; surface alignment suits sloping ground.</td></tr>
+<tr><td>Pillar</td><td>Builds a column with Classical, Cylindrical or Square Pedestal styling.</td><td>Height sets its reach; tiers/rings and taper change its profile. A bevel can soften the edges.</td></tr>
+<tr><td>Arch</td><td>Builds an arch using its footing or portal configuration, apex height, vault thickness and curve segments.</td><td>Semi-Circular is rounded, Gothic Pointed has a pointed apex, and Segmental is a shallower arc. More segments make a smoother curve and more geometry.</td></tr>
+<tr><td>Boulder</td><td>Builds a Faceted Crag, Smooth Dome or Jagged Spire from the footprint.</td><td>Height sets size; noise breaks regularity. Start with restrained noise so you can assess the base shape.</td></tr>
+<tr><td>Bevel</td><td>Adds a softened edge to supported generated shapes.</td><td>Width controls the edge band. One segment makes a chamfer; more segments can make a rounder profile.</td></tr>
+<tr><td>Level</td><td>Levels the selected region to an average world-Y height.</td><td>Use for a horizontal platform. On a wall or planet, use Flatten if you need the region’s own orientation.</td></tr>
+<tr><td>Flatten</td><td>Flattens the selection relative to its average surface orientation.</td><td>Make a planar patch on a tilted surface without forcing it horizontal.</td></tr>
+<tr><td>Scale Mask</td><td>Scales the region around its centre using X, Y and Z factors.</td><td>1 leaves that axis unchanged; use positive factors and small adjustments first.</td></tr>
+<tr><td>Subdivide Mask</td><td>Adds triangles in the selected area.</td><td>Use before a detailed edit if the region is too coarse.</td></tr>
+<tr><td>Fill Hole</td><td>Fills eligible open boundaries reached by the mask.</td><td>The selection must touch the hole boundary. Protected terrain tile edges are handled separately from ordinary holes.</td></tr>
+<tr><td>Delete Faces</td><td>Removes selected faces, subject to protected boundary handling.</td><td>Use for an opening. Keep an undo point and inspect the surrounding geometry.</td></tr>
+<tr><td>Paint Mask</td><td>Applies the chosen surface to the selected faces.</td><td>Give a generated plateau or structure its own biome without a freehand stroke.</td></tr>
+</tbody></table></div>
 
-    <h3>Material Pipelines: Terrain Atlas vs. Direct Vertex Color</h3>
-    <p>Both pipelines render through the same shared <strong>VCCore</strong> master shader/material system used across all DPT packages, so switching a terrain between pipelines doesn't require assigning a different shader by hand — the tool configures the correct keywords and texture bindings automatically.</p>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 22%;">Pipeline</th>
-                <th>Behavior</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Terrain Atlas</strong></td>
-                <td>Compiles your biome library into a <strong>Detail Texture Array</strong> (per-biome normal, height, and packed PBR data) plus a small <strong>Micro Atlas</strong> lookup texture carrying per-biome color ramps and material parameters. Best suited to large, natural, photoreal-leaning terrains that need real texture detail up close.</td>
-            </tr>
-            <tr>
-                <td><strong>Direct Vertex Color</strong></td>
-                <td>Bakes each biome's flat base color directly into the mesh's vertex colors — no texture arrays or atlases involved. Zero texture memory overhead and fully SRP Batcher / GPU Resident Drawer friendly, at the cost of per-texel surface texturing. A good fit for stylized, low-poly, or highly instanced environments.</td>
-            </tr>
-        </tbody>
-    </table>
+<h2 id="gradients">Place surfaces by height, slope or direction</h2>
+<p>Gradients turn a rule into a surface distribution. Choose your starting and ending biomes, or add ramp stops for several surfaces. The gradient’s position chooses the mixture; strength controls how firmly it is applied, and sharpness controls the transitions.</p>
+<div class="table-wrap"><table><thead><tr><th>Mode</th><th>Use it for</th><th>How to approach it</th></tr></thead><tbody>
+<tr><td>Cone Volume</td><td>A local mountain or feature.</td><td>Set the base, peak, radius and altitude range. Fit Mountain estimates a useful cone from the active terrain; Snap to Peak moves it to the highest vertex. Tilt and heading let it follow an angled feature.</td></tr>
+<tr><td>Directional Line</td><td>A transition along a chosen direction.</td><td>Position the line/arrow handles across the area. The start and end define where the two surfaces dominate.</td></tr>
+<tr><td>Whole Altitude</td><td>A broad height rule, such as grass below and snow above.</td><td>Set a height range that actually contains your terrain. A range completely above or below it can produce a single biome.</td></tr>
+<tr><td>Whole Slope</td><td>A steepness rule, such as soil on flats and rock on cliffs.</td><td>Choose the slope range and compare both horizontal and steep areas before applying.</td></tr>
+</tbody></table></div>
+<div class="example"><p><strong>Mountain recipe:</strong> first apply a broad grass-to-snow altitude gradient. Add a slope pass for exposed rock, then paint local exceptions. Use a softer strength on later passes if you want some of the earlier distribution to remain.</p></div>
+<p>A cone’s slope/cliff filter can limit its application. Use Live Preview to position the rule before committing it, and reset the cone when starting on a very different feature. A biome’s own colour ramp is a separate control: it colours that biome’s texture detail, rather than setting a world-height snow line.</p>
 
-    <h3>Undo &amp; Safety</h3>
-    <p>All painting, sculpting, and carving operations are fully integrated with Unity's native Undo system. Each continuous stroke (from mouse/pen down to release) is grouped as a single Undo step rather than one step per tick, so undoing a stroke reverts the whole brush pass in one action instead of requiring dozens of undos.</p>
+<h2 id="paths">Roads, riverbeds, steps, tunnels and bridges</h2>
+<h3>Begin with a surface path</h3>
+<ol><li>Enable Path and choose Surface.</li><li>Add at least two nodes in Scene view. Move the handles to set the route; add nodes where the curve needs more control.</li><li>Choose Width, blending and a sculpt operation. Keep the first test short.</li><li>Choose Single Biome or a gradient along the route. Use Paint Path if you only need a surface strip.</li><li>Use Create Path for geometry, or Create &amp; Paint when you want both the shape and the surface.</li></ol>
+<div class="table-wrap"><table><thead><tr><th>Setting</th><th>What it controls</th><th>Example</th></tr></thead><tbody>
+<tr><td>Width</td><td>The overall corridor width, including its shoulders. The outward blending area adds a transition beyond the core corridor.</td><td>Keep a road wide enough for its use, then soften the join to the terrain with blending.</td></tr>
+<tr><td>Node width scale</td><td>A multiplier on the path width at a node.</td><td>1 uses the normal width; enlarge a node to make a wider clearing or junction.</td></tr>
+<tr><td>Height offset</td><td>Moves the intended path height relative to its placement.</td><td>Use a small positive offset for a raised route or a negative offset for a shallow channel.</td></tr>
+<tr><td>Strength</td><td>How strongly the geometry moves toward the chosen path profile.</td><td>Use a lower value for a gentle first adjustment, then inspect and repeat if needed.</td></tr>
+<tr><td>Max Height Gap</td><td>Limits which nearby source surface can be found for the path.</td><td>Increase it when valid terrain is too far from the route to be picked up. It is not the stair riser-height control.</td></tr>
+<tr><td>Grade and Level</td><td>Forms a controlled road-like corridor.</td><td>Make a walkable route across uneven ground.</td></tr>
+<tr><td>Raise Embankment</td><td>Builds up the corridor.</td><td>Raise a track or bank above the surrounding ground.</td></tr>
+<tr><td>Carve Trench / riverbed</td><td>Cuts a channel into the terrain.</td><td>Make a drainage ditch or the bed beneath a painted river surface.</td></tr>
+<tr><td>Smooth Corridor</td><td>Softens the route’s geometry.</td><td>Tidy a rough path without selecting a new raised or cut profile.</td></tr>
+<tr><td>Cross-section</td><td>Flat, Crowned or Curved Trench changes the shape across the route.</td><td>Crown height raises the centre; trench depth lowers it. Both are geometry distances.</td></tr>
+<tr><td>Edge smoothing</td><td>Softens the outer join to the terrain.</td><td>Blend the shoulder while keeping the road centre, stair treads or channel bed distinct.</td></tr>
+<tr><td>Closed loop</td><td>Connects the route back to its beginning.</td><td>Use for a ring road; inspect the join at the first node.</td></tr>
+</tbody></table></div>
+<h3>Make steps</h3>
+<p>Choose the Steps sculpt operation. <strong>Step Height</strong> is the vertical rise of each step. <strong>Step Depth</strong> controls its horizontal tread length along the path and can be set independently. <strong>Step Bevel</strong> controls the amount of edge rounding: low values give sharper edges; higher values give more worn or rounded edges.</p>
+<p>Choose height and depth for the size of your character, then inspect the stairs from the side. A bevel should soften an edge without removing the flat tread you need. Add sufficient geometry for the intended spacing; a long stair run on very coarse terrain may need finer topology.</p>
+<h3>Paint the centre and banks</h3>
+<p>A path gradient changes the biome along the route. Stop position 0 is the start and 1 is the end. Add stops for sections such as dirt, gravel and rock. Bank controls place a separate biome toward the sides; bank width is a fraction of the half-width, rather than a distance in metres. For example, 0.35 uses the outer 35% of each side’s half-width.</p>
+<p>The preview helps show where neighbouring surfaces share influence. Use it to check the banks and transitions before painting. A painted river biome gives you a river-looking strip; carve a bed separately if you need actual channel geometry.</p>
+<h3>Create a tunnel</h3>
+<p>Switch to Tunnel and position the route through the terrain. Choose Circle, Square or Flat Bottom Arch for the cross-section. A flat bottom is useful when the tunnel should have a walking surface.</p>
+<p><strong>Minimum cover depth</strong> is the amount of solid terrain required above the tunnel. A route can be invalid even if its centre is underground, because its full width or height breaks through the outside. Check red or invalid preview regions, move the route deeper, reduce its size, or adjust the cover requirement to suit the intended opening.</p>
+<p>Create Tunnel changes geometry; Paint Tunnel changes the wall surfaces. Inspect the entrance, exit and any tile boundaries after creating it.</p>
+<h3>Create a bridge</h3>
+<p>Switch to Bridge. Put the ends on the landmasses you want to connect and use intermediate nodes across the gap. Flat Deck makes a simpler deck; Deep Girder gives a deeper structural profile; Arched Underside adds an arch below a flat walking top.</p>
+<p>Inspect the bridge from above and below, particularly where it joins each landmass. On a curved world, check that the full span clears the terrain instead of assuming world-up placement will suit every side of the planet.</p>
+<h3>Choose precise endpoints when needed</h3>
+<p>Automatic endpoint placement is the default for tunnels and bridges. If you need a specific opening or join, use Pick Start or Pick End to select an endpoint face or connected face patch. Each end is independent, so you can pin only the start, only the end, or both.</p>
+<p>Select a connected patch on the relevant terrain object whose boundary matches the opening you want. A square or rectangular patch is useful for a deliberate square end. Clear an endpoint selection to return that end to automatic placement. After deleting or rebuilding faces near a pinned endpoint, check the selection and repick it if the topology has changed.</p>
 
-    <h2 id="section-three">3. Multi-Tile Terrains</h2>
-    <p>Large worlds are typically built from several terrain tiles placed edge-to-edge rather than one enormous mesh. The tool keeps adjacent tiles' shared borders in sync automatically as you paint, sculpt, and carve near a seam:</p>
-    <ul>
-        <li><strong>Seam-aware sculpting and painting:</strong> Height changes, biome blends, and vertex colors applied near a tile boundary are mirrored onto the matching vertices of the neighboring tile, so the seam stays visually continuous instead of showing a hard edge.</li>
-        <li><strong>Cross-tile carving:</strong> A carve stroke that reaches a boundary can tunnel through into the next tile automatically, continuing caves and overhangs across multiple tiles.</li>
-        <li><strong>New tile placement checks:</strong> When creating a neighboring tile, the tool compares the new tile's footprint against the actual current mesh bounds of nearby tiles (not just their nominal grid size) and warns before creating it if they'd overlap — a safety net for tiles whose edges have already drifted from prior sculpting.</li>
-    </ul>
-    <div class="warning"><strong>Best practice:</strong> Seam synchronization needs both tiles on either side of a boundary to have been touched at least once (so the seam is registered) before it can be reliably protected. If you carve or aggressively drag geometry right at the very edge of a brand-new tile pair before painting or sculpting a normal pass over that boundary first, the boundary may not be respected as strictly as it is once it's an established, registered seam. When starting a new tile next to an existing one, do an ordinary paint or sculpt pass across the shared edge first, then use Cave Digger near it with confidence.</div>
+<h2 id="section-three">Work across terrain tiles</h2>
+<p>Tiles divide a larger terrain into separate mesh objects. The tool’s neighbour and seam handling lets supported edits operate across their shared boundaries, but the objects still need to be registered and enabled for the operation.</p>
+<ol><li>Use a generated tile arrangement or check that the intended borders meet.</li><li>Register the tiles in the target list and confirm the Paint/Sculpt switches.</li><li>Test a small stroke across one seam. Inspect both the geometry and the surface transition.</li><li>For a path, tunnel or generated feature crossing tiles, inspect every affected join after applying it.</li><li>Save all affected tile meshes, rather than only the active tile.</li></ol>
+<p>A material’s Seam Blend setting blends texture projections. It does not weld mesh borders or repair a hole. If a seam looks wrong, first decide whether you are seeing a physical gap, mismatched lighting normals or a texture transition; those need different adjustments. Arbitrarily overlapping meshes should not be assumed to form a joined terrain.</p>
 
-    <h2 id="section-four">4. Performance Tips</h2>
-    <ul>
-        <li><strong>Dynamic Topology has a real cost:</strong> subdividing geometry is inherently more expensive than a plain sculpt tick. For broad, sweeping height changes, consider sculpting with Dynamic Topology off and only re-enabling it for a finishing pass where you want extra triangle density for detail.</li>
-        <li><strong>Large single strokes vs. many small ones:</strong> a few large, deliberate strokes generally sync tile seams and rebuild vertex data less often than many tiny flicks of the brush — both get the same result, but fewer stroke boundaries means fewer full-mesh Undo snapshots.</li>
-        <li><strong>Chunk Partitioning for big terrains:</strong> once a terrain's layout is finalized, partition it into an N x N grid of chunks with generated LODs rather than leaving it as one very large mesh — this keeps both editor responsiveness and runtime rendering cost down.</li>
-        <li><strong>Smoothing large areas:</strong> the Smooth brush's relaxation pass is multi-threaded per affected vertex group, so larger brush radii scale reasonably well, but very large radii on very dense meshes will still take longer than a small, focused pass.</li>
-    </ul>
+<h2 id="section-four">Save and optimise your terrain</h2>
+<h3>Keep editing manageable</h3>
+<p>Build the broad shape before using fine topology. Use smaller brushes for detail, and avoid a very small Max Edge Length across a large area unless you need the extra triangles. Geometry density affects editing cost; texture resolution affects surface memory and quality. Reducing one does not automatically fix the other.</p>
+<h3>Bake ambient occlusion in Direct Vertex Color</h3>
+<p>The raycast AO baker adds shading for crevices and contact areas in the Direct Vertex Color workflow. It is not a lightmap and does not replace scene lighting. Bake after the main shape is finished; later geometry edits can make the stored shading out of date.</p>
+<p>Ray quality trades bake time for sampling quality. Maximum shadow distance controls how far nearby geometry can influence the shading. Contrast controls how pronounced the result looks. Start with a test bake and avoid crushing every sheltered area to black.</p>
+<h3>Partition and generate LODs</h3>
+<p>Chunking divides the terrain into a grid, with options such as 1×1, 2×2, 4×4 and 8×8. Smaller chunks can help Unity show only the relevant parts, but they create more objects and rendering groups. Choose a layout that suits your scene rather than always using the largest grid.</p>
+<p>LOD1 and LOD2 are simplified meshes. Their target ratios describe how much geometry to retain: a smaller ratio means fewer triangles and a greater chance of losing small shapes. Unity’s transition thresholds use relative screen height, not a distance in metres. The final culling threshold determines when a group stops being drawn.</p>
+<p>The generated collider uses LOD2. Check that stairs, edges and openings still collide as intended. If you use triangle-based surface queries, the surface data must correspond to the collider’s actual mesh and triangle order; data baked for a different mesh can return the wrong surface.</p>
+<p>Use Hide Original Mesh when appropriate for the generated result, and check that you are not displaying both versions. Treat chunking and LOD generation as a finishing workflow; it does not automatically make every edit to the original terrain faster.</p>
+<h3>Save the right assets</h3>
+<div class="table-wrap"><table><thead><tr><th>Action</th><th>Purpose</th><th>Check afterwards</th></tr></thead><tbody>
+<tr><td>Save / prefab export</td><td>Preserves the terrain mesh and its surface data for reuse in scenes.</td><td>Reopen the saved result and verify material references, appearance and collision.</td></tr>
+<tr><td>Compile Terrain Textures</td><td>Builds or refreshes the library’s atlas and texture array.</td><td>Check recently edited biomes. Choose resolution, compression and mipmaps for your target hardware.</td></tr>
+<tr><td>Make Standalone Copy</td><td>Creates an independent material/texture setup for a terrain that should be separated from the shared library assets.</td><td>Verify that later shared-library changes are not changing the result you intended to keep independent.</td></tr>
+<tr><td>Bake Surface Data</td><td>Stores triangle-to-biome information for gameplay queries.</td><td>Rebake after relevant painting, biome ID changes or topology edits, and ensure it matches the collider mesh.</td></tr>
+</tbody></table></div>
+<p>Material changes affect every object using that material. Duplicating a GameObject alone does not necessarily give it independent assets. Save a separate material or use the standalone workflow when two terrain pieces need different global settings.</p>
 
-    <h2 id="troubleshooting">5. Troubleshooting Notes</h2>
-    <div class="troubleshooting-q">"Target GameObject does not have the VCCore Shader assigned."</div>
-    <div class="troubleshooting-a">Ensure the GameObject's MeshRenderer references the correct `SH_DPT_VCCore` material. Click the "Assign VCCore Material" or "Enable on Material" button directly inside the Target section of the UI to automatically fix material configurations.</div>
+<h2 id="shortcuts">Keyboard and mouse reference</h2>
+<p>Use shortcuts while working in Scene view. Context matters: the same key can have a different action in Mask, Path, Gradient or Dusting mode. Typing in an editable field takes precedence. On macOS, Cmd serves the Ctrl/Cmd bindings.</p>
+<ul><li><kbd>[</kbd> / <kbd>]</kbd> and <kbd>Shift + mouse wheel</kbd> adjust brush radius. <kbd>Ctrl/Cmd + Shift + PageUp</kbd> / <kbd>PageDown</kbd> make fine radius changes.</li><li><kbd>Ctrl/Cmd + Shift + Up</kbd> / <kbd>Down</kbd> adjust geometry rate; <kbd>Ctrl/Cmd + Shift + Left</kbd> / <kbd>Right</kbd> adjust surface opacity. The minus/equal bindings act on the current tool context.</li><li><kbd>Ctrl + drag</kbd> reverses supported sculpt/inflate strokes. <kbd>Shift</kbd> temporarily smooths or blends supported brush strokes and subtracts during mask selection.</li><li><kbd>Alt + Shift + 1…9, 0</kbd> selects a biome within the visible palette group. <kbd>Tab</kbd> / <kbd>Shift + Tab</kbd> changes palette groups.</li><li><kbd>Escape</kbd> leaves the current special interaction or deactivates the tool; leaving a path mode keeps its nodes. Use Clear Nodes when you actually want to remove the route.</li></ul>
+<details><summary>Complete tool shortcut table</summary><p>“General” bindings are available across tool contexts. Brush bindings also apply in Dusting where supported.</p><div class="table-wrap"><table><thead><tr><th>Shortcut</th><th>Action</th><th>Context</th></tr></thead><tbody><tr><td><kbd>Ctrl/Cmd + Shift + H</kbd></td><td>Toggle Sculpt</td><td>General</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + I</kbd></td><td>Toggle Inflate</td><td>General</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + U</kbd></td><td>Toggle Smooth</td><td>General</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + J</kbd></td><td>Toggle Grab</td><td>General</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + K</kbd></td><td>Toggle Cave</td><td>General</td></tr><tr><td><kbd>Shift + N</kbd></td><td>Toggle Cleanup</td><td>General</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + O</kbd></td><td>Toggle Path</td><td>General</td></tr><tr><td><kbd>Shift + M</kbd></td><td>Toggle Face Mask</td><td>General</td></tr><tr><td><kbd>B</kbd></td><td>Toggle Paint</td><td>General</td></tr><tr><td><kbd>Shift + B</kbd></td><td>Toggle Dusting</td><td>General</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F1</kbd></td><td>Toggle Fill</td><td>General</td></tr><tr><td><kbd>Shift + J</kbd></td><td>Toggle Smear</td><td>General</td></tr><tr><td><kbd>J</kbd></td><td>Toggle Biome Blend</td><td>General</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + E</kbd></td><td>Toggle Gradient</td><td>General</td></tr><tr><td><kbd>I</kbd></td><td>Toggle Eyedropper</td><td>General</td></tr><tr><td><kbd>O</kbd></td><td>Circle brush</td><td>Brush</td></tr><tr><td><kbd>U</kbd></td><td>Square brush</td><td>Brush</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F2</kbd></td><td>Diamond brush</td><td>Brush</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F3</kbd></td><td>Jitter brush</td><td>Brush</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + M</kbd></td><td>Toggle multi-biome brush</td><td>Brush</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + X</kbd></td><td>Swap primary and secondary biomes</td><td>General</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + T</kbd></td><td>Toggle Dynamic Topology</td><td>General</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + W</kbd></td><td>Toggle Worklight</td><td>General</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Q</kbd></td><td>Frame active terrain</td><td>General</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Y</kbd></td><td>Toggle Scene tools HUD</td><td>General</td></tr><tr><td><kbd>Backspace</kbd></td><td>Clear face selection</td><td>Mask</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Delete</kbd></td><td>Delete masked faces</td><td>Mask</td></tr><tr><td><kbd>Shift + =</kbd></td><td>Grow mask by one face ring</td><td>Mask</td></tr><tr><td><kbd>Shift + -</kbd></td><td>Shrink mask by one face ring</td><td>Mask</td></tr><tr><td><kbd>Shift + U</kbd></td><td>Invert face selection</td><td>Mask</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F4</kbd></td><td>Select all editable faces</td><td>Mask</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + D</kbd></td><td>Clear face selection</td><td>Mask</td></tr><tr><td><kbd>Shift + W</kbd></td><td>Select faces within slope limits</td><td>Mask</td></tr><tr><td><kbd>Shift + X</kbd></td><td>Select faces using the configured biome</td><td>Mask</td></tr><tr><td><kbd>Enter</kbd></td><td>Generate selected mask shape</td><td>Mask</td></tr><tr><td><kbd>Shift + Enter</kbd></td><td>Paint masked faces</td><td>Mask</td></tr><tr><td><kbd>Shift + S</kbd></td><td>Scale masked faces using Scale Factors</td><td>Mask</td></tr><tr><td><kbd>Shift + L</kbd></td><td>Level masked faces</td><td>Mask</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F8</kbd></td><td>Flatten masked faces to surface orientation</td><td>Mask</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F5</kbd></td><td>Subdivide masked faces</td><td>Mask</td></tr><tr><td><kbd>Shift + Q</kbd></td><td>Fill selected hole boundaries</td><td>Mask</td></tr><tr><td><kbd>Shift + F1</kbd></td><td>Extrusion / plateau preset</td><td>Mask</td></tr><tr><td><kbd>Shift + F2</kbd></td><td>Pillar preset</td><td>Mask</td></tr><tr><td><kbd>Shift + F3</kbd></td><td>Arch preset</td><td>Mask</td></tr><tr><td><kbd>Shift + F4</kbd></td><td>Boulder preset</td><td>Mask</td></tr><tr><td><kbd>Shift + F5</kbd></td><td>Brush face selection</td><td>Mask</td></tr><tr><td><kbd>Shift + F6</kbd></td><td>Single-face selection</td><td>Mask</td></tr><tr><td><kbd>Shift + F7</kbd></td><td>Flood-island selection</td><td>Mask</td></tr><tr><td><kbd>O</kbd></td><td>Circular face selection brush</td><td>Mask</td></tr><tr><td><kbd>U</kbd></td><td>Square face selection brush</td><td>Mask</td></tr><tr><td><kbd>Backspace</kbd></td><td>Clear all path nodes</td><td>Path</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Delete</kbd></td><td>Delete selected path node</td><td>Path</td></tr><tr><td><kbd>Shift + P</kbd></td><td>Clear all path nodes (alternative)</td><td>Path</td></tr><tr><td><kbd>Shift + F1</kbd></td><td>Surface path</td><td>Path</td></tr><tr><td><kbd>Shift + F2</kbd></td><td>Tunnel path</td><td>Path</td></tr><tr><td><kbd>Shift + F3</kbd></td><td>Bridge path</td><td>Path</td></tr><tr><td><kbd>Shift + F4</kbd></td><td>Surface path: grade and level</td><td>Path</td></tr><tr><td><kbd>Shift + F5</kbd></td><td>Surface path: raise embankment</td><td>Path</td></tr><tr><td><kbd>Shift + F6</kbd></td><td>Surface path: carve trench / riverbed</td><td>Path</td></tr><tr><td><kbd>Shift + F7</kbd></td><td>Surface path: smooth corridor</td><td>Path</td></tr><tr><td><kbd>Shift + F8</kbd></td><td>Surface path: steps</td><td>Path</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F6</kbd></td><td>Toggle closed path loop</td><td>Path</td></tr><tr><td><kbd>Enter</kbd></td><td>Create and paint path / tunnel, or create bridge</td><td>Path</td></tr><tr><td><kbd>Shift + Enter</kbd></td><td>Paint surface path or tunnel walls</td><td>Path</td></tr><tr><td><kbd>Ctrl/Cmd + Enter</kbd></td><td>Create path geometry / tunnel / bridge</td><td>Path</td></tr><tr><td><kbd>Shift + S</kbd></td><td>Pick start endpoint faces</td><td>Path</td></tr><tr><td><kbd>Shift + E</kbd></td><td>Pick end endpoint faces</td><td>Path</td></tr><tr><td><kbd>O</kbd></td><td>Endpoint selection: circle brush</td><td>Path</td></tr><tr><td><kbd>U</kbd></td><td>Endpoint selection: square brush</td><td>Path</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F7</kbd></td><td>Endpoint selection: single face</td><td>Path</td></tr><tr><td><kbd>Shift + F1</kbd></td><td>Cone volume gradient</td><td>Gradient</td></tr><tr><td><kbd>Shift + F2</kbd></td><td>Directional gradient</td><td>Gradient</td></tr><tr><td><kbd>Shift + F3</kbd></td><td>Whole altitude gradient</td><td>Gradient</td></tr><tr><td><kbd>Shift + F4</kbd></td><td>Whole slope gradient</td><td>Gradient</td></tr><tr><td><kbd>Enter</kbd></td><td>Apply cone / altitude / slope gradient</td><td>Gradient</td></tr><tr><td><kbd>Shift + W</kbd></td><td>Fit cone to active terrain</td><td>Gradient</td></tr><tr><td><kbd>Shift + S</kbd></td><td>Snap cone to highest vertex</td><td>Gradient</td></tr><tr><td><kbd>Shift + F1</kbd></td><td>Paint dusting</td><td>Dusting</td></tr><tr><td><kbd>Shift + F2</kbd></td><td>Soften / blend dusting</td><td>Dusting</td></tr><tr><td><kbd>Shift + F3</kbd></td><td>Clear dusting</td><td>Dusting</td></tr><tr><td><kbd>Shift + F4</kbd></td><td>Fill biome with dusting</td><td>Dusting</td></tr></tbody></table></div></details>
 
-    <div class="troubleshooting-q">"Selected GameObject does not have a MeshFilter attached."</div>
-    <div class="troubleshooting-a">The target object must contain a valid MeshFilter and mesh asset to record vertex color and height data. Select an appropriate terrain tile or generate a new surface via the Terrain Generator panel.</div>
+<h2 id="glossary">Terms used in these guides</h2>
+<div class="table-wrap"><table><thead><tr><th>Term</th><th>Plain-language meaning</th></tr></thead><tbody>
+<tr><td>Mesh / vertex / face</td><td>The terrain’s shape / a point in that shape / a triangle joining points.</td></tr>
+<tr><td>Topology</td><td>How those points and triangles connect. Subdivision, deletion and tunnel creation change it.</td></tr>
+<tr><td>Biome</td><td>A reusable ground-surface preset, such as grass, snow or rock. It does not automatically place plants, enemies or weather.</td></tr>
+<tr><td>Biome ID</td><td>The preset’s numeric index in the current library list. Read it from your own library; example IDs are not universal.</td></tr>
+<tr><td>Weight</td><td>How much a surface contributes to a mixture. It is separate from the biome’s colour or physical height.</td></tr>
+<tr><td>Material / shader</td><td>The saved appearance settings / the rendering code that uses those settings.</td></tr>
+<tr><td>Atlas / texture array</td><td>Compiled collections of the library’s surface textures, used by the terrain material.</td></tr>
+<tr><td>Normal map / parallax</td><td>Lighting detail / an illusion of surface depth. Neither moves the terrain’s collision geometry.</td></tr>
+<tr><td>Bake</td><td>Calculate information in advance and save the result. Rebake when the source information changes.</td></tr>
+<tr><td>LOD</td><td>A simpler version of a mesh used when it occupies less of the screen.</td></tr>
+</tbody></table></div>
 
-    <div class="troubleshooting-q">A seam between two tiles looks cracked or misaligned after carving a tunnel near the edge.</div>
-    <div class="troubleshooting-a">This is almost always a not-yet-registered seam (see the Multi-Tile Terrains section above). Undo back to before the carve, run a normal Paint or Sculpt stroke across that shared edge so the boundary gets registered, then redo the carve.</div>
-
-    <div class="troubleshooting-q">Sculpting feels sluggish, or there's a brief pause right at the start of a stroke.</div>
-    <div class="troubleshooting-a">A short pause at the very start of a stroke is expected — it's Unity's Undo system taking its one snapshot for that stroke, and it's proportional to mesh size. If sculpting stays slow throughout the stroke rather than just at the start, try disabling Dynamic Topology temporarily; subdivision is the most expensive part of a sculpt tick, especially with a small brush radius moving quickly (e.g. with a pen tablet) across a lot of stretched geometry.</div>
-
-<hr class="divider">
-<h2 id="support">Support, Contact &amp; Custom Integration</h2>
-
-<p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form. This is the primary and most reliable way to get help with any problems you encounter with the packages.</p>
-
-<p>You can also use this form to inquire about custom freelance technical art services. If your project requires external 3D models to be integrated into the DPT ecosystem—including bespoke vertex-data packing, procedural wood grain mapping, GPU wind systems, or game-ready LOD budgeting—get in touch to discuss your specific needs and availability.</p>
-
-<div class="note">
-    <strong>Email Contact (Preferred for all Support):</strong><br>
-    For troubleshooting, bug reports, publisher licensing, and freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
-</div>
-
-<div class="note">
-    <strong>DPT Community Discord:</strong><br>
-    While the contact form is the best way to get direct help with issues, you are also welcome to join the <strong><a href="https://discord.gg/EkQykfzP5X" target="_blank">Discord Server</a></strong> to share feedback and connect with other users.
-</div>
-</body>
-</html>
+<h2 id="troubleshooting">When the result is not what you expected</h2>
+<div class="table-wrap"><table><thead><tr><th>Symptom</th><th>What to check first</th></tr></thead><tbody>
+<tr><td>The brush does nothing</td><td>Check the active target, its Paint/Sculpt switches, the active tool, radius and strength. Make sure Scene view has focus and that a text field is not receiving the keys.</td></tr>
+<tr><td>Painting looks angular</td><td>The painted information is tied to mesh geometry. Inspect vertex density, then consider local subdivision or supported dynamic topology. Blend sharpness changes the transition, not the triangle count.</td></tr>
+<tr><td>A hill is too jagged</td><td>Reduce displacement rate, use a broader brush and inspect the topology. Smooth geometry gently; changing normals alone will only change its lighting.</td></tr>
+<tr><td>A tunnel breaks through the surface</td><td>Check its full width/height and minimum cover depth along the whole route. Move it deeper or reduce the cross-section where needed.</td></tr>
+<tr><td>A gradient paints one surface everywhere</td><td>Check that the height or slope range includes the terrain, that the cone overlaps it, and that the ramp stops use the intended biome IDs.</td></tr>
+<tr><td>A seam appears between tiles</td><td>Look for a physical gap first, then check registration, enabled neighbours, normals and material settings. Projection Seam Blend cannot close a geometric gap.</td></tr>
+<tr><td>The appearance changes on another terrain</td><td>Check whether both use the same library, material or texture assets. Create an independent copy if their settings should differ.</td></tr>
+<tr><td>The character walks through or above a feature</td><td>Inspect the collider and whether it reflects the edited mesh. Also check LOD2 simplification if you generated chunk colliders.</td></tr>
+<tr><td>Gameplay reports the wrong biome</td><td>Rebake surface data after changes and match it to the hit collider’s triangle order. See the <a href="demo-components.html#surface-raycast-tester">raycast tester guide</a> for the query’s limits.</td></tr>
+<tr><td>Editing becomes slow</td><td>Inspect triangle count, brush reach and dynamic topology settings. Reduce unnecessary density in a copy and measure again; also check texture resolution separately.</td></tr>
+</tbody></table></div>
+<h2 id="support">Support</h2><p>If you need help, describe the result you expected, the control you used, and what appeared instead. Include your Unity version, the selected surface pipeline, and a screenshot of the relevant settings. For a runtime query problem, also include the collider type and when you last baked surface data.</p><p>Use the <a href="https://dptgames.github.io/#contact">DPT Games contact form</a> or join the <a href="https://discord.gg/EkQykfzP5X">DPT Games Discord</a>.</p><p class="back-top"><a href="#top">Back to top</a></p><footer class="footer">DPT Vertex 3D Terrain documentation · English control names are used throughout. Choose English or 日本語 at the top of the editor window to change the tool’s interface language.</footer></main></body></html>
