@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Configure reusable biome-driven 3D scatter, LODs, wind, custom meshes and live seasonal responses."><link rel="alternate" hreflang="en" href="scatter-system.html"><link rel="alternate" hreflang="ja" href="ja/scatter-system.html"><title>3D Scatter Guide | DPT Games</title><style>
+:root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
+main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
+.site-nav{display:flex;flex-wrap:wrap;gap:8px 20px;border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:32px;font-size:.92rem}.site-nav [aria-current]{color:white;font-weight:700}
+.language-nav{display:flex;gap:10px;flex-wrap:wrap;margin:-12px 0 28px}.language-nav a{display:inline-block;padding:6px 16px;border:1px solid var(--border);border-radius:6px;text-decoration:none}.language-nav [aria-current]{color:#0f172a;background:var(--accent);border-color:var(--accent);font-weight:700}html[lang="ja"] body{line-height:1.85;line-break:strict}html[lang="ja"] th,html[lang="ja"] td{overflow-wrap:anywhere}
+h1,h2,h3,h4{line-height:1.25;color:var(--accent)}h1{font-size:2.25rem;margin:0 0 14px}h2{font-size:1.65rem;margin:48px 0 18px;padding-top:12px;border-top:1px solid var(--border)}h3{font-size:1.22rem;margin:30px 0 12px}h4{font-size:1.06rem}
+p{margin:12px 0 18px}li{margin:7px 0}ul,ol{padding-left:25px}.lead{font-size:1.18rem;color:var(--muted);max-width:850px}.intro{margin:28px 0}.toc{background:var(--panel);padding:20px 24px;border:1px solid var(--border);border-radius:9px;margin:28px 0}.toc h2{margin:0 0 10px;padding:0;border:0;font-size:1.15rem}.toc ul{columns:2;column-gap:36px;margin:0}.toc li{break-inside:avoid}
+.callout,.example{background:var(--panel);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:14px 20px;margin:22px 0}.example{border-color:#a3e635}.callout p:last-child,.example p:last-child{margin-bottom:0}.callout p:first-child,.example p:first-child{margin-top:0}
+.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--border);border-radius:7px}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--border)}thead{background:#25354c}th{color:#f8fafc}td:first-child{font-weight:600;min-width:145px}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#172238}
+code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background:#27354c;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}kbd{white-space:nowrap;border:1px solid #50617a}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#09111f;border:1px solid var(--border);padding:20px;border-radius:7px}pre code{background:transparent;padding:0}
+.back-top{font-size:.88rem}.table-hint{display:none;color:var(--muted);font-size:.9rem}.footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);margin-top:34px;padding-top:16px}details{background:var(--panel);padding:14px 18px;border:1px solid var(--border);border-radius:7px;margin:16px 0}summary{cursor:pointer;font-weight:600;color:var(--accent)}.alias{display:block;scroll-margin-top:24px}
+@media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
+@media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
+</style></head>
+<body><main id="top"><nav class="site-nav" aria-label="Documentation"><a href="https://dptgames.github.io/">DPT Games homepage</a><a href="index.html">Vertex 3D Terrain Guide</a><a href="biomes.html">Biomes Guide</a><a href="terrain-material-settings.html">Terrain Material Settings</a><a href="scatter-system.html" aria-current="page">3D Scatter Guide</a><a href="demo-components.html">Demo &amp; Runtime Guide</a></nav><nav class="language-nav" aria-label="Language"><a href="scatter-system.html" lang="en" hreflang="en" aria-current="page">English</a><a href="ja/scatter-system.html" lang="ja" hreflang="ja">日本語</a></nav><header><h1>3D Scatter Guide</h1><p class="lead">Scatter grass, flowers, mushrooms, pebbles and custom meshes from reusable definitions that can target several Terrain Atlas biomes.</p></header><nav class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#overview">Understand the scatter library</a></li><li><a href="#quick-start">Create your first scatter object</a></li><li><a href="#target-biomes">Target several biomes from one setup</a></li><li><a href="#placement">Placement controls</a></li><li><a href="#variants">Built-in presets and custom meshes</a></li><li><a href="#lod">Distance, LOD and renderer settings</a></li><li><a href="#wind">Wind setup</a></li><li><a href="#live-response">Live biome density and colour response</a></li><li><a href="#performance">Performance and practical limits</a></li><li><a href="#troubleshooting">Scatter problems</a></li><li><a href="#support">Support</a></li></ul></nav><p class="table-hint">On a small screen, scroll wide tables sideways to read every column.</p>
+
+<div class="intro"><p>The 3D Scatter system places instanced meshes directly from Terrain Atlas biome data. A <strong>scatter object</strong> contains one reusable set of placement rules and mesh variants. Instead of rebuilding the same grass setup for every biome, add several <strong>Target Biomes</strong> to that one object and optionally give each target its own density multiplier.</p><p>Scatter is intended for repeated surface detail such as grass, flowers, mushrooms, stones and small props. It does not edit the terrain mesh, create colliders for every instance or turn scattered objects into individual GameObjects.</p></div>
+
+<h2 id="overview">Understand the scatter library</h2>
+<p>Scatter authoring is global to the Terrain Atlas biome library rather than stored separately inside every biome inspector. Open the <strong>3D Scatter</strong> section in the Vertex 3D Terrain window to create and edit the library.</p>
+<div class="table-wrap"><table><thead><tr><th>Part</th><th>Its job</th><th>Important consequence</th></tr></thead><tbody>
+<tr><td>Scatter Object</td><td>Stores reusable placement rules, wind choice and one or more mesh variants.</td><td>Configure grass once, then target several biomes instead of duplicating the whole setup.</td></tr>
+<tr><td>Target Biome</td><td>Allows that scatter object to spawn where a selected Terrain Atlas biome contributes.</td><td>Each target can have its own Density Multiplier from 0 to 2.</td></tr>
+<tr><td>Mesh Variant</td><td>Chooses a built-in preset or custom mesh and its relative selection chance.</td><td>Several variants can share the same placement rules.</td></tr>
+<tr><td>Scatter Settings</td><td>Controls seed, batching, distance, LOD transition, far density and safety budgets.</td><td>These are shared by the scatter library rather than repeated on every object.</td></tr>
+<tr><td>Active Terrain Renderer</td><td>Connects the profile to the selected terrain root and submits GPU-instanced draws.</td><td>Instances are not represented by thousands of scene GameObjects.</td></tr>
+</tbody></table></div>
+
+<h2 id="quick-start">Create your first scatter object</h2>
+<ol><li>Use the <strong>Terrain Atlas</strong> pipeline and make sure the terrain has painted biome data.</li><li>Open <strong>3D Scatter</strong> in the Vertex 3D Terrain window. If no profile exists, create the Scatter Library.</li><li>Choose <strong>+ Add Scatter Object</strong> and give it a clear name such as Meadow Grass.</li><li>Under <strong>Target Biomes</strong>, choose one or more biomes from the current library.</li><li>Start with Density Multiplier 1 on each target.</li><li>Set the base <strong>Clumps Per Square Metre</strong>, slope, scale and surface alignment.</li><li>Add a Mesh Variant. Start with the built-in Grass preset or assign a Custom Mesh.</li><li>Assign or confirm the material, enable GPU Instancing if prompted and use <strong>Rebuild Scatter</strong> after major changes if the preview has not already refreshed.</li></ol>
+<div class="example"><p><strong>Example:</strong> create one Meadow Grass object, then target Lush Grass at ×1.0, Dry Meadow at ×0.65 and Forest Soil at ×0.25. The same grass mesh, colour ramp, roughness and wind setup is reused on all three surfaces.</p></div>
+
+<h2 id="target-biomes">Target several biomes from one setup</h2>
+<p>A scatter object can target any number of Terrain Atlas biomes. The biome picker shows the current biome name and numeric ID. Use <strong>+ Add Target Biome</strong> to extend the list.</p>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>Meaning</th><th>Example</th></tr></thead><tbody>
+<tr><td>Biome</td><td>The Terrain Atlas biome on which this scatter object is allowed to appear.</td><td>Grassland, Forest Soil or another current library entry.</td></tr>
+<tr><td>Density Multiplier: 0–2</td><td>Multiplies the scatter object’s base density only for this target biome.</td><td>1 uses normal density, 0.5 gives half as much, 0 disables that target, 2 allows twice as much.</td></tr>
+</tbody></table></div>
+<p>At a painted blend, the system evaluates the combined contribution of the scatter object’s targeted biomes. A reusable object can therefore continue across a Grass/Forest boundary instead of requiring separate duplicate definitions.</p>
+<p>Accepted instances retain an owning biome based on the contributing target at their position. This is what allows a single reusable grass object to react differently when a live biome modifier affects only one of its target biomes.</p>
+
+<h2 id="placement">Placement controls</h2>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>Meaning</th><th>Useful approach</th></tr></thead><tbody>
+<tr><td>Clumps Per Square Metre: 0–100</td><td>Base expected instance density before Target Biome multipliers and live runtime density are applied.</td><td>Start low, then increase while checking instance count and distant coverage.</td></tr>
+<tr><td>Minimum Biome Coverage: 0–1</td><td>Rejects candidate positions where the combined targeted-biome coverage is below the threshold.</td><td>Raise it to keep scatter out of very faint biome blends. Lower it for softer transition edges.</td></tr>
+<tr><td>Maximum Slope: 0–90°</td><td>Rejects surfaces steeper than the chosen slope.</td><td>Grass often wants a lower limit than rocks or cliff debris.</td></tr>
+<tr><td>Scale Min / Max</td><td>Random uniform scale range for accepted instances.</td><td>Use a restrained range for natural variation without obvious size jumps.</td></tr>
+<tr><td>Align To Surface: 0–1</td><td>Blends between the selected Up Mode and the terrain normal.</td><td>0 keeps objects upright relative to the chosen up direction; 1 follows the surface normal fully.</td></tr>
+<tr><td>Surface Offset</td><td>Moves the instance along the sampled surface normal.</td><td>Use a small positive or negative adjustment when a mesh appears to float or sink.</td></tr>
+<tr><td>Enable Wind</td><td>Marks configured scatter for the shared wind path and applies wind bounds padding.</td><td>Enable for grass and flowers that should bend. Leave off for stones or rigid props.</td></tr>
+</tbody></table></div>
+
+<h2 id="variants">Built-in presets and custom meshes</h2>
+<p>Each scatter object can contain several Mesh Variants. <strong>Relative Chance</strong> controls how often each valid variant is selected relative to the others; it is not a percentage that must add to 100.</p>
+<div class="table-wrap"><table><thead><tr><th>Mesh source</th><th>Available controls</th><th>Notes</th></tr></thead><tbody>
+<tr><td>Built-in Grass</td><td>Smooth or Sharp shading, Vertex Colour Ramp, Roughness and Material.</td><td>Uses a 9-blade near mesh and 6-blade distant LOD.</td></tr>
+<tr><td>Built-in Pebbles</td><td>Smooth or Faceted style, Vertex Colour Ramp, Roughness and Material.</td><td>Uses a 4-stone cluster and does not require a separate distant preset mesh.</td></tr>
+<tr><td>Built-in Flowers</td><td>Vertex Colour Ramp, Roughness and Material.</td><td>Uses a 3-flower near mesh and 2-flower distant LOD.</td></tr>
+<tr><td>Built-in Mushrooms</td><td>Vertex Colour Ramp, Roughness and Material.</td><td>Uses a 3-mushroom near mesh and 2-mushroom distant LOD.</td></tr>
+<tr><td>Custom Mesh</td><td>3D Mesh, optional submesh index, optional Distant Mesh, Material and Relative Chance.</td><td>The source asset is not modified. DPT uses a configured clone for scatter metadata while preserving authored vertex colours and UV3 surface data.</td></tr>
+</tbody></table></div>
+<h3>Built-in colour and roughness</h3>
+<p>The built-in Vertex Colour Ramp is evaluated locally for each generated element: each blade, flower, mushroom or pebble runs from its own bottom to its own top. This avoids shorter elements sampling only the lower portion of a shared combined-mesh gradient.</p>
+<p>Built-in Roughness is packed into the generated mesh data expected by the DPT shader. Custom meshes keep their authored UV3 surface data, so prepare those channels to match your material if you rely on the same decoding.</p>
+<div class="callout"><p><strong>Material choice matters.</strong> Scatter is submitted with GPU instancing. Use a material compatible with the mesh data you expect and enable GPU Instancing when prompted. Leaving the variant material empty lets the scatter setup resolve the active terrain material where appropriate.</p></div>
+
+<h2 id="lod">Distance, LOD and renderer settings</h2>
+<p>Expand <strong>Scatter Settings</strong> for shared profile controls and use the Active Terrain Renderer section for preview, up-direction and shadow behaviour.</p>
+<div class="table-wrap"><table><thead><tr><th>Setting</th><th>Meaning</th><th>What to watch</th></tr></thead><tbody>
+<tr><td>Seed</td><td>Controls deterministic scatter placement.</td><td>Change it when you want a different distribution without changing density rules.</td></tr>
+<tr><td>Culling Cell Size</td><td>World-space size used to group instances for culling and drawing.</td><td>Very small cells increase group count; very large cells make distance/frustum culling less precise.</td></tr>
+<tr><td>Maximum Distance</td><td>Stops submitting scatter beyond this camera distance.</td><td>Set it for the actual game camera and scale of your scene.</td></tr>
+<tr><td>LOD Distance</td><td>Centre of the near-to-far transition.</td><td>Choose a distance where the mesh change is difficult to notice.</td></tr>
+<tr><td>LOD Transition Distance</td><td>Width of the smooth stochastic transition around LOD Distance.</td><td>0 produces an immediate change; a wider value mixes near/far populations across a band.</td></tr>
+<tr><td>Far Density: 0–1</td><td>Fraction of the population retained at full far distance.</td><td>Lower it to thin distant scatter as well as switching to cheaper geometry.</td></tr>
+<tr><td>Wind Bounds Padding</td><td>Extra world-space culling bounds for wind-enabled scatter.</td><td>Raise it if strongly animated tips disappear while their original bounds leave the camera.</td></tr>
+<tr><td>Max Instances Per Tile</td><td>Safety cap for accepted instances on one terrain source.</td><td>Raise only after checking memory and performance.</td></tr>
+<tr><td>Max Candidates Per Tile</td><td>Safety cap for attempted placement samples.</td><td>A cap warning usually means density or terrain size deserves review before simply increasing the budget.</td></tr>
+</tbody></table></div>
+<h3>Up Mode and preview</h3>
+<div class="table-wrap"><table><thead><tr><th>Renderer control</th><th>Use</th></tr></thead><tbody>
+<tr><td>World Up</td><td>Ordinary terrain using global +Y as the up direction.</td></tr>
+<tr><td>Root Up</td><td>Rotated terrain where the terrain/root transform defines up.</td></tr>
+<tr><td>Radial</td><td>Planetoids or spherical worlds where up points away from the selected centre/reference.</td></tr>
+<tr><td>Up Reference</td><td>Optional transform used by Root Up and Radial. The terrain root is used when no separate reference is supplied.</td></tr>
+<tr><td>Scene Preview</td><td>Shows scatter in edit mode.</td></tr>
+<tr><td>Cast Shadows / Receive Shadows</td><td>Controls the instanced draw’s shadow behaviour.</td></tr>
+</tbody></table></div>
+
+<h2 id="wind">Wind setup</h2>
+<ol><li>Enable <strong>Enable Wind</strong> on the scatter object that should move.</li><li>Open the material’s <a href="terrain-material-settings.html#wind">Wind</a> section.</li><li>Set a modest Wind Strength.</li><li>Set Height To Tip near the object-space height of the scatter mesh so the root-to-tip mask reaches the intended range.</li><li>Choose Compass Heading and Vertical Pitch.</li><li>If animated tips disappear near the camera/frustum boundary, increase Wind Bounds Padding in Scatter Settings.</li></ol>
+<p>Generated DPT scatter automatically carries the feature metadata used by this path. Rigid scatter such as pebbles can share the material while keeping Enable Wind off.</p>
+
+<h2 id="live-response">Live biome density and colour response</h2>
+<p>The same four Live Biome Modifier slots used by terrain surfaces can also control scatter belonging to their target biome IDs. This lets a seasonal system change the ground and the vegetation together.</p>
+<div class="table-wrap"><table><thead><tr><th>Scatter Response control</th><th>Meaning</th><th>Neutral value</th></tr></thead><tbody>
+<tr><td>Scatter Density: 0–1</td><td>Multiplies how many already-generated instances are submitted for scatter owned by the targeted biome IDs.</td><td>1. A value of 0 hides that biome’s scatter. Placement is not regenerated for ordinary live changes.</td></tr>
+<tr><td>Colour Multiplier</td><td>Multiplies the generated scatter colour for instances owned by the targeted biome IDs.</td><td>White. HDR values can brighten as well as tint.</td></tr>
+</tbody></table></div>
+<p>For example, a winter slot can increase snow dusting on a grass biome while reducing its Scatter Density and moving its Colour Multiplier toward a pale frosted colour. A reusable grass object can also target a forest biome; those forest-owned instances remain independent unless that biome ID is targeted by the live slot.</p>
+<div class="example"><p><strong>Seasonal example:</strong> leave summer Scatter Density at 1 and Colour Multiplier at white. At peak winter, try Density around 0.05–0.25 and a cool pale multiplier. The supplied Dynamic Biome Demo Controller contains an example winter animation that drives these values alongside dusting.</p></div>
+<p>See <a href="terrain-material-settings.html#live-biomes">Terrain Material Settings</a> for the material controls and <a href="demo-components.html#dynamic-biome-controller">Demo &amp; Runtime Guide</a> for the example controller.</p>
+
+<h2 id="performance">Performance and practical limits</h2>
+<ul><li>Scatter uses GPU-instanced draws rather than one GameObject per instance.</li><li>Placement is generated from the terrain mesh and cached. Ordinary camera movement and live density changes do not rebuild the terrain scatter distribution.</li><li>Camera distance and frustum culling operate on scatter batches/cells. Culling Cell Size therefore affects both grouping overhead and culling precision.</li><li>Far Density can reduce distant population in addition to using a cheaper distant mesh.</li><li>Very high Clumps Per Square Metre on a large terrain can reach the candidate or instance safety caps. Treat those limits as warnings to profile the setup, not targets to maximise.</li><li>Custom meshes should be suitable for instancing and should avoid unnecessary vertex/submesh/material complexity when they will appear thousands of times.</li></ul>
+
+<h2 id="troubleshooting">Scatter problems</h2>
+<div class="table-wrap"><table><thead><tr><th>Symptom</th><th>Check in this order</th></tr></thead><tbody>
+<tr><td>No scatter appears</td><td>Check Terrain Atlas mode, the Scatter Library, Target Biomes, base density, target Density Multiplier, Minimum Biome Coverage, Maximum Slope, material and Scene Preview. Then use Rebuild Scatter.</td></tr>
+<tr><td>Scatter appears on the wrong biome</td><td>Check the current Target Biome names/IDs and whether the terrain was reordered after the setup. Remove duplicate or unintended targets.</td></tr>
+<tr><td>A blend edge is too empty</td><td>Lower Minimum Biome Coverage or check the target Density Multipliers. The threshold uses combined coverage of the scatter object’s allowed target biomes.</td></tr>
+<tr><td>Too much grass appears on one biome</td><td>Lower that target’s Density Multiplier instead of duplicating the whole scatter object.</td></tr>
+<tr><td>Custom mesh does not render</td><td>Assign the mesh/material, verify the submesh index and enable GPU Instancing. Check that the material is compatible with the custom mesh’s authored data.</td></tr>
+<tr><td>Scatter pops at the LOD boundary</td><td>Increase LOD Transition Distance and verify a suitable Distant Mesh or built-in distant preset exists. Also compare near/far silhouette and scale.</td></tr>
+<tr><td>Distant scatter is too dense</td><td>Lower Far Density or Maximum Distance. Do not use the per-biome Target Density Multiplier solely as a distance control.</td></tr>
+<tr><td>Wind moves the whole object strangely</td><td>Check Enable Wind, Height To Tip, mesh object-space height and Wind Strength. Use the appropriate Up Mode for ordinary terrain, rotated terrain or a planetoid.</td></tr>
+<tr><td>Wind tips disappear while moving</td><td>Raise Wind Bounds Padding so the draw bounds include the largest expected displacement.</td></tr>
+<tr><td>Snow changes the terrain but not the grass</td><td>Check that the scatter object targets the same biome ID as the live slot, Scatter Density/Colour Multiplier are not neutral, the live-biome master switch is on and the scatter renderer uses the same compatible material.</td></tr>
+<tr><td>Changing Scatter Density has no immediate effect</td><td>Confirm you are changing the live material Scatter Response, not only the profile’s authoring density. Profile density changes placement and may require a rebuild; live Scatter Density changes the submitted population.</td></tr>
+</tbody></table></div>
+
+<h2 id="support">Support</h2><p>If you need help, include your Unity version, the Terrain Atlas biome IDs involved, a screenshot of the Scatter Object and Scatter Settings, the active material and the renderer status line. For placement problems, also mention terrain scale, density and whether the issue occurs on a pure biome or a blend.</p><p>Use the <a href="https://dptgames.github.io/#contact">DPT Games contact form</a> or join the <a href="https://discord.gg/EkQykfzP5X">DPT Games Discord</a>.</p><p class="back-top"><a href="#top">Back to top</a></p><footer class="footer">DPT Vertex 3D Terrain documentation · English control names are used throughout. A 日本語 documentation link is included above for the forthcoming Japanese translation.</footer></main></body></html>
