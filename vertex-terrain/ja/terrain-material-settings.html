@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="地形全体の見た目を調整し、ライブバイオーム効果を設定します。"><link rel="alternate" hreflang="en" href="../terrain-material-settings.html"><link rel="alternate" hreflang="ja" href="terrain-material-settings.html"><title>地形マテリアル設定 | DPT Games</title><style>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="地形全体の見た目、風、ライブバイオーム効果、ランタイムの Scatter Response を設定します。"><link rel="alternate" hreflang="en" href="../terrain-material-settings.html"><link rel="alternate" hreflang="ja" href="terrain-material-settings.html"><title>地形マテリアル設定 | DPT Games</title><style>
 :root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
 main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
@@ -14,7 +14,7 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 @media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
 @media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
 </style></head>
-<body><main id="top"><nav class="site-nav" aria-label="ドキュメント"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a href="index.html">Vertex 3D Terrain ガイド</a><a href="biomes.html">バイオームガイド</a><a href="terrain-material-settings.html" aria-current="page">地形マテリアル設定</a><a href="demo-components.html">デモ・ランタイムガイド</a></nav><nav class="language-nav" aria-label="言語"><a href="../terrain-material-settings.html" lang="en" hreflang="en">English</a><a href="terrain-material-settings.html" lang="ja" hreflang="ja" aria-current="page">日本語</a></nav><header><h1>地形マテリアル設定</h1><p class="lead">地形全体の見た目を調整し、ライブバイオーム効果を設定します。</p></header><nav class="toc" aria-label="このページの内容"><h2>このページの内容</h2><ul><li><a href="#setup">正しいマテリアルを選んで始める</a></li><li><a href="#global-surface">地表全体の設定</a></li><li><a href="#distance-fades">品質フェード</a></li><li><a href="#anti-tiling">繰り返す模様を目立たなくする</a></li><li><a href="#live-biomes">ライブバイオーム：特定の地表を変える</a></li><li><a href="#flow">地表の流れをアニメーションする</a></li><li><a href="#dusting">塗ったマスクで雪やほこりを重ねる</a></li><li><a href="#workflows">三つの実用的な設定例</a></li><li><a href="#troubleshooting">マテリアルの効果が出ない・合わないとき</a></li><li><a href="#support">サポート</a></li></ul></nav><p class="table-hint">小さい画面では、幅の広い表を横にスクロールするとすべての列を読めます。</p><div class="intro"><p>地形マテリアルは、それを使うオブジェクトの最終的な見た目を決めます。バイオームのプリセットは一つの地表を定義し、マテリアルの設定は全体を調整したり、指定した ID にライブ効果を加えたりします。</p><p>一種類の岩や草を直すなら、バイオームインスペクターを使います。地形全体の法線を弱くする、遠くの変化を減らす、特定の地表を動かすなど、広い範囲の変更にはマテリアルを使います。</p></div>
+<body><main id="top"><nav class="site-nav" aria-label="ドキュメント"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a href="index.html">Vertex 3D Terrain ガイド</a><a href="biomes.html">バイオームガイド</a><a href="terrain-material-settings.html" aria-current="page">地形マテリアル設定</a><a href="scatter-system.html">3D Scatter ガイド</a><a href="demo-components.html">デモ・ランタイムガイド</a></nav><nav class="language-nav" aria-label="言語"><a href="../terrain-material-settings.html" lang="en" hreflang="en">English</a><a href="terrain-material-settings.html" lang="ja" hreflang="ja" aria-current="page">日本語</a></nav><header><h1>地形マテリアル設定</h1><p class="lead">地形全体の見た目を調整し、ライブバイオーム効果を設定します。</p></header><nav class="toc" aria-label="このページの内容"><h2>このページの内容</h2><ul><li><a href="#setup">正しいマテリアルを選んで始める</a></li><li><a href="#global-surface">地表全体の設定</a></li><li><a href="#wind">Scatter Mesh の風設定</a></li><li><a href="#distance-fades">品質フェード</a></li><li><a href="#anti-tiling">繰り返す模様を目立たなくする</a></li><li><a href="#live-biomes">ライブバイオーム：地表と Scatter を変える</a></li><li><a href="#flow">地表の流れをアニメーションする</a></li><li><a href="#dusting">塗ったマスクで雪やほこりを重ねる</a></li><li><a href="#workflows">三つの実用的な設定例</a></li><li><a href="#troubleshooting">マテリアルの効果が出ない・合わないとき</a></li><li><a href="#support">サポート</a></li></ul></nav><p class="table-hint">小さい画面では、幅の広い表を横にスクロールするとすべての列を読めます。</p><div class="intro"><p>地形マテリアルは、それを使うオブジェクトの最終的な見た目を決めます。バイオームのプリセットは一つの地表を定義し、マテリアルの設定は全体を調整したり、指定した ID にライブ効果を加えたりします。同じマテリアルは、DPT Scatter の風とライブ Scatter Response にも使用できます。</p><p>一つの地表を直すならバイオームインスペクターを使います。Grass、Flower、Pebble、Mushroom、Custom Mesh の配置設定は <a href="scatter-system.html">3D Scatter ガイド</a>を参照してください。地形全体の法線を弱くする、風向きを変える、遠くの変化を減らす、特定のバイオームとその Scatter にライブ効果を加えるなど、広い範囲の変更にはマテリアルを使います。</p></div>
 
 <h2 id="setup">正しいマテリアルを選んで始める</h2>
 <ol><li>地形の MeshRenderer を選び、割り当てたマテリアルを開きます。</li><li>Terrain Atlas では、専用の <strong>SH_DPT_VCTerrain</strong> シェーダーを使っているか確認します。付属マテリアルは DPT_VCTerrain_Mat です。</li><li>生成したカラーランプアトラス、細部テクスチャ配列、バイオーム数が、目的のライブラリのものであることを確認します。更新は地形ツールのテクスチャ生成機能を使います。</li><li>代表的な地表をいくつか含む、小さなテスト範囲を塗ります。</li><li>通常の全体倍率は 1 付近から始めます。一つずつ変更して比較し、改善しなければ前の値に戻します。</li><li>この地形だけの設定が必要なら、大きな変更の前に専用マテリアルを用意するか、Make Standalone Copy を使います。</li></ol>
@@ -43,6 +43,15 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 </tbody></table></div>
 <div class="example"><p><strong>地形全体が騒がしく見える場合：</strong>まず全体の法線強度を少し下げ、ゲームカメラから視差を確認し、タイリングを確認します。すぐに全バイオームの設定を下げず、マテリアル側の調整だけで足りるか試してください。</p></div>
 
+<h2 id="wind">Scatter Mesh の風設定</h2>
+<p>Wind セクションは、Wind を有効にした Scatter Mesh が共有して使用する値を設定します。各 Scatter Object は <a href="scatter-system.html#placement">3D Scatter</a> 側の <strong>Enable Wind</strong> で風に参加します。Wind を無効にした Scatter は Wind Feature Path を使用せず、追加の Wind Bounds Padding も必要ありません。</p>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>意味</th><th>調整の目安</th></tr></thead><tbody>
+<tr><td>Wind Strength</td><td>Scatter の風変位全体の強さです。</td><td>低い値から始め、Mesh の根元と先端の両方を確認しながら上げます。大きな値では、動いた Geometry が早く Culling されないよう Scatter Settings の Wind Bounds Padding を増やす必要があります。</td></tr>
+<tr><td>Height To Tip</td><td>Root-to-Tip の Wind Mask を正規化するときに使う Object Space 上の高さです。</td><td>Wind を有効にした Scatter Mesh のおおよその高さに合わせます。適切な値なら、根元は比較的固定されたまま、先端で Wind Strength を十分に受けられます。</td></tr>
+<tr><td>Wind Direction</td><td>Compass Heading と Vertical Pitch から作られる正規化済みの 3D 方向です。</td><td>Heading で水平の向き、Pitch で上向き・下向きの成分を設定します。Material の共有値なので、同じ互換 Material を使う Wind 対応 Scatter が同じ方向を参照できます。</td></tr>
+</tbody></table></div>
+<div class="callout"><p><strong>Height To Tip は Mesh の Scale 設定ではありません。</strong> Object Space 上の高さを Wind Mask に変換する方法だけを変えます。Mesh 自体のサイズを変える場合は Scatter Object の Scale Min / Max を調整してください。</p></div>
+
 <h2 id="distance-fades">品質フェード</h2>
 <p>Parallax、Anti-Tiling、Seam Blend、Normal のフェードは、細部が画面上で小さくなるにつれて、それぞれの効果を弱めます。遠くの見た目を落ち着かせ、見えにくい細部に掛ける処理も減らせます。</p>
 <p><strong>項目名が「Distance」でも、正確なメートル単位の境界ではなく、フェードのスケールとして扱います。</strong>シェーダーは、画面の一画素に収まる地表細部の大きさにも反応します。カメラの視野角、解像度、見る角度によって、フェードが目立ち始める位置は変わります。</p>
@@ -65,7 +74,7 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <p>元画像に目立つ特徴がないか、Scale が適切かも確認します。自然な元画像と控えめな変化が扱いやすい組み合わせです。方向を持つ縞、木目、流れなどでは、模様と競合する変化を弱くします。</p>
 
 <h2 id="live-biomes">ライブバイオーム：特定の地表を変える</h2>
-<p>Live/Dynamic Biomes を有効にすると、四つの修正スロットを使えます。一つのスロットは最大三つの ID を対象に、重み、質感、流れ、ダスティングを調整します。メッシュを塗り直さずに見た目を変えられます。</p>
+<p>Live/Dynamic Biomes を有効にすると、四つの修正スロットを使えます。一つのスロットは最大三つの ID を対象に、重み、質感、流れ、ダスティングに加え、その ID が所有する Scatter のライブ反応も調整できます。メッシュを塗り直したり Scatter の配置を再構築したりせずに見た目を変えられます。</p>
 <ol><li>ライブラリで現在の ID を確認します。</li><li>ライブバイオーム全体のスイッチを有効にします。</li><li>一つのスロットを有効にし、対象数と ID を指定します。</li><li>最初は Weight Multiplier と質感の倍率を 1 にします。</li><li>一つだけ値を変え、その素材だけの範囲と、別の素材と混ざる境界の両方を確認します。</li></ol>
 <div class="table-wrap"><table><thead><tr><th>スロットの項目</th><th>意味</th><th>注意する点</th></tr></thead><tbody>
 <tr><td>Active</td><td>そのスロットの対象を有効にします。</td><td>Slot 1 を含め、どのスロットも無効にできます。スロットを止める場合はこのスイッチを使います。</td></tr>
@@ -74,12 +83,12 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Smoothness：0～3</td><td>対象の滑らかさの倍率です。</td><td>1 は元の反応を保ちます。より光沢を出すには 1 より大きい値を試します。</td></tr>
 <tr><td>Normal：0～3</td><td>法線細部の倍率です。</td><td>1 は維持、低い値では陰影の細部を弱くします。</td></tr>
 <tr><td>Parallax：0～3</td><td>テクスチャの見かけの深さの倍率です。</td><td>小さく調整し、浅い視線角で確認します。衝突は変わりません。</td></tr>
-<tr><td>Emissive：0～10</td><td>発光の倍率です。</td><td>元の発光細部に使います。元の寄与が 0 なら、掛け算では復元できません。</td></tr>
+<tr><td>Emissive：0～10</td><td>発光の倍率です。</td><td>元の発光細部に使います。元の寄与が 0 なら、掛け算では復元できません。</td></tr><tr><td>Scatter Density：0～1</td><td>Target Biome ID が所有する Scatter のライブ密度倍率です。</td><td>1 は Scatter Object 側で設定した量を維持し、0 はそのバイオームの Scatter を非表示にします。通常のライブ変更では配置を再構築せず、Renderer が Submit する Instance 数を変更します。</td></tr><tr><td>Scatter Colour Multiplier</td><td>Target Biome ID が所有する Generated Scatter の色を乗算します。</td><td>White が中立です。霜や雪の表現には淡い寒色の HDR 値を使えます。Terrain のバイオーム色そのものを変更する設定ではありません。</td></tr>
 </tbody></table></div>
 <h3>重みの変更でできること・できないこと</h3>
 <p>草 50%、岩 50% の境界を考えてみます。岩の倍率を 2 にすると、正規化の前の寄与が倍になり、境界は岩寄りになります。岩の重みがない草だけの場所は、岩の倍率を上げただけでは岩になりません。</p>
 <p>重みが変えるのは、すでに地形にある組み合わせです。地形の高さ、海岸線、水の体積は変わりません。一種類しかない場所で唯一の寄与を消しても、新しい地表を作る方法にはなりません。先に代わりの素材を塗ってください。</p>
-<p>最初は、一つのバイオームを一つのスロットだけで対象にします。対象が重なると、重みの変更が組み合わさって予測しづらくなります。分かりにくい場合は一つずつ無効にして確認します。</p>
+<p>最初は、一つのバイオームを一つのスロットだけで対象にします。対象が重なると、重み、Surface Override、Scatter Response が組み合わさって予測しづらくなります。分かりにくい場合は一つずつ無効にして確認します。</p><p>Scatter Response は、各 Scatter Instance が保持する所有バイオーム ID によって対応付けられます。1つの再利用 Scatter Object が複数のバイオームを Target にしていても、各 Target から生成された Instance は、そのバイオームの Live Slot に独立して反応できます。詳しくは <a href="scatter-system.html#live-response">3D Scatter ガイドのライブバイオーム反応</a>を参照してください。</p>
 
 <h2 id="flow">地表の流れをアニメーションする</h2>
 <p>Flow は、対象地表の見た目を時間とともに動かします。川、溶岩、その他の動く細部に使えます。頂点、パーティクル、キャラクターを動かす機能や、水のシミュレーションではありません。</p>
@@ -108,8 +117,8 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <ol><li>地表を塗り、通常の見た目を確認します。</li><li>その地表の ID を対象に、ライブスロットを有効にします。</li><li>分布ではなく質感を変えるため、Weight Multiplier は 1 にします。</li><li>Smoothness を少しずつ上げます。ベースの色も暗くしたい場合は、バイオームを複製して色を調整します。</li><li>シーン照明でハイライトを確認します。濡れたような見た目の効果なので、水たまりや雨の動作は別の仕組みで作ります。</li></ol>
 <h3>川の見た目を動かす</h3>
 <ol><li>実際の川床が必要なら、Path ツールで水路を作ります。</li><li>幅に合うテクスチャと Scale で、川の地表を塗ります。</li><li>一つの有効なライブスロットで、その ID を対象にし、Flow を有効にします。</li><li>低速から始め、目的の方向に動くまで Heading を調整します。</li><li>曲がり角と投影の切り替わりを確認します。専用の水形状やゲームプレイが必要なら別に追加します。</li></ol>
-<h3>季節の雪を増減させる</h3>
-<ol><li>ダスティングマスクを塗り、下地の対象、雪の ID、傾斜しきい値を設定します。</li><li>Strength 0 と 1 付近で、見た目の両端を確認します。</li><li>独自コントローラーで強さを動かすか、デモの雪サイクルで試します。</li><li>意図した地形グループだけに効くよう、マテリアルの共有範囲を確認します。</li><li>足音なども変更する場合は、ランタイムテスターと見た目を比較します。</li></ol>
+<h3>季節の雪と Scatter を一緒に増減させる</h3>
+<ol><li>ダスティングマスクを塗り、下地の対象、雪の ID、傾斜しきい値を設定します。</li><li>対象となる Grass や Flower の Scatter Object が、同じ下地バイオーム ID を Target にしていることを確認します。</li><li>Dusting Strength を 0 と 1 付近、Scatter Density を 1 と 0 に近い値、Scatter Colour Multiplier を White と淡い寒色で比較します。</li><li>独自コントローラーでこれらの値を動かすか、デモの Snow Cycle で Terrain と Scatter が連動する季節変化を試します。</li><li>意図した地形グループだけに効くよう、マテリアルの共有範囲を確認します。</li><li>足音なども変更する場合は、ランタイムテスターと見た目を比較します。Scatter の表示量を変えても、ベイク済みの Gameplay Surface Query 自体は変わりません。</li></ol>
 
 <h2 id="troubleshooting">マテリアルの効果が出ない・合わないとき</h2>
 <div class="table-wrap"><table><thead><tr><th>症状</th><th>確認する順番</th></tr></thead><tbody>
@@ -122,6 +131,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>近くは正しいが遠くで変わる</td><td>品質フェード、ミップマップ、カメラを確認します。フェードの値は正確なメートル距離ではありません。</td></tr>
 <tr><td>Seam Blend を最大にしてもタイルの裂け目が残る</td><td>形状と接続を確認します。Seam Blend は投影の境界を変えるもので、メッシュをつなぐ機能ではありません。</td></tr>
 <tr><td>問い合わせでは雪なのに見えない</td><td>ゲームプレイのダスティング判定は、塗ったマスクを含みません。画素の取得ではなく近似です。</td></tr>
-<tr><td>複数の地形が同時に変わる</td><td>共有マテリアルを確認します。独立した効果には、別のマテリアルや独立コピーを使います。</td></tr>
+<tr><td>複数の地形が同時に変わる</td><td>共有マテリアルを確認します。独立した効果には、別のマテリアルや独立コピーを使います。</td></tr><tr><td>Live Slot を変えても Scatter の色や密度が変わらない</td><td>Live Biome の Master Switch、Slot の Target ID、Scatter Object の Target Biomes、Scatter が同じ互換 Material を使用しているか確認します。1つの Scatter Object が複数バイオームを Target にできても、ライブ反応は各 Instance の所有バイオームに従います。</td></tr><tr><td>Grass の根元が動きすぎる、または先端がほとんど動かない</td><td>Height To Tip を Mesh のおおよその Object Space Height と比較し、その後 Wind Strength を調整します。動いた Geometry が Camera 境界で消える場合は Scatter Settings の Wind Bounds Padding を増やします。</td></tr>
 </tbody></table></div>
 <h2 id="support">サポート</h2><p>相談するときは、期待した結果、使った項目、実際に起きたことを説明してください。Unity のバージョン、選択したパイプライン、関連する設定のスクリーンショットも添えます。実行時の問い合わせの問題では、コライダーの種類と、最後にサーフェスデータをベイクした時期も記載してください。</p><p><a href="https://dptgames.github.io/#contact">DPT Games お問い合わせフォーム</a>、または <a href="https://discord.gg/EkQykfzP5X">DPT Games Discord</a> をご利用ください。</p><p class="back-top"><a href="#top">ページの先頭へ</a></p><footer class="footer">DPT Vertex 3D Terrain ドキュメント · 操作項目を見つけやすいよう、英語の項目名も併記しています。エディター上部の English / 日本語で、ツールの表示言語を切り替えられます。</footer></main></body></html>
