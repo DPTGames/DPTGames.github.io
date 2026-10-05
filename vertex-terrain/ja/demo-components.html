@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="付属のコンポーネントを試し、地形の地表情報を自分のゲームプレイに使います。"><link rel="alternate" hreflang="en" href="../demo-components.html"><link rel="alternate" hreflang="ja" href="demo-components.html"><title>デモ・ランタイムガイド | DPT Games</title><style>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="付属コンポーネント、ライブバイオームと Scatter の制御を試し、地形の地表情報をゲームプレイに使います。"><link rel="alternate" hreflang="en" href="../demo-components.html"><link rel="alternate" hreflang="ja" href="demo-components.html"><title>デモ・ランタイムガイド | DPT Games</title><style>
 :root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
 main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
@@ -14,12 +14,12 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 @media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
 @media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
 </style></head>
-<body><main id="top"><nav class="site-nav" aria-label="ドキュメント"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a href="index.html">Vertex 3D Terrain ガイド</a><a href="biomes.html">バイオームガイド</a><a href="terrain-material-settings.html">地形マテリアル設定</a><a href="demo-components.html" aria-current="page">デモ・ランタイムガイド</a></nav><nav class="language-nav" aria-label="言語"><a href="../demo-components.html" lang="en" hreflang="en">English</a><a href="demo-components.html" lang="ja" hreflang="ja" aria-current="page">日本語</a></nav><header><h1>デモ・ランタイムガイド</h1><p class="lead">付属のコンポーネントを試し、地形の地表情報を自分のゲームプレイに使います。</p></header><nav class="toc" aria-label="このページの内容"><h2>このページの内容</h2><ul><li><a href="#quick-start">デモを試し、各部品を確認する</a></li><li><a href="#dynamic-biome-controller">Dynamic Biome Demo Controller</a></li><li><a href="#surface-raycast-tester">Surface Raycast Tester</a></li><li><a href="#terrain-demo-camera">Terrain Demo Camera</a></li><li><a href="#runtime-architecture">サーフェスデータをゲームプレイに使う</a></li><li><a href="#query-limits">問い合わせは見た目とどこまで一致するか</a></li><li><a href="#troubleshooting">実行時・デモの問題</a></li><li><a href="#support">サポート</a></li></ul></nav><p class="table-hint">小さい画面では、幅の広い表を横にスクロールするとすべての列を読めます。</p><div class="intro"><p>デモのコンポーネントでは、地形の確認、ライブマテリアル効果の実験、物理レイキャストが返すバイオームの検証ができます。参考にして変更できる例であり、完成したキャラクター制御、天候、足音システムではありません。</p><p>デモを試すだけならコードを書く必要はありません。後半の連携例は、地表情報を自分のゲームプレイに使いたい開発者向けです。</p></div>
+<body><main id="top"><nav class="site-nav" aria-label="ドキュメント"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a href="index.html">Vertex 3D Terrain ガイド</a><a href="biomes.html">バイオームガイド</a><a href="terrain-material-settings.html">地形マテリアル設定</a><a href="scatter-system.html">3D Scatter ガイド</a><a href="demo-components.html" aria-current="page">デモ・ランタイムガイド</a></nav><nav class="language-nav" aria-label="言語"><a href="../demo-components.html" lang="en" hreflang="en">English</a><a href="demo-components.html" lang="ja" hreflang="ja" aria-current="page">日本語</a></nav><header><h1>デモ・ランタイムガイド</h1><p class="lead">付属のコンポーネントを試し、地形の地表情報を自分のゲームプレイに使います。</p></header><nav class="toc" aria-label="このページの内容"><h2>このページの内容</h2><ul><li><a href="#quick-start">デモを試し、各部品を確認する</a></li><li><a href="#dynamic-biome-controller">Dynamic Biome Demo Controller</a></li><li><a href="#surface-raycast-tester">Surface Raycast Tester</a></li><li><a href="#terrain-demo-camera">Terrain Demo Camera</a></li><li><a href="#runtime-architecture">サーフェスデータをゲームプレイに使う</a></li><li><a href="#query-limits">問い合わせは見た目とどこまで一致するか</a></li><li><a href="#troubleshooting">実行時・デモの問題</a></li><li><a href="#support">サポート</a></li></ul></nav><p class="table-hint">小さい画面では、幅の広い表を横にスクロールするとすべての列を読めます。</p><div class="intro"><p>デモのコンポーネントでは、地形の確認、ライブマテリアル効果の実験、物理レイキャストが返すバイオームの検証ができます。参考にして変更できる例であり、完成したキャラクター制御、天候、足音システムではありません。</p><p>デモを試すだけならコードを書く必要はありません。後半の連携例は、地表情報を自分のゲームプレイに使いたい開発者向けです。</p></div>
 
 <h2 id="quick-start">デモを試し、各部品を確認する</h2>
 <ol><li><code>Assets/DPTGames/Vertex_Terrain/VertexTerrain_Demo/VertexTerrain_DemoScene.unity</code> を開きます。</li><li>地形の Renderer、マテリアル、ライブラリを確認し、その地表の ID を調べます。</li><li>Dynamic Biome Demo Controller を探し、Play モードに入る前にマテリアル、対象 ID、有効なシミュレーションを確認します。</li><li>Play モードでデモカメラを動かし、塗られた地表を確認します。</li><li>効果が分かるよう、マテリアルのシミュレーションは一つずつ試します。</li><li>Surface Raycast Tester で ID と名前を確認します。一種類だけの場所と、混ざった境界で見た目を比較します。</li></ol>
 <div class="table-wrap"><table><thead><tr><th>コンポーネント・アセット</th><th>役割</th><th>自分のゲームに必要か</th></tr></thead><tbody>
-<tr><td>Dynamic Biome Demo Controller</td><td>地形マテリアルにライブ設定を書き込み、例のアニメーションを動かします。</td><td>任意です。天候やゲームのルールに合わせて独自制御を作れます。</td></tr>
+<tr><td>Dynamic Biome Demo Controller</td><td>地形マテリアルに Terrain と Scatter Response のライブ設定を書き込み、例のアニメーションを動かします。</td><td>任意です。天候やゲームのルールに合わせて独自制御を作れます。</td></tr>
 <tr><td>Surface Raycast Tester</td><td>物理ヒットと、その場所のバイオームを表示します。</td><td>任意の検証ツールです。ゲーム側から同じ問い合わせ API を直接使えます。</td></tr>
 <tr><td>Terrain Demo Camera</td><td>確認用の自由移動カメラです。</td><td>任意です。自分のプレイヤーやカメラに置き換えられます。</td></tr>
 <tr><td>Terrain Surface Data</td><td>ベイクした三角形とバイオームの対応です。</td><td>付属の三角形ベースの問い合わせに必要です。</td></tr>
@@ -47,17 +47,17 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Smoothness / Normal / Parallax：0～3</td><td>対象地表の各反応に掛ける倍率です。</td><td>1 は元の反応です。1 付近の小さな変更から試します。</td></tr>
 <tr><td>Emissive：0～10</td><td>元の発光の倍率です。</td><td>1 は維持です。模様の発光には、元の地表に発光情報が必要です。</td></tr>
 <tr><td>Flow</td><td>テクスチャの動き、方向、速さ、往復を指定します。</td><td>遅い正の速度から始めます。負なら逆方向、0 は静止です。</td></tr>
-<tr><td>Dusting</td><td>上に重ねるバイオーム、強さ、上向きの傾斜しきい値を指定します。</td><td>下地をスロットの対象にし、雪・ほこりを重ねる ID にします。地形には先にマスクを塗ります。</td></tr>
+<tr><td>Dusting</td><td>上に重ねるバイオーム、強さ、上向きの傾斜しきい値を指定します。</td><td>下地をスロットの対象にし、雪・ほこりを重ねる ID にします。地形には先にマスクを塗ります。</td></tr><tr><td>Scatter Density：0～1</td><td>Slot の Target Biome ID が所有する Scatter のライブ密度倍率です。</td><td>1 は設定済みの Scatter 量を維持し、0 は配置を再構築せずに非表示にします。</td></tr><tr><td>Scatter Colour Multiplier</td><td>Target Biome ID が所有する Generated Scatter の RGB / HDR 倍率です。</td><td>White が中立です。霜のような季節変化には淡い寒色を試してください。</td></tr>
 </tbody></table></div>
-<p>重み、流れ、傾斜、マスクの詳しい意味は、<a href="terrain-material-settings.html#live-biomes">地形マテリアル設定</a>を参照してください。デモには Waterfall Projection の項目がなく、Push するとマテリアルのフラグを解除することがあります。</p>
+<p>重み、流れ、傾斜、マスク、Scatter Response の詳しい意味は、<a href="terrain-material-settings.html#live-biomes">地形マテリアル設定</a>を参照してください。Scatter の配置、再利用可能な Target Biomes、LOD 設定については <a href="scatter-system.html">3D Scatter ガイド</a>を参照してください。デモには Waterfall Projection の項目がなく、Push するとマテリアルのフラグを解除することがあります。</p>
 <h3>デモアニメーションが実際に変えるもの</h3>
 <div class="table-wrap"><table><thead><tr><th>シミュレーション</th><th>実際の動作</th><th>必要な準備</th></tr></thead><tbody>
-<tr><td>Winter Snowstorm</td><td>Slot 1 のダスティングを有効にし、強さを 0～1.8 で変化させます。Slot 1 の重み自体は動かしません。</td><td>Slot 1 を有効にし、受け側の ID と雪の ID、地形のマスクを設定します。Weather Cycle Speed が周期の速さです。</td></tr>
+<tr><td>Winter Snowstorm</td><td>Slot 1 のダスティングを有効にし、強さを 0～1.8 で変化させます。同時に Slot 1 の Scatter を開始時の Density / Colour から Winter Scatter Density と Winter Scatter Colour Multiplier に向かってブレンドします。Slot 1 の重み自体は動かしません。</td><td>Slot 1 を有効にし、受け側の ID と雪の ID、地形のマスクを設定します。対象となる Scatter Object も同じバイオーム ID を Target にしてください。Weather Cycle Speed が周期の速さです。</td></tr>
 <tr><td>River Level</td><td>Slot 1 の重み倍率を 0～2.5 で変化させます。</td><td>対象の川バイオームを含む混合を塗ります。地表の寄与を変えるもので、水位や形状は変えません。</td></tr>
 <tr><td>Emissive Pulse</td><td>Slot 4 を有効にし、発光倍率を 0.5～8.5 で変化させます。</td><td>Slot 4 で発光バイオームを対象にします。Pulse Speed は周期の速さ、Bloom は別の設定です。</td></tr>
 </tbody></table></div>
-<p>周期の速度は、正弦波のデモの時間変化を調整します。物理的な天候の長さや、流れの速さではありません。一つずつ試して理解してから、意図を持って組み合わせてください。</p>
-<p>Play モード中に無効にすると、Slot 1 の重みとダスティング強さ、Slot 4 の発光倍率は開始時の値へ戻ります。変更したすべてのフラグ、ID、マテリアル設定が戻るわけではありません。既知の基準を残し、実験後のマテリアルを比較します。</p>
+<p>周期の速度は、正弦波のデモの時間変化を調整します。物理的な天候の長さや、流れの速さではありません。Winter Scatter Density の初期値は 0.05 なので、Winter のピークでは Target Scatter を設定量の 5% まで減らせます。Winter Scatter Colour Multiplier の初期値は明るい寒色です。使用する Material と季節表現に合わせて両方を調整してください。</p><p>一つずつ試して理解してから、意図を持って組み合わせてください。</p>
+<p>Play モード中に無効にすると、Slot 1 の重み、ダスティング強さ、Scatter Density、Scatter Colour Multiplier と、Slot 4 の発光倍率は開始時の値へ戻ります。変更したすべてのフラグ、ID、マテリアル設定が戻るわけではありません。既知の基準を残し、実験後のマテリアルを比較します。</p>
 
 <h2 id="surface-raycast-tester">Surface Raycast Tester</h2>
 <p>レイキャストは、Unity に「この線上にどのコライダーがあるか」を問い合わせます。テスターはヒットを表示し、次に地形の Surface Target にバイオームを問い合わせます。二つは別の処理です。コライダーに当たっても、サーフェスデータがあるとは限りません。</p>
@@ -155,7 +155,7 @@ public class TerrainSurfaceProbe : MonoBehaviour
 <tr><td>Play 開始時にコンポーネントの値が変わる</td><td>Pull From Material On Play が既存設定を取り込むことがあります。どちらを基準にするか先に決めます。</td></tr>
 <tr><td>マテリアルの編集がすぐ戻る</td><td>Sync In Edit Mode と実行中のシミュレーションを確認します。設定中は一方を基準にします。</td></tr>
 <tr><td>スクリプトで値を変えても見た目が変わらない</td><td>シミュレーションがない場合、変更後に PushMaterialProperties を呼びます。マテリアル参照も確認します。</td></tr>
-<tr><td>雪嵐を動かしても雪がない</td><td>Slot 1 の Active、下地の ID、雪の ID、マスク、傾斜を確認します。アニメーションは強さを変え、ダスティングを有効にするだけです。</td></tr>
+<tr><td>雪嵐を動かしても雪がない</td><td>Slot 1 の Active、下地の ID、雪の ID、マスク、傾斜を確認します。アニメーションは Dusting Strength を変化させ、Slot 1 の Scatter Response も変更します。</td></tr><tr><td>Terrain は雪になるが Grass が変わらない</td><td>Grass の Scatter Object が Slot 1 と同じバイオーム ID を Target にしているか、Material に Scatter Response Property があるか、Live Biome の Master Switch が有効か、Scatter Renderer がその Material を使用しているか確認します。詳しくは <a href="scatter-system.html#live-response">3D Scatter ガイド</a>を参照してください。</td></tr>
 <tr><td>River Level で水位が上がらない</td><td>Slot 1 の塗られた重みを変える例です。水メッシュや物理的な高さは変えません。</td></tr>
 <tr><td>ヒットしてもバイオームが出ない</td><td>レイヤー、Surface Target、ベイクを確認します。一致する MeshCollider と有効な三角形番号が必要です。</td></tr>
 <tr><td>名前や ID が違う</td><td>不適切な Override を解除し、再ベイクします。ID とコライダーの順序を確認し、混合境界より先に一種類の地表で試します。</td></tr>
