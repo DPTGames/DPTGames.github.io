@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Create reusable surfaces and understand how textures, colours and blend settings work together."><link rel="alternate" hreflang="en" href="biomes.html"><link rel="alternate" hreflang="ja" href="ja/biomes.html"><title>Biomes Guide | DPT Games</title><style>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="再利用できる地表を作り、テクスチャ、色、ブレンド設定の関係を理解します。"><link rel="alternate" hreflang="en" href="../biomes.html"><link rel="alternate" hreflang="ja" href="biomes.html"><title>バイオームガイド | DPT Games</title><style>
 :root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
 main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
@@ -14,126 +14,126 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 @media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
 @media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
 </style></head>
-<body><main id="top"><nav class="site-nav" aria-label="Documentation"><a href="https://dptgames.github.io/">DPT Games homepage</a><a href="index.html">Vertex 3D Terrain Guide</a><a href="biomes.html" aria-current="page">Biomes Guide</a><a href="terrain-material-settings.html">Terrain Material Settings</a><a href="scatter-system.html">3D Scatter Guide</a><a href="demo-components.html">Demo & Runtime Guide</a></nav><nav class="language-nav" aria-label="Language"><a href="biomes.html" lang="en" hreflang="en" aria-current="page">English</a><a href="ja/biomes.html" lang="ja" hreflang="ja">日本語</a></nav><header><h1>Biomes Guide</h1><p class="lead">Create reusable surfaces and understand how textures, colours and blend settings work together.</p></header><nav class="toc" aria-label="On this page"><h2>On this page</h2><ul><li><a href="#quick-start">Create a useful first biome</a></li><li><a href="#creating-biomes">The library and biome inspector</a></li><li><a href="#texture-inputs">Which texture goes in which field?</a></li><li><a href="#color-ramp">Colour ramps and ramp transforms</a></li><li><a href="#surface-settings">Understand each surface setting</a></li><li><a href="#variants">Make variants without losing a good preset</a></li><li><a href="#merge">Merge two surfaces into a new biome</a></li><li><a href="#direct-mode">Biomes in Direct Vertex Color</a></li><li><a href="#optimization">Texture quality, memory and shared assets</a></li><li><a href="#troubleshooting">Common biome problems</a></li><li><a href="#support">Support</a></li></ul></nav><p class="table-hint">On a small screen, scroll wide tables sideways to read every column.</p><div class="intro"><p>A biome is one reusable ground surface: grass, sand, snow, rock, metal, or another look you create. Painting chooses where that surface appears. The biome inspector chooses what the surface looks like.</p><p>A biome is not a terrain generator or a vegetation system. Naming a preset “Forest” does not place trees, and naming one “River” does not create flowing water geometry. Use the <a href="scatter-system.html">3D Scatter Guide</a> when you want biome-driven grass, flowers, mushrooms, pebbles or custom meshes placed on top of Terrain Atlas surfaces.</p></div>
+<body><main id="top"><nav class="site-nav" aria-label="ドキュメント"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a href="index.html">Vertex 3D Terrain ガイド</a><a href="biomes.html" aria-current="page">バイオームガイド</a><a href="terrain-material-settings.html">地形マテリアル設定</a><a href="scatter-system.html">3D Scatter ガイド</a><a href="demo-components.html">デモ・ランタイムガイド</a></nav><nav class="language-nav" aria-label="言語"><a href="../biomes.html" lang="en" hreflang="en">English</a><a href="biomes.html" lang="ja" hreflang="ja" aria-current="page">日本語</a></nav><header><h1>バイオームガイド</h1><p class="lead">再利用できる地表を作り、テクスチャ、色、ブレンド設定の関係を理解します。</p></header><nav class="toc" aria-label="このページの内容"><h2>このページの内容</h2><ul><li><a href="#quick-start">最初のバイオームを作る</a></li><li><a href="#creating-biomes">ライブラリとバイオームインスペクター</a></li><li><a href="#texture-inputs">どの欄にどのテクスチャを入れるか</a></li><li><a href="#color-ramp">カラーランプとランプ変換</a></li><li><a href="#surface-settings">各サーフェス設定の意味</a></li><li><a href="#variants">良いプリセットを保ちながら変化を作る</a></li><li><a href="#merge">二つの地表を一つの新しいバイオームにする</a></li><li><a href="#direct-mode">Direct Vertex Color のバイオーム</a></li><li><a href="#optimization">テクスチャ品質、メモリ、共有アセット</a></li><li><a href="#troubleshooting">バイオームでよくある問題</a></li><li><a href="#support">サポート</a></li></ul></nav><p class="table-hint">小さい画面では、幅の広い表を横にスクロールするとすべての列を読めます。</p><div class="intro"><p>バイオームは、草、砂、雪、岩、金属など、一つの再利用できる地表です。ペイントでは「どこに表示するか」、バイオームインスペクターでは「どう見えるか」を決めます。</p><p>バイオームは、地形生成や植生のシステムではありません。「Forest」と名付けても木は配置されず、「River」と名付けても水の形状は作られません。Terrain Atlas の地表に Grass、Flower、Mushroom、Pebble、Custom Mesh をバイオーム駆動で配置する場合は<a href="scatter-system.html">3D Scatter ガイド</a>を参照してください。</p></div>
 
-<h2 id="quick-start">Create a useful first biome</h2>
-<ol><li>Choose a Biome Library and the Terrain Atlas pipeline in the terrain editor.</li><li>Add a biome and give it a clear name, such as Dry Sand or Dark Rock.</li><li>Assign its base-colour image to <strong>Source RGB</strong>. If you have a compatible texture set, Auto Folder can help populate its inputs; check each assignment afterwards.</li><li>For a first test, keep normal, metallic and emissive detail restrained. Set the generation strengths you want before using <strong>Auto Generate</strong>. A strength of zero excludes that generated map.</li><li>Check the generated texture and colour ramp. Paint a test patch large enough to inspect at your expected camera distance.</li><li>Adjust Scale for the texture size, then the ramp for colour. Add normal and PBR inputs if your surface needs them.</li><li>Inspect it in both light and shade, from close up and farther away. Duplicate the biome before experimenting with a very different look.</li></ol>
-<div class="example"><p><strong>Start with one clear goal:</strong> for matte sand, first get the colour and grain size right. Then add a modest normal effect. Keep metallic at zero and smoothness low. It is easier to judge each setting when you change one thing at a time.</p></div>
+<h2 id="quick-start">最初のバイオームを作る</h2>
+<ol><li>地形エディターで Biome Library と Terrain Atlas パイプラインを選びます。</li><li>バイオームを追加し、「乾いた砂」「暗い岩」など、分かりやすい名前を付けます。</li><li>ベースカラーの画像を <strong>Source RGB</strong> に指定します。対応するテクスチャセットがあれば Auto Folder で入力を探せますが、割り当ては必ず確認します。</li><li>最初は法線、金属、発光を控えめにします。<strong>Auto Generate</strong> の前に、生成に使う強さを指定します。強さが 0 のマップは生成対象から除外されます。</li><li>生成テクスチャとカラーランプを確認します。実際に使うカメラ距離から見られる程度のテスト範囲を塗ります。</li><li>Scale で模様の大きさ、ランプで色を調整します。必要なら法線と PBR の入力も追加します。</li><li>明るい場所と影、近距離と遠距離で確認します。大きく見た目を変える前に、バイオームを複製します。</li></ol>
+<div class="example"><p><strong>最初は一つの目標に絞る：</strong>つやの少ない砂なら、まず色と粒の大きさを整えます。次に弱い法線効果を足し、Metallic は 0、Smoothness は低く保ちます。一度に一項目ずつ変えると、効果を判断しやすくなります。</p></div>
 
-<h2 id="creating-biomes">The library and biome inspector</h2>
-<p>The library is the palette shared by your terrain objects. The inspector edits the selected preset. Choose a biome card to see its settings; selecting several cards opens shared editing controls. A mixed-value field means the selected presets currently have different values.</p>
-<div class="table-wrap"><table><thead><tr><th>Action</th><th>What it does</th><th>When to use it</th></tr></thead><tbody>
-<tr><td>Add</td><td>Creates a new preset in the current pipeline’s list.</td><td>Use for a new surface that does not already have a suitable starting point.</td></tr>
-<tr><td>Biome Name</td><td>A human-readable label for the preset.</td><td>Use names that describe the appearance. User-created names are kept as entered when you change the editor language.</td></tr>
-<tr><td>Auto Folder</td><td>Helps find related texture inputs in the selected source’s folder.</td><td>Useful for an organised texture set. Verify the results, especially roughness versus smoothness and packed-channel layout.</td></tr>
-<tr><td>Duplicate</td><td>Copies the preset’s settings while retaining references to its source textures.</td><td>Make a lighter, darker, wetter-looking or differently rotated variant without importing the same files again.</td></tr>
-<tr><td>Delete</td><td>Removes a preset and updates the library’s indexing.</td><td>Check any separately stored biome IDs in gameplay components and rebake surface data where necessary.</td></tr>
-<tr><td>Reorder / swap</td><td>Changes the palette’s order and therefore its numeric IDs.</td><td>Organise the palette, then recheck explicit IDs used outside the editor workflow.</td></tr>
-<tr><td>Multi-selection</td><td>Lets you apply shared settings to several selected presets.</td><td>Adjust a family of rocks together. Changing a mixed field gives the selected presets the value you enter.</td></tr>
+<h2 id="creating-biomes">ライブラリとバイオームインスペクター</h2>
+<p>ライブラリは、地形オブジェクトが共有するパレットです。インスペクターは選択したプリセットを編集します。カードを選ぶとその設定が表示され、複数のカードを選ぶと共通の編集項目が表示されます。値が混在している表示は、選択したプリセットの値が異なることを示します。</p>
+<div class="table-wrap"><table><thead><tr><th>操作</th><th>動作</th><th>用途</th></tr></thead><tbody>
+<tr><td>Add</td><td>現在のパイプラインの一覧にプリセットを追加します。</td><td>適切な土台となるプリセットがない新しい地表に使います。</td></tr>
+<tr><td>Biome Name</td><td>プリセットの名前です。</td><td>見た目が分かる名前を付けます。エディターの言語を変えても、ユーザーが付けた名前はそのままです。</td></tr>
+<tr><td>Auto Folder</td><td>元画像のフォルダーから関連する入力テクスチャを探します。</td><td>整理されたセットに便利です。特に Roughness と Smoothness、パック画像のチャンネル配置を確認します。</td></tr>
+<tr><td>Duplicate</td><td>設定をコピーし、元のテクスチャへの参照を保ちます。</td><td>同じ画像を再インポートせず、明るい、暗い、濡れたような、回転したバリエーションを作れます。</td></tr>
+<tr><td>Delete</td><td>プリセットを削除し、ライブラリの番号を更新します。</td><td>ゲームプレイ側に保存した ID を確認し、必要ならサーフェスデータを再ベイクします。</td></tr>
+<tr><td>並べ替え・交換</td><td>パレットの順序と、その数値 ID を変えます。</td><td>整理した後は、エディター外で指定している ID も確認します。</td></tr>
+<tr><td>複数選択</td><td>選択した複数のプリセットに共通の設定を適用します。</td><td>岩のグループなどをまとめて調整できます。混在している項目を変えると、入力値が選択したすべてに適用されます。</td></tr>
 </tbody></table></div>
-<p><strong>Names and IDs are different.</strong> A name helps you recognise a surface; an ID is its position in the current pipeline’s list. ID 6 might be snow in a demo library and rock in yours. Always read the IDs from your current library before configuring live slots, <a href="scatter-system.html#target-biomes">scatter Target Biomes</a> or gameplay scripts.</p>
-<p>Editing a shared library can change several terrains at once. Use the terrain tool’s standalone-copy workflow when one result should keep its own material and texture assets.</p>
+<p><strong>名前と ID は別です。</strong>名前は地表を見分けるためのもの、ID は現在のパイプライン一覧内の番号です。デモで ID 6 が雪でも、別のライブラリでは岩かもしれません。ライブスロット、<a href="scatter-system.html#target-biomes">Scatter の Target Biomes</a>、ゲームプレイスクリプトを設定する前に、自分のライブラリで ID を確認してください。</p>
+<p>共有ライブラリを編集すると、複数の地形が変わることがあります。一つの結果だけ専用のマテリアルとテクスチャを保ちたい場合は、地形ツールの独立コピー機能を使います。</p>
 
-<h2 id="texture-inputs">Which texture goes in which field?</h2>
-<p>Different images describe different parts of a surface. You do not need every map for every biome. A plain stylised surface may only need a colour source and a good ramp; a more detailed surface may benefit from normal and PBR maps.</p>
-<div class="table-wrap"><table><thead><tr><th>Input</th><th>What the image contains</th><th>What it changes</th></tr></thead><tbody>
-<tr><td>Source RGB</td><td>The original coloured base image, often called base colour, albedo or diffuse.</td><td>Provides source colour information for generating the biome’s detail and ramp. The finished surface is not simply this image pasted unchanged onto the mesh.</td></tr>
-<tr><td>Generated</td><td>The processed detail texture used by the terrain system.</td><td>Works with the ramp to produce the surface detail. Assign a suitable existing generated texture here only when you intend to supply that processed input yourself.</td></tr>
-<tr><td>Source Height</td><td>A greyscale image describing high and low parts of the material.</td><td>Feeds the generated height/detail workflow. It can support the illusion of relief and blending, but does not raise terrain vertices.</td></tr>
-<tr><td>Invert Height</td><td>Reverses which end of the source is treated as high or low.</td><td>Useful if crevices look raised or raised details look recessed. Compare a small patch before and after.</td></tr>
-<tr><td>Normal</td><td>A tangent-space normal map, usually with blue/purple colours.</td><td>Changes how small bumps catch the light. Import it as a Normal Map in Unity. It does not change collision or silhouette.</td></tr>
-<tr><td>AO</td><td>An ambient-occlusion map: sheltered areas are darker.</td><td>Adds material-scale shading in crevices. This is separate from baking geometry AO on a Direct Vertex Color terrain.</td></tr>
-<tr><td>Metallic</td><td>A mask showing which parts behave as metal.</td><td>Changes the material response. Most grass, soil, snow and stone should have little or no metallic response.</td></tr>
-<tr><td>Smoothness / Roughness</td><td>A map describing how polished or rough different parts are.</td><td>Changes the spread of highlights. Smoothness and roughness run in opposite directions; enable the roughness interpretation when that is the map you have.</td></tr>
-<tr><td>Emissive</td><td>A mask for areas that should glow.</td><td>Works with the emissive controls and compiled surface data. Use a defined glow mask for cracks or veins; emission does not create a light source for nearby objects by itself.</td></tr>
-<tr><td>Packed PBR</td><td>Several material masks stored in separate colour channels of one image.</td><td>Supplies multiple inputs through a single file. The channel mapping must match how the image was authored.</td></tr>
+<h2 id="texture-inputs">どの欄にどのテクスチャを入れるか</h2>
+<p>画像ごとに、表面の異なる性質を表します。すべてのバイオームに、すべてのマップが必要なわけではありません。単純な表現なら色の元画像とランプだけで十分な場合があります。細かい表現には法線や PBR マップが役立ちます。</p>
+<div class="table-wrap"><table><thead><tr><th>入力</th><th>画像が持つ情報</th><th>変わる見た目</th></tr></thead><tbody>
+<tr><td>Source RGB</td><td>元の色付き画像。Base Color、Albedo、Diffuse と呼ばれることもあります。</td><td>細部とランプを生成するための色情報です。元画像をそのままメッシュに貼るだけの処理ではありません。</td></tr>
+<tr><td>Generated</td><td>地形システムで使う、処理済みの細部テクスチャです。</td><td>ランプと組み合わせて地表を描きます。処理済みの入力を自分で用意したい場合だけ、適した既存テクスチャを直接指定します。</td></tr>
+<tr><td>Source Height</td><td>素材の高低を示すグレースケール画像です。</td><td>高さ・細部の生成に使います。奥行きやブレンドの表現には使えますが、地形の頂点は上がりません。</td></tr>
+<tr><td>Invert Height</td><td>高い部分と低い部分の扱いを逆にします。</td><td>くぼみが盛り上がって見える場合などに使います。小さな範囲で変更前後を比較します。</td></tr>
+<tr><td>Normal</td><td>通常は青紫色の、接線空間の法線マップです。</td><td>細かい凹凸への光の当たり方を変えます。Unity で Normal Map としてインポートします。衝突や輪郭は変わりません。</td></tr>
+<tr><td>AO</td><td>遮られた場所を暗くするアンビエントオクルージョンのマップです。</td><td>素材の細かな溝に陰影を加えます。Direct Vertex Color 地形の形状 AO ベイクとは別です。</td></tr>
+<tr><td>Metallic</td><td>金属として扱う場所を示すマスクです。</td><td>素材の反射応答を変えます。草、土、雪、普通の石では、通常ほとんど金属反応を使いません。</td></tr>
+<tr><td>Smoothness / Roughness</td><td>磨かれた部分や粗い部分を示すマップです。</td><td>ハイライトの広がり方を変えます。滑らかさと粗さは逆の意味なので、Roughness の画像なら粗さとして扱う設定を有効にします。</td></tr>
+<tr><td>Emissive</td><td>発光する場所のマスクです。</td><td>発光設定と生成済みデータで使います。亀裂や鉱脈には明確なマスクが有効です。発光だけで周囲を照らすライトが作られるわけではありません。</td></tr>
+<tr><td>Packed PBR</td><td>一つの画像の各色チャンネルに、複数の素材マスクを格納したものです。</td><td>一つのファイルから複数の入力を取ります。作成時のチャンネル配置に合うマッピングが必要です。</td></tr>
 </tbody></table></div>
-<h3>Separate textures or packed PBR?</h3>
-<p>Use <strong>Separate Textures</strong> when you have individual AO, metallic and smoothness/roughness maps. Use <strong>Packed Texture</strong> when the supplier has combined those masks into one image. The filename alone is not enough to establish its channel layout; check the texture set’s specification.</p>
-<div class="table-wrap"><table><thead><tr><th>Mapping</th><th>Red channel</th><th>Green channel</th><th>Blue channel</th><th>Alpha channel</th></tr></thead><tbody>
-<tr><td>Standard Unity MRAO</td><td>Metallic</td><td>AO</td><td>Not used for these masks</td><td>Smoothness</td></tr>
-<tr><td>Standard Unity MRAR</td><td>Metallic</td><td>AO</td><td>Not used for these masks</td><td>Roughness, inverted to smoothness</td></tr>
-<tr><td>Unreal ORM</td><td>AO</td><td>Roughness, inverted to smoothness</td><td>Metallic</td><td>Not used for these masks</td></tr>
-<tr><td>Custom</td><td>Metallic</td><td>Smoothness</td><td>AO</td><td>Not used for these masks</td></tr>
+<h3>個別テクスチャとパック PBR の選び方</h3>
+<p>AO、Metallic、Smoothness/Roughness の個別画像がある場合は <strong>Separate Textures</strong> を使います。複数のマスクを一枚にまとめた画像なら <strong>Packed Texture</strong> を使います。ファイル名だけでチャンネル配置を判断せず、配布元の仕様を確認してください。</p>
+<div class="table-wrap"><table><thead><tr><th>マッピング</th><th>赤</th><th>緑</th><th>青</th><th>アルファ</th></tr></thead><tbody>
+<tr><td>Standard Unity MRAO</td><td>Metallic</td><td>AO</td><td>これらのマスクには未使用</td><td>Smoothness</td></tr>
+<tr><td>Standard Unity MRAR</td><td>Metallic</td><td>AO</td><td>これらのマスクには未使用</td><td>Roughness。反転して Smoothness に変換</td></tr>
+<tr><td>Unreal ORM</td><td>AO</td><td>Roughness。反転して Smoothness に変換</td><td>Metallic</td><td>これらのマスクには未使用</td></tr>
+<tr><td>Custom</td><td>Metallic</td><td>Smoothness</td><td>AO</td><td>これらのマスクには未使用</td></tr>
 </tbody></table></div>
-<p>Here, <strong>Custom</strong> means the listed fixed layout; it does not open a free-form channel picker. If your texture uses another layout, repack it or use separate source maps.</p>
-<h3>What Auto Generate changes</h3>
-<p>Auto Generate builds the processed surface inputs and the colour ramp from the source setup. The current Normal, AO, Smoothness, Metallic, Emissive and Parallax strengths influence what is generated; zero excludes the relevant map. Assigning a new Source RGB can also initialise generated detail and ramp information.</p>
-<p>Set your intended strengths first, generate, then inspect. If you excluded a map during generation and later decide you need it, regenerate from a suitable source. A shader multiplier cannot reveal useful detail that was never included.</p>
-<div class="callout"><p><strong>Before regenerating a finished biome:</strong> duplicate it if you want to keep its authored ramp. Auto Generate can replace colour work you made by hand. The ramp transform’s Reset button is not a general undo for all generation and texture assignments.</p></div>
+<p>ここでの <strong>Custom</strong> は、上記の固定配置です。任意のチャンネルを選ぶ画面ではありません。別の配置の画像は、チャンネルを組み直すか、個別のマップを使います。</p>
+<h3>Auto Generate が変更するもの</h3>
+<p>Auto Generate は、元の入力から処理済みのサーフェスデータとカラーランプを作ります。現在の Normal、AO、Smoothness、Metallic、Emissive、Parallax の強さが生成内容に影響し、0 のマップは除外されます。新しい Source RGB を指定した際にも、細部とランプが初期化されることがあります。</p>
+<p>必要な強さを先に設定し、生成してから確認します。除外していたマップが後で必要になったら、適した元画像から再生成してください。生成に含まれていない細部を、シェーダーの倍率だけで取り戻すことはできません。</p>
+<div class="callout"><p><strong>仕上げたバイオームを再生成する前に：</strong>自分で作ったランプを残したい場合は複製します。Auto Generate は手作業の色を置き換えることがあります。ランプ変換の Reset は、すべての生成やテクスチャ割り当てを取り消すボタンではありません。</p></div>
 
-<h2 id="color-ramp">Colour ramps and ramp transforms</h2>
-<p>The colour ramp maps the biome’s detail values to colours. Its left side colours the darker or lower-valued parts of that detail; its right side colours the brighter or higher-valued parts. It can turn one rock detail source into brown sandstone, cold grey stone or a stylised blue surface.</p>
-<p>This is <strong>not a world-altitude gradient</strong>. Putting white at the right end does not automatically put snow on mountain peaks. Use the terrain’s <a href="index.html#gradients">Gradient tool</a> for a rule based on terrain height or slope.</p>
-<ol><li>Open the ramp editor and adjust the colour keys.</li><li>Use a dark colour for recessed detail and a lighter colour for highlighted detail as a starting point.</li><li>Add intermediate keys when the material needs several colour bands.</li><li>Compare the painted surface under normal scene lighting. A very narrow bright band can produce speckled highlights.</li><li>Enable Fixed for stepped colour changes, or leave it off for smooth transitions.</li></ol>
-<div class="table-wrap"><table><thead><tr><th>Transform</th><th>What it does</th><th>Starting point</th></tr></thead><tbody>
-<tr><td>Hue</td><td>Rotates the colours around the hue wheel. The range −1 to +1 corresponds to approximately −180° to +180°.</td><td>0 preserves the captured ramp’s hue. Small changes make related variants.</td></tr>
-<tr><td>Saturation</td><td>Reduces or increases colour intensity relative to the captured ramp.</td><td>0 preserves it; −1 removes colour; +1 doubles saturation before the colour limits are applied.</td></tr>
-<tr><td>Brightness</td><td>Darkens or lightens the ramp colours, subject to colour limits.</td><td>0 preserves the captured brightness. Try small changes rather than moving directly to an extreme.</td></tr>
-<tr><td>Reset</td><td>Restores the ramp baseline captured for the transform operation.</td><td>Use to undo those transform adjustments. It does not necessarily restore the original imported texture’s first generated ramp.</td></tr>
+<h2 id="color-ramp">カラーランプとランプ変換</h2>
+<p>カラーランプは、素材の細部の値に色を割り当てます。左側は暗い・値の低い細部、右側は明るい・値の高い細部に対応します。同じ岩の元画像でも、茶色い砂岩、冷たい灰色の石、青いスタイライズ表現に変えられます。</p>
+<p>これは<strong>ワールド高度のグラデーションではありません。</strong>右端を白にしても、自動で山頂に雪が付きません。地形の高さ・傾斜のルールには、地形側の<a href="index.html#gradients">Gradient ツール</a>を使います。</p>
+<ol><li>ランプエディターを開き、色のキーを調整します。</li><li>まず、くぼんだ細部に暗い色、明るい細部に明るい色を使います。</li><li>複数の色帯が必要なら、中間のキーを追加します。</li><li>通常のシーン照明で塗った地表を確認します。非常に狭い明るい帯は、点状のハイライトになることがあります。</li><li>段階的な色変化には Fixed を有効にし、なめらかな変化には無効にします。</li></ol>
+<div class="table-wrap"><table><thead><tr><th>変換</th><th>動作</th><th>基準となる値</th></tr></thead><tbody>
+<tr><td>色相（Hue）</td><td>色相環に沿って色を回します。−1～+1 は、およそ −180°～+180° です。</td><td>0 は保持した基準ランプの色相です。小さく変えると関連するバリエーションを作れます。</td></tr>
+<tr><td>彩度（Saturation）</td><td>基準ランプに対して色の鮮やかさを変えます。</td><td>0 は維持、−1 は無彩色、+1 は彩度を 2 倍にしてから色の範囲に制限します。</td></tr>
+<tr><td>明るさ（Brightness）</td><td>色の範囲内で、ランプの色を暗く・明るくします。</td><td>0 は基準の明るさです。極端な値にせず、小さな変更から試します。</td></tr>
+<tr><td>Reset</td><td>変換の基準として保持したランプに戻します。</td><td>変換の調整を取り消すために使います。インポート直後に最初に生成したランプへ戻るとは限りません。</td></tr>
 </tbody></table></div>
-<p>Ramp transforms preserve the keys’ positions and alpha. If you want to change which detail values receive a colour, move or add keys rather than only changing Hue or Brightness.</p>
-<div class="example"><p><strong>Rock variation:</strong> duplicate a grey rock biome. Make one copy slightly warmer and darker using the ramp transforms. Keep their texture scale similar and rotate one copy by 90°. Painting both creates variation while retaining a consistent type of rock.</p></div>
+<p>ランプ変換ではキーの位置とアルファは保たれます。どの細部の値に色を付けるかを変えるなら、Hue や Brightness だけでなく、キーを移動・追加します。</p>
+<div class="example"><p><strong>岩のバリエーション：</strong>灰色の岩を複製し、片方のランプを少し暖かく暗くします。テクスチャの Scale は近い値にし、片方を 90° 回転させます。両方を塗ると、同じ種類の岩に見せながら変化を加えられます。</p></div>
 
-<h2 id="surface-settings">Understand each surface setting</h2>
-<p>These controls belong to the selected biome. The material has another set of global controls that can affect many biomes together. Get the individual surface looking right before using a global multiplier to change the entire terrain. Scatter placement is configured separately in the <a href="scatter-system.html">3D Scatter Guide</a>, where one reusable scatter object can target several of these biome IDs.</p>
-<div class="table-wrap"><table><thead><tr><th>Control</th><th>Lower value</th><th>Higher value</th><th>Useful guidance</th></tr></thead><tbody>
-<tr><td>Scale: 0.02–10</td><td>Larger-looking texture features and less frequent repetition.</td><td>Smaller-looking features and more repeats.</td><td>This is texture tiling, not the GameObject’s size. Compare it next to a character or another known-size object.</td></tr>
-<tr><td>Normal: 0–2</td><td>Flatter-looking lighting detail.</td><td>More pronounced lighting bumps.</td><td>The control is relevant when a normal source is assigned. Strong normals can make a surface noisy without improving the mesh shape.</td></tr>
-<tr><td>AO Strength: 0–1</td><td>Less material crevice shading.</td><td>Stronger crevice shading.</td><td>Avoid using AO to fix a lighting problem across the entire scene.</td></tr>
-<tr><td>Parallax: 0–2</td><td>Less apparent relief; zero removes that contribution.</td><td>Deeper-looking surface detail.</td><td>Inspect at a shallow viewing angle. It does not create steps, holes or collision depth.</td></tr>
-<tr><td>Smoothness</td><td>Broader, rougher-looking highlights.</td><td>Tighter, more polished highlights.</td><td>Without a map the range is 0–1; with a map it extends to 2. Around 1 preserves the mapped response; values above 1 push it toward a more uniformly smooth result.</td></tr>
-<tr><td>Metallic</td><td>Less metal-like response.</td><td>More metal-like response.</td><td>Without a map the range is 0–1; with a map it extends to 2. Above 1 expands the metal response rather than behaving as a simple neutral map multiplier.</td></tr>
-<tr><td>Emissive: 0–1</td><td>Less glow.</td><td>Stronger glow from the emissive setup.</td><td>Check the source mask and material’s emissive strength if it does nothing. Bloom is a separate scene/post-processing choice.</td></tr>
-<tr><td>Pulse</td><td>Off keeps the biome’s emission steady.</td><td>On enables its pulse behaviour.</td><td>Use for an animated glow. The runtime demo’s Slot 4 pulse is a separate material-control example.</td></tr>
-<tr><td>Rotation: 0°, 90°, 180°, 270°</td><td colspan="2">Changes the orientation of the biome’s texture detail.</td><td>Useful for matching a direction or varying copies of the same texture. It does not rotate the terrain mesh.</td></tr>
-<tr><td>Anti-Tiling: 0–1</td><td>Less procedural variation; zero removes this biome’s anti-tiling contribution.</td><td>More variation to disguise repeated detail.</td><td>Combine it with the material’s patch and colour controls. Excessive variation can obscure an intentional directional pattern.</td></tr>
-<tr><td>Seam Blend: 0–1</td><td>Less blending between texture projections.</td><td>Softer joins between projections.</td><td>Use for a visible projection transition. It cannot weld vertices or close a gap between terrain objects.</td></tr>
-<tr><td>Priority: 0–100</td><td>Lower preference when baking a representative gameplay biome.</td><td>Greater preference among sufficiently represented candidates.</td><td>It does not make the biome render in front. The static bake considers candidates with at least about 10% coverage; live weight-based queries use a different selection rule.</td></tr>
+<h2 id="surface-settings">各サーフェス設定の意味</h2>
+<p>ここでは、選択したバイオームの設定を変更します。マテリアルには、複数のバイオームへまとめて影響する全体設定もあります。個々の地表を整えてから、全体の倍率で地形を調整すると分かりやすくなります。Scatter の配置は<a href="scatter-system.html">3D Scatter ガイド</a>で別に設定し、1つの再利用 Scatter Object から複数のバイオーム ID を Target にできます。</p>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>低い値</th><th>高い値</th><th>使い方の目安</th></tr></thead><tbody>
+<tr><td>Scale：0.02～10</td><td>模様が大きく、繰り返しが少なく見えます。</td><td>模様が小さく、繰り返しが多く見えます。</td><td>テクスチャのタイリングです。GameObject のサイズではありません。キャラクターなど既知の大きさと比較します。</td></tr>
+<tr><td>Normal：0～2</td><td>照明による細部の凹凸が弱くなります。</td><td>照明の凹凸が強くなります。</td><td>法線の元画像がある場合に使います。強すぎる法線は、形状を改善せずに表面を騒がしく見せることがあります。</td></tr>
+<tr><td>AO Strength：0～1</td><td>素材のくぼみの陰影が弱くなります。</td><td>くぼみの陰影が強くなります。</td><td>シーン全体の照明問題を AO だけで直そうとしないでください。</td></tr>
+<tr><td>Parallax：0～2</td><td>見かけの起伏が弱くなり、0 でその寄与を除きます。</td><td>素材の細部が深く見えます。</td><td>浅い角度から確認します。階段、穴、衝突の深さは作りません。</td></tr>
+<tr><td>Smoothness</td><td>ハイライトが広く、粗い素材に見えます。</td><td>ハイライトが狭く、磨かれた素材に見えます。</td><td>マップなしは 0～1、マップありは最大 2 です。1 付近ではマップの反応を保ち、1 より大きい値では全体がより均一に滑らかな方向へ変わります。</td></tr>
+<tr><td>Metallic</td><td>金属らしい反応が弱くなります。</td><td>金属らしい反応が強くなります。</td><td>マップなしは 0～1、マップありは最大 2 です。1 より大きい値は金属反応を広げるため、単純な中立倍率とは異なります。</td></tr>
+<tr><td>Emissive：0～1</td><td>発光が弱くなります。</td><td>発光設定からの光が強くなります。</td><td>変わらない場合は、元のマスクとマテリアルの発光強度を確認します。Bloom は別のシーン・ポストプロセス設定です。</td></tr>
+<tr><td>Pulse</td><td>無効では発光が一定になります。</td><td>有効ではパルス動作を使います。</td><td>変化する発光に使います。ランタイムデモの Slot 4 のパルスは、別のマテリアル制御例です。</td></tr>
+<tr><td>Rotation：0°、90°、180°、270°</td><td colspan="2">バイオームのテクスチャ細部の向きを変えます。</td><td>方向を合わせたり、同じ素材の複製に変化を付けたりします。地形のメッシュは回転しません。</td></tr>
+<tr><td>Anti-Tiling：0～1</td><td>繰り返しを崩す変化が減ります。0 はそのバイオームの寄与を除きます。</td><td>模様の繰り返しが目立たないよう、変化を増やします。</td><td>マテリアルのパッチ・色設定と併用します。強すぎると、方向を意図した模様が分かりにくくなります。</td></tr>
+<tr><td>Seam Blend：0～1</td><td>テクスチャ投影間のブレンドが弱くなります。</td><td>投影の接続がやわらかくなります。</td><td>投影の境界に使います。頂点を溶接したり、地形オブジェクトの隙間を閉じたりはできません。</td></tr>
+<tr><td>Priority：0～100</td><td>ゲームプレイ用の代表バイオームをベイクするとき、優先度が低くなります。</td><td>十分な割合を占める候補の中で、優先されます。</td><td>描画の前後関係ではありません。静的ベイクは正規化した被覆率が約 10% 以上の候補を考慮します。ライブの重みによる問い合わせは別のルールです。</td></tr>
 </tbody></table></div>
-<p><strong>Keep visual and gameplay settings separate.</strong> Changing Priority may change the representative biome returned from baked surface data without changing the visible blend. If you use surface-based footsteps or effects, inspect the baked result with the raycast tester.</p>
+<p><strong>見た目とゲームプレイの設定を分けて考える：</strong>Priority を変えると、目に見える混ざり方は同じでも、ベイクした代表バイオームが変わる場合があります。足音などに使う場合は、レイキャストテスターで確認します。</p>
 
-<h2 id="variants">Make variants without losing a good preset</h2>
-<p>Duplicate is the safest starting point for a related surface. The copies have their own settings while sharing references to their source images. Compatible copies can reuse compiled source data; you do not need a separate image import merely to change the ramp or rotation.</p>
-<ul><li><strong>Dry versus wet-looking rock:</strong> keep the source detail, darken the ramp slightly and increase smoothness on the wet-looking copy. This is an appearance change, not a physical wetness simulation.</li><li><strong>Clean versus worn stone:</strong> use the same base detail with different colours and restrained changes to normal/parallax.</li><li><strong>Repeated material with variation:</strong> create a few related ramps and rotations, then paint a weighted mix rather than duplicating an identical-looking preset many times.</li></ul>
-<p>When changing a setting for several variants, use multi-selection. Check which fields are mixed before editing them so you do not accidentally erase useful differences.</p>
+<h2 id="variants">良いプリセットを保ちながら変化を作る</h2>
+<p>関連する地表は Duplicate から始めると安全です。コピーごとに設定を持ち、元画像への参照は共有します。互換性のあるコピーは生成済みの元データを再利用できます。ランプや回転だけを変えるために、新しい画像をインポートする必要はありません。</p>
+<ul><li><strong>乾いた岩と濡れたような岩：</strong>細部を同じに保ち、濡れた表現のコピーはランプを少し暗く、Smoothness を高くします。見た目の変更で、物理的な濡れのシミュレーションではありません。</li><li><strong>きれいな石と摩耗した石：</strong>同じ細部を使い、色と控えめな法線・視差の変更で差を付けます。</li><li><strong>繰り返す素材に変化を付ける：</strong>同じ見た目を大量に複製するより、関連するランプと回転をいくつか作り、重み付きで混ぜて塗ります。</li></ul>
+<p>複数のバリエーションをまとめて変えるには複数選択を使います。編集前に、どの項目が混在しているかを確認し、残したい違いを消さないようにします。</p>
 
-<h2 id="merge">Merge two surfaces into a new biome</h2>
-<p>Merge creates a new generated surface from <strong>exactly two selected biomes</strong>. It is useful when you want a reusable composite, such as stone with soil patches, rather than painting the two biomes separately everywhere. The source presets remain available.</p>
-<div class="table-wrap"><table><thead><tr><th>Control</th><th>Meaning</th><th>How to judge it</th></tr></thead><tbody>
-<tr><td>Mix Ratio: 0.1–0.9</td><td>The balance between the two inputs.</td><td>Near the middle gives a more balanced mix; moving toward an end favours one source. Check the preview to confirm which source is increasing.</td></tr>
-<tr><td>Softness: 0–1</td><td>How gradually the source patches meet.</td><td>Low values make distinct patches; high values soften their edges.</td></tr>
-<tr><td>Patch size</td><td>The size of the mixed regions.</td><td>Larger regions read as broad material patches; smaller regions read as scattered detail.</td></tr>
-<tr><td>Irregularity</td><td>How uneven the patch shapes are.</td><td>Use restrained values for rounded patches and higher values for more broken or jagged boundaries.</td></tr>
+<h2 id="merge">二つの地表を一つの新しいバイオームにする</h2>
+<p>Merge は、<strong>ちょうど二つの選択したバイオーム</strong>から新しい生成地表を作ります。石に土が混ざった素材などを、毎回二種類ずつ塗る代わりに再利用したいときに便利です。元のプリセットは残ります。</p>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>意味</th><th>判断の目安</th></tr></thead><tbody>
+<tr><td>Mix Ratio：0.1～0.9</td><td>二つの入力の比率です。</td><td>中央に近いほど均等、端に近づくほど片方を強くします。どちらが増えるかはプレビューで確認します。</td></tr>
+<tr><td>Softness：0～1</td><td>元の素材の領域同士が、どれだけ徐々につながるかです。</td><td>低い値は明確な領域、高い値はやわらかい境界になります。</td></tr>
+<tr><td>パッチの大きさ</td><td>混ざる領域のサイズです。</td><td>大きいと広い素材の領域、小さいと散らばった細部に見えます。</td></tr>
+<tr><td>不規則さ</td><td>領域の輪郭の不均一さです。</td><td>控えめなら丸い領域、高くすると崩れた、ぎざぎざの輪郭になります。</td></tr>
 </tbody></table></div>
-<p>Inspect the merged surface at its actual tiling scale. A pleasing preview may look busy when tiled tightly across a terrain. Use ordinary biome painting instead if you need to control exactly where the two source surfaces meet on the landform.</p>
+<p>実際の Scale で合成後の地表を確認します。プレビューで良く見えても、細かく繰り返すと騒がしく見えることがあります。地形上で二つの地表の接する場所を正確に決めたい場合は、通常のバイオームペイントを使います。</p>
 
-<h2 id="direct-mode">Biomes in Direct Vertex Color</h2>
-<p>Direct Vertex Color is a colour-based workflow with its own preset list. Use the biome’s base colour and the available direct-pipeline controls to build the look. The colours are stored with the mesh, so vertex density determines how detailed a painted transition can be.</p>
-<p>A texture normal, packed PBR image or parallax illusion from Terrain Atlas should not be expected to carry over as the same textured appearance. Choose this pipeline because you want its colour-based result, then inspect it under your scene lighting.</p>
-<p>For additional contact shading, use the Direct Vertex Color AO baker after finishing the major geometry. See <a href="index.html#section-four">saving and optimisation</a> for that workflow.</p>
+<h2 id="direct-mode">Direct Vertex Color のバイオーム</h2>
+<p>Direct Vertex Color は、専用のプリセット一覧を持つ色ベースの方式です。バイオームのベースカラーと、この方式で利用できる項目で見た目を作ります。色はメッシュに保存されるので、頂点密度によって塗った境界の細かさが変わります。</p>
+<p>Terrain Atlas の法線テクスチャ、パック PBR、視差が、そのまま同じテクスチャ表現として引き継がれるとは限りません。色ベースの結果を求めるときに選び、シーンの照明で確認してください。</p>
+<p>接触部の陰影を追加するなら、主要な形状を仕上げてから Direct Vertex Color の AO ベイカーを使います。手順は<a href="index.html#section-four">保存と最適化</a>を参照してください。</p>
 
-<h2 id="optimization">Texture quality, memory and shared assets</h2>
-<p>The library compiles source inputs into textures used by the terrain material. The compilation settings balance sharpness, memory use and platform support.</p>
-<div class="table-wrap"><table><thead><tr><th>Option</th><th>Effect</th><th>Practical choice</th></tr></thead><tbody>
-<tr><td>Resolution</td><td>Sets the compiled texture size, with Auto and explicit sizes from 256 up to 8192.</td><td>Start with a moderate size and inspect from the game camera. Higher resolution costs more memory; it cannot invent detail absent from the source.</td></tr>
-<tr><td>Compression</td><td>Uses the selected compiled format, including high-quality compressed options or RGBA32.</td><td>Compare detail and colour quality on the target platform. Uncompressed output generally uses more memory.</td></tr>
-<tr><td>Mipmaps</td><td>Provides lower-resolution versions for smaller on-screen texture detail.</td><td>Usually useful for terrain viewed over a range of distances. Compare distant shimmer and sharpness when changing this option.</td></tr>
-<tr><td>Unique sources</td><td>Different source sets can require additional compiled data.</td><td>Reuse a source for related variants where appropriate. Check actual compiled assets rather than estimating cost only from the number of biome cards.</td></tr>
+<h2 id="optimization">テクスチャ品質、メモリ、共有アセット</h2>
+<p>ライブラリは、元の入力を地形マテリアル用のテクスチャにまとめます。生成の設定で、鮮明さ、メモリ使用量、プラットフォーム対応のバランスを取ります。</p>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>効果</th><th>選び方</th></tr></thead><tbody>
+<tr><td>解像度</td><td>生成テクスチャのサイズです。Auto、または 256～8192 の指定値を選べます。</td><td>中程度から始め、ゲームカメラで確認します。高解像度はメモリを多く使い、元画像にない細部は作れません。</td></tr>
+<tr><td>圧縮</td><td>高品質の圧縮形式や RGBA32 など、選択した形式で生成します。</td><td>対象機器で細部と色を比較します。非圧縮は一般に多くのメモリを使います。</td></tr>
+<tr><td>ミップマップ</td><td>画面上で小さくなる細部用に、低解像度の画像を用意します。</td><td>さまざまな距離から見る地形に有効です。変更時は遠くのちらつきと鮮明さを比較します。</td></tr>
+<tr><td>異なる元画像</td><td>別の入力セットでは追加の生成データが必要になることがあります。</td><td>関連するバリエーションでは適切に元画像を共有します。カード数だけで負荷を判断せず、生成アセットを確認します。</td></tr>
 </tbody></table></div>
-<p>Library editing refreshes compiled data through the tool’s normal workflow. If the material appears out of sync, use Compile Terrain Textures and confirm that the terrain uses the intended library/material. Rebaking gameplay surface data is a different operation; compiling textures does not update a stale triangle-to-biome bake.</p>
+<p>通常のライブラリ編集では、ツールの処理を通じて生成データが更新されます。マテリアルが合っていない場合は Compile Terrain Textures を使い、正しいライブラリとマテリアルを参照しているか確認します。ゲームプレイ用サーフェスデータの再ベイクは別の操作です。テクスチャ生成だけでは、古い三角形とバイオームの対応は更新されません。</p>
 
-<h2 id="troubleshooting">Common biome problems</h2>
-<div class="table-wrap"><table><thead><tr><th>Problem</th><th>Likely checks</th></tr></thead><tbody>
-<tr><td>The imported colours do not match the finished surface</td><td>Check the generated detail and ramp. The source RGB feeds generation, while the ramp controls the resulting palette. Also inspect scene lighting and material multipliers.</td></tr>
-<tr><td>Raised details look recessed</td><td>Compare Invert Height, check the height source and reduce exaggerated parallax while testing.</td></tr>
-<tr><td>The surface is shiny or metallic everywhere</td><td>Check the PBR mapping, roughness interpretation and slider values. In mapped mode, values above 1 push toward a more uniform response.</td></tr>
-<tr><td>Normal detail is missing</td><td>Check the normal assignment/import type, biome strength, generation setup, global normal strength and normal fade controls.</td></tr>
-<tr><td>Auto Generate removed my colours</td><td>It can rebuild the ramp. Undo the generation if available or return to a saved/duplicated preset. Duplicate before regenerating an authored ramp.</td></tr>
-<tr><td>A colour ramp does not create a snow line</td><td>Use the terrain Gradient tool. The biome ramp colours local detail; it does not select terrain by world height.</td></tr>
-<tr><td>The pattern repeats obviously</td><td>Check Scale, enable the biome’s Anti-Tiling and adjust the material’s variation controls. Try related rotated/ramp variants as well.</td></tr>
-<tr><td>A map looks wrong after using Auto Folder</td><td>Verify every detected input and the packed-channel layout. A roughness map interpreted as smoothness reverses the intended result.</td></tr>
-<tr><td>Changing Priority does not change the visible surface</td><td>Priority is for choosing a representative baked gameplay biome. It is not a visual layer-order setting.</td></tr>
-<tr><td>A runtime effect changes the wrong surface</td><td>Recheck current biome IDs after adding, deleting or reordering presets. The demo’s example IDs are not names or universal constants.</td></tr>
+<h2 id="troubleshooting">バイオームでよくある問題</h2>
+<div class="table-wrap"><table><thead><tr><th>問題</th><th>確認すること</th></tr></thead><tbody>
+<tr><td>元画像と完成した色が違う</td><td>Generated とランプを確認します。Source RGB は生成の入力で、最終的な色はランプが決めます。照明と全体の倍率も確認します。</td></tr>
+<tr><td>盛り上がりがくぼんで見える</td><td>Invert Height と高さの元画像を確認し、テスト中は強すぎる Parallax を下げます。</td></tr>
+<tr><td>全面が光沢・金属になる</td><td>PBR の配置、Roughness の扱い、スライダー値を確認します。マップありの 1 より大きい値は、反応を均一に近づけます。</td></tr>
+<tr><td>法線の細部が出ない</td><td>画像の割り当てとインポート設定、バイオームの強さ、生成設定、全体の法線強度とフェードを確認します。</td></tr>
+<tr><td>Auto Generate で色が消えた</td><td>ランプが再生成される場合があります。可能なら元に戻すか、保存・複製したプリセットを使います。再生成前にランプを複製してください。</td></tr>
+<tr><td>カラーランプで雪の高度が変わらない</td><td>地形の Gradient ツールを使います。バイオームのランプは素材の細部の色で、ワールド高度の選択ではありません。</td></tr>
+<tr><td>模様の繰り返しが目立つ</td><td>Scale、バイオームの Anti-Tiling、マテリアルの変化設定を確認します。回転やランプの関連バリエーションも試します。</td></tr>
+<tr><td>Auto Folder の後でマップがおかしい</td><td>検出した入力とチャンネル配置を確認します。Roughness を Smoothness として使うと結果が逆になります。</td></tr>
+<tr><td>Priority を変えても見た目が変わらない</td><td>ゲームプレイ用の代表バイオームを選ぶ設定です。見た目の描画順ではありません。</td></tr>
+<tr><td>実行時の効果が別の地表を変える</td><td>追加、削除、並べ替え後の ID を確認します。デモの番号は名前や共通の定数ではありません。</td></tr>
 </tbody></table></div>
-<h2 id="support">Support</h2><p>If you need help, describe the result you expected, the control you used, and what appeared instead. Include your Unity version, the selected surface pipeline, and a screenshot of the relevant settings. For a runtime query problem, also include the collider type and when you last baked surface data.</p><p>Use the <a href="https://dptgames.github.io/#contact">DPT Games contact form</a> or join the <a href="https://discord.gg/EkQykfzP5X">DPT Games Discord</a>.</p><p class="back-top"><a href="#top">Back to top</a></p><footer class="footer">DPT Vertex 3D Terrain documentation · English control names are used throughout. Choose English or 日本語 at the top of the editor window to change the tool’s interface language.</footer></main></body></html>
+<h2 id="support">サポート</h2><p>相談するときは、期待した結果、使った項目、実際に起きたことを説明してください。Unity のバージョン、選択したパイプライン、関連する設定のスクリーンショットも添えます。実行時の問い合わせの問題では、コライダーの種類と、最後にサーフェスデータをベイクした時期も記載してください。</p><p><a href="https://dptgames.github.io/#contact">DPT Games お問い合わせフォーム</a>、または <a href="https://discord.gg/EkQykfzP5X">DPT Games Discord</a> をご利用ください。</p><p class="back-top"><a href="#top">ページの先頭へ</a></p><footer class="footer">DPT Vertex 3D Terrain ドキュメント · 操作項目を見つけやすいよう、英語の項目名も併記しています。エディター上部の English / 日本語で、ツールの表示言語を切り替えられます。</footer></main></body></html>
