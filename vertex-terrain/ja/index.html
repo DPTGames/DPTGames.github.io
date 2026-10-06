@@ -14,11 +14,35 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 @media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
 @media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
 </style></head>
-<body><main id="top"><nav class="site-nav" aria-label="ドキュメント"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a href="index.html" aria-current="page">Vertex 3D Terrain ガイド</a><a href="biomes.html">バイオームガイド</a><a href="terrain-material-settings.html">地形マテリアル設定</a><a href="scatter-system.html">3D Scatter ガイド</a><a href="demo-components.html">デモ・ランタイムガイド</a></nav><nav class="language-nav" aria-label="言語"><a href="../index.html" lang="en" hreflang="en">English</a><a href="index.html" lang="ja" hreflang="ja" aria-current="page">日本語</a></nav><header><h1>Vertex 3D Terrain ガイド</h1><p class="lead">地形の形を作り、地表を塗り、シーンで使える状態に仕上げます。</p></header><nav class="toc" aria-label="このページの内容"><h2>このページの内容</h2><ul><li><a href="#quick-start">最初の地形を作る</a></li><li><a href="#section-one">編集対象、ライブラリ、ブラシ設定</a></li><li><a href="#generators">土台となる形を生成する</a></li><li><a href="#section-two">形状ツールとサーフェスツール</a></li><li><a href="#masks">面を選んで形を作る</a></li><li><a href="#gradients">高さ・傾斜・方向で地表を配置する</a></li><li><a href="#paths">道、川床、階段、トンネル、橋</a></li><li><a href="#section-three">複数の地形タイルを編集する</a></li><li><a href="#section-four">地形を保存・最適化する</a></li><li><a href="#shortcuts">キーボード・マウス操作</a></li><li><a href="#glossary">このガイドで使う用語</a></li><li><a href="#troubleshooting">思ったとおりの結果にならないとき</a></li><li><a href="#support">サポート</a></li></ul></nav><p class="table-hint">小さい画面では、幅の広い表を横にスクロールするとすべての列を読めます。</p><div class="intro"><p>Vertex 3D Terrain は、Unity 内でメッシュを編集するツールです。丘を盛り上げる、開口部を作る、道を作る、同じオブジェクトに異なる地表を塗る、といった作業ができます。地形がメッシュなので、張り出した岩、浮島、惑星のような形も作れます。</p><p>作業は大きく二つに分かれます。<strong>形状ツールはメッシュの形を変えます。</strong><strong>サーフェスツールは色や質感を変えます。</strong>岩のバイオームを塗っただけで崖になるわけではありません。法線や視差の強さを上げると細部が立体的に見えますが、キャラクターが立てる場所は変わりません。</p></div>
+<body><main id="top"><nav class="site-nav" aria-label="ドキュメント"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a href="index.html" aria-current="page">Vertex 3D Terrain ガイド</a><a href="biomes.html">バイオームガイド</a><a href="terrain-material-settings.html">地形マテリアル設定</a><a href="scatter-system.html">3D Scatter ガイド</a><a href="demo-components.html">デモ・ランタイムガイド</a></nav><nav class="language-nav" aria-label="言語"><a href="../index.html" lang="en" hreflang="en">English</a><a href="index.html" lang="ja" hreflang="ja" aria-current="page">日本語</a></nav><header><h1>Vertex 3D Terrain ガイド</h1><p class="lead">地形の形を作り、地表を塗り、シーンで使える状態に仕上げます。</p></header><nav class="toc" aria-label="このページの内容"><h2>このページの内容</h2><ul><li><a href="#quick-start">最初の地形を作る</a></li><li><a href="#section-one">編集対象、ライブラリ、ブラシ設定</a></li><li><a href="#generators">土台となる形を生成する</a></li><li><a href="#section-two">形状ツールとサーフェスツール</a></li><li><a href="#masks">面を選んで形を作る</a></li><li><a href="#gradients">高さ・傾斜・方向で地表を配置する</a></li><li><a href="#paths">道、川床、階段、トンネル、橋</a></li><li><a href="#section-three">複数の地形タイルを編集する</a></li><li><a href="#section-four">地形を保存・最適化する</a></li><li><a href="#shortcuts">キーボード・マウス操作</a></li><li><a href="#glossary">このガイドで使う用語</a></li><li><a href="#troubleshooting">思ったとおりの結果にならないとき</a></li><li><a href="#support">サポート</a></li></ul></nav><p class="table-hint">小さい画面では、幅の広い表を横にスクロールするとすべての列を読めます。</p><div class="intro">
+<p>Vertex 3D Terrain では、Unity 内でメッシュベースの地形を直接生成・編集できます。一般的な地面、惑星、浮島を作成し、その後で形状を変形し、サーフェスをペイントし、パスや構造物を作成し、グラデーションを適用し、複数の地形タイルをまたいで編集できます。</p>
+
+<p><strong>形状ツール</strong>は実際のメッシュを変更し、<strong>サーフェスツール</strong>は見た目を変更します。対応している形状ツールとサーフェスツールは同じストロークで同時に使用できるため、地形を変形しながらペイントすることもできます。</p>
+</div>
 
 <h2 id="quick-start">最初の地形を作る</h2>
-<ol><li><strong>Tools → DPT Games → Vertex 3D Terrain</strong> を開きます。ウィンドウ上部で English または 日本語を選べます。</li><li><strong>バイオームライブラリ（Biome Library）</strong>を選びます。これは地表に塗る素材のパレットです。最初は既存のライブラリを使って操作を覚えると進めやすくなります。</li><li><strong>パイプラインモード（Pipeline Mode）</strong>を選びます。テクスチャ付きの地面なら Terrain Atlas、頂点の色を中心とした見た目なら Direct Vertex Color を選びます。</li><li>地形生成の設定を開き、小さな平面や単純な島から始めます。練習では分割数を控えめにして、編集しやすいサイズにします。</li><li>生成したメッシュを編集対象にします。Scene ビューで地形を表示し、表面にブラシのプレビューが出ることを確認します。</li><li><strong>スカルプト（Sculpt）</strong>を選び、半径を広め、変位の速度を低めにしてドラッグし、丘を作ります。Ctrl を押しながら操作すると地形を下げられます。Smooth で形をなめらかに整えます。</li><li>バイオームを選び、<strong>ペイント（Paint）</strong>で地表を塗ります。不透明度を下げると少しずつ混ぜられ、1 にすると選んだ地表を強く適用します。</li><li>境界に別のバイオームを塗り、ブレンドのシャープさを変えてみます。なだらかな境界と、はっきりした境界の違いを確認します。</li><li>ツールの保存・プレハブ機能で地形を保存し、Unity のシーンも保存します。保存したものを開き直し、形と地表が保たれていることを確認してから、より大きな地形に進みます。</li></ol>
-<div class="example"><p><strong>最初の練習におすすめの組み合わせ：</strong>草の丘を作り、片側に露出した岩を塗り、その上に土の道を通します。洞窟、複数タイル、実行時の効果を使わずに、形状・地表・パスの基本を試せます。</p></div>
+
+<ol>
+<li><strong>Tools → DPT Games → Vertex 3D Terrain</strong> を開きます。</li>
+
+<li><strong>Create Terrain</strong> を開き、作成する地形の種類を <strong>Flat Terrain</strong>、<strong>Planet</strong>、<strong>Floating Island</strong> から選びます。</li>
+
+<li>地形のサイズ、形状、解像度を調整します。使用できる設定は選択した地形タイプによって異なります。たとえば Floating Island では、幅、長さ、下面の深さ、台地の形状、下面の形状、サーフェスの変化を調整できます。</li>
+
+<li><strong>Spawn Position</strong> で地形を生成する位置を選びます。<strong>Live Preview</strong> が有効な場合は、生成前にプレビューで全体の大きさと形状を確認します。</li>
+
+<li>選択した地形タイプに応じて、<strong>Generate Floating Island</strong>、<strong>Generate Planet</strong>、<strong>Generate Terrain</strong> などの生成ボタンをクリックします。</li>
+
+<li>生成した地形は、形状ツールとサーフェスツールですぐに編集できます。目的に応じて、メッシュのスカルプトや変形、バイオームのペイント、パスの作成、グラデーションの適用、マスクによる面選択を行ったり、対応するツールを同じストロークで組み合わせたりできます。</li>
+
+<li>細かなディテールを加える前に、まず全体の大きな形を整えます。より細かな編集が必要な場所では、後から局所的に形状の密度を上げることができます。</li>
+
+<li>満足できる結果になったら、Unity シーンと保持したい生成アセットと一緒に地形を保存します。</li>
+</ol>
+
+<div class="example">
+<p><strong>最初の練習：</strong>小さな地形を生成し、Sculpt で輪郭の一部を変形してから、Paint、Path、または別のサーフェスツールを試します。大きなシーンに取りかかる前に、地形の生成と編集の基本的な流れを短時間で確認できます。</p>
+</div>
 
 <h2 id="section-one">編集対象、ライブラリ、ブラシ設定</h2>
 <h3>何を編集するかを選ぶ</h3>
