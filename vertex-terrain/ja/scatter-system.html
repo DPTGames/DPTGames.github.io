@@ -10,7 +10,7 @@ p{margin:12px 0 18px}li{margin:7px 0}ul,ol{padding-left:25px}.lead{font-size:1.1
 .callout,.example{background:var(--panel);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:14px 20px;margin:22px 0}.example{border-color:#a3e635}.callout p:last-child,.example p:last-child{margin-bottom:0}.callout p:first-child,.example p:first-child{margin-top:0}
 .table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--border);border-radius:7px}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--border)}thead{background:#25354c}th{color:#f8fafc}td:first-child{font-weight:600;min-width:145px}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#172238}
 code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background:#27354c;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}kbd{white-space:nowrap;border:1px solid #50617a}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#09111f;border:1px solid var(--border);padding:20px;border-radius:7px}pre code{background:transparent;padding:0}
-.back-top{font-size:.88rem}.table-hint{display:none;color:var(--muted);font-size:.9rem}.footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);margin-top:34px;padding-top:16px}details{background:var(--panel);padding:14px 18px;border:1px solid var(--border);border-radius:7px;margin:16px 0}summary{cursor:pointer;font-weight:600;color:var(--accent)}.alias{display:block;scroll-margin-top:24px}
+.back-top{font-size:.88rem}.table-hint{display:none;color:var(--muted);font-size:.9rem}.footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);margin-top:34px;padding-top:16px}details{background:var(--panel);padding:14px 18px;border:1px solid var(--border);border-radius:7px;margin:16px 0}summary{cursor:pointer;font-weight:600;color:var(--accent)}.alias{display:block;scroll-margin-top:24px}.doc-figure{margin:24px 0}.doc-figure img{display:block;width:100%;height:auto;border:1px solid var(--border);border-radius:8px;background:#0b0f16}.doc-figure figcaption{margin-top:9px;color:var(--muted);font-size:.9rem}
 @media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
 @media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
 </style></head>
@@ -49,7 +49,7 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Scale Min / Max</td><td>受理された各インスタンスに適用する Uniform Scale のランダム範囲です。</td><td>自然な差を出しつつ不自然なサイズ差にならないよう、控えめな範囲から始めます。</td></tr>
 <tr><td>Align To Surface: 0–1</td><td>選択した Up Mode と Terrain Normal の間を補間します。</td><td>0 は選択した Up Direction に対して直立、1 は Surface Normal に完全に追従します。</td></tr>
 <tr><td>Surface Offset</td><td>サンプリングした Surface Normal に沿って Instance を移動します。</td><td>Mesh が浮いて見える、または埋まる場合に小さな正負の値で調整します。</td></tr>
-<tr><td>Enable Wind</td><td>設定済み Scatter を共通 Wind Path 用にマークし、Wind Bounds Padding を適用します。</td><td>Grass や Flower など曲がるものでは有効、Stone や硬い Prop では無効にします。</td></tr>
+<tr><td>Enable Wind</td><td>この Scatter Object で DPT Scatter Wind を使用します。この設定は、割り当てた Shader が DPT Scatter Wind に対応している場合のみ使用できます。</td><td>対応 Shader を使用する Grass、Flower、その他の柔らかい Mesh で有効にします。硬い Prop では無効のままにします。VCCORE Material は独自の Wind Data を使用するため、この設定は必要ありません。</td></tr>
 </tbody></table></div>
 
 <h2 id="variants">内蔵プリセットとカスタムメッシュ</h2>
@@ -59,7 +59,7 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Built-in Pebbles</td><td>Smooth / Faceted Style、Vertex Colour Ramp、Roughness、Material。</td><td>4-Stone Cluster を使用し、別の Distant Preset Mesh は必要ありません。</td></tr>
 <tr><td>Built-in Flowers</td><td>Vertex Colour Ramp、Roughness、Material。</td><td>Near は 3-Flower、Distant LOD は 2-Flower Mesh を使用します。</td></tr>
 <tr><td>Built-in Mushrooms</td><td>Vertex Colour Ramp、Roughness、Material。</td><td>Near は 3-Mushroom、Distant LOD は 2-Mushroom Mesh を使用します。</td></tr>
-<tr><td>Custom Mesh</td><td>3D Mesh、必要に応じて Submesh Index、Distant Mesh、Material、Relative Chance。</td><td>元 Asset 自体は変更されません。DPT は Scatter 用 Metadata を設定した Clone を使用し、既存の Vertex Colour と UV3 Surface Data を保持します。</td></tr>
+<tr><td>Custom Mesh</td><td>3D Mesh、必要に応じて Submesh Index、Distant Mesh、Material、Relative Chance。</td><td>元 Asset 自体は変更されません。Custom Mesh の既存データは保持され、DPT Scatter Wind に対応した Shader で Wind を明示的に有効にした場合のみ、Scatter Wind 用の処理が適用されます。</td></tr>
 </tbody></table></div>
 <h3>内蔵メッシュの色と Roughness</h3>
 <p>内蔵の Vertex Colour Ramp は、生成された各要素ごとに個別評価されます。各 Blade、Flower、Mushroom、Pebble は、それぞれ自身の Bottom から Top まで Ramp 全体を使用します。これにより、短い要素が結合 Mesh 全体の下側だけをサンプリングしてしまう問題を避けられます。</p>
@@ -90,8 +90,31 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 </tbody></table></div>
 
 <h2 id="wind">風の設定</h2>
-<ol><li>動かしたい Scatter Object で <strong>Enable Wind</strong> を有効にします。</li><li>Material の <a href="terrain-material-settings.html#wind">Wind</a> セクションを開きます。</li><li>Wind Strength を控えめな値から設定します。</li><li>Height To Tip を Scatter Mesh の Object Space 上のおおよその高さに合わせ、Root-to-Tip Mask が意図した範囲まで届くようにします。</li><li>Compass Heading と Vertical Pitch を設定します。</li><li>動いた Tip が Camera / Frustum 境界付近で消える場合は、Scatter Settings の Wind Bounds Padding を増やします。</li></ol>
-<p>DPT の Generated Scatter には、この Wind Path が使用する Feature Metadata が自動的に設定されます。Pebbles など硬い Scatter は、同じ Material を使用していても Enable Wind を無効にできます。</p>
+<p>DPT Scatter Wind には2段階の設定があります。<strong>Material</strong> 側では Shader 内の Wind 機能を有効／無効にし、Scatter Object 側の <strong>Enable Wind</strong> では、その Scatter Object が DPT Scatter Wind を使用するかを指定します。Scatter Object の Enable Wind は、割り当てた Shader に <code>_DPT_SCATTER_WIND</code> Boolean Keyword がある場合のみ使用できます。これにより Vertex 3D Terrain は、その Shader が DPT Scatter Wind に対応していることを判別します。</p>
+
+<h3>Vertex Terrain Material で使用する場合</h3>
+<ol><li>Material の <a href="terrain-material-settings.html#wind">Wind</a> セクションを開き、<strong>Enable Wind</strong> を有効にします。</li><li><strong>Wind Strength</strong> を控えめな値から設定します。</li><li><strong>Height To Tip</strong> を Scatter Mesh の Object Space 上のおおよその高さに合わせます。これにより Root を固定したまま Tip 側で十分な Wind Movement が得られます。</li><li><strong>Compass Heading</strong> と <strong>Vertical Pitch</strong> を設定します。</li><li>3D Scatter セクションへ戻り、DPT Scatter Wind を使用したい各 Scatter Object で <strong>Enable Wind</strong> を有効にします。</li><li>強く動く Tip が Camera / Frustum 境界付近で消える場合は、Scatter Settings の <strong>Wind Bounds Padding</strong> を増やします。</li></ol>
+<p>Pebbles など硬い Scatter は、同じ Material を使用していても Scatter Object 側の Enable Wind を無効のままにできます。</p>
+
+<h3>VCCORE Material</h3>
+<p>VCCORE は独自の Wind System と Mesh に記録された Wind Data を使用するため、Scatter Object の <strong>Enable Wind</strong> は意図的に使用不可になります。これは正常な動作です。<strong>Stylized Color Swapper &amp; Material Optimizer</strong> でモデルに Wind をペイントした場合、または DPT Asset Pack に Wind Data が設定済みのモデルを使用する場合、Scatter 用の追加 Wind 設定は必要ありません。Wind の有効化や調整は VCCORE Material 側の Wind 設定を使用してください。</p>
+
+<h3>独自の Shader Graph に DPT Scatter Wind を追加する</h3>
+<p>Custom Shader にすでに独自の Wind System がある場合は、そのまま既存の Wind を使用してください。以下の設定が必要なのは、Custom Shader Graph で Vertex Terrain Shader と同じ DPT Scatter Wind 機能を使用したい場合だけです。</p>
+<p><strong>SH_DPT_VCTerrain</strong> を開き、下の画像に示す <strong>Scatter Wind</strong> ブロックをコピーして、自分の Shader Graph に貼り付けます。次に Blackboard に以下の項目を追加し、<strong>Reference 名を完全に一致させてください。</strong></p>
+
+<div class="table-wrap"><table><thead><tr><th>Blackboard 項目</th><th>Type</th><th>Reference</th></tr></thead><tbody>
+<tr><td>Wind Strength</td><td>Float</td><td><code>_Wind_Strength</code></td></tr>
+<tr><td>Wind Direction</td><td>Vector 3</td><td><code>_Wind_Direction</code></td></tr>
+<tr><td>Height To Tip</td><td>Float</td><td><code>_Height_To_Tip</code></td></tr>
+<tr><td>DPT Scatter Wind</td><td>Boolean Keyword</td><td><code>_DPT_SCATTER_WIND</code></td></tr>
+</tbody></table></div>
+
+<ol><li>付属の Vertex Terrain Shader Graph から Scatter Wind ブロック全体をコピーし、自分の Shader Graph に貼り付けます。</li><li>まだ存在しない場合は、上記4つの Blackboard 項目を追加します。</li><li><strong>Wind Strength</strong>、<strong>Wind Direction</strong>、<strong>Height To Tip</strong>、<strong>DPT Scatter Wind</strong> を、参照画像と同じ位置へ再接続します。</li><li>最後の <strong>DPT Scatter Wind</strong> の Out を Graph の <strong>Vertex Position</strong> に接続します。</li><li>Graph を保存し、その Shader を使用する Material を Custom Mesh Variant に割り当てます。</li><li>Material 側で DPT Scatter Wind Keyword を有効にし、その後 Scatter Object の <strong>Enable Wind</strong> を有効にします。</li></ol>
+
+<figure class="doc-figure"><img src="../assets/dpt-scatter-wind-shader-graph.png" alt="DPT Scatter Wind ブロック、Blackboard Property、Vertex Position への接続を示す Shader Graph の参照画像。"><figcaption>Custom Shader Graph に DPT Scatter Wind を追加するための参照設定です。Scatter Wind ブロックをコピーし、上記4つの Blackboard 項目を同じ Reference 名で作成して、画像どおりに再接続します。最後の出力は Vertex Position に接続します。</figcaption></figure>
+
+<div class="callout"><p><strong>既存の Vertex Animation がある場合:</strong> Shader Graph ですでに Vertex Position を変更している場合は、現在の変形処理を単純に置き換えるのではなく、その Object Space Position の処理へ Scatter Wind を組み込んでください。</p></div>
 
 <h2 id="live-response">ライブバイオームによる密度と色の変化</h2>
 <p>Terrain Surface に使用する4つの Live Biome Modifier Slot は、Target Biome ID に属する Scatter も制御できます。これにより、季節システムで地面と Vegetation を同時に変化させられます。</p>
@@ -115,6 +138,9 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Custom Mesh が描画されない</td><td>Mesh / Material、Submesh Index、GPU Instancing を確認します。Material が Custom Mesh の Authored Data と互換性があることも確認してください。</td></tr>
 <tr><td>LOD 境界で Scatter が Pop する</td><td>LOD Transition Distance を増やし、適切な Distant Mesh または内蔵 Distant Preset が存在するか確認します。Near / Far の Silhouette と Scale も比較してください。</td></tr>
 <tr><td>遠距離 Scatter の密度が高すぎる</td><td>Far Density または Maximum Distance を下げます。Per-Biome の Target Density Multiplier を距離専用の制御として使わないでください。</td></tr>
+<tr><td>Enable Wind がグレーアウトしている</td><td>割り当てた Shader に <code>_DPT_SCATTER_WIND</code> Boolean Keyword がないため、その Scatter Object では DPT Scatter Wind を使用できません。自分の Shader Graph に DPT Scatter Wind を追加するか、その Shader 独自の Wind System を使用してください。</td></tr>
+<tr><td>VCCORE Material で Enable Wind がグレーアウトしている</td><td>これは正常な動作です。VCCORE は独自の Wind Data と Material 側の Wind 設定を使用するため、DPT Scatter Wind の追加設定は必要ありません。</td></tr>
+<tr><td>DPT Scatter Wind 対応の Custom Shader で動かない</td><td>Material 側の DPT Scatter Wind Keyword、Scatter Object 側の Enable Wind、Blackboard の Reference 名、Vertex Position への接続、Wind Strength、Height To Tip を順に確認してください。</td></tr>
 <tr><td>Wind で Object 全体が不自然に動く</td><td>Enable Wind、Height To Tip、Mesh の Object Space Height、Wind Strength を確認します。通常 Terrain、回転 Terrain、Planetoid に応じた Up Mode を使ってください。</td></tr>
 <tr><td>Wind で動いた Tip が消える</td><td>Wind Bounds Padding を増やし、最大の予想変位を Draw Bounds に含めます。</td></tr>
 <tr><td>Snow は Terrain に出るが Grass が変化しない</td><td>Scatter Object が Live Slot と同じ Biome ID を Target にしているか、Scatter Density / Colour Multiplier が Neutral のままではないか、Live Biome Master Switch が有効か、Scatter Renderer が同じ互換 Material を使用しているか確認します。</td></tr>
