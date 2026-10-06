@@ -10,7 +10,7 @@ p{margin:12px 0 18px}li{margin:7px 0}ul,ol{padding-left:25px}.lead{font-size:1.1
 .callout,.example{background:var(--panel);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:14px 20px;margin:22px 0}.example{border-color:#a3e635}.callout p:last-child,.example p:last-child{margin-bottom:0}.callout p:first-child,.example p:first-child{margin-top:0}
 .table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--border);border-radius:7px}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--border)}thead{background:#25354c}th{color:#f8fafc}td:first-child{font-weight:600;min-width:145px}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#172238}
 code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background:#27354c;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}kbd{white-space:nowrap;border:1px solid #50617a}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#09111f;border:1px solid var(--border);padding:20px;border-radius:7px}pre code{background:transparent;padding:0}
-.back-top{font-size:.88rem}.table-hint{display:none;color:var(--muted);font-size:.9rem}.footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);margin-top:34px;padding-top:16px}details{background:var(--panel);padding:14px 18px;border:1px solid var(--border);border-radius:7px;margin:16px 0}summary{cursor:pointer;font-weight:600;color:var(--accent)}.alias{display:block;scroll-margin-top:24px}
+.back-top{font-size:.88rem}.table-hint{display:none;color:var(--muted);font-size:.9rem}.footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);margin-top:34px;padding-top:16px}details{background:var(--panel);padding:14px 18px;border:1px solid var(--border);border-radius:7px;margin:16px 0}summary{cursor:pointer;font-weight:600;color:var(--accent)}.alias{display:block;scroll-margin-top:24px}.doc-figure{margin:24px 0}.doc-figure img{display:block;width:100%;height:auto;border:1px solid var(--border);border-radius:8px;background:#0b0f16}.doc-figure figcaption{margin-top:9px;color:var(--muted);font-size:.9rem}
 @media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
 @media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
 </style></head>
@@ -49,7 +49,7 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Scale Min / Max</td><td>Random uniform scale range for accepted instances.</td><td>Use a restrained range for natural variation without obvious size jumps.</td></tr>
 <tr><td>Align To Surface: 0–1</td><td>Blends between the selected Up Mode and the terrain normal.</td><td>0 keeps objects upright relative to the chosen up direction; 1 follows the surface normal fully.</td></tr>
 <tr><td>Surface Offset</td><td>Moves the instance along the sampled surface normal.</td><td>Use a small positive or negative adjustment when a mesh appears to float or sink.</td></tr>
-<tr><td>Enable Wind</td><td>Marks configured scatter for the shared wind path and applies wind bounds padding.</td><td>Enable for grass and flowers that should bend. Leave off for stones or rigid props.</td></tr>
+<tr><td>Enable Wind</td><td>Opts this scatter object into DPT Scatter Wind. The control is only available when the assigned shader supports the DPT Scatter Wind feature.</td><td>Enable for compatible grass, flowers and other flexible meshes. Leave off for rigid props. VCCORE materials use their own authored wind data and do not need this option.</td></tr>
 </tbody></table></div>
 
 <h2 id="variants">Built-in presets and custom meshes</h2>
@@ -59,7 +59,7 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Built-in Pebbles</td><td>Smooth or Faceted style, Vertex Colour Ramp, Roughness and Material.</td><td>Uses a 4-stone cluster and does not require a separate distant preset mesh.</td></tr>
 <tr><td>Built-in Flowers</td><td>Vertex Colour Ramp, Roughness and Material.</td><td>Uses a 3-flower near mesh and 2-flower distant LOD.</td></tr>
 <tr><td>Built-in Mushrooms</td><td>Vertex Colour Ramp, Roughness and Material.</td><td>Uses a 3-mushroom near mesh and 2-mushroom distant LOD.</td></tr>
-<tr><td>Custom Mesh</td><td>3D Mesh, optional submesh index, optional Distant Mesh, Material and Relative Chance.</td><td>The source asset is not modified. DPT uses a configured clone for scatter metadata while preserving authored vertex colours and UV3 surface data.</td></tr>
+<tr><td>Custom Mesh</td><td>3D Mesh, optional submesh index, optional Distant Mesh, Material and Relative Chance.</td><td>The source asset is not modified. Custom meshes keep their authored mesh data unless DPT Scatter Wind is explicitly supported and enabled for that scatter object.</td></tr>
 </tbody></table></div>
 <h3>Built-in colour and roughness</h3>
 <p>The built-in Vertex Colour Ramp is evaluated locally for each generated element: each blade, flower, mushroom or pebble runs from its own bottom to its own top. This avoids shorter elements sampling only the lower portion of a shared combined-mesh gradient.</p>
@@ -90,8 +90,31 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 </tbody></table></div>
 
 <h2 id="wind">Wind setup</h2>
-<ol><li>Enable <strong>Enable Wind</strong> on the scatter object that should move.</li><li>Open the material’s <a href="terrain-material-settings.html#wind">Wind</a> section.</li><li>Set a modest Wind Strength.</li><li>Set Height To Tip near the object-space height of the scatter mesh so the root-to-tip mask reaches the intended range.</li><li>Choose Compass Heading and Vertical Pitch.</li><li>If animated tips disappear near the camera/frustum boundary, increase Wind Bounds Padding in Scatter Settings.</li></ol>
-<p>Generated DPT scatter automatically carries the feature metadata used by this path. Rigid scatter such as pebbles can share the material while keeping Enable Wind off.</p>
+<p>DPT Scatter Wind has two levels of control. The <strong>material</strong> decides whether the wind feature is active in the shader, while <strong>Enable Wind</strong> on the Scatter Object decides whether that particular scatter object uses the DPT Scatter Wind path. The Scatter Object control is only available when the assigned shader declares the <code>_DPT_SCATTER_WIND</code> Boolean Keyword, which lets Vertex 3D Terrain recognise that the shader supports this feature.</p>
+
+<h3>Using the Vertex Terrain material</h3>
+<ol><li>Open the material’s <a href="terrain-material-settings.html#wind">Wind</a> section and turn on <strong>Enable Wind</strong>.</li><li>Set a modest <strong>Wind Strength</strong>.</li><li>Set <strong>Height To Tip</strong> close to the object-space height of the scatter mesh so the base stays anchored and the tip can reach full movement.</li><li>Choose the <strong>Compass Heading</strong> and <strong>Vertical Pitch</strong>.</li><li>Back in the 3D Scatter section, turn on <strong>Enable Wind</strong> for each Scatter Object that should use DPT Scatter Wind.</li><li>If strongly animated tips disappear near the camera or frustum boundary, increase <strong>Wind Bounds Padding</strong> in Scatter Settings.</li></ol>
+<p>Rigid scatter such as pebbles can share the same material while leaving the Scatter Object’s Enable Wind option off.</p>
+
+<h3>VCCORE materials</h3>
+<p>VCCORE uses its own authored wind system, so the Scatter Object’s <strong>Enable Wind</strong> control is intentionally unavailable for VCCORE materials. This is expected. If wind was painted onto the model with <strong>Stylized Color Swapper &amp; Material Optimizer</strong>, or the model came from a DPT pack with wind data already authored, no Scatter-specific wind setup is required. Use the VCCORE material’s own wind controls to enable or adjust that movement.</p>
+
+<h3>Add DPT Scatter Wind to your own Shader Graph</h3>
+<p>If your custom shader already has its own wind system, keep using that system. You only need the DPT setup below when you want a custom Shader Graph to use the same Scatter Wind feature as the Vertex Terrain shader.</p>
+<p>Open <strong>SH_DPT_VCTerrain</strong>, copy the <strong>Scatter Wind</strong> block shown below and paste it into your own Shader Graph. Then add these Blackboard entries using the exact Reference names:</p>
+
+<div class="table-wrap"><table><thead><tr><th>Blackboard entry</th><th>Type</th><th>Reference</th></tr></thead><tbody>
+<tr><td>Wind Strength</td><td>Float</td><td><code>_Wind_Strength</code></td></tr>
+<tr><td>Wind Direction</td><td>Vector 3</td><td><code>_Wind_Direction</code></td></tr>
+<tr><td>Height To Tip</td><td>Float</td><td><code>_Height_To_Tip</code></td></tr>
+<tr><td>DPT Scatter Wind</td><td>Boolean Keyword</td><td><code>_DPT_SCATTER_WIND</code></td></tr>
+</tbody></table></div>
+
+<ol><li>Copy the complete Scatter Wind block from the supplied Vertex Terrain Shader Graph and paste it into your graph.</li><li>Add the four Blackboard entries above if they do not already exist.</li><li>Reconnect <strong>Wind Strength</strong>, <strong>Wind Direction</strong>, <strong>Height To Tip</strong> and <strong>DPT Scatter Wind</strong> exactly as shown in the reference image.</li><li>Connect the final <strong>DPT Scatter Wind</strong> output to the graph’s <strong>Vertex Position</strong> input.</li><li>Save the graph and assign a material that uses it to your Custom Mesh variant.</li><li>Enable the DPT Scatter Wind keyword on that material, then enable <strong>Enable Wind</strong> on the Scatter Object.</li></ol>
+
+<figure class="doc-figure"><img src="assets/dpt-scatter-wind-shader-graph.png" alt="Shader Graph reference showing the DPT Scatter Wind block, Blackboard properties and connection to the Vertex Position input."><figcaption>Reference setup for adding DPT Scatter Wind to a custom Shader Graph. Copy the Scatter Wind block, recreate the four Blackboard entries with the exact Reference names above, reconnect them as shown and send the final output to Vertex Position.</figcaption></figure>
+
+<div class="callout"><p><strong>Existing vertex animation:</strong> if your Shader Graph already modifies Vertex Position, integrate the copied Scatter Wind block with that existing object-space position instead of simply replacing your current deformation chain.</p></div>
 
 <h2 id="live-response">Live biome density and colour response</h2>
 <p>The same four Live Biome Modifier slots used by terrain surfaces can also control scatter belonging to their target biome IDs. This lets a seasonal system change the ground and the vegetation together.</p>
@@ -115,6 +138,9 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Custom mesh does not render</td><td>Assign the mesh/material, verify the submesh index and enable GPU Instancing. Check that the material is compatible with the custom mesh’s authored data.</td></tr>
 <tr><td>Scatter pops at the LOD boundary</td><td>Increase LOD Transition Distance and verify a suitable Distant Mesh or built-in distant preset exists. Also compare near/far silhouette and scale.</td></tr>
 <tr><td>Distant scatter is too dense</td><td>Lower Far Density or Maximum Distance. Do not use the per-biome Target Density Multiplier solely as a distance control.</td></tr>
+<tr><td>Enable Wind is greyed out</td><td>The assigned shader does not declare the <code>_DPT_SCATTER_WIND</code> Boolean Keyword, so the Scatter Object cannot use DPT Scatter Wind. Add the DPT Scatter Wind setup to your Shader Graph, or use the shader’s own wind system instead.</td></tr>
+<tr><td>Enable Wind is greyed out on a VCCORE material</td><td>This is intentional. VCCORE uses its own authored wind data and material wind controls, so no DPT Scatter Wind setup is required.</td></tr>
+<tr><td>A custom DPT-compatible shader still does not move</td><td>Check that the material’s DPT Scatter Wind keyword is enabled, the Scatter Object’s Enable Wind option is enabled, the Blackboard Reference names match exactly, the copied wind block is connected to Vertex Position, and Wind Strength / Height To Tip are set appropriately.</td></tr>
 <tr><td>Wind moves the whole object strangely</td><td>Check Enable Wind, Height To Tip, mesh object-space height and Wind Strength. Use the appropriate Up Mode for ordinary terrain, rotated terrain or a planetoid.</td></tr>
 <tr><td>Wind tips disappear while moving</td><td>Raise Wind Bounds Padding so the draw bounds include the largest expected displacement.</td></tr>
 <tr><td>Snow changes the terrain but not the grass</td><td>Check that the scatter object targets the same biome ID as the live slot, Scatter Density/Colour Multiplier are not neutral, the live-biome master switch is on and the scatter renderer uses the same compatible material.</td></tr>
