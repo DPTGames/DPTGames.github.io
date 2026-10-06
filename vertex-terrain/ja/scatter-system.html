@@ -112,7 +112,7 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 
 <ol><li>付属の Vertex Terrain Shader Graph から Scatter Wind ブロック全体をコピーし、自分の Shader Graph に貼り付けます。</li><li>まだ存在しない場合は、上記4つの Blackboard 項目を追加します。</li><li><strong>Wind Strength</strong>、<strong>Wind Direction</strong>、<strong>Height To Tip</strong>、<strong>DPT Scatter Wind</strong> を、参照画像と同じ位置へ再接続します。</li><li>最後の <strong>DPT Scatter Wind</strong> の Out を Graph の <strong>Vertex Position</strong> に接続します。</li><li>Graph を保存し、その Shader を使用する Material を Custom Mesh Variant に割り当てます。</li><li>Material 側で DPT Scatter Wind Keyword を有効にし、その後 Scatter Object の <strong>Enable Wind</strong> を有効にします。</li></ol>
 
-<figure class="doc-figure"><img src="../assets/dpt-scatter-wind-shader-graph.png" alt="DPT Scatter Wind ブロック、Blackboard Property、Vertex Position への接続を示す Shader Graph の参照画像。"><figcaption>Custom Shader Graph に DPT Scatter Wind を追加するための参照設定です。Scatter Wind ブロックをコピーし、上記4つの Blackboard 項目を同じ Reference 名で作成して、画像どおりに再接続します。最後の出力は Vertex Position に接続します。</figcaption></figure>
+<figure class="doc-figure"><img src="../assets/dpt-scatter-wind-shader-graph-ja.png" alt="DPT Scatter Wind ブロック、Blackboard Property、Vertex Position への接続を示す Shader Graph の参照画像。"><figcaption>Custom Shader Graph に DPT Scatter Wind を追加するための参照設定です。Scatter Wind ブロックをコピーし、上記4つの Blackboard 項目を同じ Reference 名で作成して、画像どおりに再接続します。最後の出力は Vertex Position に接続します。</figcaption></figure>
 
 <div class="callout"><p><strong>既存の Vertex Animation がある場合:</strong> Shader Graph ですでに Vertex Position を変更している場合は、現在の変形処理を単純に置き換えるのではなく、その Object Space Position の処理へ Scatter Wind を組み込んでください。</p></div>
 
