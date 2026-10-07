@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="再利用できる地表を作り、テクスチャ、色、ブレンド設定の関係を理解します。"><link rel="alternate" hreflang="en" href="../biomes.html"><link rel="alternate" hreflang="ja" href="biomes.html"><title>バイオームガイド | DPT Games</title><style>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="再利用できる地表を作り、テクスチャ、色、ブレンド設定の関係を理解します。"><link rel="alternate" hreflang="en" href="../biomes.html"><link rel="alternate" hreflang="ja" href="biomes.html"><link rel="alternate" hreflang="ko" href="../ko/biomes.html"><title>バイオームガイド | DPT Games</title><style>
 :root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
 main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
@@ -14,7 +14,7 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 @media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
 @media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
 </style></head>
-<body><main id="top"><nav class="site-nav" aria-label="ドキュメント"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a href="index.html">Vertex 3D Terrain ガイド</a><a href="biomes.html" aria-current="page">バイオームガイド</a><a href="terrain-material-settings.html">地形マテリアル設定</a><a href="demo-components.html">デモ・ランタイムガイド</a></nav><nav class="language-nav" aria-label="言語"><a href="../biomes.html" lang="en" hreflang="en">English</a><a href="biomes.html" lang="ja" hreflang="ja" aria-current="page">日本語</a></nav><header><h1>バイオームガイド</h1><p class="lead">再利用できる地表を作り、テクスチャ、色、ブレンド設定の関係を理解します。</p></header><nav class="toc" aria-label="このページの内容"><h2>このページの内容</h2><ul><li><a href="#quick-start">最初のバイオームを作る</a></li><li><a href="#creating-biomes">ライブラリとバイオームインスペクター</a></li><li><a href="#texture-inputs">どの欄にどのテクスチャを入れるか</a></li><li><a href="#color-ramp">カラーランプとランプ変換</a></li><li><a href="#surface-settings">各サーフェス設定の意味</a></li><li><a href="#variants">良いプリセットを保ちながら変化を作る</a></li><li><a href="#merge">二つの地表を一つの新しいバイオームにする</a></li><li><a href="#direct-mode">Direct Vertex Color のバイオーム</a></li><li><a href="#optimization">テクスチャ品質、メモリ、共有アセット</a></li><li><a href="#troubleshooting">バイオームでよくある問題</a></li><li><a href="#support">サポート</a></li></ul></nav><p class="table-hint">小さい画面では、幅の広い表を横にスクロールするとすべての列を読めます。</p><div class="intro"><p>バイオームは、草、砂、雪、岩、金属など、一つの再利用できる地表です。ペイントでは「どこに表示するか」、バイオームインスペクターでは「どう見えるか」を決めます。</p><p>バイオームは、地形生成や植生のシステムではありません。「Forest」と名付けても木は配置されず、「River」と名付けても水の形状は作られません。そうしたシーンを作るための素材として使えます。</p></div>
+<body><main id="top"><nav class="site-nav" aria-label="ドキュメント"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a href="index.html">Vertex 3D Terrain ガイド</a><a href="biomes.html" aria-current="page">バイオームガイド</a><a href="terrain-material-settings.html">地形マテリアル設定</a><a href="scatter-system.html">3D スキャッターガイド</a><a href="demo-components.html">デモ・ランタイムガイド</a></nav><nav class="language-nav" aria-label="言語"><a href="../biomes.html" lang="en" hreflang="en">English</a><a href="biomes.html" lang="ja" hreflang="ja" aria-current="page">日本語</a><a href="../ko/biomes.html" lang="ko" hreflang="ko">한국어</a></nav><header><h1>バイオームガイド</h1><p class="lead">再利用できる地表を作り、テクスチャ、色、ブレンド設定の関係を理解します。</p></header><nav class="toc" aria-label="このページの内容"><h2>このページの内容</h2><ul><li><a href="#quick-start">最初のバイオームを作る</a></li><li><a href="#creating-biomes">ライブラリとバイオームインスペクター</a></li><li><a href="#texture-inputs">テクスチャ入力とパック高さマッピング</a></li><li><a href="#color-ramp">カラーランプとランプ変換</a></li><li><a href="#surface-settings">各サーフェス設定の意味</a></li><li><a href="#variants">良いプリセットを保ちながら変化を作る</a></li><li><a href="#merge">二つの地表を一つの新しいバイオームにする</a></li><li><a href="#direct-mode">Direct Vertex Color のバイオーム</a></li><li><a href="#optimization">テクスチャ品質、メモリ、共有アセット</a></li><li><a href="#troubleshooting">バイオームでよくある問題</a></li><li><a href="#support">サポート</a></li></ul></nav><p class="table-hint">小さい画面では、幅の広い表を横にスクロールするとすべての列を読めます。</p><div class="intro"><p>バイオームは、草、砂、雪、岩、金属など、一つの再利用できる地表です。ペイントでは「どこに表示するか」、バイオームインスペクターでは「どう見えるか」を決めます。</p><p>バイオームは一つの地表を定義します。地形ジェネレーターで選ぶと新しい形状の初期外観になり、スキャッターオブジェクトの対象にすると植生を配置できます。プリセットを「Forest」と名付けるだけでは木は配置されず、「River」と名付けても流れる水の形状は作られません。Terrain Atlas の地表上に、バイオームに応じた草、花、キノコ、小石、カスタムメッシュを配置する場合は、<a href="scatter-system.html">3D スキャッターガイド</a>を参照してください。</p></div>
 
 <h2 id="quick-start">最初のバイオームを作る</h2>
 <ol><li>地形エディターで Biome Library と Terrain Atlas パイプラインを選びます。</li><li>バイオームを追加し、「乾いた砂」「暗い岩」など、分かりやすい名前を付けます。</li><li>ベースカラーの画像を <strong>Source RGB</strong> に指定します。対応するテクスチャセットがあれば Auto Folder で入力を探せますが、割り当ては必ず確認します。</li><li>最初は法線、金属、発光を控えめにします。<strong>Auto Generate</strong> の前に、生成に使う強さを指定します。強さが 0 のマップは生成対象から除外されます。</li><li>生成テクスチャとカラーランプを確認します。実際に使うカメラ距離から見られる程度のテスト範囲を塗ります。</li><li>Scale で模様の大きさ、ランプで色を調整します。必要なら法線と PBR の入力も追加します。</li><li>明るい場所と影、近距離と遠距離で確認します。大きく見た目を変える前に、バイオームを複製します。</li></ol>
@@ -22,6 +22,7 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 
 <h2 id="creating-biomes">ライブラリとバイオームインスペクター</h2>
 <p>ライブラリは、地形オブジェクトが共有するパレットです。インスペクターは選択したプリセットを編集します。カードを選ぶとその設定が表示され、複数のカードを選ぶと共通の編集項目が表示されます。値が混在している表示は、選択したプリセットの値が異なることを示します。</p>
+<p>テクスチャの割り当てには、コンパクトなインラインフィールドを使います。スペースに余裕がある場合、サーフェス設定はペアの行にまとめられ、<strong>Rotation</strong> と <strong>Pulse</strong> も同じ行に表示されます。オン／オフ設定は強調表示されたボタンです。パレットの <strong>Set Active</strong> ボタンは、現在アクティブなパレットページでは <strong>Active</strong> と表示されます。</p>
 <div class="table-wrap"><table><thead><tr><th>操作</th><th>動作</th><th>用途</th></tr></thead><tbody>
 <tr><td>Add</td><td>現在のパイプラインの一覧にプリセットを追加します。</td><td>適切な土台となるプリセットがない新しい地表に使います。</td></tr>
 <tr><td>Biome Name</td><td>プリセットの名前です。</td><td>見た目が分かる名前を付けます。エディターの言語を変えても、ユーザーが付けた名前はそのままです。</td></tr>
@@ -31,7 +32,7 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>並べ替え・交換</td><td>パレットの順序と、その数値 ID を変えます。</td><td>整理した後は、エディター外で指定している ID も確認します。</td></tr>
 <tr><td>複数選択</td><td>選択した複数のプリセットに共通の設定を適用します。</td><td>岩のグループなどをまとめて調整できます。混在している項目を変えると、入力値が選択したすべてに適用されます。</td></tr>
 </tbody></table></div>
-<p><strong>名前と ID は別です。</strong>名前は地表を見分けるためのもの、ID は現在のパイプライン一覧内の番号です。デモで ID 6 が雪でも、別のライブラリでは岩かもしれません。ライブスロットやゲームプレイスクリプトを設定する前に、自分のライブラリで ID を確認してください。</p>
+<p><strong>名前と ID は別です。</strong>名前は地表を見分けるためのもの、ID は現在のパイプライン一覧内の番号です。デモで ID 6 が雪でも、別のライブラリでは岩かもしれません。ライブスロット、<a href="scatter-system.html#target-biomes">スキャッターの Target Biomes</a>、ゲームプレイスクリプトを設定する前に、自分のライブラリで ID を確認してください。</p>
 <p>共有ライブラリを編集すると、複数の地形が変わることがあります。一つの結果だけ専用のマテリアルとテクスチャを保ちたい場合は、地形ツールの独立コピー機能を使います。</p>
 
 <h2 id="texture-inputs">どの欄にどのテクスチャを入れるか</h2>
@@ -51,12 +52,18 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <h3>個別テクスチャとパック PBR の選び方</h3>
 <p>AO、Metallic、Smoothness/Roughness の個別画像がある場合は <strong>Separate Textures</strong> を使います。複数のマスクを一枚にまとめた画像なら <strong>Packed Texture</strong> を使います。ファイル名だけでチャンネル配置を判断せず、配布元の仕様を確認してください。</p>
 <div class="table-wrap"><table><thead><tr><th>マッピング</th><th>赤</th><th>緑</th><th>青</th><th>アルファ</th></tr></thead><tbody>
-<tr><td>Standard Unity MRAO</td><td>Metallic</td><td>AO</td><td>これらのマスクには未使用</td><td>Smoothness</td></tr>
+<tr><td>Standard Unity MRAO</td><td>Metallic</td><td>AO</td><td>無視されます</td><td>Smoothness</td></tr>
+<tr><td>MRAO + Height (B)</td><td>Metallic</td><td>AO</td><td>作成済みの Height</td><td>Smoothness</td></tr>
 <tr><td>Standard Unity MRAR</td><td>Metallic</td><td>AO</td><td>これらのマスクには未使用</td><td>Roughness。反転して Smoothness に変換</td></tr>
 <tr><td>Unreal ORM</td><td>AO</td><td>Roughness。反転して Smoothness に変換</td><td>Metallic</td><td>これらのマスクには未使用</td></tr>
 <tr><td>Custom</td><td>Metallic</td><td>Smoothness</td><td>AO</td><td>これらのマスクには未使用</td></tr>
 </tbody></table></div>
 <p>ここでの <strong>Custom</strong> は、上記の固定配置です。任意のチャンネルを選ぶ画面ではありません。別の配置の画像は、チャンネルを組み直すか、個別のマップを使います。</p>
+<h3 id="packed-height">パック画像の青チャンネルに保存された高さを使う</h3>
+<ol><li><strong>PBR Mode → Packed Texture</strong> を選び、Packed PBR マップを割り当てます。</li><li>チャンネルが R = Metallic、G = AO、B = Height、A = Smoothness の場合は、<strong>Mapping → MRAO + Height (B)</strong> を選びます。</li><li><strong>Parallax</strong> を含むサーフェス強度を目的の値に設定してから、<strong>Auto Generate</strong> を実行します。パック画像の B が高さの入力になり、Parallax が生成時の影響量を決めます。0 にすると除外されます。</li><li>生成された Detail テクスチャとカラーランプを一緒に確認し、必要に応じて地形テクスチャをコンパイルします。</li></ol>
+<p>このマッピングは任意です。通常の Standard Unity MRAO では青チャンネルを無視するため、マッピングを意図的に変更して再生成するまでは既存バイオームの結果は変わりません。B に別の細部マスクではなく Height が入っている場合だけ選択してください。既存の Source Height の割り当ては保持されますが、このマッピングを選択している間は Auto Generate がパック画像の B を使います。</p>
+<p>Atlas のコンパイルでは、割り当て済みまたは生成済みの Detail テクスチャが優先されます。Detail テクスチャが割り当てられていない場合は、MRAO + Height がパック画像の B を直接使用できます。そのため Mapping を切り替えるだけでは既存の生成結果は置き換わりません。パックされた高さを反映したい場合は再生成してください。このオプションは既存の Detail テクスチャスライスを使用します。</p>
+
 <h3>Auto Generate が変更するもの</h3>
 <p>Auto Generate は、元の入力から処理済みのサーフェスデータとカラーランプを作ります。現在の Normal、AO、Smoothness、Metallic、Emissive、Parallax の強さが生成内容に影響し、0 のマップは除外されます。新しい Source RGB を指定した際にも、細部とランプが初期化されることがあります。</p>
 <p>必要な強さを先に設定し、生成してから確認します。除外していたマップが後で必要になったら、適した元画像から再生成してください。生成に含まれていない細部を、シェーダーの倍率だけで取り戻すことはできません。</p>
@@ -76,7 +83,7 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <div class="example"><p><strong>岩のバリエーション：</strong>灰色の岩を複製し、片方のランプを少し暖かく暗くします。テクスチャの Scale は近い値にし、片方を 90° 回転させます。両方を塗ると、同じ種類の岩に見せながら変化を加えられます。</p></div>
 
 <h2 id="surface-settings">各サーフェス設定の意味</h2>
-<p>ここでは、選択したバイオームの設定を変更します。マテリアルには、複数のバイオームへまとめて影響する全体設定もあります。個々の地表を整えてから、全体の倍率で地形を調整すると分かりやすくなります。</p>
+<p>ここでは、選択したバイオームの設定を変更します。マテリアルには、複数のバイオームへまとめて影響する全体設定もあります。個々の地表を整えてから、全体の倍率で地形を調整すると分かりやすくなります。スキャッター配置は<a href="scatter-system.html">3D スキャッターガイド</a>で別途設定し、一つの再利用可能なスキャッターオブジェクトから複数のバイオーム ID を対象にできます。</p>
 <div class="table-wrap"><table><thead><tr><th>項目</th><th>低い値</th><th>高い値</th><th>使い方の目安</th></tr></thead><tbody>
 <tr><td>Scale：0.02～10</td><td>模様が大きく、繰り返しが少なく見えます。</td><td>模様が小さく、繰り返しが多く見えます。</td><td>テクスチャのタイリングです。GameObject のサイズではありません。キャラクターなど既知の大きさと比較します。</td></tr>
 <tr><td>Normal：0～2</td><td>照明による細部の凹凸が弱くなります。</td><td>照明の凹凸が強くなります。</td><td>法線の元画像がある場合に使います。強すぎる法線は、形状を改善せずに表面を騒がしく見せることがあります。</td></tr>
@@ -85,10 +92,10 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Smoothness</td><td>ハイライトが広く、粗い素材に見えます。</td><td>ハイライトが狭く、磨かれた素材に見えます。</td><td>マップなしは 0～1、マップありは最大 2 です。1 付近ではマップの反応を保ち、1 より大きい値では全体がより均一に滑らかな方向へ変わります。</td></tr>
 <tr><td>Metallic</td><td>金属らしい反応が弱くなります。</td><td>金属らしい反応が強くなります。</td><td>マップなしは 0～1、マップありは最大 2 です。1 より大きい値は金属反応を広げるため、単純な中立倍率とは異なります。</td></tr>
 <tr><td>Emissive：0～1</td><td>発光が弱くなります。</td><td>発光設定からの光が強くなります。</td><td>変わらない場合は、元のマスクとマテリアルの発光強度を確認します。Bloom は別のシーン・ポストプロセス設定です。</td></tr>
-<tr><td>Pulse</td><td>無効では発光が一定になります。</td><td>有効ではパルス動作を使います。</td><td>変化する発光に使います。ランタイムデモの Slot 4 のパルスは、別のマテリアル制御例です。</td></tr>
+<tr><td>Pulse</td><td>無効では発光が一定になります。</td><td>有効ではパルス動作を使います。</td><td>パルス発光とダスティングは、同じ頂点では併用できません。その場所でダスティングを使う場合は Pulse を無効にします。ランタイムデモの Slot 4 のパルスは、別のマテリアル制御例です。</td></tr>
 <tr><td>Rotation：0°、90°、180°、270°</td><td colspan="2">バイオームのテクスチャ細部の向きを変えます。</td><td>方向を合わせたり、同じ素材の複製に変化を付けたりします。地形のメッシュは回転しません。</td></tr>
 <tr><td>Anti-Tiling：0～1</td><td>繰り返しを崩す変化が減ります。0 はそのバイオームの寄与を除きます。</td><td>模様の繰り返しが目立たないよう、変化を増やします。</td><td>マテリアルのパッチ・色設定と併用します。強すぎると、方向を意図した模様が分かりにくくなります。</td></tr>
-<tr><td>Seam Blend：0～1</td><td>テクスチャ投影間のブレンドが弱くなります。</td><td>投影の接続がやわらかくなります。</td><td>投影の境界に使います。頂点を溶接したり、地形オブジェクトの隙間を閉じたりはできません。</td></tr>
+<tr><td>Seam Blend：0～1</td><td>テクスチャ投影間のブレンドが弱くなります。</td><td>投影の接続がやわらかくなります。</td><td>ワールド基準のブレンドは、移動または回転するオブジェクトには固定されません。ずれを隠すには、マテリアルの Seam Blend Fade Distance を小さくします。頂点を溶接したり、隙間を閉じたりはできません。</td></tr>
 <tr><td>Priority：0～100</td><td>ゲームプレイ用の代表バイオームをベイクするとき、優先度が低くなります。</td><td>十分な割合を占める候補の中で、優先されます。</td><td>描画の前後関係ではありません。静的ベイクは正規化した被覆率が約 10% 以上の候補を考慮します。ライブの重みによる問い合わせは別のルールです。</td></tr>
 </tbody></table></div>
 <p><strong>見た目とゲームプレイの設定を分けて考える：</strong>Priority を変えると、目に見える混ざり方は同じでも、ベイクした代表バイオームが変わる場合があります。足音などに使う場合は、レイキャストテスターで確認します。</p>
@@ -124,9 +131,14 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <p>通常のライブラリ編集では、ツールの処理を通じて生成データが更新されます。マテリアルが合っていない場合は Compile Terrain Textures を使い、正しいライブラリとマテリアルを参照しているか確認します。ゲームプレイ用サーフェスデータの再ベイクは別の操作です。テクスチャ生成だけでは、古い三角形とバイオームの対応は更新されません。</p>
 
 <h2 id="troubleshooting">バイオームでよくある問題</h2>
+<p>Stylized Lighting と AO、Pulse とダスティングの互換性、移動する地形での Seam Blend については、<a href="terrain-material-settings.html#faq">マテリアル FAQ</a>も参照してください。</p>
 <div class="table-wrap"><table><thead><tr><th>問題</th><th>確認すること</th></tr></thead><tbody>
+<tr><td>Stylized Lighting でマテリアルが暗すぎる</td><td>このモードでは AO が影として扱われます。バイオームの AO Strength またはマテリアルの Surface AO Strength を下げます。高さの解釈が逆なら Invert Height を試し、必要に応じて再生成します。</td></tr>
+<tr><td>ダスティングを塗った場所で Pulse が止まる</td><td>パルス発光とダスティングは同じ頂点では併用できません。その領域ではどちらか一方を使用し、ダスティングを使う場合は Pulse を無効にします。</td></tr>
 <tr><td>元画像と完成した色が違う</td><td>Generated とランプを確認します。Source RGB は生成の入力で、最終的な色はランプが決めます。照明と全体の倍率も確認します。</td></tr>
 <tr><td>盛り上がりがくぼんで見える</td><td>Invert Height と高さの元画像を確認し、テスト中は強すぎる Parallax を下げます。</td></tr>
+<tr><td>パック画像の青チャンネルの Height が見た目に反映されない</td><td>MRAO + Height (B) を選び、B に Height が入っていて Parallax が 0 より大きいことを確認してから Auto Generate を実行します。コンパイル時は、既存の生成済み Detail テクスチャが優先されます。</td></tr>
+
 <tr><td>全面が光沢・金属になる</td><td>PBR の配置、Roughness の扱い、スライダー値を確認します。マップありの 1 より大きい値は、反応を均一に近づけます。</td></tr>
 <tr><td>法線の細部が出ない</td><td>画像の割り当てとインポート設定、バイオームの強さ、生成設定、全体の法線強度とフェードを確認します。</td></tr>
 <tr><td>Auto Generate で色が消えた</td><td>ランプが再生成される場合があります。可能なら元に戻すか、保存・複製したプリセットを使います。再生成前にランプを複製してください。</td></tr>
