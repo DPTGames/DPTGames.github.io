@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="예제 컴포넌트와 Live Biome 및 Scatter 설정을 시험하고 Terrain Surface를 Gameplay에 연결합니다."><link rel="alternate" hreflang="en" href="../demo-components.html"><link rel="alternate" hreflang="ja" href="../ja/demo-components.html"><link rel="alternate" hreflang="ko" href="demo-components.html"><title>데모 &amp; 런타임 가이드 | DPT Games</title><style>
+
+:root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
+main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
+.site-nav{display:flex;flex-wrap:wrap;gap:8px 20px;border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:32px;font-size:.92rem}.site-nav [aria-current]{color:white;font-weight:700}
+.language-nav{display:flex;gap:10px;flex-wrap:wrap;margin:-12px 0 28px}.language-nav a{display:inline-block;padding:6px 16px;border:1px solid var(--border);border-radius:6px;text-decoration:none}.language-nav [aria-current]{color:#0f172a;background:var(--accent);border-color:var(--accent);font-weight:700}html[lang="ja"] body,html[lang="ko"] body{line-height:1.85;line-break:strict}html[lang="ja"] th,html[lang="ja"] td,html[lang="ko"] th,html[lang="ko"] td{overflow-wrap:anywhere}
+h1,h2,h3,h4{line-height:1.25;color:var(--accent)}h1{font-size:2.25rem;margin:0 0 14px}h2{font-size:1.65rem;margin:48px 0 18px;padding-top:12px;border-top:1px solid var(--border)}h3{font-size:1.22rem;margin:30px 0 12px}h4{font-size:1.06rem}
+p{margin:12px 0 18px}li{margin:7px 0}ul,ol{padding-left:25px}.lead{font-size:1.18rem;color:var(--muted);max-width:850px}.intro{margin:28px 0}.toc{background:var(--panel);padding:20px 24px;border:1px solid var(--border);border-radius:9px;margin:28px 0}.toc h2{margin:0 0 10px;padding:0;border:0;font-size:1.15rem}.toc ul{columns:2;column-gap:36px;margin:0}.toc li{break-inside:avoid}
+.callout,.example{background:var(--panel);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:14px 20px;margin:22px 0}.example{border-color:#a3e635}.callout p:last-child,.example p:last-child{margin-bottom:0}.callout p:first-child,.example p:first-child{margin-top:0}
+.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--border);border-radius:7px}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--border)}thead{background:#25354c}th{color:#f8fafc}td:first-child{font-weight:600;min-width:145px}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#172238}
+code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background:#27354c;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}kbd{white-space:nowrap;border:1px solid #50617a}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#09111f;border:1px solid var(--border);padding:20px;border-radius:7px}pre code{background:transparent;padding:0}
+.back-top{font-size:.88rem}.table-hint{display:none;color:var(--muted);font-size:.9rem}.footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);margin-top:34px;padding-top:16px}details{background:var(--panel);padding:14px 18px;border:1px solid var(--border);border-radius:7px;margin:16px 0}summary{cursor:pointer;font-weight:600;color:var(--accent)}.alias{display:block;scroll-margin-top:24px}
+@media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
+@media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
+
+</style></head>
+<body><main id="top"><nav class="site-nav" aria-label="문서"><a href="https://dptgames.github.io/">DPT Games 홈페이지</a><a href="index.html">Vertex 3D Terrain 가이드</a><a href="biomes.html">바이옴 가이드</a><a href="terrain-material-settings.html">Terrain Material 설정</a><a href="scatter-system.html">3D Scatter 가이드</a><a href="demo-components.html" aria-current="page">데모 &amp; 런타임 가이드</a></nav><nav class="language-nav" aria-label="언어"><a href="../demo-components.html" lang="en" hreflang="en">English</a><a href="../ja/demo-components.html" lang="ja" hreflang="ja">日本語</a><a href="demo-components.html" lang="ko" hreflang="ko" aria-current="page">한국어</a></nav><header><h1>데모 &amp; 런타임 가이드</h1><p class="lead">예제 컴포넌트를 사용해 보고 Terrain Surface 정보를 자신의 Gameplay에 연결합니다.</p></header><nav class="toc" aria-label="이 페이지의 내용"><h2>이 페이지의 내용</h2><ul><li><a href="#quick-start">데모를 실행하고 구성 요소 확인하기</a></li><li><a href="#dynamic-biome-controller">Dynamic Biome Demo Controller</a></li><li><a href="#surface-raycast-tester">Surface Raycast Tester</a></li><li><a href="#terrain-demo-camera">Terrain Demo Camera</a></li><li><a href="#runtime-architecture">Gameplay에서 Surface Data 사용하기</a></li><li><a href="#query-limits">Query 결과는 화면과 얼마나 일치하나요?</a></li><li><a href="#troubleshooting">Runtime 및 Demo 문제</a></li><li><a href="#support">지원</a></li></ul></nav><p class="table-hint">작은 화면에서는 넓은 표를 좌우로 스크롤하여 모든 열을 확인할 수 있습니다.</p><div class="intro"><p>Demo Component를 사용하면 Terrain을 검사하고 Live Material Effect를 시험하며 Physics Raycast가 어떤 Biome을 반환하는지 확인할 수 있습니다. 학습하고 수정할 수 있는 예제이며 완성된 Character Controller, Weather System 또는 Footstep Audio System을 제공하는 것은 아닙니다.</p><p>Demo를 시험하는 데는 코드를 작성할 필요가 없습니다. 이 페이지 뒤쪽의 Integration Example은 Surface 정보를 자신의 Gameplay에서 사용하려는 개발자를 위한 것입니다.</p></div>
+
+<h2 id="quick-start">데모를 실행하고 구성 요소 확인하기</h2>
+<ol><li><code>Assets/DPTGames/Vertex_Terrain/VertexTerrain_Demo/VertexTerrain_DemoScene.unity</code>를 엽니다.</li><li>Terrain Renderer를 찾고 해당 Material과 Biome Library를 확인합니다. 그 Library에서 Surface ID를 확인합니다.</li><li>Dynamic Biome Demo Controller를 찾습니다. Play Mode에 들어가기 전에 지정된 Material, Target ID 및 활성 Simulation을 확인합니다.</li><li>Play Mode에 들어가 Demo Camera로 여러 Painted Surface를 살펴봅니다.</li><li>효과를 명확히 확인할 수 있도록 Material Simulation은 한 번에 하나씩 시험합니다.</li><li>Surface Raycast Tester로 반환되는 ID와 Name을 확인합니다. Pure Patch와 Blend 경계 근처의 외형을 비교합니다.</li></ol>
+<div class="table-wrap"><table><thead><tr><th>Component / Asset</th><th>역할</th><th>자신의 게임에 필요한가요?</th></tr></thead><tbody>
+<tr><td>Dynamic Biome Demo Controller</td><td>Terrain Material에 Live Terrain 및 Scatter-response 설정을 기록하고 예제 Animation을 제공합니다.</td><td>선택 사항입니다. 자신의 Weather 또는 Gameplay 규칙이 다르면 별도 Controller를 사용할 수 있습니다.</td></tr>
+<tr><td>Surface Raycast Tester</td><td>Physics Hit와 그 위치에서 반환되는 Biome을 표시합니다.</td><td>선택적인 Debug Tool입니다. Gameplay에서 같은 Surface-query API를 직접 호출할 수 있습니다.</td></tr>
+<tr><td>Terrain Demo Camera</td><td>검사용 Free Camera Movement를 제공합니다.</td><td>선택 사항입니다. 자신의 Player/Camera System으로 교체하십시오.</td></tr>
+<tr><td>Terrain Surface Data</td><td>Bake된 Triangle-to-biome 정보입니다.</td><td>제공되는 Triangle 기반 Biome Query에 필요합니다.</td></tr>
+<tr><td>Terrain Surface Target</td><td>Renderer를 Bake된 Data에 연결하고 Surface Query를 평가합니다.</td><td>제공되는 Query가 인식해야 하는 Terrain에 사용합니다.</td></tr>
+</tbody></table></div>
+
+<h2 id="dynamic-biome-controller">Dynamic Biome Demo Controller</h2>
+<p>Object에 <strong>DPT → Dynamic Biome Demo Controller</strong>를 추가하고 Terrain Material을 지정합니다. 비워 두면 Component가 같은 Object의 Renderer에서 Shared Material을 찾을 수 있습니다. Renderer가 없는 Empty Object에는 명시적인 Material Reference가 필요합니다.</p>
+<p>이 Controller는 지정된 Material을 직접 편집합니다. Private Material Instance를 자동으로 만들지는 않습니다. Terrain 하나만 독립적으로 변경하려면 별도 Material을 사용하십시오.</p>
+<h3>Pull, Push 및 Synchronisation 이해하기</h3>
+<div class="table-wrap"><table><thead><tr><th>Control / Action</th><th>변경 방향</th><th>사용 시점</th></tr></thead><tbody>
+<tr><td>Pull Settings From Material</td><td>Material → Component.</td><td>Material Inspector에서 이미 만든 Setup을 가져옵니다. Component의 해당 Slot 설정이 교체됩니다.</td></tr>
+<tr><td>Push Settings To Material</td><td>Component → Material.</td><td>Component의 현재 설정을 적용합니다. 먼저 Material을 지정하거나 Resolve하십시오. 해당 Material 설정이 교체됩니다.</td></tr>
+<tr><td>Pull From Material On Play</td><td>Play Mode 진입 시 기존 Live Setup이 감지되면 가져옵니다.</td><td>기본값은 On이므로 구성된 Material이 초기 상태를 제공할 수 있습니다. 가져온 뒤 예상과 다르면 Component 설정을 다시 확인하십시오.</td></tr>
+<tr><td>Sync In Edit Mode</td><td>Play Mode 밖에서 Component Inspector의 변경 사항을 Material에 기록합니다.</td><td>기본값은 Off입니다. Material을 직접 조정하는 동안에는 끄고 Component가 Setup을 구동해야 할 때 켭니다.</td></tr>
+<tr><td>Enable Dynamic Biomes</td><td>설정을 Push할 때 Material의 Master Live-biome Switch를 설정합니다.</td><td>각 Slot의 Active Switch와 함께 사용합니다. Master를 켜도 Slot 1이 강제로 활성화되지는 않습니다.</td></tr>
+</tbody></table></div>
+<p>Pull과 Push Action은 Component의 Context Menu에서 사용할 수 있습니다. Runtime에서는 Simulation이 활성화되어 있는 동안 Demo가 계속 Push합니다. 모든 Simulation이 꺼져 있으면 자신의 Script에서 Field를 변경해도 매 Frame 자동 Push되지 않습니다. 변경 후 <code>PushMaterialProperties()</code>를 호출하십시오.</p>
+<div class="example"><p><strong>예측 가능한 편집 Workflow:</strong> Material Inspector에서 Setup을 완성하고 Component로 Pull한 다음, 이후에는 Material과 Component 중 어느 쪽이 편집을 구동할지 결정합니다. Simulation 또는 Edit-mode Sync가 한쪽을 덮어쓰는 동안 양쪽을 반복해서 편집하지 마십시오.</p></div>
+<h3>네 개의 Slot 설정하기</h3>
+<p>각 Slot은 최대 세 개의 Biome ID를 Target으로 할 수 있습니다. Slot 1은 두 개의 Demo Animation에서 사용하는 Slot일 뿐 항상 활성화되어야 하는 특별한 규칙은 없습니다. Component에 저장된 Example ID는 Demo 기본값이며 사용자의 Library에 같은 Surface가 존재한다는 보장은 없습니다.</p>
+<div class="table-wrap"><table><thead><tr><th>Setting</th><th>의미</th><th>권장 시작값</th></tr></thead><tbody>
+<tr><td>Active / Target Biome IDs</td><td>Slot이 영향을 주는 기존 Surface를 선택합니다.</td><td>시험 중인 Slot만 활성화하고 자신의 Library ID를 입력합니다. 비활성화에는 Active를 사용하십시오. −1은 Disable ID가 아닙니다.</td></tr>
+<tr><td>Weight Multiplier: 0–5</td><td>기존 Painted Mixture에서 Target Surface의 기여도를 변경합니다.</td><td>1은 Weight를 유지합니다. 해당 영역에 원래 페인트되지 않은 Biome을 새로 만들 수는 없습니다.</td></tr>
+<tr><td>Smoothness / Normal / Parallax: 0–3</td><td>Target ID의 해당 Surface Response에 Multiplier를 적용합니다.</td><td>1은 원래 Response를 유지합니다. 1 근처의 작은 변화부터 시작합니다.</td></tr>
+<tr><td>Emissive: 0–10</td><td>Source Glow에 Multiplier를 적용합니다.</td><td>1은 유지합니다. 패턴이 있는 Glow가 나타나려면 Target Surface 자체에 Emissive 기여가 있어야 합니다.</td></tr>
+<tr><td>Flow</td><td>움직이는 Texture Detail, Heading, Speed 및 선택적 Back-and-forth Motion을 활성화합니다.</td><td>낮은 Positive Speed부터 시작합니다. Negative Speed는 방향을 반대로 하고 0은 정지입니다.</td></tr>
+<tr><td>Dusting</td><td>Overlay Biome, Strength 및 Upward-facing Slope Threshold를 선택합니다.</td><td>아래 Ground ID를 Slot Target으로 사용하고 Snow/Dust ID를 Overlay로 지정한 뒤 먼저 Terrain에 Dusting Mask를 페인트합니다.</td></tr><tr><td>Scatter Density: 0–1</td><td>Slot의 Target Biome ID가 소유한 Scatter에 적용되는 Live Multiplier입니다.</td><td>1은 설정된 Scatter 양을 유지하고 0은 Placement를 Rebuild하지 않고 숨깁니다.</td></tr><tr><td>Scatter Colour Multiplier</td><td>Target Biome ID가 소유한 Generated Scatter에 적용되는 Live RGB/HDR Multiplier입니다.</td><td>White가 Neutral입니다. 서리 낀 계절 반응에는 옅고 차가운 값을 사용할 수 있습니다.</td></tr>
+</tbody></table></div>
+<p>Live Weight, Flow, Slope Threshold, Painted Mask 및 Scatter Response의 전체 의미는 <a href="terrain-material-settings.html#live-biomes">Terrain Material 설정</a>을 참고하십시오. Scatter Placement, 재사용 가능한 Target Biomes 및 LOD 설정은 <a href="scatter-system.html">3D Scatter 가이드</a>를 참고하십시오. Demo Component는 Material의 Waterfall Projection Flag를 노출하지 않으며 Slot Data를 Push할 때 해당 Flag를 Clear할 수 있습니다.</p>
+<h3>Demo Animation이 실제로 변경하는 항목</h3>
+<div class="table-wrap"><table><thead><tr><th>Simulation</th><th>실제 동작</th><th>필요한 Setup</th></tr></thead><tbody>
+<tr><td>Winter Snowstorm</td><td>Slot 1 Dusting을 활성화하고 Strength를 0과 1.8 사이에서 순환시킵니다. 동시에 Slot 1 Scatter를 시작 Density/Colour에서 Winter Scatter Density와 Winter Scatter Colour Multiplier 쪽으로 Blend합니다. Slot 1의 Weight 자체를 Animate하지는 않습니다.</td><td>Slot 1을 활성화하고 효과를 받을 Ground ID를 Target으로 지정하고 Snow Overlay ID를 선택한 뒤 Dusting Mask를 페인트합니다. 관련 Scatter Object도 같은 Biome ID를 Target으로 해야 합니다. Weather Cycle Speed가 Cycle Rate를 제어합니다.</td></tr>
+<tr><td>River Level</td><td>Slot 1의 Weight Multiplier를 0과 2.5 사이에서 순환시킵니다.</td><td>Target River Biome이 포함된 Mixture를 페인트합니다. Surface 기여도를 변경할 뿐 실제 Water Height나 Terrain Geometry는 변경하지 않습니다.</td></tr>
+<tr><td>Emissive Pulse</td><td>Slot 4를 활성화하고 Emissive Multiplier를 0.5에서 8.5까지 순환시킵니다.</td><td>Slot 4에서 Emissive Biome을 Target으로 지정합니다. Pulse Speed가 Cycle Rate를 변경하며 Post-processing Bloom은 별도입니다.</td></tr>
+</tbody></table></div>
+<p>Cycle Speed 값은 물리적인 Weather Duration이나 Flow Speed가 아니라 Sine-wave Demo Timing을 제어합니다. Winter Scatter Density의 기본값은 0.05이므로 Winter가 최고조일 때 Target Scatter를 설정량의 5%까지 줄일 수 있습니다. Winter Scatter Colour Multiplier의 기본값은 차갑고 밝은 Tint입니다. 보여 주려는 Material과 계절에 맞게 두 값을 조정하십시오.</p><p>먼저 Animation 하나만 사용해 동작을 이해한 다음 의도적으로 Effect를 조합하십시오.</p>
+<p>Play Mode에서 비활성화하면 Controller는 Slot 1 Weight, Slot 1 Dusting Strength, Slot 1 Scatter Density, Slot 1 Scatter Colour Multiplier 및 Slot 4 Emissive Multiplier의 시작값을 복원합니다. 변경된 모든 Flag, ID 또는 Material 설정을 복원하는 것은 아닙니다. 알려진 Baseline을 유지하고 실험 후 Material을 비교하십시오.</p>
+
+<h2 id="surface-raycast-tester">Surface Raycast Tester</h2>
+<p>Raycast는 Unity에 “이 선을 따라 어떤 Collider가 있는가?”라고 묻습니다. Tester는 해당 Hit를 표시한 다음 Terrain의 Surface Target에 Biome을 요청합니다. 두 단계는 별개입니다. Collider에 Hit했다고 해서 Terrain Surface Data가 있다는 뜻은 아닙니다.</p>
+<h3>자신의 Terrain에 Probe 설정하기</h3>
+<ol><li>작은 Painted Test Terrain을 완성하고 Mesh를 저장합니다.</li><li>Bake하려는 Mesh와 Triangle Layout이 일치하는 MeshCollider를 지정합니다.</li><li>Terrain Tool에서 <strong>Bake Surface Data</strong>를 사용합니다.</li><li>적절한 Terrain Object에 <strong>DPT → Terrain Surface Target</strong>이 있고 Bake된 Surface Data Asset이 지정되어 있는지 확인합니다. Renderer가 필요합니다.</li><li>Terrain 위에 별도 Empty Object를 만들고 <strong>DPT → Surface Raycast Tester</strong>를 추가합니다.</li><li>Downward Probe, 충분한 Max Ray Distance 및 Terrain Collider가 포함된 Layer Mask를 선택합니다.</li><li>Scene Gizmos 또는 Game HUD를 활성화하고 Hit Object, Triangle Index, Biome ID 및 Name을 확인합니다. Probe를 서로 확실히 다른 두 Painted Area 사이로 이동합니다.</li></ol>
+<div class="table-wrap"><table><thead><tr><th>Setting</th><th>의미</th><th>흔한 실수</th></tr></thead><tbody>
+<tr><td>Downward Probe</td><td>Tester Object에서 World-down 방향으로 Cast합니다.</td><td>Planet의 Gravity Direction을 자동으로 따르지 않습니다. 해당 Setup에는 적절한 Forward/Custom Ray를 사용하십시오.</td></tr>
+<tr><td>Transform Forward</td><td>Object의 Local Forward Direction인 +Z로 Cast합니다.</td><td>Object가 Terrain 반대쪽을 향할 수 있습니다. 회전시키고 Gizmo Line을 확인하십시오.</td></tr>
+<tr><td>Mouse Cursor</td><td>Main Camera를 사용해 Pointer 방향으로 Cast하며 Editor에서는 Scene View Camera를 Fallback으로 사용합니다.</td><td>적절한 Camera가 있는지 확인합니다. 사용할 Camera가 없으면 Tester는 Downward Ray로 Fallback합니다.</td></tr>
+<tr><td>Max Ray Distance: 1–500</td><td>Probe가 Hit할 수 있는 최대 거리입니다.</td><td>높은 Terrain 위의 짧은 Ray는 도달할 수 없습니다. Distance를 늘려도 제외된 Layer 문제는 해결되지 않습니다.</td></tr>
+<tr><td>Raycast Layers</td><td>Hit할 수 있는 Collider Layer입니다.</td><td>다른 Collider가 먼저 Ray를 가로챌 수 있습니다. Debug 중에는 Terrain 전용 Layer Mask를 사용하십시오.</td></tr>
+<tr><td>Override Surface Data</td><td>Hit Object의 Surface Target을 Resolve하는 대신 특정 Baked Asset을 직접 읽습니다.</td><td>일반적인 Target 기반 Live Query에서는 비워 둡니다. Override는 Static Data를 사용하며 Hit Mesh와 일치해야 합니다. 관련 없는 Terrain에 같은 Asset을 사용하면 잘못된 결과가 나옵니다.</td></tr>
+<tr><td>Scene Gizmos</td><td>Scene View에 Probe와 Hit를 표시합니다.</td><td>Unity Scene View의 Gizmo Visibility도 확인하십시오.</td></tr>
+<tr><td>Game HUD</td><td>Game View에 Hit 결과를 표시합니다.</td><td>Debug Display이며 Player Interaction UI가 아닙니다.</td></tr>
+<tr><td>Log Clicks To Console</td><td>Left Mouse Button을 누르면 현재 Hit를 Console에 기록합니다.</td><td>Click은 현재 Probe Result를 보고할 뿐 Downward Probe를 Pointer Ray로 바꾸지 않습니다.</td></tr>
+</tbody></table></div>
+<h3>결과 읽기</h3>
+<p><strong>Hit Object</strong>는 Ray를 가로챈 Collider입니다. <strong>Triangle Index</strong>는 Lookup에 사용된 Triangle을 식별합니다. <strong>Biome ID and Name</strong>은 Surface Query Result입니다. <strong>Hit Point, Normal and Distance</strong>는 물리적인 Intersection을 설명합니다.</p>
+<p>Collider가 Hit했지만 Biome을 알 수 없다면 Surface Target과 Data를 확인합니다. Triangle 기반 Lookup에서 Box 또는 Sphere Collider는 일치하는 Terrain MeshCollider를 대체할 수 없습니다. Negative 또는 다른 유효하지 않은 Triangle Index를 정상적인 Terrain Query로 취급하지 마십시오.</p>
+
+<h2 id="terrain-demo-camera">Terrain Demo Camera</h2>
+<p>검사용 Camera에 <strong>DPT → Terrain Demo Camera</strong>를 추가합니다. Free Movement와 Mouse Look을 제공합니다. Walking Physics, Collision Avoidance, Grounded Movement 또는 Planet Gravity는 제공하지 않습니다.</p>
+<div class="table-wrap"><table><thead><tr><th>Input</th><th>Action</th></tr></thead><tbody>
+<tr><td>W / A / S / D</td><td>Camera 기준으로 Forward, Left, Backward, Right로 이동합니다.</td></tr>
+<tr><td>Space</td><td>World Space의 위쪽으로 이동합니다.</td></tr>
+<tr><td>Ctrl or C</td><td>World Space의 아래쪽으로 이동합니다.</td></tr>
+<tr><td>Hold right mouse button</td><td>Mouse로 주위를 둘러봅니다.</td></tr>
+<tr><td>Hold Shift</td><td>Movement Speed에 Multiplier를 적용해 더 빠르게 이동합니다.</td></tr>
+</tbody></table></div>
+<p>Movement Speed는 일반 이동 속도, Fast Multiplier는 Shift Boost, Mouse Sensitivity는 Look Response를 설정합니다. 선택적인 Controls Overlay는 처음 익힐 때 유용합니다. 작은 Feature를 살펴볼 때는 낮은 Speed를, 큰 Terrain을 가로지를 때는 높은 Speed를 사용합니다.</p>
+<p>이 Camera는 검사 Rig이므로 Terrain을 통과할 수 있습니다. Bridge, Cave 또는 Staircase를 실제로 통과할 수 있는지 시험할 때는 자신의 Gameplay Controller로 교체하십시오.</p>
+
+<h2 id="runtime-architecture">Gameplay에서 Surface Data 사용하기</h2>
+<p>의도된 흐름은 <strong>Terrain 페인트 → Surface Data Bake → Data를 Terrain에 연결 → 일치하는 Collider에 Raycast → Biome ID 읽기 → Gameplay Response 선택</strong>입니다.</p>
+<p>Baked Asset은 Live Reweighting에 사용되는 Candidate ID와 Weight를 포함해 Triangle마다 대표적인 Biome 정보를 기록합니다. Surface Target은 해당 정보와 Terrain Material의 현재 Modifier를 읽습니다. Hit 하나에 대해 하나의 Biome ID를 반환하며 전체 Texture나 보이는 모든 Surface 목록을 반환하는 것은 아닙니다.</p>
+<h3>간단한 Integration Example</h3>
+<p>다음 코드를 <code>TerrainSurfaceProbe.cs</code>로 저장하고 Test Terrain 위의 Object에 추가합니다. Terrain Layer Mask와 Distance를 설정합니다. Component Context Menu의 <strong>Read Surface</strong>를 사용해 Query를 한 번 실행합니다. Console Message는 예시일 뿐입니다. Gameplay에 연결할 때는 자신의 Sound, Particle 또는 Movement Lookup으로 교체하십시오.</p>
+<pre><code>using UnityEngine;
+using DPT.VertexTerrain;
+
+public class TerrainSurfaceProbe : MonoBehaviour
+{
+    public LayerMask terrainLayers = ~0;
+    public float distance = 2f;
+
+    [ContextMenu("Read Surface")]
+    public void ReadSurface()
+    {
+        if (!Physics.Raycast(transform.position, Vector3.down,
+                out RaycastHit hit, distance, terrainLayers))
+        {
+            Debug.Log("No collider within the probe distance.");
+            return;
+        }
+
+        if (hit.triangleIndex &lt; 0)
+        {
+            Debug.Log("This collider has no usable terrain triangle index.");
+            return;
+        }
+
+        if (DPT_TerrainSurfaceTarget.TryGetHitBiome(
+                hit, out int biomeID, out string biomeName))
+        {
+            Debug.Log($"Surface: {biomeName} (ID {biomeID})");
+            // Choose your project's response using biomeID.
+        }
+        else
+        {
+            Debug.Log("The hit has no linked terrain surface data.");
+        }
+    }
+}</code></pre>
+<p>Footstep에서는 Footstep이 발생하는 시점에 적절한 Foot 또는 Character Position에서 Query를 호출합니다. 반환된 ID를 자신의 Audio/Effect Table에 연결합니다. Library 변경에 맞춰 해당 Table도 갱신하십시오. Biome Name은 Label로 유용하지만 Query가 반환하는 Numeric Value는 Library ID입니다.</p>
+<p>Planet 또는 Custom Gravity System에서는 Example의 World-down Direction을 게임의 Local Gravity Direction으로 바꿉니다. 이 Script에서 Tool이 해당 방향을 자동으로 추론하지는 않습니다.</p>
+<h3>언제 다시 Bake해야 하나요?</h3>
+<ul><li>Gameplay에서 Query할 영역을 다시 페인트한 뒤.</li><li>Biome 추가, 삭제 또는 재정렬로 Data에서 사용하는 ID가 변경된 뒤.</li><li>Subdivision, Deletion, Tunnel Creation, Simplification 또는 Triangle을 변경하는 다른 작업 뒤.</li><li>Bake 또는 대표 Surface 정보에 영향을 주는 다른 Geometry 변경 뒤.</li><li>Simplified LOD Collider를 포함해 다른 Collider Mesh로 전환할 때.</li></ul>
+<p>지원되는 일반 Live Material Multiplier는 Target이 Query 시점에 읽기 때문에 Terrain을 다시 페인트하거나 Triangle Data를 다시 만들지 않고 평가할 수 있습니다. 하지만 여전히 Bake된 Candidate를 사용하므로 오래된 Bake에서 새로 페인트된 정보를 복구할 수는 없습니다.</p>
+
+<h2 id="query-limits">Query 결과는 화면과 얼마나 일치하나요?</h2>
+<p>제공되는 Query는 대표적인 Terrain Surface를 선택하는 데 유용하지만 <strong>Shader가 Render하는 결과를 Pixel-perfect하게 Sample하는 기능은 아닙니다.</strong> 모든 Edge 또는 Snow Patch가 Cursor 아래의 화면과 정확히 같은 결과를 반환한다고 가정하지 말고 자신의 Gameplay 요구사항에 맞춰 시험하십시오.</p>
+<div class="table-wrap"><table><thead><tr><th>상황</th><th>Query 동작</th><th>Gameplay에 미치는 의미</th></tr></thead><tbody>
+<tr><td>하나의 Triangle에 여러 Biome</td><td>대표 ID 하나를 반환합니다. Static Bake는 Coverage/Priority Rule을 사용하고 Live Reweighting은 저장된 Candidate Weight에서 선택합니다.</td><td>아주 작은 Painted Patch 또는 Blend Edge에서는 모든 위치에서 다른 ID가 반환되지 않을 수 있습니다.</td></tr>
+<tr><td>Height-blended Shader Detail</td><td>모든 Per-pixel Height/Detail Blend를 재현하지 않습니다.</td><td>보이는 Mixture가 국소적으로 Triangle의 대표 Surface와 다를 수 있습니다.</td></tr>
+<tr><td>Live Weight 변경</td><td>Material Slot Multiplier를 사용해 Bake된 Candidate Surface의 Weight를 다시 계산합니다.</td><td>Bake에 없는 새로 Painted Candidate를 선택할 수 없습니다.</td></tr>
+<tr><td>Dusting</td><td>단순화된 World-up Slope/Strength Test를 사용합니다. Shader의 Painted Dusting Mask는 포함하지 않습니다.</td><td>화면에는 Masked Overlay가 없는데 Query는 Overlay를 반환할 수 있습니다. Snow-specific Movement 또는 Footstep에 사용하기 전에 검증하십시오.</td></tr>
+<tr><td>Tester의 Override Surface Data</td><td>Baked Asset을 직접 읽습니다.</td><td>Target의 Live Material Evaluation을 우회합니다. 일반 Live Path를 시험하려면 Override를 비우십시오.</td></tr>
+<tr><td>다른 Collider Topology</td><td>Hit Triangle Index는 보이는 Render Mesh가 아니라 Collider를 기준으로 합니다.</td><td>Bake가 해당 Collider의 Triangle Order와 일치해야 합니다. Simplified LOD2 Collider에 관련 없는 Original-mesh Mapping을 안전하게 사용할 수 없습니다.</td></tr>
+</tbody></table></div>
+<p>Gameplay에 정확한 Small Patch, Local-gravity-aware Snow 또는 Precise Per-pixel Coverage가 필요하다면 해당 규칙에 맞는 Query를 별도로 만들고 검증하십시오. 제공되는 Component는 위의 제한을 가진 출발점입니다.</p>
+
+<h2 id="troubleshooting">Runtime 및 Demo 문제</h2>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>확인할 항목</th></tr></thead><tbody>
+<tr><td>Demo Controller가 아무것도 하지 않습니다</td><td>Terrain Material을 지정하고 Master Switch와 관련 Slot을 활성화하고 현재 Target ID를 사용한 뒤 설정을 Push합니다. 변경할 Source Contribution이 있는지도 확인하십시오.</td></tr>
+<tr><td>Play Mode 진입 시 Component 설정이 바뀝니다</td><td>Pull From Material On Play가 기존 Material Setup을 가져올 수 있습니다. Test 전에 어느 쪽이 Baseline을 제공할지 결정하십시오.</td></tr>
+<tr><td>Material 편집이 즉시 되돌아갑니다</td><td>Sync In Edit Mode와 활성 Runtime Simulation을 확인합니다. Setup 중에는 하나의 Driving Source만 사용하십시오.</td></tr>
+<tr><td>Runtime Script가 Field를 바꾸지만 화면은 그대로입니다</td><td>Simulation이 실행 중이 아니라면 Component 변경 후 PushMaterialProperties를 호출합니다. Material Reference도 확인하십시오.</td></tr>
+<tr><td>Snowstorm Animation에 눈이 보이지 않습니다</td><td>Slot 1 Active, 효과를 받을 Ground ID, Snow Overlay ID, Painted Dusting Mask 및 Slope Threshold를 확인합니다. Animation은 Dusting Strength를 순환시키면서 Slot 1 Scatter Response도 변경합니다.</td></tr><tr><td>Terrain은 눈으로 바뀌지만 Grass는 그대로입니다</td><td>Grass Scatter Object가 Slot 1과 같은 Biome ID를 Target으로 하는지, Material에 Scatter-response Property가 있는지, Live-biome Master Switch가 활성화되어 있는지, Scatter Renderer가 해당 Material을 사용하는지 확인합니다. <a href="scatter-system.html#live-response">3D Scatter 가이드</a>를 참고하십시오.</td></tr>
+<tr><td>River Level이 Water를 올리지 않습니다</td><td>Slot 1의 Painted Weight Contribution을 변경합니다. Water Mesh를 이동하거나 실제 Level을 Simulation하지 않습니다.</td></tr>
+<tr><td>Probe가 Hit을 보고하지만 Biome이 없습니다</td><td>Collider Layer, Surface Target 및 지정된 Bake를 확인합니다. 일치하는 MeshCollider와 유효한 Triangle Index를 사용하십시오.</td></tr>
+<tr><td>잘못된 Name 또는 ID가 반환됩니다</td><td>부적절한 Override를 비우고 현재 Surface Data를 다시 Bake하고 Library ID를 다시 확인한 뒤 Collider Topology를 맞춥니다. Blend Boundary 전에 Pure Patch에서 비교하십시오.</td></tr>
+<tr><td>Planet에서 Probe가 놓칩니다</td><td>Downward Probe는 World-down입니다. Surface를 향한 Transform Forward 또는 게임의 Gravity를 기반으로 한 Ray를 사용하십시오.</td></tr>
+<tr><td>여러 Terrain Object가 함께 바뀝니다</td><td>Controller가 Shared Material을 편집하고 있을 수 있습니다. 별도 동작이 필요하면 독립 Material을 사용하십시오.</td></tr>
+<tr><td>Demo Camera가 Bridge를 통과합니다</td><td>Collision Controller가 없습니다. 자신의 Gameplay Character와 실제 Terrain Collider로 이동 가능 여부를 시험하십시오.</td></tr>
+</tbody></table></div>
+<h2 id="support">지원</h2><p>도움이 필요하다면 예상한 결과, 사용한 Control 및 실제로 나타난 결과를 설명하십시오. Unity 버전, 선택한 Surface Pipeline 및 관련 설정의 스크린샷을 함께 제공하면 좋습니다. Runtime Query 문제라면 Collider Type과 마지막으로 Surface Data를 Bake한 시점도 포함하십시오.</p><p><a href="https://dptgames.github.io/#contact">DPT Games 문의 양식</a>을 사용하거나 <a href="https://discord.gg/EkQykfzP5X">DPT Games Discord</a>에 참여할 수 있습니다.</p><p class="back-top"><a href="#top">맨 위로</a></p><footer class="footer">DPT Vertex 3D Terrain 문서 · Unity Control 이름은 문서 전체에서 영어로 유지합니다. 문서는 페이지 상단에서 English / 日本語 / 한국어로 전환할 수 있으며 Tool Interface 언어는 현재 English 또는 日本語를 사용할 수 있습니다.</footer></main></body>
+</html>
