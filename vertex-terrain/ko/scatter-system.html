@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="재사용 가능한 바이옴 기반 3D Scatter, LOD, 바람, 커스텀 메시 및 실시간 계절 반응을 설정합니다."><link rel="alternate" hreflang="en" href="../scatter-system.html"><link rel="alternate" hreflang="ja" href="../ja/scatter-system.html"><link rel="alternate" hreflang="ko" href="scatter-system.html"><title>3D Scatter 가이드 | DPT Games</title><style>
+
+:root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
+main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
+.site-nav{display:flex;flex-wrap:wrap;gap:8px 20px;border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:32px;font-size:.92rem}.site-nav [aria-current]{color:white;font-weight:700}
+.language-nav{display:flex;gap:10px;flex-wrap:wrap;margin:-12px 0 28px}.language-nav a{display:inline-block;padding:6px 16px;border:1px solid var(--border);border-radius:6px;text-decoration:none}.language-nav [aria-current]{color:#0f172a;background:var(--accent);border-color:var(--accent);font-weight:700}html[lang="ja"] body,html[lang="ko"] body{line-height:1.85;line-break:strict}html[lang="ja"] th,html[lang="ja"] td,html[lang="ko"] th,html[lang="ko"] td{overflow-wrap:anywhere}
+h1,h2,h3,h4{line-height:1.25;color:var(--accent)}h1{font-size:2.25rem;margin:0 0 14px}h2{font-size:1.65rem;margin:48px 0 18px;padding-top:12px;border-top:1px solid var(--border)}h3{font-size:1.22rem;margin:30px 0 12px}h4{font-size:1.06rem}
+p{margin:12px 0 18px}li{margin:7px 0}ul,ol{padding-left:25px}.lead{font-size:1.18rem;color:var(--muted);max-width:850px}.intro{margin:28px 0}.toc{background:var(--panel);padding:20px 24px;border:1px solid var(--border);border-radius:9px;margin:28px 0}.toc h2{margin:0 0 10px;padding:0;border:0;font-size:1.15rem}.toc ul{columns:2;column-gap:36px;margin:0}.toc li{break-inside:avoid}
+.callout,.example{background:var(--panel);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:14px 20px;margin:22px 0}.example{border-color:#a3e635}.callout p:last-child,.example p:last-child{margin-bottom:0}.callout p:first-child,.example p:first-child{margin-top:0}
+.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--border);border-radius:7px}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--border)}thead{background:#25354c}th{color:#f8fafc}td:first-child{font-weight:600;min-width:145px}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#172238}
+code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background:#27354c;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}kbd{white-space:nowrap;border:1px solid #50617a}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#09111f;border:1px solid var(--border);padding:20px;border-radius:7px}pre code{background:transparent;padding:0}
+.back-top{font-size:.88rem}.table-hint{display:none;color:var(--muted);font-size:.9rem}.footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);margin-top:34px;padding-top:16px}details{background:var(--panel);padding:14px 18px;border:1px solid var(--border);border-radius:7px;margin:16px 0}summary{cursor:pointer;font-weight:600;color:var(--accent)}.alias{display:block;scroll-margin-top:24px}.doc-figure{margin:24px 0}.doc-figure img{display:block;width:100%;height:auto;border:1px solid var(--border);border-radius:8px;background:#0b0f16}.doc-figure figcaption{margin-top:9px;color:var(--muted);font-size:.9rem}
+@media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
+@media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
+
+</style></head>
+<body><main id="top"><nav class="site-nav" aria-label="문서"><a href="https://dptgames.github.io/">DPT Games 홈페이지</a><a href="index.html">Vertex 3D Terrain 가이드</a><a href="biomes.html">바이옴 가이드</a><a href="terrain-material-settings.html">Terrain Material 설정</a><a href="scatter-system.html" aria-current="page">3D Scatter 가이드</a><a href="demo-components.html">데모 &amp; 런타임 가이드</a></nav><nav class="language-nav" aria-label="언어"><a href="../scatter-system.html" lang="en" hreflang="en">English</a><a href="../ja/scatter-system.html" lang="ja" hreflang="ja">日本語</a><a href="scatter-system.html" lang="ko" hreflang="ko" aria-current="page">한국어</a></nav><header><h1>3D Scatter 가이드</h1><p class="lead">여러 Terrain Atlas 바이옴을 대상으로 할 수 있는 재사용 가능한 정의를 사용해 잔디, 꽃, 버섯, 자갈 및 커스텀 메시를 배치합니다.</p></header><nav class="toc" aria-label="이 페이지의 내용"><h2>이 페이지의 내용</h2><ul><li><a href="#overview">Scatter Library 이해하기</a></li><li><a href="#quick-start">첫 Scatter Object 만들기</a></li><li><a href="#target-biomes">하나의 설정으로 여러 바이옴 대상 지정하기</a></li><li><a href="#placement">배치 설정</a></li><li><a href="#variants">내장 프리셋과 커스텀 메시</a></li><li><a href="#lod">거리, LOD 및 Renderer 설정</a></li><li><a href="#wind">Wind 설정</a></li><li><a href="#live-response">Live Biome 밀도 및 색상 반응</a></li><li><a href="#runtime-data">런타임 Scatter와 베이크된 Terrain Data</a></li><li><a href="#performance">성능과 실용적인 제한</a></li><li><a href="#troubleshooting">Scatter 문제 해결</a></li><li><a href="#support">지원</a></li></ul></nav><p class="table-hint">작은 화면에서는 넓은 표를 좌우로 스크롤하여 모든 열을 확인할 수 있습니다.</p>
+
+<div class="intro"><p>3D Scatter 시스템은 Terrain Atlas 바이옴 데이터에서 Instanced Mesh를 직접 배치합니다. 하나의 <strong>Scatter Object</strong>에는 재사용 가능한 배치 규칙과 Mesh Variant 세트가 들어 있습니다. 바이옴마다 동일한 Grass 설정을 다시 만들 필요 없이 하나의 Object에 여러 <strong>Target Biomes</strong>를 추가하고 필요하면 각 Target에 개별 Density Multiplier를 지정할 수 있습니다.</p><p>Scatter는 잔디, 꽃, 버섯, 돌, 작은 Prop처럼 반복적으로 배치되는 Surface Detail에 적합합니다. Terrain Mesh 자체를 편집하지 않으며 각 Instance마다 Collider를 만들거나 Scatter된 오브젝트를 개별 GameObject로 변환하지 않습니다.</p></div>
+
+<h2 id="overview">Scatter Library 이해하기</h2>
+<p>Scatter Authoring은 각 Biome Inspector 안에 개별 저장되는 것이 아니라 Terrain Atlas Biome Library 전체에 적용됩니다. Vertex 3D Terrain 창의 <strong>3D Scatter</strong> 섹션을 열어 Library를 만들고 편집합니다.</p>
+<div class="table-wrap"><table><thead><tr><th>항목</th><th>역할</th><th>중요한 결과</th></tr></thead><tbody>
+<tr><td>Scatter Object</td><td>재사용 가능한 배치 규칙, Wind 선택 및 하나 이상의 Mesh Variant를 저장합니다.</td><td>Grass를 한 번 설정한 뒤 전체 설정을 복제하지 않고 여러 바이옴을 대상으로 사용할 수 있습니다.</td></tr>
+<tr><td>Target Biome</td><td>선택한 Terrain Atlas 바이옴이 기여하는 위치에서 해당 Scatter Object가 생성될 수 있게 합니다.</td><td>각 Target마다 0에서 2까지 별도의 Density Multiplier를 지정할 수 있습니다.</td></tr>
+<tr><td>Mesh Variant</td><td>내장 Preset 또는 Custom Mesh와 상대적인 선택 확률을 지정합니다.</td><td>여러 Variant가 같은 배치 규칙을 공유할 수 있습니다.</td></tr>
+<tr><td>Scatter Settings</td><td>Seed, Batching, Distance, LOD Transition, Far Density 및 Safety Budget을 제어합니다.</td><td>각 Object마다 반복되는 설정이 아니라 Scatter Library 전체에서 공유됩니다.</td></tr>
+<tr><td>Active Terrain Renderer</td><td>Profile을 선택된 Terrain Root에 연결하고 GPU Instanced Draw를 제출합니다.</td><td>수천 개의 Instance가 Scene의 개별 GameObject로 표현되지 않습니다.</td></tr>
+</tbody></table></div>
+
+<h2 id="quick-start">첫 Scatter Object 만들기</h2>
+<ol><li><strong>Terrain Atlas</strong> 파이프라인을 사용하고 Terrain에 바이옴 데이터가 페인트되어 있는지 확인합니다.</li><li>Vertex 3D Terrain 창에서 <strong>3D Scatter</strong>를 엽니다. Profile이 없다면 Scatter Library를 만듭니다.</li><li><strong>+ Add Scatter Object</strong>를 선택하고 Meadow Grass처럼 알아보기 쉬운 이름을 지정합니다.</li><li><strong>Target Biomes</strong>에서 현재 Library의 바이옴을 하나 이상 선택합니다.</li><li>처음에는 각 Target의 Density Multiplier를 1로 설정합니다.</li><li>전체 <strong>Density</strong>(제곱미터당 Clump 수), <strong>Spacing</strong>, <strong>Coverage</strong> 범위, Slope, Scale 및 Surface Alignment를 설정합니다.</li><li>Mesh Variant를 추가합니다. 먼저 내장 Grass Preset을 사용하거나 Custom Mesh를 지정해 보십시오.</li><li>Material을 지정하거나 확인하고 필요하다면 GPU Instancing을 활성화합니다. 큰 설정 변경 후 Preview가 자동 갱신되지 않았다면 <strong>Rebuild Scatter</strong>를 사용합니다.</li></ol>
+<div class="example"><p><strong>예:</strong> Meadow Grass Object 하나를 만든 뒤 Lush Grass는 ×1.0, Dry Meadow는 ×0.65, Forest Soil은 ×0.25로 Target에 추가합니다. 같은 Grass Mesh, Colour Ramp, Roughness 및 Wind 설정을 세 Surface 모두에서 재사용할 수 있습니다.</p></div>
+
+<h2 id="target-biomes">하나의 설정으로 여러 바이옴 대상 지정하기</h2>
+<p>하나의 Scatter Object는 원하는 수의 Terrain Atlas 바이옴을 대상으로 할 수 있습니다. Biome Picker에는 현재 바이옴 이름과 숫자 ID가 표시됩니다. <strong>+ Add Target Biome</strong>으로 목록을 확장합니다.</p>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>의미</th><th>예</th></tr></thead><tbody>
+<tr><td>Biome</td><td>이 Scatter Object가 나타날 수 있는 Terrain Atlas 바이옴입니다.</td><td>Grassland, Forest Soil 또는 현재 Library의 다른 항목.</td></tr>
+<tr><td>Density Multiplier: 0–2</td><td>이 Target Biome에서만 Scatter Object의 Base Density를 곱합니다.</td><td>1은 기본 밀도, 0.5는 절반, 0은 해당 Target 비활성화, 2는 두 배까지 허용합니다.</td></tr>
+</tbody></table></div>
+<p>페인트된 Blend 영역에서는 Scatter Object가 대상으로 삼은 여러 바이옴의 합산 기여도를 평가합니다. 따라서 재사용 가능한 Object 하나가 Grass/Forest 경계를 가로질러 이어질 수 있으며 별도의 중복 정의가 필요하지 않습니다.</p>
+<p>승인된 각 Instance는 해당 위치에서 기여한 Target을 기준으로 소유 바이옴을 유지합니다. 따라서 하나의 재사용 가능한 Grass Object가 여러 바이옴을 대상으로 하더라도 Live Biome Modifier가 그중 하나에만 영향을 줄 경우 해당 바이옴 소유 Instance만 다르게 반응할 수 있습니다.</p>
+
+<h2 id="placement">배치 설정</h2>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>의미</th><th>권장 접근</th></tr></thead><tbody>
+<tr><td>Density: 0–100 clumps/m²</td><td>Target Biome Multiplier와 Live Runtime Density가 적용되기 전의 기본 예상 Instance 밀도입니다.</td><td>낮은 값부터 시작해 Instance Count와 먼 거리 Coverage를 확인하면서 올립니다.</td></tr>
+<tr><td>Coverage Min / Max: 0–1</td><td>모든 Target Biome의 합산 Coverage가 선택한 범위 안에 있는 위치에서만 배치를 허용합니다.</td><td>희미한 Blend를 제외하려면 Min을 올립니다. 완전히 채워진 바이옴 내부를 제외하려면 Max를 1보다 낮춥니다. Max 1은 일반적인 내부 배치를 유지합니다.</td></tr>
+<tr><td>Spacing</td><td>이 Scatter Object의 Clump 중심 사이에 필요한 최소 World-space 거리입니다. Terrain Tile 경계를 넘어도 적용됩니다. 0이면 제한하지 않습니다.</td><td>Clumping과 겹침을 줄이려면 늘립니다. 최종 Instance 수가 Density 기대치보다 줄어들 수 있습니다. 중심 간 거리이므로 큰 Mesh 외곽은 여전히 겹칠 수 있습니다.</td></tr>
+<tr><td>Max Slope: 0–90°</td><td>선택한 각도보다 가파른 Surface를 제외합니다.</td><td>Grass는 보통 Rock이나 Cliff Debris보다 낮은 한계가 적합합니다.</td></tr>
+<tr><td>Scale Min / Max</td><td>승인된 Instance에 적용되는 Random Uniform Scale 범위입니다.</td><td>자연스러운 차이를 주되 눈에 띄는 크기 점프가 없도록 제한된 범위부터 사용합니다.</td></tr>
+<tr><td>Alignment: 0–1</td><td>선택한 Up Mode와 Terrain Normal 사이를 Blend합니다.</td><td>0은 선택한 Up Direction에 대해 Object를 세우고 1은 Surface Normal을 완전히 따릅니다.</td></tr>
+<tr><td>Offset</td><td>샘플된 Surface Normal을 따라 Instance를 이동합니다.</td><td>Mesh가 떠 보이거나 파묻힐 때 작은 양수 또는 음수로 조정합니다.</td></tr>
+<tr><td>Enable Wind</td><td>이 Scatter Object가 DPT Scatter Wind를 사용하도록 합니다. 지정된 Shader가 DPT Scatter Wind 기능을 지원하는 경우에만 사용할 수 있습니다.</td><td>호환되는 Grass, Flower 및 유연한 Mesh에 활성화합니다. 단단한 Prop에는 끕니다. VCCORE Material은 자체 Authoring된 Wind Data를 사용하므로 이 옵션이 필요하지 않습니다.</td></tr>
+</tbody></table></div>
+
+<h3 id="shoreline">해안선에만 Reeds 배치하기</h3>
+<ol><li>Reeds Scatter Object를 만들고 <strong>Water만</strong> Target으로 지정합니다.</li><li><strong>0.15–0.65</strong> 같은 Coverage 범위를 사용하면 Water가 Mud와 섞이는 곳에는 Reeds를 허용하면서 Coverage 1인 순수 Water는 제외할 수 있습니다.</li><li>페인트된 Transition Width와 Coverage 범위를 조정해 Band 위치를 정한 뒤 Density와 Spacing으로 원하는 개수와 간격을 설정합니다.</li></ol>
+<p>Coverage는 모든 Target Biome을 합산합니다. Water와 Mud를 모두 Target으로 지정하면 Transition 전체에서 두 값의 합이 1이 될 수 있으므로 같은 범위 설정이 해당 영역을 제외할 수 있습니다. 필요한 Edge를 설명하는 부분 Coverage를 가진 바이옴만 Target으로 지정하십시오. Coverage는 배치 가능한 Surface를 필터링하고 바이옴별 <strong>Density Multiplier</strong>는 그곳에 나타나는 Clump 수를 변경합니다.</p>
+
+<h2 id="variants">내장 프리셋과 커스텀 메시</h2>
+<p>각 Scatter Object는 여러 Mesh Variant를 가질 수 있습니다. <strong>Relative Chance</strong>는 상대적인 선택 Weight이며 합계가 100이 되어야 하는 백분율이 아닙니다. Placement Seed를 바꾸지 않고 내장 Mesh 형태에 변화를 주려면 서로 다른 <strong>Shape Seed</strong> 값을 사용합니다. Preset 설명은 Tooltip에서 확인할 수 있습니다.</p>
+<div class="table-wrap"><table><thead><tr><th>내장 Preset</th><th>적합한 용도</th><th>형태 참고</th></tr></thead><tbody>
+<tr><td>Grass / Short Grass / Tall Grass</td><td>초원, 낮은 Ground Cover, 더 높은 식생.</td><td>Scene에 맞는 Silhouette을 선택하십시오. Near/Far Geometry를 사용해 먼 거리 Population을 더 저렴하게 유지합니다.</td></tr>
+<tr><td>Flowers</td><td>작은 꽃 군집.</td><td>Seed와 Ramp를 조합해 변화를 만듭니다.</td></tr>
+<tr><td>Lavender</td><td>세로로 솟은 보라색 꽃대.</td><td>Clustered Flower Geometry와 적은 잎을 사용해 많은 개별 Floret보다 Mesh를 단순하게 유지합니다.</td></tr>
+<tr><td>Ferns / Clover / Shrubs</td><td>잎이 많은 하층 식생과 낮은 관목.</td><td>Scale과 Spacing으로 잎 겹침을 제어합니다.</td></tr>
+<tr><td>Reeds</td><td>습지와 해안선 식생.</td><td>더 작은 기본 Stalk이며 Coverage Band와 Spacing을 함께 사용하기 좋습니다.</td></tr>
+<tr><td>Pebbles</td><td>작은 돌 군집.</td><td>Smoothing Angle로 부드럽거나 Faceted한 Lighting을 선택합니다.</td></tr>
+<tr><td>Mushrooms</td><td>숲 바닥 디테일.</td><td>Colour Ramp가 생성된 각 Element의 Local Height를 따릅니다.</td></tr>
+<tr><td>Crystals</td><td>Faceted Mineral Cluster.</td><td>선명한 Face를 위해 Smoothing Angle 기본값이 0이며 조정할 수 있습니다.</td></tr>
+<tr><td>Fallen Branches</td><td>지면 Debris.</td><td>단순화된 Twig와 지면 방향 Shape를 사용합니다. 가파른 지면에서는 Alignment와 Offset을 확인하십시오.</td></tr>
+</tbody></table></div>
+<h3>Shading과 Surface Property</h3>
+<p>Crystals를 포함한 모든 내장 Preset에는 <strong>Smoothing Angle: 0–180°</strong>가 있습니다. 0에서는 Face가 Flat하게 유지되고 180에서는 맞닿은 모든 Face가 Normal을 Blend할 수 있습니다. 중간 값은 완만한 Join을 부드럽게 하면서 날카로운 Edge는 유지합니다. 이는 Lighting을 변경하며 Mesh Silhouette이나 Terrain 전체의 Smooth / Sharp 설정은 변경하지 않습니다.</p>
+<p><strong>Vertex Colour Ramp</strong>는 생성된 각 Element마다 Bottom에서 Top까지 Local하게 평가됩니다. <strong>Smoothness</strong>는 거친 0에서 광택 있는 1까지이며 새 Variant의 기본값은 <strong>0.2</strong>입니다. <strong>Metallic</strong>은 0에서 1까지 금속 반응을 제어합니다.</p>
+<p>생성 Mesh는 Metallic을 <strong>UV3.R</strong>에 저장합니다. UV3.G에는 Raw Smoothness가 아니라 Smoothness에서 파생된 DPT Packed Scale/Roughness 값이 들어갑니다. Custom Shader에서 올바르게 사용하려면 이 DPT Mesh Data를 Decode해야 합니다.</p>
+<h3>Emissive Scatter</h3>
+<p>내장 Variant에서 <strong>Emissive</strong>를 활성화한 뒤 Ramp의 HDR Colour로 밝기를, Ramp Alpha로 Glow Coverage를 설정합니다. DPT는 Emissive Biome과 같은 방식으로 Coverage를 Vertex Alpha에 저장합니다. HDR Colour만으로 Emission이 활성화되지는 않습니다. Material의 Emission Control도 적용되며 눈에 보이는 Bloom은 Scene Post-processing에 따라 달라집니다. Emission 자체는 Light Source를 생성하지 않습니다.</p>
+<h3>Custom Mesh</h3>
+<p><strong>Custom Mesh</strong>를 선택하고 3D Mesh, 선택적 Submesh Index, Material 및 선택적 Distant Mesh를 지정합니다. Distant Mesh가 없으면 Near Mesh를 재사용합니다. Custom Mesh는 Authoring된 Normal, Vertex Colour 및 UV3 Surface Data를 유지하며 내장 Shading, Metallic, Smoothness, Emissive Control이 이를 다시 쓰지 않습니다. 지원되는 DPT Scatter Wind를 활성화하면 Wind/Biome Data를 가진 Runtime Copy가 준비되며 원본 Asset은 그대로 유지됩니다.</p>
+<div class="callout"><p><strong>Material 선택은 중요합니다.</strong> Scatter는 GPU Instancing을 사용합니다. Mesh Data와 호환되는 Material을 사용하고 요청될 경우 GPU Instancing을 활성화하십시오. Variant Material을 비워 두면 적절한 경우 Source Terrain Material이 사용됩니다.</p></div>
+
+<h2 id="lod">거리, LOD 및 Renderer 설정</h2>
+<p><strong>Scatter Settings</strong>를 펼칩니다. 자주 사용하는 Control은 <strong>Distance &amp; LOD</strong>와 <strong>Preview &amp; Shadows</strong>에 묶여 있습니다. Cell Size, Wind Bounds, Tile별 Budget, Up Mode 및 Runtime Discovery는 <strong>Advanced</strong>를 여십시오. Placement 설정은 Compact Paired Slider를 사용하고 Scale Range는 X/Y 대신 Min/Max로 표시됩니다.</p>
+<div class="table-wrap"><table><thead><tr><th>설정</th><th>의미</th><th>확인할 점</th></tr></thead><tbody>
+<tr><td>Seed</td><td>Deterministic Scatter 배치를 제어합니다.</td><td>Density Rule을 바꾸지 않고 다른 Distribution을 원할 때 변경합니다.</td></tr>
+<tr><td>Cell Size</td><td>Culling과 Drawing을 위해 Instance를 그룹화하는 World-space 크기입니다.</td><td>너무 작은 Cell은 Group 수를 늘리고 너무 큰 Cell은 Distance/Frustum Culling 정밀도를 떨어뜨립니다.</td></tr>
+<tr><td>Draw Distance</td><td>Camera에서 이 거리보다 먼 Scatter 제출을 중단합니다.</td><td>실제 Game Camera와 Scene Scale에 맞춥니다.</td></tr>
+<tr><td>LOD Distance</td><td>Near에서 Far로 전환하는 중심 거리입니다.</td><td>Mesh 변화가 눈에 띄기 어려운 거리를 선택합니다.</td></tr>
+<tr><td>Transition</td><td>LOD Distance 주변의 부드러운 Stochastic Transition 폭입니다.</td><td>0은 즉시 전환되며 더 넓은 값은 일정 구간에서 Near/Far Population을 섞습니다.</td></tr>
+<tr><td>Far Density: 0–1</td><td>완전히 Far 상태일 때 유지할 Population 비율입니다.</td><td>더 저렴한 Geometry로 전환하는 것과 함께 먼 거리 Scatter 수 자체를 줄이려면 낮춥니다.</td></tr>
+<tr><td>Wind Bounds</td><td>Wind가 활성화된 Scatter에 추가되는 World-space Culling Bounds입니다.</td><td>강하게 움직이는 Tip이 원래 Bounds를 벗어나 Camera에서 사라질 때 늘립니다.</td></tr>
+<tr><td>Instances / Tile</td><td>하나의 Terrain Source에서 승인 가능한 Instance 수 Safety Cap입니다.</td><td>Memory와 Performance를 확인한 뒤에만 늘립니다.</td></tr>
+<tr><td>Candidates / Tile</td><td>배치를 시도하는 Sample 수 Safety Cap입니다.</td><td>Cap Warning은 단순히 Budget을 늘리기 전에 Density나 Terrain Size를 검토해야 한다는 신호인 경우가 많습니다.</td></tr>
+</tbody></table></div>
+<h3>Up Mode와 Preview</h3>
+<div class="table-wrap"><table><thead><tr><th>Renderer Control</th><th>용도</th></tr></thead><tbody>
+<tr><td>World Up</td><td>Global +Y를 Up Direction으로 사용하는 일반 Terrain.</td></tr>
+<tr><td>Root Up</td><td>Terrain/Root Transform이 Up을 정의하는 회전된 Terrain.</td></tr>
+<tr><td>Radial</td><td>선택한 Center/Reference에서 바깥쪽으로 Up이 향하는 Planetoid 또는 구형 World.</td></tr>
+<tr><td>Up Reference</td><td>Root Up 및 Radial에 사용하는 선택적 Transform입니다. 별도 Reference가 없으면 Terrain Root를 사용합니다.</td></tr>
+<tr><td>Scene Preview</td><td>Edit Mode에서 Scatter를 표시합니다.</td></tr>
+<tr><td>Cast Shadows / Receive Shadows</td><td>Instanced Draw의 Shadow를 제어합니다. 새 Renderer의 Cast Shadows 기본값은 On입니다. 기존 Renderer는 저장된 값을 유지하므로 확인하십시오. Shadow는 근거리 품질을 높일 수 있지만 Rendering Cost가 추가됩니다.</td></tr>
+<tr><td>Animate Preview</td><td>Wind 또는 Animated Material을 위해 Scene View를 계속 갱신합니다. 정적인 Preview에서는 끌 수 있습니다.</td></tr>
+<tr><td>Runtime Discovery</td><td>기본값은 Off입니다. Play 중 주기적인 Discovery가 필요하면 활성화하거나 Nested Terrain Hierarchy 또는 LOD Membership 변경 후 <code>DPT_ScatterRenderer.RefreshSources()</code>를 호출하십시오. Direct Child 변경은 자동 갱신됩니다.</td></tr>
+</tbody></table></div>
+
+<h2 id="wind">Wind 설정</h2>
+<p>DPT Scatter Wind에는 두 단계의 제어가 있습니다. <strong>Material</strong>은 Shader에서 Wind 기능 자체가 활성화되는지를 결정하고 Scatter Object의 <strong>Enable Wind</strong>는 해당 Scatter Object가 DPT Scatter Wind Path를 사용할지를 결정합니다. Scatter Object Control은 지정된 Shader가 <code>_DPT_SCATTER_WIND</code> Boolean Keyword를 선언한 경우에만 사용할 수 있으며 이를 통해 Vertex 3D Terrain이 해당 Shader의 기능 지원 여부를 인식합니다.</p>
+
+<h3>Vertex Terrain Material 사용하기</h3>
+<ol><li>Material의 <a href="terrain-material-settings.html#wind">Wind</a> 섹션을 열고 <strong>Enable Wind</strong>를 켭니다.</li><li>적당한 <strong>Wind Strength</strong> 값을 설정합니다.</li><li><strong>Height To Tip</strong>을 Scatter Mesh의 Object-space 높이에 가깝게 설정하여 Base는 고정되고 Tip은 전체 움직임을 받을 수 있게 합니다.</li><li><strong>Compass Heading</strong>과 <strong>Vertical Pitch</strong>를 선택합니다.</li><li>3D Scatter 섹션으로 돌아가 DPT Scatter Wind를 사용해야 하는 각 Scatter Object에서 <strong>Enable Wind</strong>를 켭니다.</li><li>강하게 움직이는 Tip이 Camera 또는 Frustum 경계 근처에서 사라진다면 Scatter Settings의 <strong>Wind Bounds</strong>를 늘립니다.</li></ol>
+<p>Pebbles 같은 단단한 Scatter는 같은 Material을 공유하면서도 Scatter Object의 Enable Wind를 끈 상태로 둘 수 있습니다.</p>
+
+<h3>VCCORE Material</h3>
+<p>VCCORE는 자체 Authoring된 Wind System을 사용하므로 Scatter Object의 <strong>Enable Wind</strong> Control이 의도적으로 비활성화됩니다. 정상 동작입니다. <strong>Stylized Color Swapper &amp; Material Optimizer</strong>로 모델에 Wind를 페인트했거나 DPT Pack에서 이미 Wind Data가 Authoring된 모델을 사용하는 경우 Scatter 전용 Wind 설정은 필요하지 않습니다. 움직임을 활성화하거나 조정할 때는 VCCORE Material 자체의 Wind Control을 사용하십시오.</p>
+
+<h3>자체 Shader Graph에 DPT Scatter Wind 추가하기</h3>
+<p>Custom Shader에 이미 자체 Wind System이 있다면 기존 System을 그대로 사용하십시오. 아래 DPT 설정은 Custom Shader Graph에서 Vertex Terrain Shader와 같은 Scatter Wind 기능을 사용하려는 경우에만 필요합니다.</p>
+<p><strong>SH_DPT_VCTerrain</strong>을 열고 아래에 표시된 <strong>Scatter Wind</strong> Block을 복사하여 자신의 Shader Graph에 붙여 넣습니다. 그런 다음 정확한 Reference 이름을 사용해 다음 Blackboard 항목을 추가합니다.</p>
+
+<div class="table-wrap"><table><thead><tr><th>Blackboard 항목</th><th>Type</th><th>Reference</th></tr></thead><tbody>
+<tr><td>Wind Strength</td><td>Float</td><td><code>_Wind_Strength</code></td></tr>
+<tr><td>Wind Direction</td><td>Vector 3</td><td><code>_Wind_Direction</code></td></tr>
+<tr><td>Height To Tip</td><td>Float</td><td><code>_Height_To_Tip</code></td></tr>
+<tr><td>DPT Scatter Wind</td><td>Boolean Keyword</td><td><code>_DPT_SCATTER_WIND</code></td></tr>
+</tbody></table></div>
+
+<ol><li>제공된 Vertex Terrain Shader Graph에서 Scatter Wind Block 전체를 복사해 자신의 Graph에 붙여 넣습니다.</li><li>아직 없다면 위 네 개의 Blackboard 항목을 추가합니다.</li><li><strong>Wind Strength</strong>, <strong>Wind Direction</strong>, <strong>Height To Tip</strong>, <strong>DPT Scatter Wind</strong>를 Reference 이미지와 정확히 같은 방식으로 다시 연결합니다.</li><li>최종 <strong>DPT Scatter Wind</strong> Output을 Graph의 <strong>Vertex Position</strong> Input에 연결합니다.</li><li>Graph를 저장하고 이를 사용하는 Material을 Custom Mesh Variant에 지정합니다.</li><li>Material에서 DPT Scatter Wind Keyword를 활성화한 뒤 Scatter Object의 <strong>Enable Wind</strong>를 활성화합니다.</li></ol>
+
+<figure class="doc-figure"><img src="../assets/dpt-scatter-wind-shader-graph.png" alt="DPT Scatter Wind Block, Blackboard Property 및 Vertex Position Input 연결을 보여 주는 Shader Graph 참고 이미지."><figcaption>Custom Shader Graph에 DPT Scatter Wind를 추가하는 참고 설정입니다. Scatter Wind Block을 복사하고 위 네 개 Blackboard 항목을 정확한 Reference 이름으로 다시 만든 뒤 그림처럼 연결하고 최종 Output을 Vertex Position으로 보냅니다.</figcaption></figure>
+
+<div class="callout"><p><strong>기존 Vertex Animation:</strong> Shader Graph가 이미 Vertex Position을 수정하고 있다면 현재 Deformation Chain을 단순히 교체하지 말고 복사한 Scatter Wind Block을 기존 Object-space Position 처리와 통합하십시오.</p></div>
+
+<h2 id="live-response">Live Biome 밀도 및 색상 반응</h2>
+<p>Terrain Surface에서 사용하는 동일한 네 개의 Live Biome Modifier Slot으로 Target Biome ID에 속한 Scatter도 제어할 수 있습니다. 이를 통해 Seasonal System이 지면과 식생을 함께 변경할 수 있습니다.</p>
+<div class="table-wrap"><table><thead><tr><th>Scatter Response Control</th><th>의미</th><th>Neutral 값</th></tr></thead><tbody>
+<tr><td>Scatter Density: 0–1</td><td>Target Biome ID에 속한 Scatter의 이미 생성된 Instance 중 Draw에 제출되는 수를 곱합니다.</td><td>1. 0은 해당 바이옴의 Scatter를 숨깁니다. 일반적인 Live 변경에서는 Placement를 다시 생성하지 않습니다.</td></tr>
+<tr><td>Colour Multiplier</td><td>Target Biome ID에 속한 Instance의 Generated Scatter Colour를 곱합니다.</td><td>White. HDR 값은 Tint뿐 아니라 더 밝게 만들 수도 있습니다.</td></tr>
+</tbody></table></div>
+<p>예를 들어 Winter Slot은 Grass Biome의 Snow Dusting을 늘리면서 Scatter Density를 낮추고 Colour Multiplier를 옅고 서리 낀 색으로 이동시킬 수 있습니다. 하나의 재사용 가능한 Grass Object가 Forest Biome도 대상으로 삼더라도 해당 Forest 소유 Instance는 그 Biome ID가 Live Slot의 Target이 아닌 한 독립적으로 유지됩니다.</p>
+<div class="example"><p><strong>계절 예:</strong> Summer에는 Scatter Density를 1, Colour Multiplier를 White로 둡니다. Winter가 가장 강할 때는 Density를 약 0.05–0.25, Colour Multiplier를 차갑고 옅은 색으로 시험해 보십시오. 제공되는 Dynamic Biome Demo Controller에는 Dusting과 함께 이 값을 움직이는 Winter Animation 예제가 포함되어 있습니다.</p></div>
+<p>Material 설정은 <a href="terrain-material-settings.html#live-biomes">Terrain Material 설정</a>, 예제 Controller는 <a href="demo-components.html#dynamic-biome-controller">데모 &amp; 런타임 가이드</a>를 참고하십시오.</p>
+
+<h2 id="runtime-data">런타임 Scatter와 베이크된 Terrain Data</h2>
+<p>Scatter Placement는 Main Thread에서 동기적으로 생성된 뒤 Rendering용으로 Cache됩니다. Readable Terrain Mesh는 Placement Geometry를 직접 제공합니다. Non-readable Terrain Mesh는 Scatter Geometry가 Bake된 대응 <strong>DPT_TerrainSurfaceData</strong> Asset을 대신 사용할 수 있으므로 이 Runtime Path를 위해 Terrain Read/Write를 계속 켜 둘 필요가 없습니다.</p>
+<ol><li>Bake하기 전에 Scatter Profile을 지정합니다.</li><li>Terrain을 Editor에서 Authoring할 수 있는 동안 <strong>Bake Surface Data</strong>를 사용합니다. Scatter Profile이 지정된 경우 Gameplay Surface 정보뿐 아니라 Placement Vertex, Normal, Triangle 및 Biome Channel도 포함됩니다.</li><li>각 Source Terrain의 <strong>DPT_TerrainSurfaceTarget</strong>에 Baked Asset을 지정한 상태로 유지하고 Build에 포함합니다.</li><li>Terrain Geometry, Painting, Biome ID 또는 Topology를 변경한 뒤에는 다시 Bake합니다. Gameplay 전용 또는 오래된 Bake는 Scatter Placement에 충분하지 않습니다.</li><li>Terrain Read/Write를 비활성화한 상태로 Build Scene을 테스트합니다. Renderer가 Scatter Geometry Bake를 요구한다면 최신 Data를 제공하거나 해당 Source Mesh를 Readable 상태로 유지하십시오.</li></ol>
+<p>Bake된 Placement Array 자체는 Memory를 사용합니다. Terrain Read/Write를 끈다고 Scatter Data 자체가 사라지는 것은 아닙니다. 큰 Population을 생성하거나 Rebuild하는 작업은 여전히 Main Thread 시간을 사용할 수 있습니다. 이 Terrain Data 옵션은 DPT Wind Copy를 준비할 때 Readable Mesh Channel이 필요한 경우를 포함해 Authoring된 Custom Mesh의 요구 사항을 없애지 않습니다.</p>
+
+<h2 id="performance">성능과 실용적인 제한</h2>
+<ul><li>Scatter는 Instance마다 GameObject를 만드는 대신 GPU Instanced Draw를 사용합니다.</li><li>Placement는 Terrain Mesh에서 생성되고 Cache됩니다. 일반적인 Camera 이동과 Live Density 변경은 Terrain Scatter Distribution을 다시 만들지 않습니다.</li><li>Camera Distance와 Frustum Culling은 Scatter Batch/Cell 단위로 작동합니다. 따라서 Cell Size는 Grouping Overhead와 Culling Precision 모두에 영향을 줍니다.</li><li>Far Density는 더 저렴한 Distant Mesh를 사용하는 것과 함께 먼 거리 Population 자체도 줄일 수 있습니다.</li><li>큰 Terrain에서 매우 높은 Density를 사용하면 Candidate 또는 Instance Safety Cap에 도달할 수 있습니다. 이 Limit를 최대화 목표가 아니라 Setup을 Profile하라는 Warning으로 취급하십시오.</li><li>Custom Mesh는 Instancing에 적합해야 하며 수천 개가 표시될 경우 불필요한 Vertex/Submesh/Material Complexity를 피해야 합니다.</li></ul>
+<p>Runtime Discovery는 Opt-in이므로 안정적인 Terrain Hierarchy에서는 Play 중 매초 Full Search를 할 필요가 없습니다. 내장 Variant Signature는 Profile이 바뀔 때까지 Cache됩니다. Configured Mesh Cache는 Active Renderer가 여전히 사용하는 Mesh를 유지하고 Rebuild 후 더 이상 필요하지 않은 Entry를 해제합니다. 마지막 Renderer를 비활성화하면 공유 Scatter Cache가 Clear됩니다. Profile 변경은 여전히 Regeneration을 요구할 수 있습니다.</p>
+
+<h2 id="troubleshooting">Scatter 문제 해결</h2>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>이 순서로 확인</th></tr></thead><tbody>
+<tr><td>Scatter가 보이지 않습니다</td><td>Terrain Atlas Mode, Scatter Library, Target Biomes, Base Density, Target Density Multiplier, Coverage Min/Max 범위, Maximum Slope, Material 및 Scene Preview를 확인한 뒤 Rebuild Scatter를 사용합니다.</td></tr>
+<tr><td>잘못된 바이옴에 Scatter가 나타납니다</td><td>현재 Target Biome 이름/ID와 설정 후 Terrain 순서를 변경했는지 확인합니다. 중복 또는 의도하지 않은 Target을 제거합니다.</td></tr>
+<tr><td>Blend Edge가 너무 비어 있습니다</td><td>Coverage Min과 Max 양쪽 및 Target Density Multiplier를 확인합니다. Coverage는 모든 Target Biome을 합산합니다. Shoreline Band에서는 Water와 Mud를 함께 Target으로 지정하지 말고 Water만 지정합니다.</td></tr>
+<tr><td>Clump가 너무 많이 겹칩니다</td><td>Spacing을 늘리고 Scale Min/Max를 확인합니다. Spacing은 이 Scatter Object 안의 중심을 분리할 뿐 전체 Mesh 외곽이나 다른 Scatter Object 사이를 분리하지 않으며 최종 Count를 줄일 수 있습니다.</td></tr>
+<tr><td>호수 중앙에도 Scatter가 나타납니다</td><td>Water만 Target으로 지정하고 Coverage Max를 1보다 낮춥니다. Reeds가 자라야 하는 위치에 점진적인 Water/Mud Transition을 페인트합니다.</td></tr>
+<tr><td>특정 바이옴에 Grass가 너무 많습니다</td><td>Scatter Object 전체를 복제하는 대신 해당 Target의 Density Multiplier를 낮춥니다.</td></tr>
+<tr><td>Custom Mesh가 Render되지 않습니다</td><td>Mesh/Material을 지정하고 Submesh Index를 확인한 뒤 GPU Instancing을 활성화합니다. Material이 Custom Mesh의 Authoring Data와 호환되는지도 확인하십시오.</td></tr>
+<tr><td>LOD 경계에서 Scatter가 튑니다</td><td>Transition을 늘리고 적절한 Distant Mesh 또는 내장 Distant Preset이 존재하는지 확인합니다. Near/Far Silhouette과 Scale도 비교하십시오.</td></tr>
+<tr><td>먼 거리 Scatter가 너무 조밀합니다</td><td>Far Density 또는 Draw Distance를 낮춥니다. 바이옴별 Target Density Multiplier를 오직 거리 제어 용도로 사용하지 마십시오.</td></tr>
+<tr><td>Enable Wind가 비활성화되어 있습니다</td><td>지정된 Shader가 <code>_DPT_SCATTER_WIND</code> Boolean Keyword를 선언하지 않아 Scatter Object가 DPT Scatter Wind를 사용할 수 없습니다. Shader Graph에 DPT Scatter Wind 설정을 추가하거나 Shader 자체 Wind System을 사용합니다.</td></tr>
+<tr><td>VCCORE Material에서 Enable Wind가 비활성화되어 있습니다</td><td>의도된 동작입니다. VCCORE는 자체 Authoring된 Wind Data 및 Material Wind Control을 사용하므로 DPT Scatter Wind 설정이 필요하지 않습니다.</td></tr>
+<tr><td>DPT 호환 Custom Shader인데도 움직이지 않습니다</td><td>Material의 DPT Scatter Wind Keyword, Scatter Object의 Enable Wind, Blackboard Reference 이름의 정확한 일치, 복사한 Wind Block의 Vertex Position 연결, Wind Strength / Height To Tip 값을 확인합니다.</td></tr>
+<tr><td>Wind가 오브젝트 전체를 이상하게 움직입니다</td><td>Enable Wind, Height To Tip, Mesh Object-space Height 및 Wind Strength를 확인합니다. 일반 Terrain, 회전 Terrain 또는 Planetoid에 적절한 Up Mode를 사용하십시오.</td></tr>
+<tr><td>Wind로 움직이는 Tip이 사라집니다</td><td>Wind Bounds를 늘려 예상되는 최대 변위를 Draw Bounds에 포함합니다.</td></tr>
+<tr><td>Neutral Live Slot이 Scatter를 Tint합니다</td><td>Slot 1을 포함한 네 Slot 모두에서 HDR Intensity 0의 White가 Neutral입니다. 겹치는 Slot Target, 다른 Colour Multiplier 및 Shader의 Scatter Input을 확인합니다. Dusting과 Scatter Response는 별도 Path입니다.</td></tr>
+<tr><td>HDR Ramp Colour가 빛나지 않습니다</td><td>내장 Variant에서 Emissive를 활성화하고 Ramp Alpha와 Material Emission Control을 확인합니다. Custom Mesh는 자체 Authoring된 Emission Data가 필요합니다.</td></tr>
+<tr><td>Non-readable Terrain을 사용하는 Build에서 Scatter가 사라집니다</td><td>Scatter Profile이 있는 상태에서 Surface Data를 지정하고 다시 Bake합니다. <a href="#runtime-data">Runtime Data 설정</a>을 참고하십시오. Gameplay 전용 Data에는 Placement Geometry가 포함되지 않습니다.</td></tr>
+<tr><td>Snow가 Terrain은 바꾸지만 Grass는 바꾸지 않습니다</td><td>Scatter Object가 Live Slot과 같은 Biome ID를 Target으로 하는지, Scatter Density/Colour Multiplier가 Neutral 상태가 아닌지, Live-biome Master Switch가 켜져 있는지, Scatter Renderer가 같은 호환 Material을 사용하는지 확인합니다.</td></tr>
+<tr><td>Scatter Density를 바꿔도 바로 효과가 없습니다</td><td>Profile의 Authoring Density만이 아니라 Live Material Scatter Response를 변경하고 있는지 확인합니다. Profile Density 변경은 Placement를 바꾸므로 Rebuild가 필요할 수 있고 Live Scatter Density는 제출되는 Population을 변경합니다.</td></tr>
+</tbody></table></div>
+
+<h2 id="support">지원</h2><p>도움이 필요하다면 Unity 버전, 관련 Terrain Atlas Biome ID, Scatter Object와 Scatter Settings 스크린샷, 활성 Material 및 Renderer Status Line을 포함하십시오. Placement 문제라면 Terrain Scale, Density, 문제가 Pure Biome에서 발생하는지 Blend에서 발생하는지도 알려 주십시오.</p><p><a href="https://dptgames.github.io/#contact">DPT Games 문의 양식</a>을 사용하거나 <a href="https://discord.gg/EkQykfzP5X">DPT Games Discord</a>에 참여할 수 있습니다.</p><p class="back-top"><a href="#top">맨 위로</a></p><footer class="footer">DPT Vertex 3D Terrain 문서 · Unity 인터페이스에서 찾기 쉽도록 영어 Control 이름을 사용합니다. 페이지 상단에서 English / 日本語 / 한국어 문서로 전환할 수 있습니다.</footer></main></body>
+</html>

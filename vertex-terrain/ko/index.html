@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="지형의 형태를 만들고 지표면을 Paint한 뒤 Scene에서 사용할 수 있도록 준비합니다."><link rel="alternate" hreflang="en" href="../index.html"><link rel="alternate" hreflang="ja" href="../ja/index.html"><link rel="alternate" hreflang="ko" href="index.html"><title>Vertex 3D Terrain 가이드 | DPT Games</title><style>
+
+:root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
+main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
+.site-nav{display:flex;flex-wrap:wrap;gap:8px 20px;border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:32px;font-size:.92rem}.site-nav [aria-current]{color:white;font-weight:700}
+.language-nav{display:flex;gap:10px;flex-wrap:wrap;margin:-12px 0 28px}.language-nav a{display:inline-block;padding:6px 16px;border:1px solid var(--border);border-radius:6px;text-decoration:none}.language-nav [aria-current]{color:#0f172a;background:var(--accent);border-color:var(--accent);font-weight:700}html[lang="ja"] body,html[lang="ko"] body{line-height:1.85;line-break:strict}html[lang="ja"] th,html[lang="ja"] td,html[lang="ko"] th,html[lang="ko"] td{overflow-wrap:anywhere}
+h1,h2,h3,h4{line-height:1.25;color:var(--accent)}h1{font-size:2.25rem;margin:0 0 14px}h2{font-size:1.65rem;margin:48px 0 18px;padding-top:12px;border-top:1px solid var(--border)}h3{font-size:1.22rem;margin:30px 0 12px}h4{font-size:1.06rem}
+p{margin:12px 0 18px}li{margin:7px 0}ul,ol{padding-left:25px}.lead{font-size:1.18rem;color:var(--muted);max-width:850px}.intro{margin:28px 0}.toc{background:var(--panel);padding:20px 24px;border:1px solid var(--border);border-radius:9px;margin:28px 0}.toc h2{margin:0 0 10px;padding:0;border:0;font-size:1.15rem}.toc ul{columns:2;column-gap:36px;margin:0}.toc li{break-inside:avoid}
+.callout,.example{background:var(--panel);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:14px 20px;margin:22px 0}.example{border-color:#a3e635}.callout p:last-child,.example p:last-child{margin-bottom:0}.callout p:first-child,.example p:first-child{margin-top:0}
+.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--border);border-radius:7px}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--border)}thead{background:#25354c}th{color:#f8fafc}td:first-child{font-weight:600;min-width:145px}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#172238}
+code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background:#27354c;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}kbd{white-space:nowrap;border:1px solid #50617a}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#09111f;border:1px solid var(--border);padding:20px;border-radius:7px}pre code{background:transparent;padding:0}
+.back-top{font-size:.88rem}.table-hint{display:none;color:var(--muted);font-size:.9rem}.footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);margin-top:34px;padding-top:16px}details{background:var(--panel);padding:14px 18px;border:1px solid var(--border);border-radius:7px;margin:16px 0}summary{cursor:pointer;font-weight:600;color:var(--accent)}.alias{display:block;scroll-margin-top:24px}
+@media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
+@media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
+
+</style></head>
+<body><main id="top"><nav class="site-nav" aria-label="문서"><a href="https://dptgames.github.io/">DPT Games 홈페이지</a><a href="index.html" aria-current="page">Vertex 3D Terrain 가이드</a><a href="biomes.html">바이옴 가이드</a><a href="terrain-material-settings.html">Terrain Material 설정</a><a href="scatter-system.html">3D Scatter 가이드</a><a href="demo-components.html">데모 &amp; 런타임 가이드</a></nav><nav class="language-nav" aria-label="언어"><a href="../index.html" lang="en" hreflang="en">English</a><a href="../ja/index.html" lang="ja" hreflang="ja">日本語</a><a href="index.html" lang="ko" hreflang="ko" aria-current="page">한국어</a></nav><header><h1>Vertex 3D Terrain 가이드</h1><p class="lead">지형의 형태를 만들고 지표면을 Paint한 뒤 Scene에서 사용할 수 있도록 준비합니다.</p></header><nav class="toc" aria-label="이 페이지의 내용"><h2>이 페이지의 내용</h2><ul><li><a href="#quick-start">첫 번째 지형 만들기</a></li><li><a href="#section-one">편집 대상, 라이브러리, 브러시 설정</a></li><li><a href="#generators">시작 형태 생성하기</a></li><li><a href="#section-two">Geometry Tool과 Surface Tool</a></li><li><a href="#masks">Face 선택, 편집 범위 제한, 형태 만들기</a></li><li><a href="#gradients">Height, Slope, Direction으로 Surface 배치하기</a></li><li><a href="#paths">Road, Riverbed, Step, Tunnel, Bridge</a></li><li><a href="#section-three">Terrain Tile을 가로질러 작업하기</a></li><li><a href="#section-four">Terrain 저장 및 최적화</a></li><li><a href="#shortcuts">키보드 및 마우스 참고</a></li><li><a href="#glossary">이 가이드에서 사용하는 용어</a></li><li><a href="#troubleshooting">결과가 예상과 다를 때</a></li><li><a href="#support">지원</a></li></ul></nav><p class="table-hint">작은 화면에서는 넓은 표를 좌우로 스크롤하여 모든 열을 확인할 수 있습니다.</p><div class="intro"><p>Vertex 3D Terrain을 사용하면 Unity 안에서 Mesh 기반 Terrain을 직접 생성하고 편집할 수 있습니다. 일반적인 Ground, Planet, Floating Island를 만든 뒤 Geometry를 변형하고 Surface를 Paint하며 Path와 Structure를 만들고 Gradient를 적용하고 여러 Terrain Tile을 가로질러 작업할 수 있습니다.</p><p><strong>Geometry Tool</strong>은 실제 Mesh를 바꾸고 <strong>Surface Tool</strong>은 외형을 바꿉니다. 호환되는 Geometry Tool과 Surface Tool은 같은 Stroke에서 함께 사용할 수 있으므로 Terrain을 변형하면서 동시에 Paint할 수 있습니다.</p></div>
+
+<h2 id="quick-start">첫 번째 지형 만들기</h2>
+<ol>
+<li><strong>Tools → DPT Games → Vertex 3D Terrain</strong>을 엽니다.</li>
+<li><strong>Create Terrain</strong>을 열고 만들 지형 유형을 <strong>Flat Terrain</strong>, <strong>Planet</strong>, <strong>Floating Island</strong> 중에서 선택합니다.</li>
+<li><strong>Starting Biome</strong>을 선택합니다. Floating Island에서는 <strong>Top Biome</strong>과 <strong>Bottom Biome</strong>을 선택합니다. 지형의 크기, 형태, 해상도도 조정합니다. 사용할 수 있는 항목은 선택한 지형 유형에 따라 달라집니다. 예를 들어 Floating Island에서는 폭, 길이, 하부 깊이, Plateau Shape, 하부 형태, Surface Variation을 설정할 수 있습니다.</li>
+<li><strong>Spawn Position</strong>으로 지형을 생성할 위치를 선택합니다. <strong>Live Preview</strong>가 활성화되어 있다면 생성 전에 전체 크기와 형태를 확인합니다.</li>
+<li>선택한 지형 유형에 맞는 생성 버튼을 클릭합니다. 예: <strong>Generate Floating Island</strong>, <strong>Generate Planetoid</strong>, <strong>Generate Surface</strong>.</li>
+<li>생성된 지형은 Geometry Tool과 Surface Tool로 바로 편집할 수 있습니다. 메시를 Sculpt하거나 형태를 바꾸고, 바이옴을 Paint하고, Path와 Gradient를 만들고, Mask로 Face를 선택할 수 있습니다. 호환되는 Geometry Tool과 Surface Tool은 같은 Stroke에서 함께 사용할 수도 있습니다.</li>
+<li>작은 디테일을 추가하기 전에 전체 형태부터 크게 조정합니다. 더 세밀한 편집이 필요한 영역은 나중에 로컬 Geometry Density를 늘릴 수 있습니다.</li>
+<li>결과가 만족스러우면 Unity Scene과 유지할 Generated Asset과 함께 지형을 저장합니다.</li>
+</ol>
+<div class="example"><p><strong>첫 연습으로 좋은 방법:</strong> 작은 지형을 하나 생성하고 Sculpt로 실루엣 일부를 바꾼 뒤 Paint, Path 또는 다른 Surface Tool을 시험해 보십시오. 더 큰 Scene을 만들기 전에 생성과 편집의 기본 흐름을 빠르게 익힐 수 있습니다.</p></div>
+
+<h2 id="section-one">편집 대상, 라이브러리, 브러시 설정</h2>
+<h3>무엇을 편집할지 선택하기</h3>
+<p>Active Terrain은 현재 Mesh와 설정을 제공합니다. 여러 오브젝트로 이루어진 지형에서는 Target List를 사용해 어떤 오브젝트를 Paint 또는 Sculpt할 수 있는지 선택합니다. <strong>Active</strong>와 <strong>Paint/Sculpt 활성화</strong>는 역할이 다릅니다. 한 Tile을 선택했다고 해서 주변 Tile이 모두 자동으로 편집 가능해지는 것은 아닙니다.</p>
+<p>필요한 Terrain Object를 추가하거나 등록하고 Scene 구성이 바뀌면 목록을 새로 고칩니다. 경계를 가로지르는 Stroke를 사용하기 전에 Paint/Sculpt 스위치를 확인하십시오. Target에는 Tool이 사용하는 Mesh Component가 있어야 합니다. 런타임에 Physics Raycast로 지형을 감지하려면 Collider도 필요합니다.</p>
+<div class="table-wrap"><table><thead><tr><th>설정</th><th>의미</th><th>변경할 때</th></tr></thead><tbody>
+<tr><td>Terrain Atlas</td><td>Biome Library에서 Compile한 Texture와 Colour Ramp를 사용해 Paint된 지표면을 렌더링합니다.</td><td>Texture 기반의 Rock, Sand, Grass, Water-like Surface 및 Material Detail에 사용합니다. 전용 Terrain Shader는 SH_DPT_VCTerrain입니다.</td></tr>
+<tr><td>Direct Vertex Color</td><td>Atlas 기반 바이옴 Texture 대신 Mesh Vertex에 Surface Color를 저장합니다.</td><td>더 단순한 색상 기반 스타일에 사용합니다. Vertex 수와 위치가 Paint 가능한 색상 디테일의 정도를 결정합니다.</td></tr>
+<tr><td>Biome Library</td><td>재사용 가능한 Ground Preset 모음입니다. 두 Pipeline은 하나의 Library 안에 서로 다른 Preset List를 가집니다.</td><td>관련 Terrain Piece는 하나의 Library를 공유하고, Surface가 독립적으로 변경되어야 한다면 별도 Copy를 사용합니다.</td></tr>
+<tr><td>Radius</td><td>World Metre 단위의 Brush 범위입니다.</td><td>넓은 지형 형태에는 큰 Radius를, 마무리에는 작은 Radius를 사용합니다. Geometry와 Paint가 같은 영역에 적용되어야 한다면 Radius를 연결합니다.</td></tr>
+<tr><td>Geometry speed / strength</td><td>Stroke가 Mesh를 얼마나 빠르게 움직이는지 결정합니다.</td><td>정밀한 변경에는 낮게 설정합니다. 너무 높으면 짧은 Stroke에서도 깊은 홈이나 높은 Spike가 생길 수 있습니다.</td></tr>
+<tr><td>Paint opacity</td><td>선택한 Surface가 기존 Surface를 얼마나 강하게 대체하거나 혼합하는지 결정합니다.</td><td>낮은 값은 약한 Stroke를 반복해 조절할 수 있고 1은 선택 Surface를 강하게 적용합니다.</td></tr>
+<tr><td>Blend sharpness</td><td>Paint된 바이옴 사이 경계의 성격을 정합니다.</td><td>낮추면 점진적인 전환, 높이면 더 뚜렷한 Patch가 됩니다. Mesh Vertex를 추가하지는 않습니다.</td></tr>
+<tr><td>Brush shape</td><td>Circle, Square, Diamond, Noise Jitter가 Stroke의 Footprint를 바꿉니다.</td><td>Circle이 좋은 시작점입니다. 의도적인 직선형 Edge에는 더 각진 Shape를 사용하고 불규칙한 흔적에는 Jitter를 사용합니다.</td></tr>
+<tr><td>Pen pressure</td><td>최소 Pressure Floor와 함께 Strength, Radius 또는 Both에 영향을 줄 수 있습니다.</td><td>Tablet Stroke를 점진적으로 만들려면 Strength, 누를수록 Brush를 넓히려면 Radius를 선택합니다.</td></tr>
+<tr><td>Preview colours</td><td>편집 가능한 Geometry와 Paint Color로 두 Brush Footprint를 구분합니다. Alpha는 Preview 투명도를 바꿉니다.</td><td>Terrain에서 잘 보이는 색을 사용합니다. 이 색은 실제로 Paint되는 바이옴을 바꾸지 않습니다.</td></tr>
+<tr><td>Worklight / Scene HUD</td><td>추가 작업용 Light와 현재 Tool을 보여 주는 간단한 표시입니다.</td><td>형태를 확인하고 어떤 Tool이 활성화되어 있는지 놓치지 않도록 사용합니다. 최종 결과는 Scene의 실제 Lighting에서도 확인하십시오.</td></tr>
+</tbody></table></div>
+<p>Pipeline을 바꾸면 Terrain Surface Data를 사용하는 방식이 달라집니다. 완성된 작업을 변환하기 전에 Copy를 저장하고 변환 뒤 외형을 비교하십시오. Terrain Atlas의 Texture Detail이 Direct Vertex Color에서 동일하게 보일 것이라고 기대해서는 안 됩니다.</p>
+<p>개별 Preset, Texture Input, Library 작업은 <a href="biomes.html">바이옴 가이드</a>를 참고하십시오. Material 전체에 영향을 주는 설정은 <a href="terrain-material-settings.html">Terrain Material 설정</a>을 참고하십시오. 바이옴 기반 Grass, Flower, Mushroom, Pebble 및 Custom Mesh 배치는 <a href="scatter-system.html">3D Scatter 가이드</a>를 참고하십시오.</p>
+
+<h2 id="generators">시작 형태 생성하기</h2>
+<p><strong>Create Terrain</strong>을 열고 <strong>Flat Terrain</strong>, <strong>Planet</strong>, <strong>Floating Island</strong> 중 하나를 선택합니다. 각 Generator는 Terrain Material이 적용된 Mesh를 만들고 편집 Target으로 등록합니다. Sculpt나 세부 Paint를 시작하기 전에 목적에 맞는 시작 형태와 바이옴을 설정하십시오.</p>
+<h3 id="generation-common">배치, 프리뷰, 바이옴 선택</h3>
+<p><strong>Live Preview</strong>는 Scene View에 임시 저해상도 회색 Mesh를 표시합니다. 위치, 크기, 실루엣을 판단하는 데 사용합니다. 최종 Terrain은 선택한 전체 해상도를 사용하며 회색 Preview는 완성된 Biome Texture의 Preview가 아닙니다.</p>
+<div class="table-wrap"><table><thead><tr><th>Spawn Position</th><th>배치</th></tr></thead><tbody>
+<tr><td>World Origin</td><td>(0, 0, 0)에서 시작합니다.</td></tr>
+<tr><td>Position Offset</td><td>World Origin을 기준으로 입력한 절대 XYZ 위치를 사용합니다.</td></tr>
+<tr><td>Scene View Center</td><td>Scene View Camera의 Orbit Pivot을 사용합니다.</td></tr>
+<tr><td>Ground Snapped View</td><td>View의 X/Z 위치를 사용하고 Y = 0으로 설정합니다. 임의의 Terrain Surface에 Raycast하여 붙는 기능은 아닙니다.</td></tr>
+</tbody></table></div>
+<p><strong>Starting Biome</strong>은 Flat Terrain과 Planet의 초기 Surface를 선택합니다. Picker는 현재 Surface Pipeline과 Library를 따릅니다. Floating Island는 아래에 설명하는 Top Biome과 Bottom Biome을 별도로 사용합니다. 생성 뒤에는 모든 Surface를 다시 Paint할 수 있습니다.</p>
+<h3 id="generation-flat">Flat Terrain</h3>
+<p><strong>Shape Preset</strong>에서 Flat Plane, Island Mountain, River Valley 또는 Crater Basin을 선택합니다. Flat Terrain은 Generator Category이며 Height Preset을 사용해 Hill과 Depression도 만들 수 있습니다.</p>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>용도</th></tr></thead><tbody>
+<tr><td>Surface Name</td><td>생성되는 Terrain Object의 이름을 지정합니다.</td></tr>
+<tr><td>Quick Size / Tile Size (Square)</td><td>정사각형 Tile의 폭과 길이를 metre 단위로 정합니다. Quick Size는 25, 50, 100, 250, 500, 1000 m를 제공합니다.</td></tr>
+<tr><td>Grid Subdivisions</td><td>X와 Z 방향의 Grid Density를 정합니다. Density 버튼은 32, 64, 128, 256을 시작값으로 제공합니다.</td></tr>
+<tr><td>High Density Borders</td><td>내부 해상도는 유지하면서 영구 Tile Edge의 Density를 두 배로 만듭니다. Tile 전체 Density를 두 배로 하지 않고 Seam Support를 추가합니다.</td></tr>
+<tr><td>Mesh Complexity</td><td>예상 Vertex/Triangle 수와 Quad 간격을 표시합니다. 크고 조밀한 Terrain을 만들기 전에 확인하십시오.</td></tr>
+</tbody></table></div>
+<p>준비가 되면 <strong>Generate Surface</strong>를 클릭합니다. 처음부터 모든 Tile을 최대 해상도로 만들기보다 필요한 큰 특징을 표현할 정도의 Geometry를 선택하고 세부 영역은 나중에 추가하십시오.</p>
+<h3 id="generation-planet">Planet: 연속형 또는 Tile형</h3>
+<p><strong>Planetoid Name</strong>, <strong>Starting Biome</strong>, <strong>Radius</strong>, <strong>Mesh Structure</strong>를 설정합니다. Single Mesh는 하나의 연속 Object를 만들고 Multi Tile은 Cube의 여섯 Face에 Tile 배열을 만듭니다.</p>
+<div class="table-wrap"><table><thead><tr><th>Structure</th><th>형태 및 Density 설정</th><th>용도</th></tr></thead><tbody>
+<tr><td>Single Mesh</td><td>Shape Preset: Sphere, Cube 또는 Rounded Cube. Rounded Cube는 Roundness를 0(Cube)부터 1(Sphere)까지 설정합니다. Cube Shape는 Face Grid Density를 사용합니다.</td><td>연속된 닫힌 Base를 만듭니다. Box 형태의 World를 뒤집어 Room으로 만드는 용도도 포함합니다.</td></tr>
+<tr><td>Single Mesh Sphere</td><td>Sphere Topology: Cube Sphere, Icosphere 또는 UV Sphere. Cube Sphere는 Face Grid Density, Icosphere는 재귀적 Subdivision Level, UV Sphere는 Resolution을 사용합니다.</td><td>원하는 형태와 편집 방식에 맞는 Triangle 분포를 선택합니다. 서로 다른 Topology Type의 Density 값은 동일한 의미가 아닙니다.</td></tr>
+<tr><td>Multi Tile</td><td>Shape Preset: Planetoid 또는 Cube. Tiles Per Face (N×N), 자동 Tile Size, Tile Grid Subdivisions, High Density Borders.</td><td>서로 분리해 편집할 수 있는 Terrain Tile입니다. 총 Tile 수는 6 × N²이며 N=2면 24개, N=4면 96개입니다.</td></tr>
+</tbody></table></div>
+<p>Multi Tile에서 각 Face가 맞닿도록 Tile Size는 (2 × Radius) / Tiles Per Face로 계산됩니다. High Density Borders는 Projection 전에 각 Tile Edge의 Density를 두 배로 하며 Face 사이 Seam과 Cube Corner도 포함합니다. <strong>Generate Planetoid</strong>를 클릭한 뒤 Join을 확인하고 World Up 방향이 맞지 않는 곳에서는 Surface-oriented Brush를 사용하십시오.</p>
+<p>Interior를 만들려면 Single Mesh Cube 또는 Rounded Cube를 생성하고 Mask Mode에서 모든 Face를 선택한 뒤 <a href="#invert-faces">Invert Faces</a>를 사용합니다. 이는 별도의 Generator Type이 아니라 편집 작업입니다.</p>
+<h3 id="generation-island">Floating Island</h3>
+<p>Floating Island는 위쪽 Plateau와 조형된 Underside를 가진 닫힌 Mesh입니다. 이름, 배치, 두 Biome을 설정한 뒤 위와 아래의 실루엣을 모두 확인하십시오.</p>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>변경 내용</th></tr></thead><tbody>
+<tr><td>Top Biome / Bottom Biome</td><td>위 Plateau와 Underside에 서로 다른 Surface를 지정합니다. 예를 들어 위는 Grass, 아래는 Rock으로 설정할 수 있습니다.</td></tr>
+<tr><td>Edge Blend Width</td><td>Rim 양쪽에서 두 Biome이 섞이는 거리를 metre 단위로 정합니다. 공유 Rim은 동일한 비율로 섞입니다. 양쪽에 같은 Biome을 선택하면 이 Control은 비활성화됩니다.</td></tr>
+<tr><td>Width (X), Length (Z), Underside Depth (Y)</td><td>섬의 수평 크기와 아래 방향 깊이를 정합니다.</td></tr>
+<tr><td>Plateau Shape</td><td>Circular, Rounded Square 또는 Oval Long Outline을 선택합니다.</td></tr>
+<tr><td>Bottom Keel Shape</td><td>Pointed Spire, Rounded Bowl, Stepped Crag 또는 Flat Taper Profile을 선택합니다.</td></tr>
+<tr><td>Top Surface Preset</td><td>위 Surface에 Terrain Height Preset을 사용합니다. 평평한 시작 Plateau가 필요하면 Flat Plane을 선택합니다.</td></tr>
+<tr><td>Rock Jaggedness</td><td>Underside에 Procedural Rock Noise와 Crag를 추가합니다.</td></tr>
+<tr><td>Round Plateau Edge / Edge Radius</td><td>기존 Vertex Row를 구부려 둥근 Rim을 만듭니다. 새 Loop를 삽입하지 않으므로 Curve를 표현할 충분한 Grid Resolution이 필요합니다.</td></tr>
+<tr><td>Grid Subdivisions</td><td>Island Mesh Density를 정합니다. 실루엣이나 계획한 편집에 필요할 때만 높이십시오.</td></tr>
+</tbody></table></div>
+<p><strong>Generate Floating Island</strong>를 클릭합니다. Edge Radius는 Geometry를 바꾸고 Edge Blend Width는 Biome Transition을 바꿉니다. 두 값을 따로 조정한 뒤 Paint나 Scatter 배치 전에 Underside도 확인하십시오.</p>
+<h3 id="generation-variation">Surface Variation</h3>
+<p><strong>Surface Variation</strong>을 활성화하면 생성 Terrain, Planetoid, Floating Island Top에 결정론적인 Height Variation을 추가할 수 있습니다. Island Underside의 Rock Jaggedness와는 별개입니다.</p>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>의미</th></tr></thead><tbody>
+<tr><td>Strength</td><td>최대 Height Displacement를 metre 단위로 정합니다. 선택한 Base Shape를 유지하려면 낮은 값부터 시작하십시오.</td></tr>
+<tr><td>Feature Size</td><td>World Space에서 가장 큰 Noise Feature의 대략적인 크기입니다. 값이 클수록 넓은 Hill이 만들어집니다.</td></tr>
+<tr><td>Detail</td><td>Fractal Noise Layer 수로 1부터 6까지입니다. Layer가 많을수록 더 세밀한 Variation이 추가되며 이를 표현할 충분한 Geometry가 필요합니다.</td></tr>
+<tr><td>World Seed / Randomize</td><td>Seed를 편집하거나 Randomize를 누르기 전까지 Pattern을 동일하게 유지합니다. 설정을 재현해야 한다면 Seed를 보관하십시오.</td></tr>
+</tbody></table></div>
+<p>Live Preview로 설정을 비교한 뒤 최종 판단은 Full-resolution Generated Result에서 하십시오. 거친 Grid에 강한 Variation을 적용해도 미세한 Detail을 만들 수 없으며 Noise 추가와 Surface Texture Painting은 별개의 작업입니다.</p>
+
+<h2 id="section-two">Geometry Tool과 Surface Tool</h2>
+<p>Tool에는 Geometry와 Surface를 위한 별도의 선택 항목이 있습니다. 일부 Brush Tool은 함께 사용할 수 있으므로 한 Stroke에서 형태를 바꾸면서 Paint할 수 있습니다. Path, Mask, Gradient는 각각의 전용 편집 Workflow를 사용합니다. Drag하기 전에 Active Button과 Scene HUD를 확인하십시오.</p>
+<p>On/Off Control은 Button입니다. 활성화된 Geometry Control은 녹색으로 강조되고 다른 영역의 활성 Control은 파란색으로 강조되며 비활성 상태는 회색입니다. Path Control도 다른 Geometry Tool과 같은 녹색 강조를 사용합니다. 공간이 허용되면 관련 Action은 Compact Row에 함께 표시됩니다.</p>
+<h3>Geometry Tool: 메시 변경</h3>
+<div class="table-wrap"><table><thead><tr><th>Tool</th><th>동작</th><th>사용 예</th></tr></thead><tbody>
+<tr><td>Sculpt</td><td>Up, Surface Normal 또는 View Direction을 따라 Vertex를 올리거나 내립니다. Ctrl은 올림/내림 방향을 반대로 바꿉니다.</td><td>일반 Hill에는 Up, Planet이나 Wall에는 Surface Normal, 특정 시점에서 작업할 때는 View Direction을 사용합니다.</td></tr>
+<tr><td>Inflate</td><td>Surface를 Local Shape 방향 바깥쪽으로 밀고 반대 Stroke는 안쪽으로 당깁니다.</td><td>Rock Bulge를 두껍게 하거나 Depression을 부드럽게 조정합니다.</td></tr>
+<tr><td>Smooth</td><td>Vertex를 더 부드러운 배열로 이동합니다.</td><td>Sculpt 뒤 날카로운 Bump를 줄입니다. 반복하면 유지하려던 Detail도 약해질 수 있습니다.</td></tr>
+<tr><td>Grab</td><td>영향받는 Geometry Patch를 Drag합니다.</td><td>Ridge를 옆으로 당기거나 전체 Landform을 다시 만들지 않고 Silhouette을 조정합니다.</td></tr>
+<tr><td>Cave</td><td>Dynamic Topology를 사용해 Cavity, Tunnel, Overhang을 위한 Geometry를 편집합니다.</td><td>자연스러운 Opening을 만듭니다. 계획된 Route와 Cross-section이 필요하면 Tunnel Path를 사용합니다.</td></tr>
+<tr><td>Clean-Up</td><td>Brush 영역의 불필요하거나 불균일한 Geometry를 줄입니다.</td><td>반복된 Topology 편집으로 지나치게 조밀해진 영역을 정리합니다. 이후 Silhouette과 Painted Border를 확인하십시오.</td></tr>
+<tr><td>Path</td><td>편집 가능한 Node가 있는 Curve를 사용해 Road, Trench, Step, Tunnel 또는 Bridge를 만듭니다.</td><td>폭을 제어할 수 있는 반복 가능한 Route를 만듭니다. <a href="#paths">Path</a>를 참고하십시오.</td></tr>
+<tr><td>Mask</td><td>영역에 작업을 적용하기 전에 Face를 선택합니다.</td><td>Plateau를 올리거나 Pillar를 만들거나 Wall을 평평하게 합니다. <a href="#masks">Face Mask</a>를 참고하십시오.</td></tr>
+</tbody></table></div>
+<h3>Surface Tool: 외형 변경</h3>
+<div class="table-wrap"><table><thead><tr><th>Tool</th><th>동작</th><th>사용 예</th></tr></thead><tbody>
+<tr><td>Paint</td><td>선택한 Biome 또는 여러 Biome의 Weighted Mix를 적용합니다.</td><td>Path에 Dirt를 추가하거나 Rock과 Grass를 제어된 비율로 섞습니다.</td></tr>
+<tr><td>Fill</td><td>현재 Biome의 연결된 영역 전체에 Surface를 적용합니다.</td><td>모든 Face를 Brush로 칠하지 않고 연속 Patch를 교체합니다.</td></tr>
+<tr><td>Smear</td><td>기존 Surface Weight를 Stroke 방향으로 끌어당깁니다.</td><td>새 Surface를 선택하지 않고 Patch를 Streak 형태로 늘립니다.</td></tr>
+<tr><td>Blend / Biome Blend</td><td>기존 Biome Transition을 부드럽게 만듭니다.</td><td>딱딱한 Painted Edge를 완화합니다. Surface Weight를 부드럽게 할 뿐 Landform을 Smooth하지 않습니다.</td></tr>
+<tr><td>Gradient</td><td>Height, Slope 또는 공간 방향을 사용해 Biome을 배치합니다.</td><td>Peak 근처에 Snow, 가파른 Face에 Rock을 배치합니다. <a href="#gradients">Gradient</a>를 참고하십시오.</td></tr>
+<tr><td>Eyedropper</td><td>Cursor 아래의 Surface를 Sample합니다.</td><td>Terrain에 이미 있는 Biome으로 계속 Paint할 때 사용합니다.</td></tr>
+<tr><td>Dusting</td><td>Surface Effect가 사용하는 Dusting Mask를 Paint, Blend, Clear 또는 Fill합니다.</td><td>Snow나 Dust Overlay가 허용될 영역을 표시합니다. 외형은 <a href="terrain-material-settings.html#dusting">Material Dusting Control</a>에서 설정합니다.</td></tr>
+</tbody></table></div>
+<p>Multi-biome Brush에서는 원하는 Surface를 선택하고 상대 Weight를 설정합니다. Equalize Weights는 동일한 영향력을 부여합니다. Noise는 분포를 덜 균일하게 만들 수 있습니다. 복잡한 Mix를 Terrain 전체에 적용하기 전에 작은 Test Patch에서 확인하십시오.</p>
+<h3>Dynamic Topology와 Normal</h3>
+<p><strong>Dynamic Topology</strong>는 작업에 더 작은 Triangle이 필요할 때 Geometry를 추가합니다. Max Edge Length는 Edge가 너무 길다고 판단하는 기준입니다. 값이 낮을수록 더 세밀한 Geometry가 만들어지고 보통 Processing과 Memory 비용이 늘어납니다. Cave/Tunnel 작업에 사용되며 지원되는 Sculpt 또는 Paint Workflow에서도 활성화할 수 있습니다.</p>
+<p>큰 Triangle 때문에 원하는 형태를 만들 수 없을 때 사용하십시오. 모든 거친 Mesh를 균일한 고밀도 Grid로 바꾸는 기능은 아닙니다. 큰 변경 뒤에는 Wireframe을 확인하고 Scene Scale에 맞는 Threshold를 사용하십시오.</p>
+<p>전역 <strong>Smooth / Sharp</strong> Shading Button은 <strong>Scene HUD</strong> 옆에 있습니다. Sharp Normal은 개별 Polygon을 강조하고 Smooth Normal은 Terrain Mesh Face 사이의 Lighting을 부드럽게 연결합니다. Vertex를 실제로 움직이는 Smooth Brush 및 Scatter Variant의 <a href="scatter-system.html#variants">Smoothing Angle</a>과는 별개의 설정입니다.</p>
+
+<h2 id="masks">Face 선택, 편집 범위 제한, 형태 만들기</h2>
+<ol><li>Mask를 활성화하고 선택 방식을 고릅니다. Brush는 영역을 칠해 선택하고 Single Face는 개별 Face를 정밀하게 선택하며 Flood Island는 연결된 영역을 선택합니다.</li><li>원하는 형태의 Footprint가 될 Face를 선택합니다. Shift를 누르면 선택에서 Face를 제거할 수 있습니다.</li><li>Grow, Shrink, Invert로 선택을 다듬습니다. Select Slope는 Degree Range를 사용하고 Select Biome Faces는 선택한 Surface ID를 사용합니다.</li><li>작업 또는 Shape Preset을 선택합니다. 적용 전에 영향을 받는 영역을 확인하십시오.</li><li>위에서뿐 아니라 옆에서도 결과를 확인합니다. 필요하면 Undo한 뒤 Footprint나 설정을 조정합니다.</li></ol>
+<h3>선택과 Paint 경계</h3>
+<p><strong>Brush Drag</strong>는 Circle 또는 Square Footprint로 Patch를 선택하고 <strong>Single Face</strong>는 개별 Triangle을 선택하며 <strong>Flood Island</strong>는 연결 영역을 선택합니다. Shift는 Face를 제거합니다. Grow와 Shrink는 선택을 한 Face Ring씩 늘리거나 줄이고 Invert는 반대 영역을 선택하며 Clear는 현재 선택을 지웁니다. Counter에는 여러 Tile에 걸친 선택 Face 수가 표시됩니다.</p>
+<p>절차적 선택을 사용하려면 <strong>Slope Angles</strong>를 설정한 뒤 <strong>Select Slope</strong>를 클릭하거나 Biome ID를 입력하고 <strong>Select Biome Faces</strong>를 사용합니다. <strong>Select All</strong>은 Face Inversion 같은 전체 Mesh 작업에 유용합니다.</p>
+<p><strong>Paint Edges</strong>는 <strong>Paint</strong> 작업과 자동으로 Paint되는 Generated Shape에 적용됩니다. <strong>Sharp</strong>는 선명한 Face Boundary를 유지하고 <strong>Blended</strong>는 인접 Face 사이 Surface Transition을 부드럽게 합니다. 이 설정은 Paint Edge를 제어하고 저장된 Editing Mask는 어디를 편집할 수 있는지 제어합니다.</p>
+<h3>Shape, Surface, Topology 작업</h3>
+<div class="table-wrap"><table><thead><tr><th>작업</th><th>의미</th><th>실용적인 지침</th></tr></thead><tbody>
+<tr><td>Flat Plateau / extrusion</td><td>선택 영역을 변위시킵니다. 양의 Height는 올리고 음의 Height는 내립니다. Taper는 Side가 넓어지거나 좁아지는 방식을 바꿉니다.</td><td>Taper 1은 직선 Side를 유지하고 1 미만은 안쪽으로 좁아지며 1 초과는 바깥쪽으로 넓어집니다. 직립 Plateau에는 World-up Alignment가, 경사진 Ground에는 Surface Alignment가 적합합니다.</td></tr>
+<tr><td>Pillar</td><td>Classical, Cylindrical 또는 Square Pedestal 스타일의 Column을 만듭니다.</td><td>Height는 높이, Tier/Ring과 Taper는 Profile을 바꿉니다. Bevel로 Edge를 부드럽게 할 수 있습니다.</td></tr>
+<tr><td>Arch</td><td>선택 Footprint에서 Arch Apex Height, Vault Thickness, Curve Segments, Arch Profile을 사용해 Arch를 만듭니다.</td><td>Semi-Circular는 둥글고 Gothic Pointed는 뾰족한 Apex를 가지며 Segmental은 더 얕습니다. Align to Surface는 Tile을 가로질러도 선택 영역의 평균 Normal을 따릅니다. World-up 방향으로 만들려면 비활성화하십시오. Dynamic Topology는 Curve Segment 수를 늘릴 수 있습니다.</td></tr>
+<tr><td>Boulder</td><td>Footprint에서 Faceted Crag, Smooth Dome 또는 Jagged Spire를 만듭니다.</td><td>Height는 크기를 정하고 Noise는 규칙성을 깨뜨립니다. Base Shape를 판단할 수 있도록 낮은 Noise부터 시작하십시오.</td></tr>
+<tr><td>Bevel</td><td>지원되는 Generated Shape의 Edge를 부드럽게 만듭니다.</td><td>Bevel Extrude Edge는 올라온 Rim을 둥글게 하면서 Terrain 쪽 Base는 유지합니다. 짧은 Extrusion이나 좁은 Mask에서는 Width가 제한됩니다. Segment 1은 Chamfer를 만들고 Segment 수가 많을수록 더 둥글게 됩니다. Pillar Bevel은 Profile 변화와 Square Vertical Corner를 완화하고 Arch Bevel은 발 부분까지 이어집니다.</td></tr>
+<tr><td>Invert Faces</td><td>선택한 Triangle Winding과 Surface Direction을 반대로 바꿉니다.</td><td>Select All을 사용해 닫힌 Cube 형태 Planet을 안쪽을 향한 Room으로 만들 수 있습니다. 선택 영역 자체를 Invert하는 작업은 아닙니다.</td></tr>
+<tr><td>Level</td><td>선택 영역을 평균 World-Y Height로 맞춥니다.</td><td>수평 Platform에 사용합니다. Wall이나 Planet에서 영역 자체의 방향을 유지해야 한다면 Flatten을 사용합니다.</td></tr>
+<tr><td>Flatten</td><td>선택 영역의 평균 Surface Orientation을 기준으로 평평하게 만듭니다.</td><td>경사진 Surface에 강제로 수평화하지 않고 Planar Patch를 만듭니다.</td></tr>
+<tr><td>Scale Mask</td><td>영역 중심을 기준으로 X, Y, Z Factor를 사용해 Scale합니다.</td><td>1은 해당 Axis를 변경하지 않습니다. 양의 Factor와 작은 조정부터 사용하십시오.</td></tr>
+<tr><td>Subdivide Mask</td><td>선택 영역에 Triangle을 추가합니다.</td><td>세밀한 편집을 하기엔 너무 거친 영역에서 먼저 사용합니다.</td></tr>
+<tr><td>Fill Hole</td><td>선택과 접촉한 처리 가능한 Hole을 채우며 새 Face가 선택 상태가 됩니다.</td><td>Seam Ledger 또는 보존된 Flat-tile Border Vertex가 누락된 Rim을 정의할 수 있을 때 손상된 Tile Border를 복구할 수 있습니다. 정상 Outer Edge는 열린 상태로 남습니다. 먼저 Active Editing Mask를 지우십시오.</td></tr>
+<tr><td>Delete Faces</td><td>선택 Triangle을 제거하고 열린 Boundary를 남깁니다. Undo를 지원합니다.</td><td>아직 이웃이 없는 Edge를 포함해 Permanent Tile-edge Face는 보호됩니다. Tunnel-mouth Node는 삭제할 수 있습니다. 결과 Opening과 Collider를 확인하십시오.</td></tr>
+<tr><td>Paint</td><td>선택 Face에 지정한 Surface를 적용합니다.</td><td>Freehand Stroke 없이 Generated Plateau나 Structure에 별도 Biome을 지정할 수 있습니다.</td></tr>
+</tbody></table></div>
+<h3 id="editing-mask">저장한 영역으로 편집 제한하기</h3>
+<ol><li>Mask Tool로 편집할 Face를 선택합니다.</li><li><strong>Set Mask</strong>를 클릭해 해당 선택을 편집 영역으로 저장합니다.</li><li><strong>Editing Mask</strong>를 활성화하면 그 영역 안에서만 Paint와 Sculpt가 가능합니다. 바깥 Face는 보호됩니다. 공유 Boundary Vertex는 고정되므로 인접 Face와 Weld된 Tile Seam이 서로 벌어지지 않습니다.</li><li>Editing Mask를 끄면 제한을 일시 중지하고 다시 켜면 같은 제한을 재개합니다. 기본 Shortcut은 <kbd>Ctrl/Cmd + Shift + L</kbd>이며 <a href="#custom-hotkeys">Hotkey Sheet</a>에서 바꿀 수 있습니다.</li><li><strong>Clear Editing Mask</strong>를 사용해 저장 영역을 제거합니다. 현재 Face Selection은 유지됩니다.</li></ol>
+<p>저장된 Editing Mask는 현재 Face Selection과 별개입니다. 현재 선택을 Grow, Clear 또는 교체해도 저장 영역은 바뀌지 않습니다. 새 Boundary를 원하면 Set Mask를 다시 사용하십시오. 공유 Boundary를 고정해야 하므로 매우 좁은 Selection은 실제로 움직일 수 있는 내부 Vertex가 적을 수 있습니다.</p>
+<p>Extrusion이나 Hole Filling 전에 Active Editing Mask를 지우십시오. Mask가 일시 중지된 상태에서 작업이 Face를 재구성하면 Tool이 저장된 Mask를 지우고 알림을 표시할 수 있습니다. Topology 변경 뒤 새 영역을 선택하고 Set Mask를 다시 사용하십시오.</p>
+<h3 id="invert-faces">닫힌 형태를 내부 공간으로 바꾸기</h3>
+<p><strong>Invert Faces</strong>는 선택 Triangle과 그 Surface Direction을 반대로 바꿉니다. Cube 형태 Planet으로 Room을 만들려면 Mask Mode에서 <strong>Select All</strong>을 사용한 뒤 Invert Faces를 실행합니다. 내부에서 결과를 확인하고 Character가 사용할 쪽에서 Collider도 확인하십시오. 이 작업은 Undo를 지원합니다.</p>
+<p><strong>Invert</strong>는 어떤 Face가 선택되는지를 바꾸고 <strong>Invert Faces</strong>는 Mesh 자체를 바꿉니다. Normal Recalculation 및 지원되는 Subdivision, Cleanup, LOD Workflow는 선택한 Face Orientation을 유지합니다. 닫힌 Surface의 일부만 반전하면 인접 Face가 서로 반대 방향을 향할 수 있으므로 Local Selection을 반전한 뒤 Join을 확인하십시오.</p>
+
+<h2 id="gradients">Height, Slope, Direction으로 Surface 배치하기</h2>
+<p>Gradient는 규칙을 Surface Distribution으로 바꿉니다. 시작 및 끝 Biome을 선택하거나 여러 Surface용 Ramp Stop을 추가합니다. Gradient Position은 혼합을 정하고 Strength는 얼마나 강하게 적용되는지, Sharpness는 Transition을 제어합니다.</p>
+<div class="table-wrap"><table><thead><tr><th>Mode</th><th>용도</th><th>사용 방법</th></tr></thead><tbody>
+<tr><td>Cone Volume</td><td>로컬 Mountain 또는 Feature.</td><td>Base, Peak, Radius, Altitude Range를 설정합니다. Fit Mountain은 Active Terrain에서 유용한 Cone을 추정하고 Snap to Peak는 가장 높은 Vertex로 이동시킵니다. Tilt와 Heading으로 기울어진 Feature를 따라갈 수 있습니다.</td></tr>
+<tr><td>Directional Line</td><td>선택한 방향을 따라가는 Transition.</td><td>Line/Arrow Handle을 영역에 배치합니다. Start와 End가 두 Surface가 우세한 위치를 정합니다.</td></tr>
+<tr><td>Whole Altitude</td><td>아래는 Grass, 위는 Snow처럼 넓은 Height Rule.</td><td>실제 Terrain을 포함하는 Height Range를 설정합니다. Terrain보다 완전히 위나 아래에 있으면 하나의 Biome만 나올 수 있습니다.</td></tr>
+<tr><td>Whole Slope</td><td>평지에는 Soil, Cliff에는 Rock처럼 Steepness Rule.</td><td>Slope Range를 정하고 적용 전에 수평 영역과 가파른 영역을 모두 비교합니다.</td></tr>
+</tbody></table></div>
+<div class="example"><p><strong>Mountain 예시:</strong> 먼저 넓은 Grass-to-Snow Altitude Gradient를 적용합니다. 노출된 Rock용 Slope Pass를 추가한 뒤 Local Exception을 Paint합니다. 앞선 Distribution 일부를 남기려면 나중 Pass에서 더 낮은 Strength를 사용하십시오.</p></div>
+<p>Cone의 Slope/Cliff Filter로 적용 범위를 제한할 수 있습니다. 적용하기 전에 Live Preview로 Rule 위치를 맞추고 매우 다른 Feature에서 새로 시작할 때는 Cone을 Reset하십시오. Biome 자체의 Colour Ramp는 별도의 Control입니다. 이는 해당 Biome의 Texture Detail에 색을 입히며 World-height Snow Line을 설정하지 않습니다.</p>
+
+<h2 id="paths">Road, Riverbed, Step, Tunnel, Bridge</h2>
+<h3>Surface Path부터 시작하기</h3>
+<ol><li>Path를 활성화하고 Surface를 선택합니다.</li><li>Scene View에 최소 두 개의 Node를 추가합니다. Handle을 움직여 Route를 정하고 Curve 제어가 더 필요한 곳에 Node를 추가합니다.</li><li>Width, Blending, Sculpt Operation을 선택합니다. 첫 테스트는 짧게 만드십시오.</li><li>Single Biome 또는 Route를 따라가는 Gradient를 선택합니다. Surface Strip만 필요하다면 Paint Path를 사용합니다.</li><li>Geometry에는 Create Path를 사용하고 Shape와 Surface를 모두 원하면 Create &amp; Paint를 사용합니다.</li></ol>
+<div class="table-wrap"><table><thead><tr><th>설정</th><th>제어 항목</th><th>예</th></tr></thead><tbody>
+<tr><td>Width</td><td>Shoulder를 포함한 전체 Corridor Width입니다. 바깥 Blending Area는 Core Corridor 밖에 Transition을 추가합니다.</td><td>사용 목적에 맞는 Road Width를 확보한 뒤 Blending으로 Terrain과의 Join을 부드럽게 만듭니다.</td></tr>
+<tr><td>Node width scale</td><td>Node에서 Path Width에 적용되는 Multiplier입니다.</td><td>1은 기본 Width입니다. 넓은 Clearing이나 Junction이 필요하면 Node Scale을 키웁니다.</td></tr>
+<tr><td>Height offset</td><td>배치 위치를 기준으로 목표 Path Height를 이동합니다.</td><td>Raised Route에는 작은 양의 Offset, 얕은 Channel에는 음의 Offset을 사용합니다.</td></tr>
+<tr><td>Strength</td><td>Geometry가 선택한 Path Profile 쪽으로 얼마나 강하게 이동하는지 정합니다.</td><td>처음에는 낮은 값으로 부드럽게 조정하고 결과를 본 뒤 필요하면 반복합니다.</td></tr>
+<tr><td>Max Height Gap</td><td>Path가 찾을 수 있는 주변 Source Surface 범위를 제한합니다.</td><td>유효한 Terrain이 Route에서 너무 멀어 감지되지 않을 때 높입니다. Stair Riser Height Control은 아닙니다.</td></tr>
+<tr><td>Grade and Level</td><td>제어된 Road-like Corridor를 만듭니다.</td><td>고르지 않은 Ground를 가로지르는 Walkable Route를 만듭니다.</td></tr>
+<tr><td>Raise Embankment</td><td>Corridor를 쌓아 올립니다.</td><td>Track이나 Bank를 주변 Ground보다 높게 만듭니다.</td></tr>
+<tr><td>Carve Trench / riverbed</td><td>Terrain에 Channel을 깎습니다.</td><td>Drainage Ditch나 Paint된 River Surface 아래의 Bed를 만듭니다.</td></tr>
+<tr><td>Smooth Corridor</td><td>Route Geometry를 부드럽게 만듭니다.</td><td>새 Raised/Cut Profile을 선택하지 않고 거친 Path를 정리합니다.</td></tr>
+<tr><td>Cross-section</td><td>Flat, Crowned, Curved Trench가 Route를 가로지르는 Shape를 바꿉니다.</td><td>Crown Height는 중앙을 올리고 Trench Depth는 낮춥니다. 둘 다 Geometry Distance입니다.</td></tr>
+<tr><td>Edge smoothing</td><td>Terrain과 만나는 바깥 Join을 부드럽게 합니다.</td><td>Road Centre, Stair Tread, Channel Bed를 유지하면서 Shoulder를 Blend합니다.</td></tr>
+<tr><td>Closed loop</td><td>Route를 시작점과 다시 연결합니다.</td><td>Ring Road에 사용하고 첫 Node의 Join을 확인합니다.</td></tr>
+</tbody></table></div>
+<h3>Step 만들기</h3>
+<p>Steps Sculpt Operation을 선택합니다. <strong>Step Height</strong>는 각 Step의 수직 높이이며 <strong>Step Depth</strong>는 Path 방향의 수평 Tread 길이를 독립적으로 제어합니다. <strong>Step Bevel</strong>은 Edge Roundness를 정합니다. 낮은 값은 더 날카롭고 높은 값은 더 닳거나 둥근 Edge를 만듭니다.</p>
+<p>Character 크기에 맞춰 Height와 Depth를 정한 뒤 옆에서 Stair를 확인하십시오. Bevel은 필요한 Flat Tread를 없애지 않으면서 Edge만 부드럽게 해야 합니다. 원하는 간격을 표현할 충분한 Geometry를 추가하십시오. 매우 거친 Terrain에서 긴 Stair Run을 만들면 더 세밀한 Topology가 필요할 수 있습니다.</p>
+<h3>중앙과 Bank Paint하기</h3>
+<p>Path Gradient는 Route를 따라 Biome을 바꿉니다. Stop Position 0은 시작, 1은 끝입니다. Dirt, Gravel, Rock 같은 구간을 위해 Stop을 추가합니다. Bank Control은 Side 쪽에 별도 Biome을 배치하며 Bank Width는 metre가 아니라 Half-width의 비율입니다. 예를 들어 0.35는 각 Side Half-width의 바깥 35%를 사용합니다.</p>
+<p>Preview는 인접 Surface가 어디에서 Influence를 공유하는지 보여 줍니다. Paint 전에 Bank와 Transition을 확인하십시오. River Biome을 Paint하면 강처럼 보이는 Strip은 만들 수 있지만 실제 Channel Geometry가 필요하면 Bed를 별도로 Carve해야 합니다.</p>
+<h3>Tunnel 만들기</h3>
+<p>Tunnel로 전환하고 Terrain을 통과하도록 Route를 배치합니다. Cross-section은 Circle, Square 또는 Flat Bottom Arch를 선택합니다. Tunnel에 Walking Surface가 필요하면 Flat Bottom이 유용합니다.</p>
+<p><strong>Minimum cover depth</strong>는 Tunnel 위에 필요한 Solid Terrain 두께입니다. Route Centre가 지하에 있어도 전체 Width나 Height가 외부로 뚫고 나오면 유효하지 않을 수 있습니다. 빨간색 또는 Invalid Preview 영역을 확인하고 Route를 더 깊게 옮기거나 크기를 줄이거나 목적에 맞게 Cover Requirement를 조정하십시오.</p>
+<p>Create Tunnel은 Geometry를 바꾸고 Paint Tunnel은 Wall Surface를 바꿉니다. 생성 뒤 Entrance, Exit 및 Tile Boundary를 확인하십시오.</p>
+<h3>Bridge 만들기</h3>
+<p>Bridge로 전환합니다. 연결할 Landmass에 양 끝을 놓고 Gap 위에 Intermediate Node를 사용합니다. Flat Deck은 단순한 Deck, Deep Girder는 더 깊은 Structural Profile, Arched Underside는 Flat Walking Top 아래에 Arch를 추가합니다.</p>
+<p>특히 각 Landmass와 만나는 부분을 중심으로 Bridge를 위와 아래에서 확인하십시오. Curved World에서는 World-up 배치가 Planet의 모든 면에 적합하다고 가정하지 말고 전체 Span이 Terrain을 충분히 통과하는지 확인합니다.</p>
+<h3>필요할 때 정확한 Endpoint 선택하기</h3>
+<p>Tunnel과 Bridge는 기본적으로 Endpoint를 자동 배치합니다. 특정 Opening이나 Join이 필요하면 Pick Start 또는 Pick End로 Endpoint Face나 연결 Face Patch를 선택합니다. 양 끝은 독립적이므로 Start만, End만 또는 둘 다 고정할 수 있습니다.</p>
+<p>원하는 Opening과 Boundary가 일치하는 관련 Terrain Object의 연결 Patch를 선택합니다. Square 또는 Rectangular Patch는 의도적인 Square End에 유용합니다. Endpoint Selection을 Clear하면 해당 끝은 자동 배치로 돌아갑니다. 고정 Endpoint 근처 Face를 삭제하거나 재구성했다면 Topology가 바뀌었는지 확인하고 필요하면 다시 선택하십시오.</p>
+
+<h2 id="section-three">Terrain Tile을 가로질러 작업하기</h2>
+<p>Tile은 큰 Terrain을 여러 개의 개별 Mesh Object로 나눕니다. Tool의 Neighbour 및 Seam 처리를 통해 지원되는 편집은 공유 Boundary를 가로질러 동작할 수 있지만 해당 Object는 여전히 등록되어 있고 작업에 활성화되어 있어야 합니다.</p>
+<ol><li>생성된 Tile 배열을 사용하거나 의도한 Border가 정확히 맞닿는지 확인합니다.</li><li>Target List에 Tile을 등록하고 Paint/Sculpt 스위치를 확인합니다.</li><li>하나의 Seam을 가로지르는 작은 Stroke를 시험합니다. Geometry와 Surface Transition을 모두 확인합니다.</li><li>Path, Tunnel 또는 Generated Feature가 여러 Tile을 가로지르면 적용 뒤 영향을 받은 모든 Join을 확인합니다.</li><li>Active Tile만이 아니라 영향을 받은 모든 Tile Mesh를 저장합니다.</li></ol>
+<p>Material의 Seam Blend 설정은 Texture Projection을 Blend합니다. Mesh Border를 Weld하거나 Hole을 복구하지는 않습니다. Seam이 이상하다면 먼저 실제 Geometry Gap인지, Lighting Normal 불일치인지, Texture Transition인지 구분하십시오. 각 문제는 다른 조정이 필요합니다. 임의로 겹친 Mesh가 자동으로 연결된 Terrain을 형성한다고 가정해서는 안 됩니다.</p>
+
+<h2 id="section-four">Terrain 저장 및 최적화</h2>
+<h3>편집을 관리하기 쉬운 상태로 유지하기</h3>
+<p>세밀한 Topology를 사용하기 전에 큰 형태를 먼저 만드십시오. Detail에는 더 작은 Brush를 사용하고 추가 Triangle이 꼭 필요하지 않다면 넓은 영역에 매우 작은 Max Edge Length를 사용하지 마십시오. Geometry Density는 편집 비용에 영향을 주고 Texture Resolution은 Surface Memory와 품질에 영향을 줍니다. 하나를 낮춘다고 다른 문제가 자동으로 해결되지는 않습니다.</p>
+<p>호환되는 Geometry Tool과 Surface Tool은 Combined Stroke 중 Brush Data를 공유합니다. Vertex 이동은 재사용 가능한 Paint Buffer를 유지하고 Topology 변경, Seam Data 변경, Undo/Redo는 영향을 받은 Cache를 갱신합니다. 이 과정은 자동으로 이루어지며 추가 설정이 필요하지 않습니다. 반복 준비 비용을 줄이지만 Sculpt, Topology, Scatter Rebuild 비용은 여전히 Terrain과 Brush에 따라 달라집니다.</p>
+<h3>Direct Vertex Color에서 Ambient Occlusion Bake하기</h3>
+<p>Raycast AO Baker는 Direct Vertex Color Workflow에서 Crevice와 Contact Area에 Shading을 추가합니다. Lightmap이 아니며 Scene Lighting을 대체하지 않습니다. 주요 형태가 끝난 뒤 Bake하십시오. 이후 Geometry를 편집하면 저장된 Shading이 오래된 상태가 될 수 있습니다.</p>
+<p>Ray Quality를 높이면 Bake 시간 대신 Sampling Quality가 올라갑니다. Maximum Shadow Distance는 주변 Geometry가 얼마나 멀리까지 Shading에 영향을 줄 수 있는지 정하고 Contrast는 결과의 강도를 정합니다. 먼저 Test Bake를 하고 가려진 모든 영역이 검게 뭉개지지 않도록 조정하십시오.</p>
+<h3>Partition 및 LOD 생성</h3>
+<p>Chunking은 Terrain을 1×1, 2×2, 4×4, 8×8 같은 Grid로 나눕니다. 작은 Chunk는 Unity가 필요한 부분만 표시하는 데 도움이 될 수 있지만 Object와 Rendering Group 수를 늘립니다. 항상 가장 큰 Grid를 선택하기보다 Scene에 맞는 Layout을 사용하십시오.</p>
+<p>LOD1과 LOD2는 단순화된 Mesh입니다. Target Ratio는 유지할 Geometry 비율을 나타냅니다. 낮은 Ratio는 Triangle을 줄이지만 작은 Shape를 잃을 가능성이 커집니다. Unity Transition Threshold는 metre 단위 거리가 아니라 상대적인 Screen Height를 사용합니다. 마지막 Culling Threshold는 Group이 더 이상 Draw되지 않는 시점을 정합니다.</p>
+<p>생성된 Collider는 LOD2를 사용합니다. Stair, Edge, Opening이 의도한 대로 Collision하는지 확인하십시오. Triangle 기반 Surface Query를 사용한다면 Surface Data는 Collider의 실제 Mesh와 Triangle Order에 대응해야 합니다. 다른 Mesh에서 Bake된 Data는 잘못된 Surface를 반환할 수 있습니다.</p>
+<p>생성 결과에 적합한 경우 Hide Original Mesh를 사용하고 원본과 생성본을 동시에 표시하고 있지 않은지 확인하십시오. Chunking과 LOD Generation은 마무리 Workflow로 다루십시오. 원본 Terrain의 모든 편집을 자동으로 빠르게 만들지는 않습니다.</p>
+<h3>필요한 Asset 저장하기</h3>
+<div class="table-wrap"><table><thead><tr><th>작업</th><th>목적</th><th>이후 확인</th></tr></thead><tbody>
+<tr><td>Save / prefab export</td><td>Terrain Mesh와 Surface Data를 보존해 Scene에서 다시 사용할 수 있게 합니다.</td><td>저장된 결과를 다시 열고 Material Reference, 외형, Collision을 확인합니다.</td></tr>
+<tr><td>Compile Terrain Textures</td><td>Library의 Atlas와 Texture Array를 생성하거나 갱신합니다.</td><td>최근 편집한 Biome을 확인하고 Target Hardware에 맞는 Resolution, Compression, Mipmap을 선택합니다.</td></tr>
+<tr><td>Make Standalone Copy</td><td>공유 Library Asset과 분리되어야 하는 Terrain용 독립 Material/Texture 구성을 만듭니다.</td><td>이후 Shared Library 변경이 독립적으로 유지하려던 결과를 바꾸지 않는지 확인합니다.</td></tr>
+<tr><td>Bake Surface Data</td><td>Gameplay Query용 Triangle-to-Biome 정보를 저장합니다. Scatter Profile이 지정되어 있으면 Read/Write가 비활성인 Terrain Mesh에서도 Runtime Scatter를 배치할 수 있도록 Placement Geometry도 포함합니다.</td><td>Geometry, Painting, Biome ID 또는 Topology가 바뀐 뒤 다시 Bake합니다. Gameplay Data는 Collider Mesh와 맞추고 Scatter Data는 렌더링되는 Terrain Mesh와 맞춥니다. <a href="scatter-system.html#runtime-data">Runtime Scatter Data</a>를 참고하십시오.</td></tr>
+</tbody></table></div>
+<p>Material 변경은 해당 Material을 사용하는 모든 Object에 영향을 줍니다. GameObject만 Duplicate한다고 Asset이 반드시 독립되는 것은 아닙니다. 두 Terrain Piece에 서로 다른 Global Setting이 필요하면 별도 Material을 저장하거나 Standalone Workflow를 사용하십시오.</p>
+
+<h2 id="shortcuts">키보드 및 마우스 참고</h2>
+<p>아래 Keyboard Binding은 <strong>기본값</strong>입니다. Scene View에서 작업할 때 Shortcut을 사용합니다. 같은 Key라도 Mask, Path, Gradient, Dusting Mode에서 다른 동작을 할 수 있으므로 Context가 중요합니다. 편집 가능한 Input Field에 입력 중이면 텍스트 입력이 우선됩니다. macOS에서는 Ctrl/Cmd Binding에 Cmd를 사용합니다.</p>
+<ul><li><kbd>[</kbd> / <kbd>]</kbd>와 <kbd>Shift + Mouse Wheel</kbd>은 Brush Radius를 조정합니다. <kbd>Ctrl/Cmd + Shift + PageUp</kbd> / <kbd>PageDown</kbd>은 미세하게 조정합니다.</li><li><kbd>Ctrl/Cmd + Shift + Up</kbd> / <kbd>Down</kbd>은 Geometry Rate, <kbd>Ctrl/Cmd + Shift + Left</kbd> / <kbd>Right</kbd>은 Surface Opacity를 조정합니다. Minus/Equal Binding은 현재 Tool Context에 따라 동작합니다.</li><li><kbd>Ctrl + Drag</kbd>는 지원되는 Sculpt/Inflate Stroke 방향을 반대로 바꿉니다. <kbd>Shift</kbd>는 지원되는 Brush Stroke를 일시적으로 Smooth 또는 Blend하고 Mask 선택 중에는 Face를 제외합니다.</li><li><kbd>Alt + Shift + 1…9, 0</kbd>은 현재 보이는 Palette Group에서 Biome을 선택합니다. <kbd>Tab</kbd> / <kbd>Shift + Tab</kbd>은 Biome Page를 바꿉니다.</li><li><kbd>Escape</kbd>는 현재 특수 상호작용을 종료하거나 Tool을 비활성화합니다. Path Mode를 나가도 Node는 유지됩니다. Route 자체를 삭제하려면 Clear Nodes를 사용하십시오.</li></ul>
+<h3 id="custom-hotkeys">Hotkey Sheet에서 Shortcut 변경하기</h3>
+<ol><li>Terrain Window에서 <strong>Hotkey Sheet</strong>를 엽니다. Action이나 Key로 검색하거나 Tools, Brush adjustments, Mask mode, Path mode 같은 Group을 펼칩니다.</li><li>Action의 Key Button을 클릭한 뒤 새 Key Combination을 누릅니다. Modifier Key만 누르면 Main Key 입력을 기다립니다. <kbd>Escape</kbd>는 기록을 취소합니다.</li><li><strong>×</strong>로 Binding을 지우고 <strong>Reset</strong>으로 한 Action을 복원하며 <strong>Restore Defaults</strong>로 전체 목록을 기본값으로 되돌립니다.</li></ol>
+<p>변경 내용은 현재 Unity Editor User에 자동 저장되며 Project 사이에서 공유됩니다. Tooltip과 Scene HUD에는 현재 설정된 Key가 표시됩니다. 겹치는 Context에서 다른 Action과 Key가 충돌하면 Sheet가 해당 Action 이름을 표시하고 할당을 거부합니다. 먼저 다른 Binding을 변경하거나 지우십시오. Mask, Path, Gradient는 Context가 겹치지 않으면 같은 Key를 재사용할 수 있지만 General Action은 Mode 전체에 적용됩니다.</p>
+<p>Mouse Gesture와 Unity Undo/Redo는 고정입니다. Shift + Mouse Wheel은 Radius 조정, Shift + Drag는 일시적 Smooth/Blend 또는 선택 Face 제외, Ctrl + Drag는 Lower/Deflate, Paint에서 Ctrl + Click은 Biome Sample, Shift + Click은 Path Node를 X/Z에 제한합니다. Undo는 Ctrl/Cmd + Z, Redo는 Ctrl/Cmd + Shift + Z 또는 Ctrl/Cmd + Y를 사용합니다. Shortcut 기록 중이 아닐 때는 편집 가능한 Input Field의 텍스트 입력이 계속 우선됩니다.</p>
+<details><summary>전체 기본 Keyboard Binding</summary><p>아래는 Factory Default입니다. 현재 할당은 Hotkey Sheet에서 확인할 수 있습니다. General Binding은 모든 Mode에 적용되며 지원되는 Brush Binding은 Dusting에서도 사용됩니다.</p><div class="table-wrap"><table><thead><tr><th>기본 Shortcut</th><th>Action</th><th>Context</th></tr></thead><tbody><tr><td><kbd>Escape</kbd></td><td>Tool 비활성화 / Endpoint 선택 종료</td><td>일반</td></tr><tr><td><kbd>[</kbd></td><td>Brush Radius / Path Width 감소</td><td>일반</td></tr><tr><td><kbd>]</kbd></td><td>Brush Radius / Path Width 증가</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + PageDown</kbd></td><td>Radius / Path Width를 미세 단계로 감소</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + PageUp</kbd></td><td>Radius / Path Width를 미세 단계로 증가</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Down</kbd></td><td>Geometry Speed / Cleanup Strength 감소</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Up</kbd></td><td>Geometry Speed / Cleanup Strength 증가</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Left</kbd></td><td>Paint Opacity / Dusting Strength 감소</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Right</kbd></td><td>Paint Opacity / Dusting Strength 증가</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + -</kbd></td><td>Geometry 및 Surface Strength 감소</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + =</kbd></td><td>Geometry 및 Surface Strength 증가</td><td>일반</td></tr><tr><td><kbd>Tab</kbd></td><td>다음 Biome Page</td><td>일반</td></tr><tr><td><kbd>Shift + Tab</kbd></td><td>이전 Biome Page</td><td>일반</td></tr><tr><td><kbd>Alt + Shift + 1</kbd></td><td>Biome Slot 1 선택</td><td>일반</td></tr><tr><td><kbd>Alt + Shift + 2</kbd></td><td>Biome Slot 2 선택</td><td>일반</td></tr><tr><td><kbd>Alt + Shift + 3</kbd></td><td>Biome Slot 3 선택</td><td>일반</td></tr><tr><td><kbd>Alt + Shift + 4</kbd></td><td>Biome Slot 4 선택</td><td>일반</td></tr><tr><td><kbd>Alt + Shift + 5</kbd></td><td>Biome Slot 5 선택</td><td>일반</td></tr><tr><td><kbd>Alt + Shift + 6</kbd></td><td>Biome Slot 6 선택</td><td>일반</td></tr><tr><td><kbd>Alt + Shift + 7</kbd></td><td>Biome Slot 7 선택</td><td>일반</td></tr><tr><td><kbd>Alt + Shift + 8</kbd></td><td>Biome Slot 8 선택</td><td>일반</td></tr><tr><td><kbd>Alt + Shift + 9</kbd></td><td>Biome Slot 9 선택</td><td>일반</td></tr><tr><td><kbd>Alt + Shift + 0</kbd></td><td>Biome Slot 10 선택</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + H</kbd></td><td>Sculpt 전환</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + I</kbd></td><td>Inflate 전환</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + U</kbd></td><td>Smooth 전환</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + J</kbd></td><td>Grab 전환</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + K</kbd></td><td>Cave 전환</td><td>일반</td></tr><tr><td><kbd>Shift + N</kbd></td><td>Cleanup 전환</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + O</kbd></td><td>Path 전환</td><td>일반</td></tr><tr><td><kbd>Shift + M</kbd></td><td>Face Mask 전환</td><td>일반</td></tr><tr><td><kbd>B</kbd></td><td>Paint 전환</td><td>일반</td></tr><tr><td><kbd>Shift + B</kbd></td><td>Dusting 전환</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F1</kbd></td><td>Fill 전환</td><td>일반</td></tr><tr><td><kbd>Shift + J</kbd></td><td>Smear 전환</td><td>일반</td></tr><tr><td><kbd>J</kbd></td><td>Biome Blend 전환</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + E</kbd></td><td>Gradient 전환</td><td>일반</td></tr><tr><td><kbd>I</kbd></td><td>Eyedropper 전환</td><td>일반</td></tr><tr><td><kbd>O</kbd></td><td>Circle Brush</td><td>브러시</td></tr><tr><td><kbd>U</kbd></td><td>Square Brush</td><td>브러시</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F2</kbd></td><td>Diamond Brush</td><td>브러시</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F3</kbd></td><td>Jitter Brush</td><td>브러시</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + M</kbd></td><td>multi-biome brush 전환</td><td>브러시</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + X</kbd></td><td>Primary / Secondary Biome 교환</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + T</kbd></td><td>Dynamic Topology 전환</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + W</kbd></td><td>Worklight 전환</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Q</kbd></td><td>Active Terrain을 Frame에 맞춤</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + L</kbd></td><td>editing mask 전환</td><td>일반</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Y</kbd></td><td>Scene tools HUD 전환</td><td>일반</td></tr><tr><td><kbd>Backspace</kbd></td><td>Face Selection 지우기</td><td>마스크</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Delete</kbd></td><td>Mask된 Face 삭제</td><td>마스크</td></tr><tr><td><kbd>Shift + =</kbd></td><td>Mask를 Face Ring 한 줄 확장</td><td>마스크</td></tr><tr><td><kbd>Shift + -</kbd></td><td>Mask를 Face Ring 한 줄 축소</td><td>마스크</td></tr><tr><td><kbd>Shift + U</kbd></td><td>Face Selection 반전</td><td>마스크</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F4</kbd></td><td>편집 가능한 모든 Face 선택</td><td>마스크</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + D</kbd></td><td>Face Selection 지우기</td><td>마스크</td></tr><tr><td><kbd>Shift + W</kbd></td><td>Slope Limit 안의 Face 선택</td><td>마스크</td></tr><tr><td><kbd>Shift + X</kbd></td><td>설정한 Biome의 Face 선택</td><td>마스크</td></tr><tr><td><kbd>Enter</kbd></td><td>선택한 Mask Shape 생성</td><td>마스크</td></tr><tr><td><kbd>Shift + Enter</kbd></td><td>Mask된 Face Paint</td><td>마스크</td></tr><tr><td><kbd>Shift + S</kbd></td><td>Scale Factors로 Mask된 Face Scale</td><td>마스크</td></tr><tr><td><kbd>Shift + L</kbd></td><td>Mask된 Face Level</td><td>마스크</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F8</kbd></td><td>Mask된 Face를 Surface Orientation에 맞춰 Flatten</td><td>마스크</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F5</kbd></td><td>Mask된 Face Subdivide</td><td>마스크</td></tr><tr><td><kbd>Shift + Q</kbd></td><td>선택한 Hole Boundary 채우기</td><td>마스크</td></tr><tr><td><kbd>Shift + F1</kbd></td><td>Extrusion / Plateau Preset</td><td>마스크</td></tr><tr><td><kbd>Shift + F2</kbd></td><td>Pillar Preset</td><td>마스크</td></tr><tr><td><kbd>Shift + F3</kbd></td><td>Arch Preset</td><td>마스크</td></tr><tr><td><kbd>Shift + F4</kbd></td><td>Boulder Preset</td><td>마스크</td></tr><tr><td><kbd>Shift + F5</kbd></td><td>Brush Face Selection</td><td>마스크</td></tr><tr><td><kbd>Shift + F6</kbd></td><td>Single-face Selection</td><td>마스크</td></tr><tr><td><kbd>Shift + F7</kbd></td><td>Flood-island Selection</td><td>마스크</td></tr><tr><td><kbd>O</kbd></td><td>Circle Face Selection Brush</td><td>마스크</td></tr><tr><td><kbd>U</kbd></td><td>Square Face Selection Brush</td><td>마스크</td></tr><tr><td><kbd>Backspace</kbd></td><td>모든 Path Node 지우기</td><td>경로</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Delete</kbd></td><td>선택 Path Node 삭제</td><td>경로</td></tr><tr><td><kbd>Shift + P</kbd></td><td>모든 Path Node 지우기 (대체 키)</td><td>경로</td></tr><tr><td><kbd>Shift + F1</kbd></td><td>Surface Path</td><td>경로</td></tr><tr><td><kbd>Shift + F2</kbd></td><td>Tunnel Path</td><td>경로</td></tr><tr><td><kbd>Shift + F3</kbd></td><td>Bridge Path</td><td>경로</td></tr><tr><td><kbd>Shift + F4</kbd></td><td>Surface Path: Grade and Level</td><td>경로</td></tr><tr><td><kbd>Shift + F5</kbd></td><td>Surface Path: Raise Embankment</td><td>경로</td></tr><tr><td><kbd>Shift + F6</kbd></td><td>Surface Path: Trench / Riverbed Carve</td><td>경로</td></tr><tr><td><kbd>Shift + F7</kbd></td><td>Surface Path: Smooth Corridor</td><td>경로</td></tr><tr><td><kbd>Shift + F8</kbd></td><td>Surface Path: Steps</td><td>경로</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F6</kbd></td><td>Closed Path Loop 전환</td><td>경로</td></tr><tr><td><kbd>Enter</kbd></td><td>Path / Tunnel 생성 및 Paint 또는 Bridge 생성</td><td>경로</td></tr><tr><td><kbd>Shift + Enter</kbd></td><td>Surface Path 또는 Tunnel Wall Paint</td><td>경로</td></tr><tr><td><kbd>Ctrl/Cmd + Enter</kbd></td><td>Path Geometry / Tunnel / Bridge 생성</td><td>경로</td></tr><tr><td><kbd>Shift + S</kbd></td><td>Start Endpoint Face 선택</td><td>경로</td></tr><tr><td><kbd>Shift + E</kbd></td><td>End Endpoint Face 선택</td><td>경로</td></tr><tr><td><kbd>O</kbd></td><td>Endpoint Selection: Circle Brush</td><td>경로</td></tr><tr><td><kbd>U</kbd></td><td>Endpoint Selection: Square Brush</td><td>경로</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F7</kbd></td><td>Endpoint Selection: Single Face</td><td>경로</td></tr><tr><td><kbd>Shift + F1</kbd></td><td>Cone Volume Gradient</td><td>그라디언트</td></tr><tr><td><kbd>Shift + F2</kbd></td><td>Directional Gradient</td><td>그라디언트</td></tr><tr><td><kbd>Shift + F3</kbd></td><td>Whole Altitude Gradient</td><td>그라디언트</td></tr><tr><td><kbd>Shift + F4</kbd></td><td>Whole Slope Gradient</td><td>그라디언트</td></tr><tr><td><kbd>Enter</kbd></td><td>Cone / Altitude / Slope Gradient 적용</td><td>그라디언트</td></tr><tr><td><kbd>Shift + W</kbd></td><td>Cone을 Active Terrain에 맞춤</td><td>그라디언트</td></tr><tr><td><kbd>Shift + S</kbd></td><td>Cone을 가장 높은 Vertex에 Snap</td><td>그라디언트</td></tr><tr><td><kbd>Shift + F1</kbd></td><td>Dusting Paint</td><td>더스팅</td></tr><tr><td><kbd>Shift + F2</kbd></td><td>Dusting Soften / Blend</td><td>더스팅</td></tr><tr><td><kbd>Shift + F3</kbd></td><td>Dusting Clear</td><td>더스팅</td></tr><tr><td><kbd>Shift + F4</kbd></td><td>Biome을 Dusting으로 Fill</td><td>더스팅</td></tr></tbody></table></div></details>
+
+<h2 id="glossary">이 가이드에서 사용하는 용어</h2>
+<div class="table-wrap"><table><thead><tr><th>용어</th><th>쉬운 설명</th></tr></thead><tbody>
+<tr><td>Mesh / vertex / face</td><td>Terrain의 형태 / 그 형태를 만드는 점 / 점들을 잇는 Triangle입니다.</td></tr>
+<tr><td>Topology</td><td>점과 Triangle이 연결되는 방식입니다. Subdivision, 삭제, Tunnel 생성 등으로 바뀝니다.</td></tr>
+<tr><td>Biome</td><td>Grass, Snow, Rock 같은 재사용 가능한 Ground Surface Preset입니다. Plant, Enemy, Weather를 자동 배치하지는 않습니다.</td></tr>
+<tr><td>Biome ID</td><td>현재 Library List에서 Preset의 숫자 Index입니다. 자신의 Library에서 확인하십시오. 예제 ID는 공통 고정값이 아닙니다.</td></tr>
+<tr><td>Weight</td><td>Surface Mix에서 해당 Surface가 얼마나 기여하는지를 나타냅니다. Biome Color나 실제 Height와는 별개입니다.</td></tr>
+<tr><td>Material / shader</td><td>저장된 외형 설정 / 해당 설정을 사용해 렌더링하는 코드입니다.</td></tr>
+<tr><td>Atlas / texture array</td><td>Terrain Material에서 사용하도록 Compile된 Library Surface Texture 모음입니다.</td></tr>
+<tr><td>Normal map / parallax</td><td>Lighting Detail / Surface Depth의 시각적 착시입니다. 둘 다 Terrain Collision Geometry를 움직이지 않습니다.</td></tr>
+<tr><td>Bake</td><td>정보를 미리 계산해 결과를 저장하는 것입니다. 원본 정보가 바뀌면 다시 Bake합니다.</td></tr>
+<tr><td>LOD</td><td>화면에서 더 작게 보일 때 사용하는 단순화된 Mesh 버전입니다.</td></tr>
+<tr><td>3D Scatter</td><td>Terrain Atlas Biome Data를 기반으로 Grass, Flower, Mushroom, Pebble 또는 Custom Mesh 같은 Surface Object를 GPU Instancing으로 배치하는 시스템입니다. <a href="scatter-system.html">3D Scatter 가이드</a>를 참고하십시오.</td></tr>
+</tbody></table></div>
+
+<h2 id="troubleshooting">결과가 예상과 다를 때</h2>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>먼저 확인할 항목</th></tr></thead><tbody>
+<tr><td>Brush가 아무 변화도 만들지 않습니다</td><td>Active Target, Paint/Sculpt 스위치, Active Tool, Radius, Strength를 확인합니다. Scene View에 Focus가 있고 Text Field가 Key 입력을 받고 있지 않은지도 확인하십시오.</td></tr>
+<tr><td>Mask Boundary 근처를 Brush로 편집할 수 없습니다</td><td>Editing Mask와 저장된 영역을 확인합니다. 공유 Boundary Vertex는 인접 Face와 Weld된 Seam을 보호하기 위해 고정됩니다. 제한을 일시 중지하려면 Mask를 끄거나 더 넓은 영역을 선택한 뒤 Set Mask를 다시 사용하십시오.</td></tr>
+<tr><td>Extrusion 또는 Fill Hole을 사용할 수 없습니다</td><td>이 작업 전에 Active Editing Mask를 지우십시오. 저장된 Editing Mask를 지우는 것과 현재 Face Selection을 지우는 것은 별개입니다.</td></tr>
+<tr><td>Shortcut이 이 가이드와 다르게 보입니다</td><td>표에는 기본값이 표시됩니다. Hotkey Sheet를 열어 현재 Binding을 확인하고 Action을 검색한 뒤 필요하면 Reset하십시오.</td></tr>
+<tr><td>Paint 경계가 각져 보입니다</td><td>Paint 정보는 Mesh Geometry에 연결됩니다. Vertex Density를 확인한 뒤 Local Subdivision 또는 지원되는 Dynamic Topology를 고려하십시오. Blend Sharpness는 Transition을 바꾸지만 Triangle 수는 바꾸지 않습니다.</td></tr>
+<tr><td>Hill이 너무 들쭉날쭉합니다</td><td>Displacement Rate를 낮추고 더 넓은 Brush를 사용하며 Topology를 확인합니다. Geometry를 부드럽게 Smooth하십시오. Normal만 바꾸면 Lighting만 달라집니다.</td></tr>
+<tr><td>Tunnel이 Surface를 뚫고 나옵니다</td><td>전체 Route의 Width/Height와 Minimum Cover Depth를 확인합니다. 필요한 곳에서 더 깊게 이동하거나 Cross-section을 줄이십시오.</td></tr>
+<tr><td>Gradient가 전체에 하나의 Surface만 Paint합니다</td><td>Height 또는 Slope Range가 Terrain을 포함하는지, Cone이 Terrain과 겹치는지, Ramp Stop이 의도한 Biome ID를 사용하는지 확인합니다.</td></tr>
+<tr><td>Tile 사이에 Seam이 보입니다</td><td>먼저 실제 Geometry Gap을 찾고 Registration, 활성 Neighbour, Normal, Material Setting을 확인합니다. Projection Seam Blend는 Geometry Gap을 닫을 수 없습니다.</td></tr>
+<tr><td>다른 Terrain의 외형도 바뀝니다</td><td>둘이 같은 Library, Material 또는 Texture Asset을 사용하는지 확인합니다. 서로 다른 설정이 필요하면 독립 Copy를 만드십시오.</td></tr>
+<tr><td>Character가 Feature를 통과하거나 위에 떠 있습니다</td><td>Collider가 편집된 Mesh를 반영하는지 확인합니다. Chunk Collider를 생성했다면 LOD2 Simplification도 확인하십시오.</td></tr>
+<tr><td>Gameplay에서 잘못된 Biome을 반환합니다</td><td>변경 뒤 Surface Data를 다시 Bake하고 Hit Collider의 Triangle Order와 맞춥니다. Triangle 기반 Lookup에는 유효한 Mesh Triangle이 필요하며 Mesh가 아닌 Collider Hit가 자동으로 Biome 0을 반환하지는 않습니다. Query 제한은 <a href="demo-components.html#surface-raycast-tester">Raycast Tester 가이드</a>를 참고하십시오.</td></tr>
+<tr><td>편집이 느려집니다</td><td>Triangle 수, Brush Reach, Dynamic Topology 설정을 확인합니다. Copy에서 불필요한 Density를 줄이고 다시 측정하며 Texture Resolution은 별도로 확인하십시오.</td></tr>
+</tbody></table></div>
+
+<h2 id="support">지원</h2><p>도움이 필요하면 기대한 결과, 사용한 Control, 실제로 나타난 결과를 설명하십시오. Unity 버전, 선택한 Surface Pipeline, 관련 설정의 Screenshot도 포함하십시오. Runtime Query 문제라면 Collider Type과 마지막으로 Surface Data를 Bake한 시점도 알려주십시오.</p><p><a href="https://dptgames.github.io/#contact">DPT Games 문의 양식</a>을 사용하거나 <a href="https://discord.gg/EkQykfzP5X">DPT Games Discord</a>에 참여할 수 있습니다.</p><p class="back-top"><a href="#top">맨 위로</a></p><footer class="footer">DPT Vertex 3D Terrain 문서 · Unity의 실제 항목을 쉽게 찾을 수 있도록 영어 Control 이름을 함께 사용합니다. 현재 Tool Interface는 Editor Window 상단에서 English 또는 日本語로 변경할 수 있습니다.</footer></main></body></html>

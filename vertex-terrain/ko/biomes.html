@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="재사용 가능한 지표면을 만들고 텍스처, 색상, 블렌드 설정이 어떻게 함께 작동하는지 이해합니다."><link rel="alternate" hreflang="en" href="../biomes.html"><link rel="alternate" hreflang="ja" href="../ja/biomes.html"><link rel="alternate" hreflang="ko" href="biomes.html"><title>바이옴 가이드 | DPT Games</title><style>
+
+:root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
+main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
+.site-nav{display:flex;flex-wrap:wrap;gap:8px 20px;border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:32px;font-size:.92rem}.site-nav [aria-current]{color:white;font-weight:700}
+.language-nav{display:flex;gap:10px;flex-wrap:wrap;margin:-12px 0 28px}.language-nav a{display:inline-block;padding:6px 16px;border:1px solid var(--border);border-radius:6px;text-decoration:none}.language-nav [aria-current]{color:#0f172a;background:var(--accent);border-color:var(--accent);font-weight:700}html[lang="ja"] body,html[lang="ko"] body{line-height:1.85;line-break:strict}html[lang="ja"] th,html[lang="ja"] td,html[lang="ko"] th,html[lang="ko"] td{overflow-wrap:anywhere}
+h1,h2,h3,h4{line-height:1.25;color:var(--accent)}h1{font-size:2.25rem;margin:0 0 14px}h2{font-size:1.65rem;margin:48px 0 18px;padding-top:12px;border-top:1px solid var(--border)}h3{font-size:1.22rem;margin:30px 0 12px}h4{font-size:1.06rem}
+p{margin:12px 0 18px}li{margin:7px 0}ul,ol{padding-left:25px}.lead{font-size:1.18rem;color:var(--muted);max-width:850px}.intro{margin:28px 0}.toc{background:var(--panel);padding:20px 24px;border:1px solid var(--border);border-radius:9px;margin:28px 0}.toc h2{margin:0 0 10px;padding:0;border:0;font-size:1.15rem}.toc ul{columns:2;column-gap:36px;margin:0}.toc li{break-inside:avoid}
+.callout,.example{background:var(--panel);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:14px 20px;margin:22px 0}.example{border-color:#a3e635}.callout p:last-child,.example p:last-child{margin-bottom:0}.callout p:first-child,.example p:first-child{margin-top:0}
+.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--border);border-radius:7px}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--border)}thead{background:#25354c}th{color:#f8fafc}td:first-child{font-weight:600;min-width:145px}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#172238}
+code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background:#27354c;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}kbd{white-space:nowrap;border:1px solid #50617a}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#09111f;border:1px solid var(--border);padding:20px;border-radius:7px}pre code{background:transparent;padding:0}
+.back-top{font-size:.88rem}.table-hint{display:none;color:var(--muted);font-size:.9rem}.footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);margin-top:34px;padding-top:16px}details{background:var(--panel);padding:14px 18px;border:1px solid var(--border);border-radius:7px;margin:16px 0}summary{cursor:pointer;font-weight:600;color:var(--accent)}.alias{display:block;scroll-margin-top:24px}
+@media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
+@media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
+
+</style></head>
+<body><main id="top"><nav class="site-nav" aria-label="문서"><a href="https://dptgames.github.io/">DPT Games 홈페이지</a><a href="index.html">Vertex 3D Terrain 가이드</a><a href="biomes.html" aria-current="page">바이옴 가이드</a><a href="terrain-material-settings.html">Terrain Material 설정</a><a href="scatter-system.html">3D Scatter 가이드</a><a href="demo-components.html">데모 &amp; 런타임 가이드</a></nav><nav class="language-nav" aria-label="언어"><a href="../biomes.html" lang="en" hreflang="en">English</a><a href="../ja/biomes.html" lang="ja" hreflang="ja">日本語</a><a href="biomes.html" lang="ko" hreflang="ko" aria-current="page">한국어</a></nav><header><h1>바이옴 가이드</h1><p class="lead">재사용 가능한 지표면을 만들고 텍스처, 색상, 블렌드 설정이 어떻게 함께 작동하는지 이해합니다.</p></header><nav class="toc" aria-label="이 페이지의 내용"><h2>이 페이지의 내용</h2><ul><li><a href="#quick-start">첫 번째 실용적인 바이옴 만들기</a></li><li><a href="#creating-biomes">라이브러리와 바이옴 인스펙터</a></li><li><a href="#texture-inputs">텍스처 입력과 Packed Height 매핑</a></li><li><a href="#color-ramp">컬러 램프와 램프 변환</a></li><li><a href="#surface-settings">각 지표면 설정 이해하기</a></li><li><a href="#variants">좋은 프리셋을 유지하면서 변형 만들기</a></li><li><a href="#merge">두 지표면을 새 바이옴으로 병합하기</a></li><li><a href="#direct-mode">Direct Vertex Color의 바이옴</a></li><li><a href="#optimization">텍스처 품질, 메모리, 공유 에셋</a></li><li><a href="#troubleshooting">일반적인 바이옴 문제</a></li><li><a href="#support">지원</a></li></ul></nav><p class="table-hint">작은 화면에서는 넓은 표를 좌우로 스크롤하여 모든 열을 확인할 수 있습니다.</p><div class="intro"><p>바이옴은 잔디, 모래, 눈, 바위, 금속 등 하나의 재사용 가능한 지표면입니다. 페인팅은 그 지표면이 어디에 나타날지를 정하고 바이옴 인스펙터는 그 지표면이 어떻게 보일지를 정합니다.</p><p>바이옴은 지표면을 정의합니다. Terrain Generator에서 선택하면 새 지형의 초기 외형으로 사용할 수 있고 Scatter Object의 대상으로 지정하면 식생을 배치할 수 있습니다. 프리셋 이름을 “Forest”로 지정한다고 해서 나무가 자동으로 배치되는 것은 아니며 “River”라고 지정한다고 해서 흐르는 물 지오메트리가 생성되는 것도 아닙니다. Terrain Atlas 지표면 위에 바이옴 기반의 잔디, 꽃, 버섯, 자갈 또는 커스텀 메시를 배치하려면 <a href="scatter-system.html">3D Scatter 가이드</a>를 사용합니다.</p></div>
+
+<h2 id="quick-start">첫 번째 실용적인 바이옴 만들기</h2>
+<ol><li>Terrain Editor에서 Biome Library와 Terrain Atlas 파이프라인을 선택합니다.</li><li>바이옴을 추가하고 Dry Sand 또는 Dark Rock처럼 알아보기 쉬운 이름을 지정합니다.</li><li>베이스 컬러 이미지를 <strong>Source RGB</strong>에 지정합니다. 호환되는 텍스처 세트가 있다면 Auto Folder가 입력을 자동으로 채우는 데 도움이 되지만 이후 각 할당을 확인해야 합니다.</li><li>첫 테스트에서는 Normal, Metallic, Emissive 디테일을 과하게 사용하지 마십시오. <strong>Auto Generate</strong>를 실행하기 전에 원하는 생성 강도를 설정합니다. 강도가 0인 맵은 생성 결과에서 제외됩니다.</li><li>생성된 텍스처와 컬러 램프를 확인합니다. 실제로 사용할 카메라 거리에서 확인할 수 있을 만큼 충분히 큰 테스트 영역을 페인트합니다.</li><li>Scale로 텍스처 크기를 조정한 다음 램프로 색상을 조정합니다. 필요한 경우 Normal 및 PBR 입력을 추가합니다.</li><li>밝은 곳과 그늘, 근거리와 원거리에서 모두 확인합니다. 크게 다른 외형을 시험하기 전에는 바이옴을 Duplicate합니다.</li></ol>
+<div class="example"><p><strong>처음에는 하나의 명확한 목표에 집중하십시오.</strong> 무광 모래를 만들려면 먼저 색상과 입자 크기를 맞춘 뒤 약한 Normal 효과를 추가합니다. Metallic은 0으로 유지하고 Smoothness는 낮게 설정합니다. 한 번에 하나의 설정만 변경하면 각 설정의 영향을 판단하기 쉽습니다.</p></div>
+
+<h2 id="creating-biomes">라이브러리와 바이옴 인스펙터</h2>
+<p>라이브러리는 여러 Terrain Object가 공유하는 팔레트입니다. 인스펙터는 선택한 프리셋을 편집합니다. 바이옴 카드를 선택하면 해당 설정이 표시되고 여러 카드를 선택하면 공통 편집 컨트롤이 열립니다. 값이 혼합되어 표시되는 필드는 선택한 프리셋들의 현재 값이 서로 다르다는 뜻입니다.</p>
+<p>텍스처 할당에는 공간을 절약한 인라인 필드가 사용됩니다. 공간이 허용되면 지표면 속성이 두 개씩 같은 행에 표시되며 <strong>Rotation</strong>과 <strong>Pulse</strong>도 함께 배치됩니다. 켜기/끄기 설정은 강조된 버튼으로 표시됩니다. 팔레트의 <strong>Set Active</strong> 버튼은 현재 활성 팔레트 페이지에서 <strong>Active</strong>로 표시됩니다.</p>
+
+<div class="table-wrap"><table><thead><tr><th>작업</th><th>동작</th><th>사용 시점</th></tr></thead><tbody>
+<tr><td>Add</td><td>현재 파이프라인 목록에 새 프리셋을 만듭니다.</td><td>적절한 시작 프리셋이 없는 새로운 지표면을 만들 때 사용합니다.</td></tr>
+<tr><td>Biome Name</td><td>프리셋을 식별하기 위한 이름입니다.</td><td>외형을 설명하는 이름을 사용합니다. 사용자가 만든 이름은 에디터 언어를 변경해도 입력한 그대로 유지됩니다.</td></tr>
+<tr><td>Auto Folder</td><td>선택한 소스 파일의 폴더에서 관련 텍스처 입력을 찾는 데 도움을 줍니다.</td><td>정리된 텍스처 세트에 유용합니다. 특히 Roughness와 Smoothness 구분 및 Packed Channel 배치를 확인하십시오.</td></tr>
+<tr><td>Duplicate</td><td>소스 텍스처 참조를 유지하면서 프리셋 설정을 복사합니다.</td><td>같은 파일을 다시 임포트하지 않고 더 밝거나 어둡거나 젖어 보이거나 회전이 다른 변형을 만들 때 사용합니다.</td></tr>
+<tr><td>Delete</td><td>프리셋을 제거하고 라이브러리 인덱스를 갱신합니다.</td><td>게임플레이 컴포넌트 등에 별도로 저장된 바이옴 ID를 확인하고 필요한 경우 Surface Data를 다시 Bake합니다.</td></tr>
+<tr><td>Reorder / swap</td><td>팔레트 순서를 변경하며 그에 따라 숫자 ID도 변경됩니다.</td><td>팔레트를 정리한 뒤 에디터 워크플로 외부에서 직접 사용한 ID를 다시 확인하십시오.</td></tr>
+<tr><td>Multi-selection</td><td>여러 선택 프리셋에 공통 설정을 적용할 수 있습니다.</td><td>여러 종류의 바위를 한꺼번에 조정할 때 유용합니다. 혼합 값 필드를 변경하면 입력한 값이 선택된 모든 프리셋에 적용됩니다.</td></tr>
+</tbody></table></div>
+<p><strong>이름과 ID는 서로 다릅니다.</strong> 이름은 지표면을 알아보기 위한 것이고 ID는 현재 파이프라인 목록에서의 위치입니다. 데모 라이브러리에서 ID 6이 Snow이더라도 사용자의 라이브러리에서는 Rock일 수 있습니다. Live Slot, <a href="scatter-system.html#target-biomes">Scatter Target Biomes</a> 또는 게임플레이 스크립트를 설정하기 전에 현재 라이브러리의 ID를 반드시 확인하십시오.</p>
+<p>공유 라이브러리를 편집하면 여러 Terrain이 동시에 변경될 수 있습니다. 특정 결과만 자체 Material과 Texture Asset을 유지해야 한다면 Terrain Tool의 Standalone Copy 워크플로를 사용합니다.</p>
+
+<h2 id="texture-inputs">어떤 텍스처를 어느 필드에 넣어야 하나요?</h2>
+<p>서로 다른 이미지는 지표면의 서로 다른 속성을 설명합니다. 모든 바이옴에 모든 맵이 필요한 것은 아닙니다. 단순한 스타일라이즈드 지표면은 컬러 소스와 좋은 램프만으로 충분할 수 있고 더 세밀한 지표면은 Normal 및 PBR 맵을 활용할 수 있습니다.</p>
+<div class="table-wrap"><table><thead><tr><th>입력</th><th>이미지에 포함된 정보</th><th>변경되는 결과</th></tr></thead><tbody>
+<tr><td>Source RGB</td><td>원본 컬러 베이스 이미지입니다. Base Color, Albedo 또는 Diffuse라고도 합니다.</td><td>바이옴의 Detail과 Ramp 생성에 사용할 원본 색상 정보를 제공합니다. 완성된 지표면은 이 이미지를 메시 위에 그대로 붙이는 방식이 아닙니다.</td></tr>
+<tr><td>Generated</td><td>Terrain System에서 사용하는 처리된 Detail Texture입니다.</td><td>Ramp와 함께 사용되어 지표면 디테일을 만듭니다. 처리된 입력을 직접 제공하려는 경우에만 적절한 기존 Generated Texture를 여기에 지정합니다.</td></tr>
+<tr><td>Source Height</td><td>재질의 높은 부분과 낮은 부분을 나타내는 그레이스케일 이미지입니다.</td><td>생성되는 Height/Detail 워크플로의 입력입니다. 요철과 블렌딩의 시각적 깊이를 만들 수 있지만 Terrain Vertex 자체를 올리지는 않습니다.</td></tr>
+<tr><td>Invert Height</td><td>소스에서 높고 낮게 취급되는 방향을 뒤집습니다.</td><td>홈이 솟아 보이거나 튀어나온 부분이 들어가 보일 때 유용합니다. 작은 영역에서 전후 결과를 비교하십시오.</td></tr>
+<tr><td>Normal</td><td>보통 파랑/보라색 계열의 Tangent Space Normal Map입니다.</td><td>작은 요철이 빛을 받는 방식을 변경합니다. Unity에서 Normal Map으로 임포트하십시오. Collision이나 Silhouette은 변경되지 않습니다.</td></tr>
+<tr><td>AO</td><td>가려진 영역이 더 어둡게 표현되는 Ambient Occlusion 맵입니다.</td><td>재질의 작은 홈과 틈에 음영을 추가합니다. Direct Vertex Color Terrain에서 Geometry AO를 Bake하는 기능과는 별개입니다.</td></tr>
+<tr><td>Metallic</td><td>어떤 영역이 금속처럼 동작하는지 나타내는 마스크입니다.</td><td>Material 반응을 변경합니다. 대부분의 잔디, 흙, 눈, 일반적인 돌은 Metallic 반응이 거의 없거나 없어야 합니다.</td></tr>
+<tr><td>Smoothness / Roughness</td><td>각 영역이 얼마나 매끈하거나 거친지를 나타내는 맵입니다.</td><td>하이라이트의 퍼짐 정도를 바꿉니다. Smoothness와 Roughness는 반대 방향이므로 Roughness 맵을 사용하는 경우 해당 해석 옵션을 활성화하십시오.</td></tr>
+<tr><td>Emissive</td><td>빛나야 하는 영역을 나타내는 마스크입니다.</td><td>Emissive 컨트롤 및 Compile된 Surface Data와 함께 작동합니다. 균열이나 광맥에는 명확한 Glow Mask가 유용합니다. Emission 자체가 주변 오브젝트를 밝히는 실제 Light Source를 만드는 것은 아닙니다.</td></tr>
+<tr><td>Packed PBR</td><td>하나의 이미지에서 서로 다른 Color Channel에 여러 Material Mask를 저장한 텍스처입니다.</td><td>하나의 파일에서 여러 입력을 제공합니다. Channel Mapping은 해당 이미지가 제작된 방식과 일치해야 합니다.</td></tr>
+</tbody></table></div>
+
+<h3>Separate Textures 또는 Packed PBR?</h3>
+<p>개별 AO, Metallic 및 Smoothness/Roughness 맵이 있다면 <strong>Separate Textures</strong>를 사용합니다. 공급자가 여러 마스크를 하나의 이미지로 합쳐 제공했다면 <strong>Packed Texture</strong>를 사용합니다. 파일 이름만으로 Channel Layout을 확정하지 말고 텍스처 세트의 사양을 확인하십시오.</p>
+<div class="table-wrap"><table><thead><tr><th>Mapping</th><th>Red 채널</th><th>Green 채널</th><th>Blue 채널</th><th>Alpha 채널</th></tr></thead><tbody>
+<tr><td>Standard Unity MRAO</td><td>Metallic</td><td>AO</td><td>사용하지 않음</td><td>Smoothness</td></tr>
+<tr><td>MRAO + Height (B)</td><td>Metallic</td><td>AO</td><td>제작된 Height</td><td>Smoothness</td></tr>
+<tr><td>Standard Unity MRAR</td><td>Metallic</td><td>AO</td><td>이 마스크들에는 사용하지 않음</td><td>Roughness, Smoothness로 반전</td></tr>
+<tr><td>Unreal ORM</td><td>AO</td><td>Roughness, Smoothness로 반전</td><td>Metallic</td><td>이 마스크들에는 사용하지 않음</td></tr>
+<tr><td>Custom</td><td>Metallic</td><td>Smoothness</td><td>AO</td><td>이 마스크들에는 사용하지 않음</td></tr>
+</tbody></table></div>
+<p>여기서 <strong>Custom</strong>은 위 표에 정의된 고정 Layout을 의미하며 자유롭게 Channel을 선택하는 화면을 열지는 않습니다. 다른 Layout을 사용하는 텍스처는 Channel을 다시 패킹하거나 Separate Source Map을 사용하십시오.</p>
+
+<h3 id="packed-height">Packed Blue에 저장된 Height 사용하기</h3>
+<ol><li><strong>PBR Mode → Packed Texture</strong>를 선택하고 Packed PBR 맵을 지정합니다.</li><li>채널이 R Metallic, G AO, B Height, A Smoothness인 경우 <strong>Mapping → MRAO + Height (B)</strong>를 선택합니다.</li><li><strong>Parallax</strong>를 포함해 원하는 Surface Strength를 설정한 뒤 <strong>Auto Generate</strong>를 실행합니다. Packed B가 Height Source를 제공하며 Parallax는 생성 중 그 영향력을 제어합니다. 값이 0이면 제외됩니다.</li><li>생성된 Detail Texture와 Colour Ramp를 함께 확인한 뒤 필요한 경우 Terrain Texture를 Compile합니다.</li></ol>
+<p>이 Mapping은 선택 사항입니다. 일반 Standard Unity MRAO는 Blue Channel을 무시하므로 사용자가 의도적으로 Mapping을 변경하고 다시 생성하기 전까지 기존 바이옴 결과는 그대로 유지됩니다. B에 다른 Detail Mask가 아니라 Height가 들어 있는 경우에만 선택하십시오. 기존 Source Height 할당은 유지되지만 이 Mapping을 선택한 상태에서는 Auto Generate가 Packed B를 사용합니다.</p>
+<p>Atlas Compile은 할당되었거나 생성된 Detail Texture를 우선합니다. Detail Texture가 지정되지 않은 경우에는 MRAO + Height가 Packed B를 직접 제공할 수 있습니다. 따라서 Mapping만 바꿔서는 기존 Generated Result가 교체되지 않습니다. Packed Height를 반영하려면 다시 Generate하십시오. 이 옵션은 기존 Detail Texture Slice를 사용합니다.</p>
+
+<h3>Auto Generate가 변경하는 항목</h3>
+<p>Auto Generate는 Source Setup에서 처리된 Surface Input과 Colour Ramp를 만듭니다. 현재 Normal, AO, Smoothness, Metallic, Emissive, Parallax Strength가 생성 결과에 영향을 주며 0인 맵은 제외됩니다. 새 Source RGB를 지정하면 Generated Detail과 Ramp 정보도 초기화될 수 있습니다.</p>
+<p>원하는 Strength를 먼저 설정한 뒤 Generate하고 결과를 확인합니다. 생성 시 제외한 맵이 나중에 필요해지면 적절한 Source에서 다시 Generate하십시오. Shader Multiplier만으로 생성 데이터에 포함되지 않았던 유용한 디테일을 다시 만들어낼 수는 없습니다.</p>
+<div class="callout"><p><strong>완성된 바이옴을 다시 Generate하기 전에:</strong> 직접 만든 Ramp를 유지하려면 바이옴을 Duplicate하십시오. Auto Generate는 수동으로 만든 색상 작업을 교체할 수 있습니다. Ramp Transform의 Reset 버튼은 모든 생성 및 텍스처 할당을 되돌리는 일반적인 Undo가 아닙니다.</p></div>
+
+<h2 id="color-ramp">컬러 램프와 램프 변환</h2>
+<p>Colour Ramp는 바이옴의 Detail 값을 색상에 매핑합니다. 왼쪽은 더 어둡거나 값이 낮은 디테일을, 오른쪽은 더 밝거나 값이 높은 디테일을 색칠합니다. 하나의 Rock Detail Source를 갈색 사암, 차가운 회색 돌 또는 스타일라이즈드 블루 지표면으로 바꿀 수 있습니다.</p>
+<p>이 기능은 <strong>월드 고도 그라디언트가 아닙니다.</strong> 오른쪽 끝을 흰색으로 설정해도 산 정상에 눈이 자동으로 배치되지는 않습니다. Terrain Height 또는 Slope에 기반한 규칙은 Terrain의 <a href="index.html#gradients">Gradient Tool</a>을 사용하십시오.</p>
+<ol><li>Ramp Editor를 열고 Color Key를 조정합니다.</li><li>시작점으로 움푹 들어간 디테일에는 어두운 색상을, 돌출되어 밝게 보이는 디테일에는 더 밝은 색상을 사용합니다.</li><li>여러 색상 밴드가 필요하면 중간 Key를 추가합니다.</li><li>일반적인 Scene Lighting에서 페인트된 지표면을 비교합니다. 매우 좁고 밝은 밴드는 점처럼 흩어진 하이라이트를 만들 수 있습니다.</li><li>단계적인 색상 변화를 원하면 Fixed를 활성화하고 부드러운 전환을 원하면 비활성화합니다.</li></ol>
+<div class="table-wrap"><table><thead><tr><th>Transform</th><th>동작</th><th>기준점</th></tr></thead><tbody>
+<tr><td>Hue</td><td>Hue Wheel을 따라 색상을 회전합니다. −1에서 +1 범위는 대략 −180°에서 +180°에 해당합니다.</td><td>0은 캡처된 Ramp의 Hue를 유지합니다. 작은 변경으로 서로 관련된 변형을 만들 수 있습니다.</td></tr>
+<tr><td>Saturation</td><td>캡처된 Ramp를 기준으로 색상의 채도를 낮추거나 높입니다.</td><td>0은 유지, −1은 색상을 제거하며 +1은 색상 범위 제한이 적용되기 전에 Saturation을 두 배로 만듭니다.</td></tr>
+<tr><td>Brightness</td><td>색상 범위 제한 내에서 Ramp 색상을 더 어둡거나 밝게 만듭니다.</td><td>0은 캡처된 밝기를 유지합니다. 극단적인 값으로 바로 이동하기보다 작은 변경부터 시험하십시오.</td></tr>
+<tr><td>Reset</td><td>Transform 작업을 위해 저장된 Ramp 기준 상태를 복원합니다.</td><td>해당 Transform 조정을 취소할 때 사용합니다. 원본 임포트 텍스처에서 처음 생성된 Ramp로 반드시 돌아가는 것은 아닙니다.</td></tr>
+</tbody></table></div>
+<p>Ramp Transform은 Key 위치와 Alpha를 유지합니다. 어떤 Detail 값에 어떤 색을 적용할지를 바꾸려면 Hue나 Brightness만 바꾸지 말고 Key를 이동하거나 추가하십시오.</p>
+<div class="example"><p><strong>바위 변형:</strong> 회색 Rock Biome을 Duplicate한 뒤 한 복사본의 Ramp를 약간 더 따뜻하고 어둡게 만듭니다. Texture Scale은 비슷하게 유지하고 한 복사본을 90° 회전합니다. 두 바이옴을 함께 페인트하면 같은 종류의 바위 느낌을 유지하면서 반복감을 줄일 수 있습니다.</p></div>
+
+<h2 id="surface-settings">각 지표면 설정 이해하기</h2>
+<p>이 컨트롤은 선택한 바이옴에 속합니다. Material에는 여러 바이옴에 함께 영향을 줄 수 있는 별도의 Global Control도 있습니다. Global Multiplier로 Terrain 전체를 바꾸기 전에 각 지표면을 먼저 원하는 모습으로 맞추는 것이 좋습니다. Scatter 배치는 <a href="scatter-system.html">3D Scatter 가이드</a>에서 별도로 설정하며 하나의 재사용 가능한 Scatter Object가 여러 바이옴 ID를 대상으로 할 수 있습니다.</p>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>낮은 값</th><th>높은 값</th><th>사용 지침</th></tr></thead><tbody>
+<tr><td>Scale: 0.02–10</td><td>텍스처 요소가 더 크게 보이고 반복 빈도가 낮아집니다.</td><td>요소가 더 작게 보이고 반복 횟수가 늘어납니다.</td><td>GameObject 크기가 아니라 Texture Tiling입니다. 캐릭터처럼 크기를 알고 있는 오브젝트 옆에서 비교하십시오.</td></tr>
+<tr><td>Normal: 0–2</td><td>조명에 의한 표면 요철이 더 평평하게 보입니다.</td><td>조명에 의한 요철이 더 강하게 보입니다.</td><td>Normal Source가 지정되어 있을 때 의미가 있습니다. 너무 강한 Normal은 Mesh Shape를 개선하지 않으면서 지표면을 산만하게 만들 수 있습니다.</td></tr>
+<tr><td>AO Strength: 0–1</td><td>재질 홈의 음영이 약해집니다.</td><td>홈의 음영이 강해집니다.</td><td>Scene 전체의 Lighting 문제를 AO만으로 해결하려고 하지 마십시오.</td></tr>
+<tr><td>Parallax: 0–2</td><td>시각적 깊이가 줄어들며 0은 해당 기여를 제거합니다.</td><td>지표면 디테일이 더 깊어 보입니다.</td><td>낮은 시야각에서 확인하십시오. 실제 Step, Hole 또는 Collision Depth를 만들지는 않습니다.</td></tr>
+<tr><td>Smoothness</td><td>더 넓고 거칠어 보이는 하이라이트를 만듭니다.</td><td>더 좁고 광택 있는 하이라이트를 만듭니다.</td><td>맵이 없으면 범위는 0–1이고 맵이 있으면 2까지 확장됩니다. 1 근처에서는 맵의 반응을 유지하며 1보다 큰 값은 전체 결과를 더 균일하게 매끄러운 방향으로 이동시킵니다.</td></tr>
+<tr><td>Metallic</td><td>금속 같은 반응이 줄어듭니다.</td><td>금속 같은 반응이 강해집니다.</td><td>맵이 없으면 범위는 0–1이고 맵이 있으면 2까지 확장됩니다. 1보다 큰 값은 단순한 중립 Multiplier처럼 동작하지 않고 Metallic 반응 영역을 넓힙니다.</td></tr>
+<tr><td>Emissive: 0–1</td><td>발광이 약해집니다.</td><td>Emissive 설정에서 나오는 발광이 강해집니다.</td><td>변화가 없다면 Source Mask와 Material의 Emissive Strength를 확인하십시오. Bloom은 별도의 Scene/Post-processing 설정입니다.</td></tr>
+<tr><td>Pulse</td><td>Off에서는 바이옴의 Emission이 일정하게 유지됩니다.</td><td>On에서는 Pulse 동작이 활성화됩니다.</td><td>Pulsing Emission과 Dusting은 같은 Vertex에서 함께 사용할 수 없습니다. 해당 영역에 Dusting을 사용할 때는 Pulse를 비활성화하십시오. Runtime Demo의 Slot 4 Pulse는 별도의 Material Control 예제입니다.</td></tr>
+<tr><td>Rotation: 0°, 90°, 180°, 270°</td><td colspan="2">바이옴 Texture Detail의 방향을 변경합니다.</td><td>방향을 맞추거나 같은 텍스처의 복사본에 변화를 줄 때 유용합니다. Terrain Mesh 자체를 회전시키지는 않습니다.</td></tr>
+<tr><td>Anti-Tiling: 0–1</td><td>절차적 변형이 줄어들며 0은 해당 바이옴의 Anti-Tiling 기여를 제거합니다.</td><td>반복되는 디테일을 숨기기 위한 변형이 늘어납니다.</td><td>Material의 Patch 및 Color Control과 함께 사용하십시오. 너무 강한 변형은 의도적으로 방향성이 있는 패턴을 흐릴 수 있습니다.</td></tr>
+<tr><td>Seam Blend: 0–1</td><td>Texture Projection 사이의 블렌딩이 줄어듭니다.</td><td>Projection 경계가 더 부드럽게 연결됩니다.</td><td>World-oriented Blending은 이동하거나 회전하는 오브젝트에 고정되어 따라가지 않습니다. Material의 Seam Blend Fade Distance를 낮춰 불일치를 숨길 수 있습니다. Vertex를 Weld하거나 실제 틈을 닫는 기능은 아닙니다.</td></tr>
+<tr><td>Priority: 0–100</td><td>대표 Gameplay Biome을 Bake할 때 우선순위가 낮아집니다.</td><td>충분한 비율을 차지하는 후보 중 우선순위가 높아집니다.</td><td>바이옴을 시각적으로 앞에 그리는 설정이 아닙니다. Static Bake는 정규화된 Coverage가 약 10% 이상인 후보를 고려하며 Live Weight 기반 Query는 다른 선택 규칙을 사용합니다.</td></tr>
+</tbody></table></div>
+<p><strong>시각 설정과 게임플레이 설정을 구분하십시오.</strong> Priority를 변경하면 보이는 Blend는 그대로인 상태에서 Baked Surface Data가 반환하는 대표 바이옴이 달라질 수 있습니다. 지표면 기반 Footstep이나 Effect를 사용하는 경우 Raycast Tester로 Baked Result를 확인하십시오.</p>
+
+<h2 id="variants">좋은 프리셋을 유지하면서 변형 만들기</h2>
+<p>관련된 지표면을 만들 때는 Duplicate가 가장 안전한 시작점입니다. 복사본은 각자 설정을 가지면서 Source Image 참조는 공유합니다. 호환되는 복사본은 Compile된 Source Data를 재사용할 수 있으므로 Ramp나 Rotation만 바꾸기 위해 별도의 이미지를 다시 임포트할 필요가 없습니다.</p>
+<ul><li><strong>마른 바위와 젖어 보이는 바위:</strong> Source Detail은 그대로 두고 젖어 보이는 복사본의 Ramp를 약간 어둡게 하고 Smoothness를 높입니다. 이는 외형 변화이며 물리적인 Wetness Simulation은 아닙니다.</li><li><strong>깨끗한 돌과 마모된 돌:</strong> 같은 Base Detail을 사용하고 색상과 Normal/Parallax를 적당히 조정하여 차이를 만듭니다.</li><li><strong>반복 재질에 변형 추가:</strong> 동일한 프리셋을 많이 복제하기보다 관련된 Ramp와 Rotation을 몇 개 만든 뒤 Weighted Mix로 함께 페인트합니다.</li></ul>
+<p>여러 변형의 설정을 함께 바꾸려면 Multi-selection을 사용합니다. 편집 전에 어떤 필드가 Mixed 상태인지 확인하여 유지해야 할 차이를 실수로 없애지 않도록 하십시오.</p>
+
+<h2 id="merge">두 지표면을 새 바이옴으로 병합하기</h2>
+<p>Merge는 <strong>정확히 두 개의 선택된 바이옴</strong>에서 새로운 Generated Surface를 만듭니다. 예를 들어 흙이 섞인 돌처럼 두 바이옴을 항상 따로 페인트하지 않고 재사용 가능한 Composite Surface를 만들고 싶을 때 유용합니다. 원본 프리셋은 그대로 유지됩니다.</p>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>의미</th><th>판단 방법</th></tr></thead><tbody>
+<tr><td>Mix Ratio: 0.1–0.9</td><td>두 입력 사이의 비율입니다.</td><td>중앙에 가까울수록 균형 잡힌 혼합이 되고 한쪽 끝으로 갈수록 한 소스가 더 강해집니다. 어떤 소스가 증가하는지는 Preview에서 확인하십시오.</td></tr>
+<tr><td>Softness: 0–1</td><td>Source Patch 사이가 얼마나 점진적으로 연결되는지를 정합니다.</td><td>낮은 값은 뚜렷한 Patch를 만들고 높은 값은 경계를 부드럽게 합니다.</td></tr>
+<tr><td>Patch size</td><td>혼합 영역의 크기입니다.</td><td>큰 값은 넓은 재질 영역처럼 보이고 작은 값은 흩어진 디테일처럼 보입니다.</td></tr>
+<tr><td>Irregularity</td><td>Patch 모양이 얼마나 불규칙한지를 정합니다.</td><td>둥근 Patch에는 낮은 값을 사용하고 더 깨지고 들쭉날쭉한 경계에는 높은 값을 사용합니다.</td></tr>
+</tbody></table></div>
+<p>실제 Tiling Scale에서 Merge된 지표면을 확인하십시오. Preview에서는 좋아 보이더라도 Terrain 전체에 촘촘히 반복되면 지나치게 복잡해 보일 수 있습니다. 두 Source Surface가 Landform의 정확히 어느 위치에서 만나는지를 직접 제어해야 한다면 일반 Biome Painting을 사용하십시오.</p>
+
+<h2 id="direct-mode">Direct Vertex Color의 바이옴</h2>
+<p>Direct Vertex Color는 자체 프리셋 목록을 사용하는 색상 기반 워크플로입니다. 바이옴의 Base Color와 Direct Pipeline에서 제공되는 컨트롤을 사용해 외형을 만듭니다. 색상은 Mesh와 함께 저장되므로 Vertex Density가 페인트 전환의 세밀함을 결정합니다.</p>
+<p>Terrain Atlas의 Texture Normal, Packed PBR Image 또는 Parallax Illusion이 같은 Texture 기반 외형으로 그대로 전달될 것이라고 기대해서는 안 됩니다. 색상 기반 결과가 필요할 때 이 Pipeline을 선택하고 Scene Lighting 아래에서 결과를 확인하십시오.</p>
+<p>추가적인 Contact Shading이 필요하다면 주요 Geometry 작업을 끝낸 뒤 Direct Vertex Color AO Baker를 사용합니다. 이 워크플로는 <a href="index.html#section-four">저장 및 최적화</a> 섹션을 참고하십시오.</p>
+
+<h2 id="optimization">텍스처 품질, 메모리, 공유 에셋</h2>
+<p>라이브러리는 Source Input을 Terrain Material에서 사용하는 Texture로 Compile합니다. Compile 설정은 선명도, 메모리 사용량, 플랫폼 지원 사이의 균형을 조절합니다.</p>
+<div class="table-wrap"><table><thead><tr><th>Option</th><th>효과</th><th>실용적인 선택</th></tr></thead><tbody>
+<tr><td>Resolution</td><td>Compile되는 Texture Size를 설정합니다. Auto 및 256에서 8192까지의 명시적 크기를 사용할 수 있습니다.</td><td>적당한 크기부터 시작하여 게임 카메라에서 확인하십시오. 높은 해상도는 메모리를 더 사용하지만 Source에 없는 디테일을 새로 만들 수는 없습니다.</td></tr>
+<tr><td>Compression</td><td>고품질 압축 옵션 또는 RGBA32를 포함한 선택된 Compile Format을 사용합니다.</td><td>Target Platform에서 Detail과 Color 품질을 비교하십시오. 압축하지 않은 출력은 일반적으로 메모리를 더 많이 사용합니다.</td></tr>
+<tr><td>Mipmaps</td><td>화면에서 작게 보이는 Texture Detail을 위해 저해상도 버전을 제공합니다.</td><td>여러 거리에서 Terrain을 볼 때 일반적으로 유용합니다. 설정을 바꿀 때 원거리 Shimmer와 Sharpness를 비교하십시오.</td></tr>
+<tr><td>Unique sources</td><td>서로 다른 Source Set은 추가 Compile Data를 필요로 할 수 있습니다.</td><td>적절한 경우 관련 변형에서 Source를 재사용하십시오. Biome Card 수만으로 비용을 추정하지 말고 실제 Compile Asset을 확인하십시오.</td></tr>
+</tbody></table></div>
+<p>Library 편집은 Tool의 일반 워크플로를 통해 Compile Data를 갱신합니다. Material이 동기화되지 않은 것처럼 보이면 Compile Terrain Textures를 사용하고 Terrain이 의도한 Library/Material을 사용하고 있는지 확인하십시오. Gameplay Surface Data를 다시 Bake하는 작업은 별도입니다. Texture Compile은 오래된 Triangle-to-Biome Bake를 갱신하지 않습니다.</p>
+
+<h2 id="troubleshooting">일반적인 바이옴 문제</h2>
+<p>Stylized Lighting과 AO, Pulse/Dusting 호환성, 이동하는 Terrain의 Seam Blending에 대해서는 <a href="terrain-material-settings.html#faq">Material FAQ</a>를 참고하십시오.</p>
+<div class="table-wrap"><table><thead><tr><th>문제</th><th>확인할 항목</th></tr></thead><tbody>
+<tr><td>Stylized Lighting에서 Material이 너무 어둡습니다</td><td>이 모드에서는 AO가 Shadow로 처리됩니다. 바이옴의 AO Strength 또는 Material의 Surface AO Strength를 낮추십시오. Height가 반대로 해석되는 경우 Invert Height를 사용하고 필요하면 다시 Generate하십시오.</td></tr>
+<tr><td>Dusting을 페인트한 곳에서 Pulse가 작동하지 않습니다</td><td>Pulsing Emission과 Dusting은 같은 Vertex를 공유할 수 없습니다. 해당 영역에서는 하나의 효과를 선택하고 Dusting을 사용할 때 Pulse를 비활성화하십시오.</td></tr>
+<tr><td>임포트한 색상이 최종 지표면과 일치하지 않습니다</td><td>Generated Detail과 Ramp를 확인하십시오. Source RGB는 생성에 사용되고 Ramp가 최종 Palette를 제어합니다. Scene Lighting과 Material Multiplier도 확인하십시오.</td></tr>
+<tr><td>돌출된 디테일이 움푹 들어가 보입니다</td><td>Invert Height를 비교하고 Height Source를 확인한 뒤 테스트 중에는 과도한 Parallax를 낮추십시오.</td></tr>
+<tr><td>Packed Blue Height가 눈에 보이는 차이를 만들지 않습니다</td><td>MRAO + Height (B)를 선택하고 B에 Height가 들어 있는지, Parallax가 0보다 큰지 확인한 뒤 Auto Generate를 실행하십시오. Compile 시 기존 Generated Detail Texture가 우선됩니다.</td></tr>
+<tr><td>지표면 전체가 지나치게 반짝이거나 금속처럼 보입니다</td><td>PBR Mapping, Roughness 해석 및 Slider 값을 확인하십시오. Mapping Mode에서 1보다 큰 값은 결과를 더 균일한 반응 쪽으로 밀어갑니다.</td></tr>
+<tr><td>Normal Detail이 보이지 않습니다</td><td>Normal 할당 및 Import Type, Biome Strength, Generation Setup, Global Normal Strength 및 Normal Fade Control을 확인하십시오.</td></tr>
+<tr><td>Auto Generate가 내가 만든 색상을 없앴습니다</td><td>Auto Generate는 Ramp를 다시 만들 수 있습니다. 가능하다면 Generate 작업을 Undo하거나 저장된/복제된 프리셋으로 돌아가십시오. 직접 만든 Ramp를 다시 Generate하기 전에는 Duplicate하십시오.</td></tr>
+<tr><td>Colour Ramp로 Snow Line을 만들 수 없습니다</td><td>Terrain의 Gradient Tool을 사용하십시오. Biome Ramp는 로컬 Detail에 색상을 적용할 뿐 World Height를 기준으로 Terrain 영역을 선택하지 않습니다.</td></tr>
+<tr><td>패턴 반복이 너무 눈에 띕니다</td><td>Scale을 확인하고 바이옴의 Anti-Tiling을 활성화한 뒤 Material Variation Control을 조정하십시오. 관련된 Rotation/Ramp 변형도 함께 사용해 보십시오.</td></tr>
+<tr><td>Auto Folder 사용 후 맵이 잘못 보입니다</td><td>감지된 모든 입력과 Packed Channel Layout을 확인하십시오. Roughness 맵이 Smoothness로 해석되면 의도한 결과가 반대로 나타납니다.</td></tr>
+<tr><td>Priority를 변경해도 보이는 지표면이 바뀌지 않습니다</td><td>Priority는 대표 Baked Gameplay Biome을 선택하기 위한 설정입니다. 시각적인 Layer Order 설정이 아닙니다.</td></tr>
+<tr><td>Runtime Effect가 잘못된 지표면을 변경합니다</td><td>Preset을 추가, 삭제 또는 재정렬한 뒤 현재 Biome ID를 다시 확인하십시오. Demo의 예제 ID는 이름이나 공통 상수가 아닙니다.</td></tr>
+</tbody></table></div>
+
+<h2 id="support">지원</h2><p>도움이 필요하다면 기대한 결과, 사용한 컨트롤, 실제로 나타난 결과를 설명하십시오. Unity 버전, 선택한 Surface Pipeline, 관련 설정의 스크린샷을 함께 제공하면 좋습니다. Runtime Query 문제라면 Collider Type과 마지막으로 Surface Data를 Bake한 시점도 포함하십시오.</p><p><a href="https://dptgames.github.io/#contact">DPT Games 문의 양식</a>을 사용하거나 <a href="https://discord.gg/EkQykfzP5X">DPT Games Discord</a>에 참여할 수 있습니다.</p><p class="back-top"><a href="#top">맨 위로</a></p><footer class="footer">DPT Vertex 3D Terrain 문서 · 문서에서는 Unity 인터페이스와 일치하도록 영어 컨트롤 이름을 사용합니다. 현재 툴 인터페이스 언어는 에디터 창 상단에서 English 또는 日本語로 변경할 수 있습니다.</footer></main></body>
+</html>
