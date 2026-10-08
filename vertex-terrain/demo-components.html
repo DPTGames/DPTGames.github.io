@@ -22,8 +22,9 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <li>Inspect the terrain material and Ground Library. Assign that material to the <strong>Dynamic Biome Demo Controller</strong> and optionally assign a directional <strong>Sun</strong> light.</li>
 <li>Set up the first appearance in the terrain material Inspector. Click <strong>+ Capture Current Settings as NEW Profile</strong> on the demo controller. Name the profile, for example Spring.</li>
 <li>Change the actual material settings to create the next appearance. Capture again and name the new profile Summer. Continue for Autumn, Winter or other appearances.</li>
-<li>Set a transition duration for each profile after the first. Enable <strong>Preview In Edit Mode</strong> and scrub the timeline to preview transitions. Always click <strong>Stop Preview &amp; Restore Material</strong> before editing or recapturing a material.</li>
-<li>Enter Play mode to run the sequence when <strong>Play On Start</strong> is selected, and use the demo camera to explore the results.</li>
+<li>To revisit a saved appearance, click <strong>Apply Profile To Material</strong> on its profile. This loads the stored settings into the actual shared material for further editing. If you want to keep the edits, click <strong>Capture Profile From Material</strong> afterward.</li>
+<li>Set a transition duration for each profile after the first. Click <strong>Run Sequence From Start</strong> to test the entire sequence in Edit Mode or Play mode. Use <strong>Pause</strong>, <strong>Resume</strong> and <strong>Stop &amp; Restore</strong> to control playback. Edit Mode scrubbing is also available.</li>
+<li>Optionally enable <strong>Play On Start</strong> to run the sequence automatically when entering Play mode. Use the demo camera to explore the results.</li>
 <li>Use <strong>Surface Raycast Tester</strong> to inspect the biome IDs returned for painted surfaces.</li>
 </ol>
 <div class="table-wrap"><table><thead><tr><th>Component / asset</th><th>Its job</th><th>Needed for your own game?</th></tr></thead><tbody>
@@ -35,13 +36,24 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 </tbody></table></div>
 
 <h2 id="dynamic-biome-controller">Dynamic Biome Demo Controller</h2>
+<p>Click <strong>Open Documentation</strong> at the top of the component Inspector, or the component header’s Help icon, to open this online guide: <a href="https://dptgames.github.io/vertex-terrain/demo-components.html">Demo &amp; Runtime Guide</a>.</p>
 <p>Add <strong>DPT → Dynamic Biome Demo Controller</strong> to a GameObject. Assign <strong>Terrain Material</strong> or place the component on a GameObject with a Renderer so it can resolve that Renderer’s shared material. Assign <strong>Sun</strong> if you want to blend a directional light’s rotation, intensity and colour.</p>
 <p><strong>The material Inspector is the authoring interface.</strong> Set your dynamic biome slots, target IDs, dusting, scatter density and colour, surface overrides and flow settings there. The demo controller deliberately does not duplicate those controls. It reads and stores material values only when you click a capture button.</p>
 <p>All terrain objects using the same material receive the same changes. This is useful when several neighbouring tiles need to change together. Use separate materials if you need independent behaviour.</p>
 <div class="callout"><p><strong>Single-script component:</strong> The custom Inspector and its capture buttons are included in <code>DPT_DynamicBiomeDemoController.cs</code> inside an Editor-only conditional. No second Editor script is required. If you previously installed <code>DPT_DynamicBiomeDemoControllerEditor.cs</code>, remove that old file to avoid duplicate Inspector classes.</p></div>
+<h3>Inspector sections</h3>
+<div class="table-wrap"><table><thead><tr><th>Section</th><th>Purpose</th></tr></thead><tbody>
+<tr><td>Open Documentation</td><td>Opens this online guide. Unity’s component Help icon also links here.</td></tr>
+<tr><td>Target Setup</td><td>Assign <strong>Terrain Material</strong> and optional <strong>Sun</strong>.</td></tr>
+<tr><td>Test Environment Sequence</td><td>Use <strong>Run Sequence From Start</strong>, <strong>Pause</strong>, <strong>Resume</strong> and <strong>Stop &amp; Restore</strong> to test changes without automatic playback.</td></tr>
+<tr><td>Environment Profiles</td><td>Use <strong>+ Capture Current Settings as NEW Profile</strong> to add a snapshot. For each existing profile, use <strong>Capture Profile From Material</strong>, <strong>Apply Profile To Material</strong>, <strong>Move Up</strong>, <strong>Move Down</strong> or <strong>Remove Profile</strong>.</td></tr>
+<tr><td>Playback</td><td>Configure <strong>Play On Start</strong>, <strong>Loop</strong>, optional <strong>Loop Return Seconds</strong> and <strong>Playback Speed</strong>.</td></tr>
+<tr><td>Edit Mode Preview</td><td>Enable <strong>Preview In Edit Mode</strong> and scrub with <strong>Preview Normalized</strong>. Use <strong>Stop Preview &amp; Restore Material</strong> when finished.</td></tr>
+</tbody></table></div>
 <h3>What the profile stores</h3>
 <p>Each profile captures an independent copy of all four modifier slots, including active states, biome IDs, weight, smoothness, normals, parallax, emission, flow, dusting and scatter response. It also copies the material’s supported stylized lighting values and the assigned Sun’s rotation, intensity and colour.</p>
 <p>A profile does not keep a link to the material’s live values. Changing the material to create Winter <strong>does not change a previously captured Autumn snapshot</strong>. To change an existing snapshot, capture again using that profile’s own button.</p>
+<p>Use <strong>Apply Profile To Material</strong> to load any captured snapshot into the shared terrain material and optional Sun. This is a direct material edit, not a temporary timeline preview. It does not alter the saved profile. You can then adjust the material visually and deliberately recapture it into that same profile. Unity Undo is available for the apply operation.</p>
 <p>See <a href="terrain-material-settings.html#live-biomes">Terrain Material Settings</a> for the shader settings themselves and <a href="scatter-system.html#live-response">3D Scatter Guide</a> for how a biome’s scatter-response settings affect instanced vegetation.</p>
 
 <h2 id="environment-profiles">Environment Profiles &amp; Timeline</h2>
@@ -55,22 +67,25 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <li>Each profile automatically checks the affected biome slots and optional lighting controls that differ from the previous resolved state. You can change those <strong>Channels to Animate</strong> checkboxes manually. Unchecked channels inherit their previous values.</li>
 <li>Preview the sequence with <strong>Preview In Edit Mode</strong> and <strong>Preview Normalized</strong>. When finished, click <strong>Stop Preview &amp; Restore Material</strong>. With <strong>Loop</strong> enabled, the final appearance transitions smoothly back to the first.</li>
 </ol>
-<div class="example"><p><strong>Replacing an existing profile:</strong> open the desired profile on the controller and press its own <strong>Capture Current Settings (Replace Snapshot)</strong> button. Confirm the replacement. Only that profile is overwritten. The other captured snapshots remain unchanged, even if you later edit the material again.</p></div>
+<div class="example"><p><strong>Editing an existing profile:</strong> click <strong>Apply Profile To Material</strong> on the profile you want to edit, change the material or Sun, then click <strong>Capture Profile From Material</strong> and confirm. Only the selected snapshot is overwritten. Stop any preview or playback before applying or capturing.</p></div>
 <h3>Controls</h3>
 <div class="table-wrap"><table><thead><tr><th>Setting / button</th><th>Behaviour</th></tr></thead><tbody>
 <tr><td>+ Capture Current Settings as NEW Profile</td><td>Appends a new, independent snapshot of the assigned material and Sun, without changing any earlier profiles.</td></tr>
-<tr><td>Capture Current Settings</td><td>Captures values into one existing profile. Replacing an already captured profile asks for confirmation.</td></tr>
+<tr><td>Capture Profile From Material / Capture Current Settings into Profile</td><td>Copies the current material and Sun into the selected profile. Replacing an already captured profile asks for confirmation.</td></tr>
+<tr><td>Apply Profile To Material</td><td>Loads all four stored biome slots, the live-biome master setting and the captured lighting values into the current shared material and optional Sun. Stored stylized lighting values are restored without enabling or disabling the shader feature. Does not edit the saved snapshot. Available only in Edit Mode with playback and preview stopped.</td></tr>
 <tr><td>Name</td><td>Descriptive label such as Spring, Winter, Drought or Flooding.</td></tr>
 <tr><td>Transition Seconds</td><td>Time to blend from the previous profile into this one. The first profile is the starting appearance and needs no incoming transition.</td></tr>
 <tr><td>Easing</td><td>AnimationCurve controlling the speed through a transition.</td></tr>
 <tr><td>Channels to Animate</td><td>Select any combination of the four dynamic biome slots, stylized lighting and directional light. Automatically detected after capture but editable.</td></tr>
-<tr><td>Play On Start</td><td>Starts the timeline in Play mode when two or more complete snapshots exist.</td></tr>
+<tr><td>Run Sequence From Start / Pause / Resume</td><td>Tests the sequence on demand in Edit Mode or Play mode without enabling automatic playback.</td></tr>
+<tr><td>Stop &amp; Restore</td><td>Stops manual playback or scrubbing and restores the material and Sun as they were when that session began.</td></tr>
+<tr><td>Play On Start</td><td>Optional automatic playback on entering Play mode when two or more complete snapshots exist. Off by default for newly added controllers.</td></tr>
 <tr><td>Loop / Loop Return Seconds</td><td>Blends from the last profile to the first over a separate closing duration. Loop disabled holds the last profile.</td></tr>
 <tr><td>Playback Speed</td><td>Multiplier for timeline time progression. 1 is normal speed; 0 pauses progression.</td></tr>
 <tr><td>Preview In Edit Mode / Preview Normalized</td><td>Optional live scrub preview in the editor, including the return transition when Loop is enabled.</td></tr>
 <tr><td>Stop Preview &amp; Restore Material</td><td>Restores the material and light settings captured when the preview session began. Required before editing the source material or capturing another profile.</td></tr>
 </tbody></table></div>
-<p>The controller exposes <code>SetTimelineNormalized(float)</code> to seek to a position in the sequence and <code>TotalDuration</code>, <code>CurrentTimeSeconds</code> and <code>IsPlaying</code> for runtime integration. The component context menu also offers an action to capture a new profile.</p>
+<p>The controller exposes <code>PlayFromStart()</code>, <code>PauseTimeline()</code>, <code>ResumeTimeline()</code>, <code>StopAndRestore()</code> and <code>SetTimelineNormalized(float)</code> for sequence control. <code>ApplyProfileToMaterial(int)</code> applies one saved snapshot while <code>CaptureCurrentMaterialIntoProfile(int)</code> replaces it. The component context menu also offers actions to run the sequence and capture a new profile.</p>
 <h3>Lighting and transition limits</h3>
 <ul>
 <li><strong>Stylized lighting is optional.</strong> Its values are animated only when <code>_STYLIZED_LIGHTING</code> was already enabled when preview or playback began. The controller never turns the keyword on or off. The Sun transition works independently.</li>
@@ -174,8 +189,9 @@ public class TerrainSurfaceProbe : MonoBehaviour
 <h2 id="troubleshooting">Runtime and demo problems</h2>
 <div class="table-wrap"><table><thead><tr><th>Symptom</th><th>What to check</th></tr></thead><tbody>
 <tr><td>Capture buttons are missing</td><td>Check for C# compile errors and confirm only the single-file controller is installed. The buttons appear near the <strong>top</strong> of its custom Inspector. Delete the old separate Editor script.</td></tr>
-<tr><td>The demo controller does nothing</td><td>Assign Terrain Material, capture at least two profiles and enable Play On Start or Edit Mode preview. Check the material's live biome master switch and which channels the profile animates.</td></tr>
-<tr><td>I changed Winter and Autumn changed too</td><td>Captured values are independent. Stop any active preview before adjusting the source material. Only pressing Autumn's Replace Snapshot button can intentionally replace Autumn's saved values.</td></tr>
+<tr><td>The demo controller does nothing</td><td>Assign Terrain Material, capture at least two profiles and click Run Sequence From Start. Alternatively enable Play On Start or Edit Mode preview. Check the material's live biome master switch and which channels the profile animates.</td></tr>
+<tr><td>Apply Profile To Material is disabled</td><td>Capture the profile first, then stop playback and preview. Applying a stored profile to the material is an Edit Mode authoring operation, not a Play Mode animation.</td></tr>
+<tr><td>I changed Winter and Autumn changed too</td><td>Captured values are independent. Stop any active preview before adjusting the source material. Only pressing Autumn's Capture Profile From Material button can intentionally replace Autumn's saved values.</td></tr>
 <tr><td>The profile captured the wrong settings</td><td>Stop preview and Play mode before capture. Verify the assigned Terrain Material is the one you edited and that Sun is assigned if you want light settings captured.</td></tr>
 <tr><td>A profile does not change its biome</td><td>Check the saved profile's Slot 1–4 channel checkboxes, material modifier target IDs, active state, painted surface contribution and relevant dusting mask/slope threshold.</td></tr>
 <tr><td>Snow appears but vegetation stays unchanged</td><td>Check the stored scatter density response and biome IDs, and confirm the scatter renderer is using the material that the controller updates. See the <a href="scatter-system.html#live-response">3D Scatter Guide</a>.</td></tr>
