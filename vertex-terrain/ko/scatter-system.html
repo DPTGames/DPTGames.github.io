@@ -130,7 +130,7 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 
 <ol><li>제공된 Vertex Terrain Shader Graph에서 Scatter Wind Block 전체를 복사해 자신의 Graph에 붙여 넣습니다.</li><li>아직 없다면 위 네 개의 Blackboard 항목을 추가합니다.</li><li><strong>Wind Strength</strong>, <strong>Wind Direction</strong>, <strong>Height To Tip</strong>, <strong>DPT Scatter Wind</strong>를 Reference 이미지와 정확히 같은 방식으로 다시 연결합니다.</li><li>최종 <strong>DPT Scatter Wind</strong> Output을 Graph의 <strong>Vertex Position</strong> Input에 연결합니다.</li><li>Graph를 저장하고 이를 사용하는 Material을 Custom Mesh Variant에 지정합니다.</li><li>Material에서 DPT Scatter Wind Keyword를 활성화한 뒤 Scatter Object의 <strong>Enable Wind</strong>를 활성화합니다.</li></ol>
 
-<figure class="doc-figure"><img src="../assets/dpt-scatter-wind-shader-graph.png" alt="DPT Scatter Wind Block, Blackboard Property 및 Vertex Position Input 연결을 보여 주는 Shader Graph 참고 이미지."><figcaption>Custom Shader Graph에 DPT Scatter Wind를 추가하는 참고 설정입니다. Scatter Wind Block을 복사하고 위 네 개 Blackboard 항목을 정확한 Reference 이름으로 다시 만든 뒤 그림처럼 연결하고 최종 Output을 Vertex Position으로 보냅니다.</figcaption></figure>
+<figure class="doc-figure"><img src="../assets/dpt-scatter-wind-shader-graph-ko.png" alt="DPT Scatter Wind Block, Blackboard Property 및 Vertex Position Input 연결을 보여 주는 Shader Graph 참고 이미지."><figcaption>Custom Shader Graph에 DPT Scatter Wind를 추가하는 참고 설정입니다. Scatter Wind Block을 복사하고 위 네 개 Blackboard 항목을 정확한 Reference 이름으로 다시 만든 뒤 그림처럼 연결하고 최종 Output을 Vertex Position으로 보냅니다.</figcaption></figure>
 
 <div class="callout"><p><strong>기존 Vertex Animation:</strong> Shader Graph가 이미 Vertex Position을 수정하고 있다면 현재 Deformation Chain을 단순히 교체하지 말고 복사한 Scatter Wind Block을 기존 Object-space Position 처리와 통합하십시오.</p></div>
 
