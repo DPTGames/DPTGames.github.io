@@ -1,5 +1,6 @@
-<!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="環境プロファイルで地形、Scatter、ライティングの変化を連続再生し、地表情報をゲームプレイに活用します。"><link rel="alternate" hreflang="en" href="../demo-components.html"><link rel="alternate" hreflang="ja" href="demo-components.html"><link rel="alternate" hreflang="ko" href="../ko/demo-components.html"><title>デモ・ランタイムガイド | DPT Games</title><style>
+<!DOCTYPE html>
+
+<html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="環境プロファイルで地形、Scatter、ライティングの変化を連続再生し、地表情報をゲームプレイに活用します。" name="description"/><link href="../demo-components.html" hreflang="en" rel="alternate"/><link href="demo-components.html" hreflang="ja" rel="alternate"/><link href="../ko/demo-components.html" hreflang="ko" rel="alternate"/><title>デモ・ランタイムガイド | DPT Games</title><style>
 :root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
 main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
@@ -14,89 +15,109 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 @media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
 @media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
 </style></head>
-<body><main id="top"><nav class="site-nav" aria-label="ドキュメント"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a href="index.html">Vertex 3D Terrain ガイド</a><a href="biomes.html">バイオームガイド</a><a href="terrain-material-settings.html">地形マテリアル設定</a><a href="scatter-system.html">3D Scatter ガイド</a><a href="demo-components.html" aria-current="page">デモ・ランタイムガイド</a></nav><nav class="language-nav" aria-label="言語"><a href="../demo-components.html" lang="en" hreflang="en">English</a><a href="demo-components.html" lang="ja" hreflang="ja" aria-current="page">日本語</a><a href="../ko/demo-components.html" lang="ko" hreflang="ko">한국어</a></nav><header><h1>デモ・ランタイムガイド</h1><p class="lead">環境プロファイルで地形、Scatter、ライティングを連続的に変化させ、地表情報をゲームプレイに活用します。</p></header><nav class="toc" aria-label="このページの内容"><h2>このページの内容</h2><ul><li><a href="#quick-start">デモを試し、各部品を確認する</a></li><li><a href="#dynamic-biome-controller">Dynamic Biome Demo Controller</a></li><li><a href="#environment-profiles">環境プロファイルとタイムライン</a></li><li><a href="#surface-raycast-tester">Surface Raycast Tester</a></li><li><a href="#terrain-demo-camera">Terrain Demo Camera</a></li><li><a href="#runtime-architecture">サーフェスデータをゲームプレイに使う</a></li><li><a href="#query-limits">問い合わせは見た目とどこまで一致するか</a></li><li><a href="#troubleshooting">実行時・デモの問題</a></li><li><a href="#support">サポート</a></li></ul></nav><p class="table-hint">小さい画面では、幅の広い表を横にスクロールするとすべての列を読めます。</p><div class="intro"><p>デモのコンポーネントでは、地形の確認、環境プロファイルを使った連続的な変化、バイオームと Scatter のライブ制御、物理レイキャストが返すバイオームの検証ができます。参考にして変更できる例であり、完成したキャラクター制御、物理的な天候シミュレーション、足音システムではありません。</p><p>デモを試すだけならコードを書く必要はありません。後半の連携例は、地表情報を自分のゲームプレイに使いたい開発者向けです。</p></div>
+<body><main id="top"><nav aria-label="ドキュメント" class="site-nav"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a href="index.html">Vertex 3D Terrain ガイド</a><a href="biomes.html">バイオームガイド</a><a href="terrain-material-settings.html">地形マテリアル設定</a><a href="scatter-system.html">3D Scatter ガイド</a><a aria-current="page" href="demo-components.html">デモ・ランタイムガイド</a></nav><nav aria-label="言語" class="language-nav"><a href="../demo-components.html" hreflang="en" lang="en">English</a><a aria-current="page" href="demo-components.html" hreflang="ja" lang="ja">日本語</a><a href="../ko/demo-components.html" hreflang="ko" lang="ko">한국어</a></nav><header><h1>デモ・ランタイムガイド</h1><p class="lead">環境プロファイルで地形、Scatter、ライティングを連続的に変化させ、地表情報をゲームプレイに活用します。</p></header><nav aria-label="このページの内容" class="toc"><h2>このページの内容</h2><ul>
+<li><a href="#quick-start">デモを試し、各コンポーネントを確認する</a></li>
+<li><a href="#dynamic-biome-controller">Dynamic Biome Demo Controller</a></li>
+<li><a href="#environment-profiles">環境プロファイルとタイムライン</a></li>
+<li><a href="#profile-swaps">指定したプロファイルへ移行して状態を維持する</a></li>
+<li><a href="#profile-wind">環境プロファイルでの風の制御</a></li>
+<li><a href="#external-profile-requests">コードや UnityEvent からのプロファイル切り替え</a></li>
+<li><a href="#scatter-transitions">Scatter の安定したフェードと編集時の表示</a></li>
+<li><a href="#surface-raycast-tester">Surface Raycast Tester</a></li>
+<li><a href="#terrain-demo-camera">Terrain Demo Camera</a></li>
+<li><a href="#runtime-architecture">サーフェスデータをゲームプレイに使う</a></li>
+<li><a href="#query-limits">問い合わせ結果と見た目の一致範囲</a></li>
+<li><a href="#troubleshooting">実行時・デモの問題</a></li>
+<li><a href="#support">サポート</a></li>
+</ul></nav><p class="table-hint">小さい画面では、幅の広い表を横にスクロールするとすべての列を読めます。</p><div class="intro"><p>デモのコンポーネントでは、地形の確認、環境プロファイルを使った連続的な変化、バイオームと Scatter のライブ制御、物理レイキャストが返すバイオームの検証ができます。参考にして変更できる例であり、完成したキャラクター制御、物理的な天候シミュレーション、足音システムではありません。</p><p>デモを試すだけならコードを書く必要はありません。後半の連携例は、地表情報を自分のゲームプレイに使いたい開発者向けです。</p></div>
+<h2 id="quick-start">デモを試し、各部品を確認する</h2><ol>
+<li><code>Assets/DPTGames/Vertex_3D_Terrain/Vertex3DTerrain_Demo/VertexTerrain_DemoScene.unity</code> を開きます。</li>
+<li>地形マテリアルと Ground Library を確認します。使用するマテリアルを <strong>Dynamic Biome Demo Controller</strong> に割り当てます。必要に応じて、<strong>Sun</strong> に Directional Light も指定します。</li>
+<li>まず、地形マテリアルの Inspector で最初の見た目を設定します。コントローラーの <strong>+ Capture Current Settings as NEW Profile</strong> をクリックしてプロファイルを作成し、Spring などの名前を付けます。</li>
+<li>マテリアルの設定を実際に変更して次の見た目を作ります。もう一度キャプチャして Summer と名付けます。必要に応じて Autumn、Winter なども追加します。</li>
+<li>保存した状態に戻して編集するには、そのプロファイルの <strong>Apply Profile To Material</strong> をクリックします。保存済みの設定が実際の共有マテリアルに読み込まれます。編集内容を保存する場合は、続いて <strong>Capture Profile From Material</strong> をクリックします。</li>
+<li>最初のプロファイルを含め、それぞれの <strong>Transition Seconds</strong>、<strong>Easing</strong>、<strong>Channels to Animate</strong> を設定します。変更対象のバイオームスロットやライト、必要に応じて <strong>Wind</strong> を選択してください。各プロファイルの <strong>Animate To Profile</strong> を押すと、その状態まで移行して維持できます。</li>
+<li>全体の動作を確認するには、二つ以上のプロファイルをキャプチャし、<strong>Run Sequence From Start</strong> をクリックします。シーケンス再生と個別プロファイルへの移行は、どちらも Edit Mode と Play モードで使用できます。<strong>Pause</strong>、<strong>Resume</strong>、<strong>Stop &amp; Restore</strong> で操作でき、Edit Mode では全シーケンスのスクラブも可能です。</li>
+<li>Play モード開始時に自動再生したい場合は、<strong>Play On Start</strong> を有効にします。デモカメラで結果を確認します。</li>
+<li><strong>Surface Raycast Tester</strong> を使い、ペイントされた地表から返されるバイオーム ID を確認します。</li>
+</ol><div class="table-wrap"><table><thead><tr><th>コンポーネント・アセット</th><th>役割</th><th>自分のゲームに必要か</th></tr></thead><tbody>
+<tr><td>Dynamic Biome Demo Controller</td><td>マテリアルと Sun の状態をキャプチャし、環境プロファイル間で Dynamic Biome、Scatter、必要に応じてライティングの設定を補間します。</td><td>任意です。サンプルのタイムラインを使うか、独自のゲームプレイ制御に組み込めます。</td></tr>
+<tr><td>Surface Raycast Tester</td><td>物理レイキャストのヒットと、その位置で取得したバイオームを表示します。</td><td>任意の検証ツールです。ゲーム側から同じサーフェス問い合わせ API を直接呼び出せます。</td></tr>
+<tr><td>Terrain Demo Camera</td><td>動作確認用の自由移動カメラです。</td><td>任意です。独自のプレイヤーやカメラに置き換えられます。</td></tr>
+<tr><td>Terrain Surface Data</td><td>ベイクされた三角形とバイオームの対応情報です。</td><td>付属の三角形ベースのバイオーム問い合わせには必要です。</td></tr>
+<tr><td>Terrain Surface Target</td><td>Renderer とベイク済みデータを関連付け、地表問い合わせを評価します。</td><td>付属のサーフェス問い合わせを利用する地形に設定します。</td></tr>
+</tbody></table></div><h2 id="dynamic-biome-controller">Dynamic Biome Demo Controller</h2><p>コンポーネントの Inspector 上部にある <strong>Open Documentation</strong> またはコンポーネントヘッダーの Help アイコンから、オンラインの <a href="https://dptgames.github.io/vertex-terrain/demo-components.html">Demo &amp; Runtime Guide</a> を開けます。</p><p>GameObject に <strong>DPT → Dynamic Biome Demo Controller</strong> を追加します。<strong>Terrain Material</strong> を指定するか、Renderer のある GameObject にコンポーネントを追加し、その Renderer の共有マテリアルを参照できるようにします。Directional Light の回転、強さ、色も補間する場合は <strong>Sun</strong> を指定します。</p><p><strong>状態の作成は地形マテリアルの Inspector で行います。</strong> Dynamic Biome の各スロット、対象バイオーム ID、Dusting、Scatter Density と Colour、Surface Overrides、Flow などをマテリアル側で設定します。これらのコントロールはデモコントローラー内には重複して配置されていません。キャプチャボタンを押した時点のマテリアル値が保存されます。</p><p>同じ共有マテリアルを使う地形は、すべて同じ変更を受けます。隣接する複数の地形タイルをまとめて変化させる場合に便利です。個別に変化させたい場合は別々のマテリアルを使ってください。</p><div class="callout"><p><strong>単一スクリプトのコンポーネント：</strong>カスタム Inspector とキャプチャボタンは <code>DPT_DynamicBiomeDemoController.cs</code> 内の Editor 専用条件付きコードに含まれています。二つ目の Editor スクリプトは不要です。古い <code>DPT_DynamicBiomeDemoControllerEditor.cs</code> が残っている場合は、Inspector クラスの重複を防ぐため削除してください。</p></div><h3>Inspector の各セクション</h3><div class="table-wrap"><table><thead><tr><th>セクション</th><th>用途</th></tr></thead><tbody>
+<tr><td>Open Documentation</td><td>このオンラインガイドを開きます。Unity のコンポーネント Help アイコンからもアクセスできます。</td></tr>
+<tr><td>Target Setup</td><td><strong>Terrain Material</strong> と任意の <strong>Sun</strong> を指定します。</td></tr>
+<tr><td>Test Environment Sequence</td><td><strong>Run Sequence From Start</strong>、<strong>Pause</strong>、<strong>Resume</strong>、<strong>Stop &amp; Restore</strong> で、自動再生を有効にせずに変化を確認します。</td></tr>
+<tr><td>Environment Profiles</td><td>独立したスナップショットをキャプチャし、移行時間、Easing、変化させるチャンネルを設定します。<strong>Animate To Profile</strong> で任意の状態へ移行して維持できます。<strong>Apply Profile To Material</strong> では全設定を即時に読み込んで編集できます。再キャプチャ、並べ替え、削除も可能です。</td></tr>
+<tr><td>Playback</td><td><strong>Play On Start</strong>、<strong>Loop</strong>、任意の <strong>Loop Return Seconds</strong>、<strong>Playback Speed</strong> を設定します。</td></tr>
+<tr><td>Edit Mode Preview</td><td><strong>Preview In Edit Mode</strong> を有効にし、<strong>Preview Normalized</strong> でスクラブします。終了時は <strong>Stop Preview &amp; Restore Material</strong> を使用します。</td></tr>
+</tbody></table></div><h3>プロファイルに保存される内容</h3><p>各プロファイルには四つの Modifier Slot が独立したスナップショットとして保存されます。各スロットの有効状態、バイオーム ID、Weight、Smoothness、Normal、Parallax、Emission、Flow、Dusting、Scatter Response が含まれます。対応する Stylized Lighting の値、割り当てた Sun の回転、強さ、色に加え、地形マテリアルの <strong>Wind</strong> の有効状態、Strength、Direction、Height To Tip も保存されます。</p><p>プロファイルはマテリアルの現在値を参照し続けるわけではありません。Winter を作るためにマテリアルを変更しても、<strong>以前にキャプチャした Autumn のスナップショットは変わりません</strong>。既存プロファイルを更新するときは、そのプロファイルのキャプチャボタンを使います。</p><p><strong>Apply Profile To Material</strong> は、<strong>Channels to Animate</strong> のチェック状態に関係なく、保存された全設定を共有マテリアルと任意の Sun に即時適用します。Edit Mode で再生とプレビューを停止した状態で使用し、保存済みの見た目へ戻して編集する際に便利です。Unity Undo に対応し、保存済みプロファイルは変更しません。</p><p>一方、<strong>Animate To Profile</strong> は現在の見た目から補間を開始し、移行先プロファイルでチェックされたチャンネルだけを変更して、その結果を維持します。Edit Mode、Play モード、別のプロファイルへの移行中にも使用できます。</p><p>シェーダーの設定は <a href="terrain-material-settings.html#live-biomes">地形マテリアル設定</a>、バイオームの Scatter Response がインスタンシングされた植生に与える影響は <a href="scatter-system.html#live-response">3D Scatter ガイド</a> を参照してください。</p><h2 id="environment-profiles">環境プロファイルとタイムライン</h2><p>Environment Profiles は、季節、干ばつ、洪水、気温の変化などを表現するために利用できます。<strong>Run Sequence From Start</strong> は最初のプロファイルでチェックされたチャンネルを開始時の見た目に適用し、その後のプロファイルへ順番に移行します。<strong>Animate To Profile</strong> では、最初のプロファイルも含め、キャプチャ済みの任意のプロファイルを直接指定できます。</p><p><strong>プロファイル 1 にも他のプロファイルと同じコントロールがあります。</strong> <strong>Transition Seconds</strong>、<strong>Easing</strong>、<strong>Slot 1–4</strong>、<strong>Stylized Lighting</strong>、<strong>Directional Light</strong>、<strong>Wind</strong> を設定できます。チェックされていないチャンネルは現在値を維持します。最初にキャプチャしたプロファイルではすべてのチャンネルが初期選択され、それ以降の新規キャプチャでは前の確定状態との差分が検出されます。既存のチェック状態は保持されます。</p><h3>一連のプロファイルをキャプチャする</h3><ol>
+<li><strong>Spring：</strong>マテリアルと必要に応じて Sun を設定し、<strong>+ Capture Current Settings as NEW Profile</strong> をクリックします。名前を Spring にします。これがタイムラインの開始状態です。</li>
+<li><strong>Summer：</strong>マテリアルとライトを夏の状態に変更し、同じボタンで再びキャプチャします。Summer と名付け、<strong>Transition Seconds</strong> に移行時間を設定します。</li>
+<li><strong>Autumn：</strong>Dusting、Scatter、ライティングなどを調整し、三つ目のプロファイルとして保存します。</li>
+<li><strong>Winter：</strong>積雪用の Dusting、少ない植生、寒色寄りのライティングなどを設定します。四つ目のプロファイルをキャプチャして移行時間を設定します。</li>
+<li>最初のプロファイル以外では、新規キャプチャ時に前の確定状態と異なるバイオーム、ライティング、風のチャンネルが自動選択されます。<strong>Channels to Animate</strong> は最初のプロファイルも含め手動で変更できます。チェックを外したチャンネルは現在値を維持します。</li>
+<li><strong>Preview In Edit Mode</strong> と <strong>Preview Normalized</strong> でシーケンスを確認し、<strong>Stop Preview &amp; Restore Material</strong> で終了します。<strong>Loop</strong> を有効にすると、最後の状態から最初のプロファイルでチェックしたチャンネルへ戻ります。チェックしていないチャンネルは変更されません。</li>
+</ol><div class="example"><p><strong>保存済みプロファイルの再編集：</strong>編集するプロファイルの <strong>Apply Profile To Material</strong> をクリックし、マテリアルまたは Sun を調整します。その後 <strong>Capture Profile From Material</strong> をクリックして確認します。上書きされるのは選択したスナップショットだけです。適用とキャプチャの前にはプレビューと再生を停止してください。</p></div><h3>操作一覧</h3><div class="table-wrap"><table><thead><tr><th>設定・ボタン</th><th>動作</th></tr></thead><tbody>
+<tr><td>+ Capture Current Settings as NEW Profile</td><td>現在のマテリアルと Sun の独立したスナップショットを末尾に追加します。以前のプロファイルには影響しません。</td></tr>
+<tr><td>Capture Profile From Material / Capture Current Settings into Profile</td><td>現在のマテリアルと Sun の値を、選択したプロファイルへコピーします。保存済みのプロファイルを上書きする場合は確認が表示されます。</td></tr>
+<tr><td>Apply Profile To Material</td><td>保存済みの全バイオームスロット、Dynamic Biomes の全体設定、ライティングとキャプチャ済みの風の設定を、共有マテリアルと任意の Sun に即時適用します。<strong>Channels to Animate</strong> は無視され、保存済みスナップショットは変更されません。Stylized Lighting の値は復元しますが、シェーダー機能の有効状態は変更しません。再生、状態維持セッション、プレビューを停止した Edit Mode で使用できます。</td></tr>
+<tr><td>Animate To Profile</td><td>現在の見た目から、対象プロファイルでチェックしたチャンネルを指定の時間と Easing に従って補間し、完了後もその状態を維持します。キャプチャしたプロファイルが一つだけの場合や、最初のプロファイルでも使用できます。進行中の移行を中断して切り替えることもできます。</td></tr>
+<tr><td>Name</td><td>Spring、Winter、Drought、Flooding などの分かりやすい名前です。</td></tr>
+<tr><td>Transition Seconds</td><td>そのプロファイルへ移行する時間で、プロファイル 1 も対象です。0 なら即時適用して状態を維持します。シーケンス再生ではプロファイル 1 から即時に開始し、最後からの戻りには <strong>Loop Return Seconds</strong> が使用されます。</td></tr>
+<tr><td>Easing</td><td>移行の進み方を制御する AnimationCurve です。</td></tr>
+<tr><td>Channels to Animate</td><td>最初のプロファイルを含む各プロファイルで、Slot 1–4、Stylized Lighting、Directional Light、Wind を個別に選択します。この設定は個別のプロファイル要求とシーケンス再生の両方に適用されます。チェックを外したチャンネルは現在値を維持します。<strong>Apply Profile To Material</strong> は代わりに全設定を読み込みます。</td></tr>
+<tr><td>Run Sequence From Start / Pause / Resume</td><td>Run Sequence で全シーケンスをテストします。Pause と Resume はシーケンス、または未完了の個別プロファイルへの移行を制御します。移行完了後の状態維持中に Resume を押しても再開始しません。</td></tr>
+<tr><td>Stop &amp; Restore</td><td>再生、状態維持、スクラブを停止し、セッション開始前のマテリアル、Sun、風の設定に復元します。複数のプロファイルへ切り替えても、最初のセッション開始前の状態に戻ります。コンポーネントの無効化や削除でも元の状態に戻ります。</td></tr>
+<tr><td>Play On Start</td><td>二つ以上の完全なスナップショットがあるとき、Play モード開始時に自動再生する設定です。新規コントローラーでは初期状態で無効です。</td></tr>
+<tr><td>Loop / Loop Return Seconds</td><td>全シーケンスの最後から最初のプロファイルでチェックしたチャンネルへ戻る際の移行を設定します。<strong>Animate To Profile</strong> には影響しません。個別に要求したプロファイルは次の要求があるまで状態を維持します。</td></tr>
+<tr><td>Playback Speed</td><td>シーケンスと個別プロファイルへの移行の時間経過倍率です。1 は通常速度、0 は時間の進行停止です。</td></tr>
+<tr><td>Preview In Edit Mode / Preview Normalized</td><td>Edit Mode で、Loop が有効な場合の戻りも含めて全シーケンスをスクラブします。個別プロファイルへの移行中や状態維持中は無効です。先に <strong>Stop &amp; Restore</strong> を使用してください。</td></tr>
+<tr><td>Stop Preview &amp; Restore Material</td><td>プレビュー開始時に保存したマテリアルとライトの値を復元します。元のマテリアルを編集したり別のプロファイルをキャプチャしたりする前に実行してください。</td></tr>
+</tbody></table></div><h3 id="profile-swaps">指定したプロファイルへ移行して状態を維持する</h3><ol>
+<li>目標の見た目をキャプチャします。個別のプロファイル要求には一つのキャプチャ済みプロファイルだけで十分です。</li>
+<li>移行先プロファイルの <strong>Transition Seconds</strong>、<strong>Easing</strong>、変更するチャンネルを設定します。最初のプロファイルにも同じコントロールがあります。</li>
+<li><strong>Animate To Profile</strong> をクリックします。移行が完了すると、進行バーに <strong>Holding: プロファイル名</strong> と表示されます。</li>
+<li>別の状態が必要になったら、そのプロファイルを要求します。移行中でも、元の開始状態に戻ることなく、その時点で補間された見た目から新しい移行が始まります。</li>
+</ol><p>要求した状態は、別のプロファイル要求、<strong>Stop &amp; Restore</strong>、シーケンスの再開始、コンポーネントのクリーンアップまで維持されます。個別プロファイルの要求は Loop によって自動的に次へ進みません。Pause は未完了の移行を停止し、Resume で続行します。移行済みの保持状態には再開すべき処理がありません。</p><div class="callout"><p><strong>即時の適用とアニメーションによる切り替え：</strong>Edit Mode の <strong>Apply Profile To Material</strong> は保存したスナップショット全体を即時に読み込み、編集するための操作です。ゲームプレイ中に選択したチャンネルだけを即時に切り替えるには、移行先の <strong>Transition Seconds</strong> を 0 にして <strong>Animate To Profile</strong> を呼び出します。</p><p>Edit Mode の要求と状態維持セッションは、共有マテリアルの値を一時的に変更します。元のマテリアル設定を編集、キャプチャ、保存する前に停止して復元してください。全シーケンスの動作確認には引き続き <strong>Run Sequence From Start</strong> を利用できます。</p></div><h3 id="profile-wind">環境プロファイルでの風の制御</h3><p>地形マテリアルの Inspector で <strong>Enable Wind</strong>、<strong>Wind Strength</strong>、<strong>Wind Direction</strong>、<strong>Height To Tip</strong> を設定してからプロファイルをキャプチャします。そのプロファイルの <strong>Wind</strong> チャンネルにチェックすると、これらの値がアニメーションします。チェックを外すと風の現在値は維持されます。</p><p>風を無効にする移行では、強さをゼロまでフェードさせてから到達時にシェーダー機能を無効化します。有効にする移行では、ゼロから保存した強さへ徐々に変化します。Direction と Height To Tip も補間されます。Stylized Lighting と異なり、Wind チャンネルは機能の有効状態も切り替えられます。</p><p>風のデータが保存されていない古いプロファイルは、Wind にチェックがあっても現在の風を変更しません。風の設定を追加する場合は停止・復元し、古いプロファイルを適用してマテリアルの風を設定し、再キャプチャしてください。Scatter グループ側にも独自の <strong>Enable Wind</strong> の選択と対応マテリアルが必要です。全体の風をキャプチャしても、グループごとの風の設定は変更されません。</p><h3 id="external-profile-requests">コードや UnityEvent からのプロファイル切り替え</h3><p><code>AnimateToProfile(string profileName)</code> で名前を指定するか、<code>AnimateToProfile(int profileIndex)</code> でリスト中の位置を指定できます。<strong>インデックスは 0 から始まります。</strong> 例えば <code>controller.AnimateToProfile(0)</code> は最初のプロファイルを要求します。名前の大文字と小文字は区別されません。重複する名前では最初に一致する項目が選択されるため、固有の名前を使用してください。無効な指定や未キャプチャのプロファイルでは警告が出て、進行中の移行は変更されません。</p><p>次の例を <code>EnvironmentProfileRequests.cs</code> として保存し、GameObject に追加して Demo Controller の参照を指定します。Winter と Summer という名前のプロファイルを用意し、ゲームロジックまたは UI から対応するメソッドを呼び出します。</p><pre><code>using UnityEngine;
+using DPT.Vertex3DTerrain.Demo;
 
-<h2 id="quick-start">デモを試し、各部品を確認する</h2>
-<ol>
-<li><code>Assets/DPTGames/Vertex_Terrain/VertexTerrain_Demo/VertexTerrain_DemoScene.unity</code> を開きます。</li>
-<li>地形のマテリアルと Ground Library を確認します。そのマテリアルを <strong>Dynamic Biome Demo Controller</strong> の <strong>Terrain Material</strong> に指定します。太陽光も変化させたい場合は、<strong>Sun</strong> に Directional Light を指定します。</li>
-<li>地形マテリアルの Inspector で最初の状態を作り、コントローラーの <strong>+ Capture Current Settings as NEW Profile</strong> をクリックします。作成されたプロファイルに「Spring」などの名前を付けます。</li>
-<li>マテリアルの設定を変更して次の状態を作り、再びキャプチャします。新しいプロファイルを「Summer」と名付け、同様に Autumn、Winter などを追加します。</li>
-<li>保存済みの状態を編集する場合は、そのプロファイルの <strong>Apply Profile To Material</strong> をクリックします。保存した設定が実際の共有マテリアルに読み込まれます。調整結果を保存したいときは、続けて <strong>Capture Profile From Material</strong> をクリックします。</li>
-<li>二つ目以降のプロファイルで移行時間を設定し、<strong>Run Sequence From Start</strong> をクリックして一連の変化を確認します。Edit Mode と Play モードの両方で実行できます。<strong>Pause</strong>、<strong>Resume</strong>、<strong>Stop &amp; Restore</strong> で操作でき、Edit Mode ではタイムラインのスクラブも可能です。</li>
-<li>Play モードに入ったとき自動再生したい場合は、<strong>Play On Start</strong> を有効にします。デモカメラで変化を確認してください。</li>
-<li><strong>Surface Raycast Tester</strong> を使い、塗られた地表から返るバイオーム ID を確認します。</li>
-</ol>
-<div class="table-wrap"><table><thead><tr><th>コンポーネント・アセット</th><th>役割</th><th>自分のゲームに必要か</th></tr></thead><tbody>
-<tr><td>Dynamic Biome Demo Controller</td><td>マテリアルと Sun の状態を独立したプロファイルとして保存し、Dynamic Biome、Scatter、必要に応じてライティングの設定を滑らかに切り替えます。</td><td>任意です。このタイムラインを利用するか、独自のゲームプレイ制御に組み込めます。</td></tr>
-<tr><td>Surface Raycast Tester</td><td>物理ヒットと、その場所のバイオームを表示します。</td><td>任意の検証ツールです。ゲーム側から同じ問い合わせ API を直接使えます。</td></tr>
-<tr><td>Terrain Demo Camera</td><td>確認用の自由移動カメラです。</td><td>任意です。自分のプレイヤーやカメラに置き換えられます。</td></tr>
-<tr><td>Terrain Surface Data</td><td>ベイクした三角形とバイオームの対応情報です。</td><td>付属の三角形ベースの問い合わせに必要です。</td></tr>
-<tr><td>Terrain Surface Target</td><td>Renderer とベイク済みデータを結び、地表の問い合わせを処理します。</td><td>付属の地表問い合わせを使いたい地形に設定します。</td></tr>
-</tbody></table></div>
+public class EnvironmentProfileRequests : MonoBehaviour
+{
+    [SerializeField] private DPT_DynamicBiomeDemoController controller;
 
-<h2 id="dynamic-biome-controller">Dynamic Biome Demo Controller</h2>
-<p>コンポーネントの Inspector 上部にある <strong>Open Documentation</strong> ボタン、またはコンポーネントのヘッダーにある Help アイコンから、<a href="https://dptgames.github.io/vertex-terrain/demo-components.html">英語版のデモ・ランタイムガイド</a>を開けます。このページは日本語版です。</p>
-<p>GameObject に <strong>DPT → Dynamic Biome Demo Controller</strong> を追加します。<strong>Terrain Material</strong> を指定してください。同じ GameObject に Renderer がある場合は、その共有マテリアルを自動取得することもできます。Directional Light の回転、強さ、色も変化させたい場合は、<strong>Sun</strong> を指定します。</p>
-<p><strong>各状態の設定は、地形マテリアルの Inspector で作成します。</strong>Dynamic Biome のスロット、対象バイオーム ID、Dusting、Scatter Density / Colour、Surface Overrides、Flow などをマテリアル側で編集してください。デモコントローラーには、これらの設定項目を重複して設けていません。キャプチャボタンを押した時点の値だけがプロファイルに保存されます。</p>
-<p>同じ共有マテリアルを使用する地形は、すべて同じ変更を受けます。隣接する複数のタイルを一緒に切り替える場合に便利です。地形ごとに別の動作が必要なら、独立したマテリアルを用意してください。</p>
-<div class="callout"><p><strong>スクリプトは一つだけです：</strong>カスタム Inspector とキャプチャボタンは、<code>DPT_DynamicBiomeDemoController.cs</code> 内の Editor 専用の条件付きコードに含まれます。別の Editor スクリプトは不要です。以前の <code>DPT_DynamicBiomeDemoControllerEditor.cs</code> が残っている場合は、Inspector クラスの重複を避けるため削除してください。</p></div>
-<h3>Inspector の各セクション</h3>
-<div class="table-wrap"><table><thead><tr><th>セクション</th><th>用途</th></tr></thead><tbody>
-<tr><td>Open Documentation</td><td>オンラインの英語版ガイドを開きます。コンポーネントの Help アイコンからもアクセスできます。</td></tr>
-<tr><td>Target Setup</td><td><strong>Terrain Material</strong> と、必要に応じて <strong>Sun</strong> を指定します。</td></tr>
-<tr><td>Test Environment Sequence</td><td><strong>Run Sequence From Start</strong>、<strong>Pause</strong>、<strong>Resume</strong>、<strong>Stop &amp; Restore</strong> を使い、自動再生を有効にせずに変化をテストします。</td></tr>
-<tr><td>Environment Profiles</td><td><strong>+ Capture Current Settings as NEW Profile</strong> でスナップショットを追加します。各プロファイルには <strong>Capture Profile From Material</strong>、<strong>Apply Profile To Material</strong>、<strong>Move Up</strong>、<strong>Move Down</strong>、<strong>Remove Profile</strong> があります。</td></tr>
-<tr><td>Playback</td><td><strong>Play On Start</strong>、<strong>Loop</strong>、必要に応じて <strong>Loop Return Seconds</strong>、<strong>Playback Speed</strong> を設定します。</td></tr>
-<tr><td>Edit Mode Preview</td><td><strong>Preview In Edit Mode</strong> と <strong>Preview Normalized</strong> で任意の位置を確認します。終了時は <strong>Stop Preview &amp; Restore Material</strong> を使います。</td></tr>
-</tbody></table></div>
-<h3>プロファイルに保存される内容</h3>
-<p>各プロファイルには、四つの Modifier Slot の有効状態、対象バイオーム ID、Weight、Smoothness、Normal、Parallax、Emission、Flow、Dusting、Scatter Response がそれぞれ独立して保存されます。対応する Stylized Lighting の数値・色と、指定した Sun の回転・強さ・色も保存されます。</p>
-<p>プロファイルはマテリアルの値を常時参照するものではありません。Winter のためにマテリアルを変更しても、<strong>以前にキャプチャした Autumn のスナップショットは変わりません</strong>。既存のプロファイルを更新するには、そのプロファイルのキャプチャボタンを明示的に押します。</p>
-<p><strong>Apply Profile To Material</strong> は、保存済みの状態を現在の共有マテリアルと必要に応じて Sun に適用します。これは一時的なプレビューではなく、実際のマテリアルの編集です。保存済みプロファイル自体は変更されません。適用後に見た目を調整し、同じプロファイルに再キャプチャできます。適用操作には Unity の Undo を使用できます。</p>
-<p>シェーダー側の各設定については<a href="terrain-material-settings.html#live-biomes">地形マテリアル設定</a>を参照してください。バイオームの Scatter Response が GPU インスタンシングされた植生にどう反映されるかは、<a href="scatter-system.html#live-response">3D Scatter ガイド</a>を参照してください。</p>
+    public void RequestWinter()
+    {
+        if (controller != null)
+            controller.AnimateToProfile("Winter");
+    }
 
-<h2 id="environment-profiles">環境プロファイルとタイムライン</h2>
-<p>Environment Profiles は、春夏秋冬だけでなく、干ばつ、洪水、気温による変化など、一連の環境状態を表現するために利用できます。<strong>最初のプロファイルが開始時の見た目です。</strong>二つ目以降は、それぞれ前の状態から移行する先の見た目と、移行に必要な秒数を指定します。</p>
-<h3>一連のプロファイルをキャプチャする</h3>
-<ol>
-<li><strong>Spring：</strong>マテリアルと必要に応じて Sun を調整し、<strong>+ Capture Current Settings as NEW Profile</strong> をクリックします。名前を Spring に変更します。これがタイムラインの開始状態です。</li>
-<li><strong>Summer：</strong>マテリアルとライトを夏の状態に編集して再びキャプチャします。名前を Summer にし、<strong>Transition Seconds</strong> に春から夏への移行時間を設定します。</li>
-<li><strong>Autumn：</strong>Dusting、Scatter、ライティングなどを必要に応じて調整し、三つ目のプロファイルとして保存します。</li>
-<li><strong>Winter：</strong>積雪用の Dusting、少ない植生、寒色寄りのライティングなどを設定します。四つ目のプロファイルをキャプチャし、移行時間を設定します。</li>
-<li>新規キャプチャ時には、前の状態と比較し、違いのある Modifier Slot やライティングの <strong>Channels to Animate</strong> が自動選択されます。チェックは手動でも変更できます。チェックのない項目は前の状態を引き継ぎます。</li>
-<li><strong>Preview In Edit Mode</strong> と <strong>Preview Normalized</strong> で変化を確認し、終わったら <strong>Stop Preview &amp; Restore Material</strong> を押します。<strong>Loop</strong> を有効にすると、最後の状態から最初の状態へも滑らかに移行します。</li>
-</ol>
-<div class="example"><p><strong>保存済みプロファイルの再編集：</strong>編集したいプロファイルの <strong>Apply Profile To Material</strong> を押してから、マテリアルまたは Sun を調整します。変更を保存するには <strong>Capture Profile From Material</strong> を押し、確認ダイアログで承認してください。上書きされるのは選択したプロファイルだけです。適用・キャプチャの前には、再生やプレビューを停止してください。</p></div>
-<h3>操作一覧</h3>
-<div class="table-wrap"><table><thead><tr><th>設定・ボタン</th><th>動作</th></tr></thead><tbody>
-<tr><td>+ Capture Current Settings as NEW Profile</td><td>現在のマテリアルと Sun を新しい独立したスナップショットとして末尾に追加します。以前のプロファイルは変更しません。</td></tr>
-<tr><td>Capture Profile From Material / Capture Current Settings into Profile</td><td>現在のマテリアルと Sun の設定を、選択したプロファイルにコピーします。キャプチャ済みのプロファイルを置き換える場合は確認が表示されます。</td></tr>
-<tr><td>Apply Profile To Material</td><td>保存された四つの Biome Slot、ライブバイオームの全体設定、ライティングの値を共有マテリアルと Sun に読み込みます。Stylized Lighting の値は復元しますが、シェーダー機能の有効・無効は切り替えません。保存済みスナップショットは変更しません。再生とプレビューを停止した Edit Mode でのみ利用できます。</td></tr>
-<tr><td>Name</td><td>Spring、Winter、Drought、Flooding など、状態を表す名前です。</td></tr>
-<tr><td>Transition Seconds</td><td>前のプロファイルから現在のプロファイルへの移行時間です。最初のプロファイルは開始状態なので、移行時間はありません。</td></tr>
-<tr><td>Easing</td><td>移行中の変化の進み方を調整する AnimationCurve です。</td></tr>
-<tr><td>Channels to Animate</td><td>四つの Dynamic Biome Slot、Stylized Lighting、Directional Light から変化させる項目を選びます。キャプチャ時に差分が自動検出されますが、手動変更も可能です。</td></tr>
-<tr><td>Run Sequence From Start / Pause / Resume</td><td>自動再生を有効にせず、Edit Mode または Play モードでシーケンスを実行・一時停止・再開します。</td></tr>
-<tr><td>Stop &amp; Restore</td><td>手動再生またはスクラブを停止し、そのセッション開始時のマテリアルと Sun の値に戻します。</td></tr>
-<tr><td>Play On Start</td><td>二つ以上のキャプチャ済みプロファイルがある場合、Play モード開始時に自動実行します。新規コントローラーでは初期状態で無効です。</td></tr>
-<tr><td>Loop / Loop Return Seconds</td><td>最後のプロファイルから最初へ戻る移行時間を指定します。Loop を無効にすると最後の状態を維持します。</td></tr>
-<tr><td>Playback Speed</td><td>タイムラインの進行速度の倍率です。1 は通常速度、0 は進行停止です。</td></tr>
-<tr><td>Preview In Edit Mode / Preview Normalized</td><td>Editor 内でタイムラインの位置をスクラブして確認します。Loop が有効なら戻りの移行も含まれます。</td></tr>
-<tr><td>Stop Preview &amp; Restore Material</td><td>プレビュー開始前のマテリアルとライトの設定を復元します。マテリアル編集や次のキャプチャを行う前に実行してください。</td></tr>
-</tbody></table></div>
-<p>スクリプトからは <code>PlayFromStart()</code>、<code>PauseTimeline()</code>、<code>ResumeTimeline()</code>、<code>StopAndRestore()</code>、<code>SetTimelineNormalized(float)</code> でシーケンスを制御できます。<code>ApplyProfileToMaterial(int)</code> は指定したスナップショットをマテリアルに適用し、<code>CaptureCurrentMaterialIntoProfile(int)</code> はそれを更新します。コンポーネントのコンテキストメニューからも実行や新規キャプチャが可能です。</p>
-<h3>ライティングと移行の制限</h3>
-<ul>
-<li><strong>Stylized Lighting は任意です。</strong><code>_STYLIZED_LIGHTING</code> がプレビューまたは再生の開始時点で既に有効な場合にのみ、その数値・色を変化させます。コントローラーはシェーダーキーワードを切り替えません。Sun の移行は独立して動作します。</li>
-<li><strong>数値・色の値は補間されます。</strong>Weight、Dusting Strength、Scatter Density / Colour、Flow Speed、Emission、陰影、Sun の回転などは指定時間に沿って変化します。</li>
-<li><strong>ID やオン・オフ設定は連続的には補間されません。</strong>対象バイオーム ID、Dusting 用のバイオーム ID、シェーダー機能の切り替えなどは段階的な変更になります。滑らかな移行には、可能な限り同じ対象 ID を使い、Strength、Weight、Density を変化させてください。</li>
-<li><strong>地形マテリアル側で Dynamic Biomes を有効にする必要があります。</strong>全体スイッチが無効な場合、プロファイルが変化してもライブ Modifier の効果は表示されません。</li>
-<li><strong>プレビューは共有マテリアルを一時的に書き換えます。</strong>アセットの保存やマテリアルの再編集前に、必ず停止・復元してください。Editor が予期せず終了した場合に備えて、元のマテリアルを保存しておくことをおすすめします。</li>
-</ul>
-<p>プロファイルは地形の再ペイント、Scatter の再配置、水位を表すジオメトリの移動、降水シミュレーションは行いません。Weight のライブ変更は既にペイントされたバイオームの寄与に作用し、雪の Dusting には適切なバイオーム ID と、事前にペイントした Dusting マスクが必要です。</p>
-
-<h2 id="surface-raycast-tester">Surface Raycast Tester</h2>
+    public void RequestSummer()
+    {
+        if (controller != null)
+            controller.AnimateToProfile("Summer");
+    }
+}</code></pre><h4>ラッパースクリプトなしで UnityEvent に接続する</h4><ol>
+<li>UI Button の <strong>On Click()</strong> などにイベントを追加します。</li>
+<li>Dynamic Biome Demo Controller がある GameObject を指定します。</li>
+<li>文字列または整数を受け取る <strong>AnimateToProfile</strong> メソッドを選択します。</li>
+<li>Winter などのプロファイル名、または 0 から始まるインデックスを入力します。イベントを呼び出すと Inspector のボタンと同じように移行し、その状態を維持します。</li>
+</ol><h4>再生状態を取得する</h4><div class="table-wrap"><table><thead><tr><th>公開プロパティ</th><th>意味</th></tr></thead><tbody>
+<tr><td>IsPlaying</td><td>シーケンスまたは要求した移行が進行中です。</td></tr>
+<tr><td>IsProfileSession</td><td>個別プロファイルの要求セッションが存在します。一時停止中の移行や、完了後の状態維持も含みます。</td></tr>
+<tr><td>HasPendingProfileTransition</td><td>要求した移行がまだ完了していません。一時停止中も true のままになる場合があります。</td></tr>
+<tr><td>RequestedProfileIndex</td><td>要求したプロファイルの 0 始まりのインデックスです。</td></tr>
+<tr><td>ActiveProfileIndex</td><td>移行中は -1、完了後は保持中のプロファイルのインデックスです。復元すると -1 に戻ります。</td></tr>
+<tr><td>CurrentTimeSeconds / CurrentPlaybackDuration</td><td>現在の要求またはシーケンスの経過時間と長さ（秒）です。Playback Speed は実際の経過時間に影響します。</td></tr>
+</tbody></table></div><p><code>PlayFromStart()</code> はシーケンス全体を実行します。<code>PauseTimeline()</code>、<code>ResumeTimeline()</code>、<code>StopAndRestore()</code> はどちらの再生方法にも対応します。<code>SetTimelineNormalized(float)</code> は個別要求セッション中に 0～1 の範囲でその移行をシークし、それ以外ではシーケンスを操作します。<code>ApplyProfileToMaterial(int)</code> と <code>CaptureCurrentMaterialIntoProfile(int)</code> は、再生とプレビューを停止した状態で使う Edit Mode の編集用メソッドです。</p><h3>ライティングと移行の制限</h3><ul>
+<li><strong>Stylized Lighting は任意です。</strong> プレビューまたは再生開始時点で <code>_STYLIZED_LIGHTING</code> が有効な場合にのみ値をアニメーションします。コントローラーはシェーダーキーワードをオン・オフしません。Sun の移行は独立して動作します。</li>
+<li><strong>数値と色は補間されます。</strong> Weight、Dusting Strength、Scatter Density と Colour、Flow Speed、Emission、シェーディング、Sun の回転などは指定時間に沿って変化します。</li>
+<li><strong>ID とスイッチは離散的です。</strong> 対象バイオーム ID、Overlay Biome ID、シェーダー機能の切り替えは連続補間されません。滑らかに変化させたい場合は、可能な限り同じ対象 ID を使用し、Strength、Weight、Density を調整してください。</li>
+<li><strong>地形マテリアルで Dynamic Biomes を有効にする必要があります。</strong>全体スイッチが無効な場合、ライブ Modifier の効果は表示されません。</li>
+<li><strong>プレビューは共有マテリアルを一時的に変更します。</strong> アセット保存やマテリアル編集の前に停止・復元してください。Editor が予期せず終了した場合に備え、元のマテリアルを保存しておくと安全です。</li>
+</ul><p>プロファイルは地形の再ペイント、地形ジオメトリやシームの変更、水位の物理的な引き上げ、降水シミュレーションを行いません。ライブ Weight の変化は既存のペイント済みバイオームの寄与に作用します。雪の Dusting には適切なバイオーム ID と、あらかじめペイントされた Dusting マスクが必要です。</p><h3 id="scatter-transitions">Scatter の安定したフェードと編集時の表示</h3><p>Scatter の配置はペイントされたバイオームの範囲から生成されます。Dynamic <strong>Weight Multiplier</strong> と <strong>Scatter Density</strong> は、既存の安定したクランプ群から描画時に間引く方式です。泥、黄ばんだ草、干ばつなどを表現するために草の強さを下げても、毎ステップで配置を再生成しません。元の強さに戻すと同じ配置が復元されます。色の変更もライブで反映されます。</p><p><strong>Strength は Scatter のフェード制御で、上限は 1 です。</strong> Strength が 0 なら該当する動的 Scatter は非表示、0.5 ならおおむね半分、1 以上ならペイントされた設定量が表示されます。1 を超える値は地形シェーディングには影響する場合がありますが、Scatter の密度は増やしません。配置の最大密度を増やすには Scatter グループの <strong>Density</strong> を調整してください。Strength と Scatter Density Response は乗算され、重複するスロットの Weight Multiplier は上限適用前に合成されます。</p><p>季節によるバイオーム変更から除外したいクリスタルなどの Scatter には、そのグループの <strong>Wind</strong> の隣にある <strong>Static Scatter</strong> を有効にします。Static グループは Dynamic Biome の Weight、Scatter Density、Colour / Surface Overrides を無視します。ただし、ペイントやスカルプトに応じて配置は更新され、共有インスタンス数の上限も適用されます。</p><p>Scatter Settings の <strong>Disable While Brushing</strong> は、サーフェスまたはジオメトリのツールが選択されている間、ストロークの合間も含めて Scatter を非表示にし、配置更新を停止します。<strong>両方のツール選択を None にする</strong>か、地形ツールウィンドウを閉じると再表示されます。このオプションは Edit Mode のみ対象です。別の <strong>Update After Stroke</strong> は、非表示設定がオフのときストローク中も配置を表示し、ストローク終了後に影響を受けたソースを更新します。</p><h2 id="surface-raycast-tester">Surface Raycast Tester</h2>
 <p>レイキャストは、Unity に「この線上にどのコライダーがあるか」を問い合わせます。テスターはヒットを表示し、次に地形の Surface Target にバイオームを問い合わせます。二つは別の処理です。コライダーに当たっても、サーフェスデータがあるとは限りません。</p>
 <h3>自分の地形にプローブを置く</h3>
 <ol><li>小さなテスト地形を塗り、メッシュを保存します。</li><li>ベイクするメッシュと同じ三角形配置の MeshCollider を用意します。</li><li>地形ツールの <strong>Bake Surface Data</strong> を使います。</li><li>適切な地形オブジェクトに <strong>DPT → Terrain Surface Target</strong> があり、ベイクした Surface Data が指定されていることを確認します。Renderer も必要です。</li><li>地形の上に別の空オブジェクトを作り、<strong>DPT → Surface Raycast Tester</strong> を追加します。</li><li>Downward Probe、十分な Max Ray Distance、地形のコライダーを含むレイヤーマスクを指定します。</li><li>Scene Gizmos か Game HUD を有効にし、対象、三角形番号、ID、名前を確認します。異なる地表間でプローブを動かして比較します。</li></ol>
@@ -114,7 +135,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <h3>結果の読み方</h3>
 <p><strong>Hit Object</strong> はレイを受けたコライダー、<strong>Triangle Index</strong> は参照する三角形番号です。<strong>Biome ID と Name</strong> が地表の結果、<strong>Hit Point、Normal、Distance</strong> は交点、法線、距離です。</p>
 <p>当たっているのにバイオームが不明なら、Surface Target とデータを確認します。BoxCollider や SphereCollider は、この三角形ベースの処理で一致した地形 MeshCollider の代わりにはなりません。負の値など無効な三角形番号を、有効な問い合わせとして扱わないでください。</p>
-
 <h2 id="terrain-demo-camera">Terrain Demo Camera</h2>
 <p>確認用カメラに <strong>DPT → Terrain Demo Camera</strong> を追加します。自由移動とマウス視点操作ができます。歩行の物理、衝突回避、接地、惑星の重力は提供しません。</p>
 <div class="table-wrap"><table><thead><tr><th>入力</th><th>動作</th></tr></thead><tbody>
@@ -126,45 +146,44 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 </tbody></table></div>
 <p>Movement Speed は通常の速度、Fast Multiplier は Shift の倍率、Mouse Sensitivity は視点の感度です。操作表示は、覚える間に便利です。小さな形状の確認では遅く、大きな地形を移動するときは速くします。</p>
 <p>確認用カメラには衝突制御がないため、地形を通り抜けます。橋、洞窟、階段を実際に移動できるかは、自分のゲームプレイ用コントローラーで確認します。</p>
-
 <h2 id="runtime-architecture">サーフェスデータをゲームプレイに使う</h2>
 <p>基本の流れは、<strong>地形を塗る → サーフェスデータをベイクする → 地形に関連付ける → 一致するコライダーへレイを飛ばす → ID を読む → ゲーム側の反応を選ぶ</strong>です。</p>
 <p>ベイクしたアセットは、ライブの重み変更に使う候補 ID と重みを含め、三角形ごとの代表的な地表情報を記録します。Surface Target は、その情報とマテリアルの現在の修正を読みます。一回のヒットに一つの ID を返すもので、テクスチャ全体や見えているすべての素材の一覧を返すものではありません。</p>
 <h3>小さな連携例</h3>
 <p>以下を <code>TerrainSurfaceProbe.cs</code> として保存し、テスト地形の上のオブジェクトに追加します。地形のレイヤーと距離を設定し、コンポーネントのメニューの <strong>Read Surface</strong> で一回問い合わせます。Console 出力は例です。ゲームに組み込むときは、自分の音、パーティクル、移動設定の参照に置き換えてください。</p>
 <pre><code>using UnityEngine;
-using DPT.VertexTerrain;
+using DPT.Vertex3DTerrain;
 
 public class TerrainSurfaceProbe : MonoBehaviour
 {
     public LayerMask terrainLayers = ~0;
     public float distance = 2f;
 
-    [ContextMenu(&quot;Read Surface&quot;)]
+    [ContextMenu("Read Surface")]
     public void ReadSurface()
     {
         if (!Physics.Raycast(transform.position, Vector3.down,
                 out RaycastHit hit, distance, terrainLayers))
         {
-            Debug.Log(&quot;指定距離内にコライダーがありません。&quot;);
+            Debug.Log("指定距離内にコライダーがありません。");
             return;
         }
 
         if (hit.triangleIndex &lt; 0)
         {
-            Debug.Log(&quot;このコライダーには有効な地形の三角形番号がありません。&quot;);
+            Debug.Log("このコライダーには有効な地形の三角形番号がありません。");
             return;
         }
 
         if (DPT_TerrainSurfaceTarget.TryGetHitBiome(
                 hit, out int biomeID, out string biomeName))
         {
-            Debug.Log($&quot;地表: {biomeName} (ID {biomeID})&quot;);
+            Debug.Log($"地表: {biomeName} (ID {biomeID})");
             // biomeID を使って、ゲーム側の処理を選びます。
         }
         else
         {
-            Debug.Log(&quot;当たった対象に地形のサーフェスデータがありません。&quot;);
+            Debug.Log("当たった対象に地形のサーフェスデータがありません。");
         }
     }
 }</code></pre>
@@ -173,7 +192,6 @@ public class TerrainSurfaceProbe : MonoBehaviour
 <h3>再ベイクするタイミング</h3>
 <ul><li>ゲームプレイで問い合わせる場所を塗り直した後。</li><li>バイオームの追加、削除、並べ替えにより、データで使う ID が変わった後。</li><li>分割、削除、トンネル生成、簡略化などで三角形が変わった後。</li><li>その他の形状変更により、ベイクや代表的な地表情報に影響した後。</li><li>簡略化した LOD コライダーなど、別のコライダーメッシュへ切り替えたとき。</li></ul>
 <p>通常の対応するライブ倍率は、問い合わせ時に読まれるため、毎回塗り直したり三角形データを作り直したりする必要はありません。ただし、候補はベイク済みのものです。古いベイクから、新しく塗った情報を読み出すことはできません。</p>
-
 <h2 id="query-limits">問い合わせは見た目とどこまで一致するか</h2>
 <p>付属の問い合わせは代表的な地表の選択に役立ちますが、<strong>シェーダーが描く画素を完全に取得するものではありません。</strong>すべての境界や雪の領域で、カーソル下の見た目と正確に一致すると考えず、自分のゲームの要件で確認します。</p>
 <div class="table-wrap"><table><thead><tr><th>状況</th><th>問い合わせの動作</th><th>ゲームプレイへの影響</th></tr></thead><tbody>
@@ -185,25 +203,24 @@ public class TerrainSurfaceProbe : MonoBehaviour
 <tr><td>別のコライダーのトポロジー</td><td>三角形番号はコライダーのもので、描画メッシュとは限りません。</td><td>ベイクをその三角形順序に合わせる必要があります。簡略化した LOD2 に、別の元メッシュの対応をそのまま使わないでください。</td></tr>
 </tbody></table></div>
 <p>正確な小領域、局所重力に合う雪、画素単位の被覆がゲームに必要なら、そのルール用の問い合わせを作り、検証してください。付属コンポーネントは、ここで説明した制約を持つ出発点です。</p>
-
 <h2 id="troubleshooting">実行時・デモの問題</h2>
 <div class="table-wrap"><table><thead><tr><th>症状</th><th>確認すること</th></tr></thead><tbody>
 <tr><td>キャプチャボタンが表示されない</td><td>C# のコンパイルエラーがないか、単一ファイル版のコントローラーだけがインストールされているかを確認します。ボタンはカスタム Inspector の上部にあります。古い別ファイルの Editor スクリプトは削除してください。</td></tr>
-<tr><td>デモコントローラーが何も変えない</td><td>Terrain Material を指定し、二つ以上のプロファイルをキャプチャして <strong>Run Sequence From Start</strong> を押します。または Play On Start か Edit Mode Preview を有効にします。地形マテリアルの Dynamic Biomes 全体スイッチと、プロファイルの Channels to Animate も確認してください。</td></tr>
-<tr><td>Apply Profile To Material が無効になっている</td><td>先にそのプロファイルをキャプチャし、再生とプレビューを停止します。この操作は Edit Mode でマテリアルを編集するためのもので、Play モード用のアニメーション操作ではありません。</td></tr>
+<tr><td>デモコントローラーが何も変えない</td><td>Terrain Material を割り当ててプロファイルをキャプチャし、個別の切り替えには Animate To Profile を使います。Run Sequence From Start には二つ以上のプロファイルが必要です。シーケンスには Play On Start または Edit Mode プレビューも使用できます。Playback Speed、マテリアルの Dynamic Biomes 全体スイッチ、移行先プロファイルのチェック済みチャンネルを確認してください。</td></tr>
+<tr><td>Apply Profile To Material が無効になっている</td><td>プロファイルをキャプチャした後、Stop &amp; Restore でプレビュー、再生、状態維持セッションを終了します。Apply は Edit Mode で全スナップショットを即時に読み込んで編集するための操作です。ゲームプレイ中の切り替えには Animate To Profile を使い、選択チャンネルを即時に変更したい場合は Transition Seconds を 0 に設定します。</td></tr>
 <tr><td>Winter を変更したら Autumn も変わった</td><td>キャプチャ済みプロファイルの値は互いに独立しています。元のマテリアルを編集する前に、実行中のプレビューを停止してください。Autumn の保存済みデータが上書きされるのは、Autumn の <strong>Capture Profile From Material</strong> を明示的に押した場合だけです。</td></tr>
 <tr><td>意図しない設定がキャプチャされた</td><td>キャプチャ前にプレビューと Play モードを停止します。編集したマテリアルが Terrain Material に指定されていること、ライトの値も保存したい場合は Sun が指定されていることを確認してください。</td></tr>
 <tr><td>プロファイルを切り替えてもバイオームが変わらない</td><td>保存したプロファイルの Slot 1～4 のチェック、マテリアル内の対象バイオーム ID、スロットの有効状態、元の塗り分け、Dusting マスクと傾斜しきい値を確認します。</td></tr>
-<tr><td>雪は表示されるが植生は変わらない</td><td>保存された Scatter Density Response とバイオーム ID を確認し、Scatter Renderer がコントローラーの更新対象と同じマテリアルを使用しているか確認します。詳しくは<a href="scatter-system.html#live-response">3D Scatter ガイド</a>を参照してください。</td></tr>
+<tr><td>雪は表示されるが植生は変わらない</td><td>キャプチャ済みの Scatter Density Response とバイオーム ID を確認し、Scatter Renderer がコントローラーの対象マテリアルを使用していることを確認します。Static Scatter のグループは季節による Dynamic Biome の変化を意図的に無視します。詳しくは <a href="scatter-system.html#live-response">3D Scatter ガイド</a>を参照してください。</td></tr>
 <tr><td>Stylized Lighting が変化しない</td><td>プレビューまたは再生を始める前にマテリアル側で Stylized Lighting を有効にし、該当プロファイルの <strong>Stylized Lighting (if enabled)</strong> にチェックを入れます。コントローラーはシェーダーキーワードを切り替えません。</td></tr>
 <tr><td>Sun が回転しない・暗くならない</td><td>Sun に Light を指定し、該当プロファイルの <strong>Directional Light</strong> を有効にします。回転、強さ、色に十分な差がある状態をキャプチャしてください。</td></tr>
 <tr><td>滑らかに変化せず瞬時に切り替わる</td><td><strong>Transition Seconds</strong> を 0 より大きくし、Easing カーブも確認してください。バイオーム ID や一部のオン・オフ設定は段階的にしか変えられません。</td></tr>
-<tr><td>ループ時に最初の状態へ飛ぶ</td><td><strong>Loop</strong> を有効にし、<strong>Loop Return Seconds</strong> に 0 より大きい値を設定して最後から最初への移行を作ります。</td></tr>
+<tr><td>ループ時に最初の状態へ飛ぶ</td><td>Loop を有効にし、最後から最初への補間に Loop Return Seconds を 0 より大きく設定します。戻りの移行に影響するのは最初のプロファイルでチェックされたチャンネルです。Loop は全シーケンス用であり、個別の Animate To Profile は移行先の状態を維持します。</td></tr>
 <tr><td>プレビューを止めると設定が戻る</td><td>仕様どおりです。Stop &amp; Restore はプレビュー開始前のマテリアルとライトの値を復元します。新しい状態を保存するには、プレビュー外で実際のマテリアルを調整してからキャプチャしてください。</td></tr>
 <tr><td>ヒットしてもバイオームが出ない</td><td>コライダーのレイヤー、Surface Target、割り当てたベイクを確認します。一致する MeshCollider と有効な三角形番号が必要です。</td></tr>
 <tr><td>名前や ID が違う</td><td>不適切な Override を解除して最新の Surface Data を再ベイクし、ライブラリ ID とコライダーの三角形順序を確認します。</td></tr>
 <tr><td>惑星でレイが外れる</td><td>Downward Probe はワールド下方向です。Transform Forward、またはゲームの重力方向に沿ったレイを使います。</td></tr>
 <tr><td>複数の地形が一緒に変わる</td><td>コントローラーは共有マテリアルを編集します。地形ごとに異なる動作が必要な場合は、独立したマテリアルを使ってください。</td></tr>
 <tr><td>デモカメラが橋を通り抜ける</td><td>衝突制御がありません。実際の地形コライダーと自分のゲーム用キャラクターで移動を確認してください。</td></tr>
-</tbody></table></div>
+<tr><td>Animate To Profile を押しても何も変わらない</td><td>マテリアルの参照、移行先プロファイルのキャプチャ、チェック済みチャンネル、Dynamic Biomes の全体スイッチ、Playback Speed を確認します。個別の要求には一つのプロファイルで十分ですが、全シーケンスの再生には二つ以上必要です。</td></tr><tr><td>プロファイル切り替え後に Resume が無効になる</td><td>Holding は移行が完了した状態です。見た目を変更するには別のプロファイルを要求してください。Resume は未完了で一時停止している移行を続けるための操作です。</td></tr><tr><td>Play モード開始時に Wind が変わる</td><td>Wind のスイッチはシェーダーキーワードと対応するマテリアル値を一緒に保存します。マテリアル側で風を設定して保存し、要求したプロファイルの Wind チャンネルを確認してください。風データのない古いプロファイルは再キャプチャするまで現在値を維持します。グループごとの Enable Wind は別設定です。</td></tr><tr><td>洞窟のクリスタルが季節の影響を受ける</td><td>クリスタルの Scatter グループで Static Scatter を有効にし、プロファイルのスロットの対象バイオームを確認してください。同じバイオームを対象とするスロットが重複している場合、その Modifier は合成されます。</td></tr><tr><td>ブラシを離しても Scatter が非表示のままになる</td><td>Disable While Brushing が有効な場合、ツールが選択されている間はストローク間も非表示です。サーフェスとジオメトリの両方のツールを None にするか、地形ツールウィンドウを閉じてください。</td></tr><tr><td>Strength を 1 より大きくしても草が増えない</td><td>Scatter の Strength は 1 が上限です。最大配置密度を増やすにはグループの Density を上げ、その量を Strength または Scatter Density Response でフェードさせてください。</td></tr></tbody></table></div>
 <h2 id="support">サポート</h2><p>相談するときは、期待した結果、使った項目、実際に起きたことを説明してください。Unity のバージョン、選択したパイプライン、関連する設定のスクリーンショットも添えます。実行時の問い合わせの問題では、コライダーの種類と、最後にサーフェスデータをベイクした時期も記載してください。</p><p><a href="https://dptgames.github.io/#contact">DPT Games お問い合わせフォーム</a>、または <a href="https://discord.gg/EkQykfzP5X">DPT Games Discord</a> をご利用ください。</p><p class="back-top"><a href="#top">ページの先頭へ</a></p><footer class="footer">DPT Vertex 3D Terrain ドキュメント · 操作項目を見つけやすいよう、英語の項目名も併記しています。エディター上部の English / 日本語で、ツールの表示言語を切り替えられます。</footer></main></body></html>
