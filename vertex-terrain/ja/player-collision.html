@@ -1,0 +1,116 @@
+<!doctype html>
+
+
+<html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="プレイヤーに反応する草、パーティクルプリセット、移動で発生する花粉や草片、ベイク済み地表データを利用したバイオーム別の水しぶきや雪、粉じんの設定。" name="description"/><title>プレイヤーとの衝突とスキャッターのインタラクション | DPT Games</title><style>
+:root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
+main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
+.site-nav{display:flex;flex-wrap:wrap;gap:8px 20px;border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:32px;font-size:.92rem}.site-nav [aria-current]{color:white;font-weight:700}
+.language-nav{display:flex;gap:10px;flex-wrap:wrap;margin:-12px 0 28px}.language-nav a{display:inline-block;padding:6px 16px;border:1px solid var(--border);border-radius:6px;text-decoration:none}.language-nav [aria-current]{color:#0f172a;background:var(--accent);border-color:var(--accent);font-weight:700}html[lang="ja"] body{line-height:1.85;line-break:strict}html[lang="ja"] th,html[lang="ja"] td{overflow-wrap:anywhere}
+h1,h2,h3,h4{line-height:1.25;color:var(--accent)}h1{font-size:2.25rem;margin:0 0 14px}h2{font-size:1.65rem;margin:48px 0 18px;padding-top:12px;border-top:1px solid var(--border)}h3{font-size:1.22rem;margin:30px 0 12px}h4{font-size:1.06rem}
+p{margin:12px 0 18px}li{margin:7px 0}ul,ol{padding-left:25px}.lead{font-size:1.18rem;color:var(--muted);max-width:850px}.intro{margin:28px 0}.toc{background:var(--panel);padding:20px 24px;border:1px solid var(--border);border-radius:9px;margin:28px 0}.toc h2{margin:0 0 10px;padding:0;border:0;font-size:1.15rem}.toc ul{columns:2;column-gap:36px;margin:0}.toc li{break-inside:avoid}
+.callout,.example{background:var(--panel);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:14px 20px;margin:22px 0}.example{border-color:#a3e635}.callout p:last-child,.example p:last-child{margin-bottom:0}.callout p:first-child,.example p:first-child{margin-top:0}
+.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--border);border-radius:7px}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--border)}thead{background:#25354c}th{color:#f8fafc}td:first-child{font-weight:600;min-width:145px}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#172238}
+code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background:#27354c;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}kbd{white-space:nowrap;border:1px solid #50617a}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#09111f;border:1px solid var(--border);padding:20px;border-radius:7px}pre code{background:transparent;padding:0}
+.back-top{font-size:.88rem}.table-hint{display:none;color:var(--muted);font-size:.9rem}.footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);margin-top:34px;padding-top:16px}details{background:var(--panel);padding:14px 18px;border:1px solid var(--border);border-radius:7px;margin:16px 0}summary{cursor:pointer;font-weight:600;color:var(--accent)}.alias{display:block;scroll-margin-top:24px}.doc-figure{margin:24px 0}.doc-figure img{display:block;width:100%;height:auto;border:1px solid var(--border);border-radius:8px;background:#0b0f16}.doc-figure figcaption{margin-top:9px;color:var(--muted);font-size:.9rem}
+@media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
+@media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
+</style><link href="../player-collision.html" hreflang="en" rel="alternate"/><link href="player-collision.html" hreflang="ja" rel="alternate"/><link href="../ko/player-collision.html" hreflang="ko" rel="alternate"/></head>
+<body><main id="top"><nav aria-label="Documentation" class="site-nav"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a href="index.html">Vertex 3D Terrain ガイド</a><a href="biomes.html">バイオームガイド</a><a href="terrain-material-settings.html">地形マテリアルの設定</a><a href="scatter-system.html">3D スキャッターガイド</a><a aria-current="page" href="player-collision.html">プレイヤーとの衝突と反応</a><a href="demo-components.html">デモとランタイムガイド</a></nav><nav aria-label="言語" class="language-nav"><a href="../player-collision.html" hreflang="en" lang="en">English</a><a aria-current="page" href="player-collision.html" hreflang="ja" lang="ja">日本語</a><a href="../ko/player-collision.html" hreflang="ko" lang="ko">한국어</a></nav>
+<header><h1>プレイヤーとの衝突とスキャッターのインタラクション</h1><p class="lead">プレイヤーや NPC が通過すると草が倒れ、草片や花粉が舞うように設定します。さらに、足元の地形に応じて水しぶき、砂ぼこり、雪のエフェクトを追加できます。</p></header>
+<nav aria-label="On this page" class="toc"><h2>このページの内容</h2><ul><li><a href="#overview">インタラクションの仕組み</a></li><li><a href="#quick-start">プレイヤーに草を反応させる</a></li><li><a href="#interactor-controls">Scatter Interactor の設定</a></li><li><a href="#scatter-controls">曲がるスキャッターを選ぶ</a></li><li><a href="#movement-particles">草を揺らしたときのパーティクル</a></li><li><a href="#surface-effects">水しぶき、砂ぼこり、地表エフェクト</a></li><li><a href="#materials">マテリアルとカスタムメッシュ</a></li><li><a href="#multiple-players">プレイヤー、NPC、制限事項</a></li><li><a href="#collision">物理的な衝突とゲームプレイ</a></li><li><a href="#performance">パフォーマンスとカリング</a></li><li><a href="#troubleshooting">インタラクションのトラブルシューティング</a></li><li><a href="#support">サポート</a></li></ul></nav>
+<p class="table-hint">画面が小さい場合は、幅の広い表を左右にスクロールしてすべての列をご覧ください。</p>
+<div class="intro"><p>Scatter Interactor は、対応するスキャッターシェーダーに位置と影響範囲を渡します。近くの草の先端は Interactor から離れる方向に動き、その変位は半径の端に向かって滑らかに減衰します。根元は固定されたままで、プレイヤーが離れると草は元の形に戻ります。</p><p>まず <a href="scatter-system.html">3D スキャッターガイド</a> に従って草を設定し、次にこのページでプレイヤーへの反応を追加します。風、動的バイオームアニメーション、パーティクル放出はそれぞれ独立した設定です。</p></div>
+<h2 id="overview">インタラクションの仕組み</h2>
+<div class="table-wrap"><table><thead><tr><th>実現したいこと</th><th>必要な設定</th><th>ベイク済みの地表データが必要か</th></tr></thead><tbody>
+<tr><td>プレイヤーが通ると草が曲がる</td><td>草の Scatter Object で <a href="#quick-start">Scatter Interactor + Player Interaction</a> を使用します。</td><td>不要です。スキャッターがすでに描画されていれば動作します。</td></tr>
+<tr><td>プレイヤーが植物を揺らすと草片や花粉が現れる</td><td>同じ Scatter Object に <a href="#movement-particles">Both output + Particle Preset + Player Movement trigger</a> を設定します。</td><td>ゲームプレイ用の追加の地表ベイクは不要です。</td></tr>
+<tr><td>移動中のプレイヤーの足元に水しぶき、岩の粉じん、雪が現れる</td><td><a href="#surface-effects">DPT_PlayerSurfaceEffects</a> を使用し、エフェクトごとにバイオームとプリセットを明示的に指定します。</td><td>必要です。Bake Surface Data を実行し、対応する地形 MeshCollider を使用します。</td></tr>
+</tbody></table></div>
+<p>外観はプリセットで、放出するタイミングはトリガーまたはコンポーネントで指定します。同じ <a href="scatter-system.html#particle-presets">プリセット一覧</a> を 3 種類のパーティクル用インスペクターで利用できます。組み込みエフェクトは、マテリアルや数式で定義されたパーティクル形状も含めてコードから生成されるため、プレハブやスプライトを指定する必要はありません。独自に作成したパーティクルプレハブを使う場合は Custom を選んでください。</p>
+<div class="callout"><p><strong>草の曲がりは見た目だけの反応です。</strong> 配置データと GPU インスタンシングを維持しながら、描画されるスキャッターの頂点を変形します。草のコライダーを生成したり、Rigidbody に力を加えたり、地形の衝突メッシュを変更したりしません。地形や障害物との物理衝突については <a href="#collision">物理的な衝突とゲームプレイ</a> を参照してください。</p></div>
+<div class="table-wrap"><table><thead><tr><th>要素</th><th>役割</th><th>設定する場所</th></tr></thead><tbody>
+<tr><td>Scatter Interactor</td><td>移動する影響中心、半径、高さの許容範囲、押しの強さを定義します。</td><td>プレイヤー、NPC、または足元付近の子 Transform に DPT_ScatterInteractor を追加します。</td></tr>
+<tr><td>Player Interaction</td><td>個々の Scatter Object に曲がりの反応を許可します。</td><td>3D Scatter セクションで、草や柔らかい植物の各グループに対して有効にします。</td></tr>
+<tr><td>Bend Distance</td><td>その Scatter Object の先端変位をワールド単位のメートルで制限します。</td><td>グループに小さな正の値を設定し、硬いプロップでは無効にします。</td></tr>
+<tr><td>対応するスキャッターマテリアル</td><td>インスタンスの描画時に頂点インタラクションを実行します。</td><td>付属の SH_DPT_VCTerrain マテリアル設定から始めてください。</td></tr>
+</tbody></table></div>
+<h2 id="quick-start">プレイヤーに草を反応させる</h2>
+<div class="callout" id="scatter-output"><p><strong>Scatter Output はどこにありますか？</strong> <strong>Vertex 3D Terrain window</strong> で <strong>3D Scatter</strong> を展開し、草の Scatter Object の名前または矢印をクリックして設定を開きます。<strong>Scatter Output のドロップダウンは、Target Biomes のすぐ下、Placement 見出しの上にあります</strong>。</p><p>草のメッシュのみなら <strong>Meshes</strong>、草のメッシュとパーティクルエフェクトの両方なら <strong>Both</strong> を選びます。</p></div>
+<ol><li>Vertex 3D Terrain ウィンドウで <strong>3D Scatter</strong> を展開します。草の Scatter Object を作成するか開き、意図した Terrain Atlas バイオームにすでに表示されていることを確認します。</li><li>オブジェクトの設定上部で、<strong>Target Biomes</strong> の下かつ <strong>Placement</strong> の上にある <strong>Scatter Output</strong> を見つけ、<strong>Meshes</strong> または <strong>Both</strong> を選択します。</li><li><strong>Placement</strong> 内で、<strong>Static Scatter</strong> の横にある <strong>Player Interaction</strong> を有効にします。するとボタンの下に <strong>Bend Distance</strong> が現れます。まずは 0.3～0.5 メートル程度に設定します。</li><li>付属の <strong>SH_DPT_VCTerrain</strong> シェーダーなど、対応するマテリアルを使用します。</li><li>プレイヤー、または足元付近の子オブジェクトで <strong>Add Component</strong> を選び、<strong>DPT_ScatterInteractor</strong> / <strong>Scatter Interactor</strong> を検索して追加します。</li><li>Interactor の中心を草の根元付近に置きます。プレイヤーの Transform が高い位置にある場合は <strong>Centre Offset</strong> を使います。</li><li>最初は Radius 1、Height Tolerance 0.75、Strength 1 を使用します。コンポーネントを選択してギズモを確認します。</li><li>Play モードでプレイヤーを草の中で動かします。影響範囲は Radius、先端の移動量は Bend Distance で調整します。</li><li>周囲の風による動きも必要であれば、風を別途有効にします。</li></ol>
+<div class="example"><p><strong>歩くキャラクターの場合：</strong> 足元の高さにある子オブジェクトへ Interactor を配置します。Radius 0.8、Height Tolerance 0.5、Strength 1、草の Bend Distance 0.35 を使用します。反応の開始位置がキャラクターに近すぎる場合は半径を増やし、短い草が倒れすぎる場合は Bend Distance を下げます。</p></div>
+<p>このコンポーネントは編集時にも動作します。Scene Preview を有効にすると、Play モードに入る前に Interactor の Transform を動かして草の反応を確認できます。</p>
+<h2 id="interactor-controls">Scatter Interactor の設定</h2>
+<div class="table-wrap"><table><thead><tr><th>設定項目</th><th>意味</th><th>調整方法</th></tr></thead><tbody>
+<tr><td>Centre Offset</td><td>Transform のローカル軸に沿ったオフセットです。Transform の回転とスケールは、実際の中心位置に影響します。</td><td>中心を胸ではなく足元付近に配置します。足元の子オブジェクトならオフセットを 0 にできます。</td></tr>
+<tr><td>Radius</td><td>各スキャッターインスタンスの表面平面で測った、ワールド単位のメートルでの影響半径です。</td><td>初期値は 1 です。キャラクター周囲の反応範囲を広げるには大きくします。</td></tr>
+<tr><td>Height Tolerance</td><td>インスタンスのローカル上方向に沿って測定する、草の根元から上下方向に許容する距離です。</td><td>初期値は 0.75 です。別の階のプレイヤーが下の草に影響しない程度に小さくします。</td></tr>
+<tr><td>Strength: 0–1</td><td>このキャラクターが周囲の草を押す強さです。</td><td>初期値は 1 です。反応を弱くするには下げます。0 にすると、このキャラクターの影響はなくなります。</td></tr>
+<tr><td>Maximum Movement Step</td><td>スキャッターパーティクルの発生を判定する際、1 サンプルで許容する中心の最大移動距離です。</td><td>初期値は 5 メートルです。それ以上の移動はテレポートとして扱われ、移動経路に沿ったパーティクルを放出しません。ただし、移動先での草の曲がりは無効になりません。</td></tr>
+</tbody></table></div>
+<p>Radius は反応する範囲を決めるもので、最大変位量ではありません。草の先端が動く距離はスキャッターグループの Bend Distance で決まります。距離と高さによる影響は、いずれも境界に向かって滑らかに減衰します。</p>
+<p>選択中コンポーネントのギズモには中心、半径方向の範囲、高さの帯が表示されます。斜面や曲面地形では各インスタンスの表面平面を使って反応を計算するため、ギズモは設定用の目安であり、すべてのインスタンスの計算範囲をそのまま描画したものではありません。</p>
+<h2 id="scatter-controls">曲がるスキャッターを選ぶ</h2>
+<div class="table-wrap"><table><thead><tr><th>スキャッターの設定</th><th>効果</th><th>実用的な使い方</th></tr></thead><tbody>
+<tr><td>Player Interaction</td><td>マテリアルが機能をサポートしている場合に、グループの曲がりを有効にします。</td><td>草、花、その他の柔らかいメッシュで有効にし、岩、クリスタル、硬いプロップでは無効にします。</td></tr>
+<tr><td>Bend Distance</td><td>ワールド単位のメートルで表した先端の最大変位量です。複数の Interactor が重なっても、この上限を共有します。</td><td>初期値は 0.5 です。短い植物には小さい値を使います。0 にすると視覚的な曲がりは発生しません。</td></tr>
+<tr><td>Enable Wind</td><td>独立した風の機能を制御します。</td><td>風が無効でもプレイヤーへの反応は動作します。両方を有効にすると、環境風と近くのプレイヤーによる反応を併用できます。</td></tr>
+<tr><td>Static Scatter</td><td>動的なバイオーム密度、色、地表の変化を無視します。</td><td>プレイヤーへの反応は無効になりません。Player Interaction が有効であれば、Static Scatter の草も曲がります。</td></tr>
+<tr><td><a href="#scatter-output">Scatter Output</a></td><td>展開した Scatter Object で、Target Biomes の下、Placement の上にあるドロップダウンです。グループが可視メッシュを出力するかどうかを決めます。</td><td>Meshes と Both は曲がります。Particles のみのグループには曲げるメッシュ頂点がありません。</td></tr>
+</tbody></table></div>
+<p><strong>Both</strong> の場合、この Scatter Object のメッシュ配置のうち、指定した割合がパーティクルの発生元になります。常時放出には Continuous、Interactor が通過したときの放出には Player Movement を選びます。Scatter Object ごとに独立した放出位置を持ちます。詳しくは <a href="scatter-system.html#particle-triggers">パーティクルの発生条件と発生位置</a> を参照してください。</p>
+<p>パーティクルの放出位置は配置 Transform に固定され、シェーダーで草の先端が曲がっても追従しません。植物が静止しているときの形状に合わせるには、パーティクルの <a href="scatter-system.html#particles">Emission Offset</a> を使って位置を調整します。</p>
+<h2 id="movement-particles">草を揺らしたときのパーティクル</h2>
+<div class="callout"><p><strong>パーティクル設定の場所：</strong> Vertex 3D Terrain ウィンドウ → 3D Scatter → 草の Scatter Object を開く → Scatter Output を Both にする → Particle Effect を展開します。Particle Effect の先頭に <strong>Particle Preset</strong> と <strong>Emission Trigger</strong> のドロップダウンがあります。</p><p><strong>Preview Particles</strong> はボタンです。青色なら有効です。これは編集中のプレビューを制御し、実行時の放出は選択したトリガーに従います。</p></div>
+<p>プレイヤーが草原を走り抜けたときに草片や花粉を舞わせるには、既存の草の Scatter Object で <strong>Both</strong> を選び、<strong>Player Interaction</strong> を有効にして Bend Distance を 0 より大きく設定します。<strong>Particle Effect</strong> 内で、<strong>Particle Preset</strong> ドロップダウンから <strong>Grass Flecks</strong> または <strong>Pollen</strong> を選び、Emission Trigger に <strong>Player Movement</strong> を指定します。</p>
+<p>同じ Scatter Interactor が移動する接触範囲を提供します。Emitter Fraction はパーティクルを放出できる草の配置割合、Rate / Emitter は影響を受けている間の放出頻度を指定します。Minimum Movement Speed は静止時の放出や細かな位置の揺れによる誤放出を防ぎます。Emission Offset は静止時の配置からの相対位置です。風はこのモードのトリガーにはなりません。</p>
+<p>パーティクルのみのグループも、移動する Interactor の範囲内で反応できます。判定には、描画された各頂点の変位ではなく根元までの距離と高さを使用します。<a href="scatter-system.html#player-particle-reactions">スキャッター反応の設定</a> と <a href="scatter-system.html#particle-presets">利用可能なプリセット</a> を参照してください。</p>
+<h2 id="surface-effects">水しぶき、砂ぼこり、地表エフェクト</h2>
+<p><strong>DPT_PlayerSurfaceEffects</strong> は、プレイヤーが指定した地形バイオームの上を移動するとパーティクルを放出します。スキャッターの配置とは独立して動作するため、水しぶきや岩の粉じんに草やメッシュのスキャッターグループは必要ありません。</p>
+<ol><li>地形を作成した後、地形ウィンドウで <strong>Bake Surface Data</strong> を実行します。ベイク処理によって <strong>DPT_TerrainSurfaceTarget</strong> とそのデータアセットが追加または更新されます。地形には、ベイクされた三角形構成と一致する <strong>MeshCollider</strong> を設定してください。ジオメトリやバイオームのペイントを変更した場合は再構築して再ベイクします。</li><li>プレイヤーで Add Component を使い、<strong>DPT_PlayerSurfaceEffects</strong> を検索します。<strong>Foot Offset</strong> を調整してサンプル位置を足元に合わせます。このコンポーネントには Scatter Interactor は不要です。</li><li><strong>Surface Layers</strong> に地形のレイヤーを設定し、プレイヤーのレイヤーは除外します。まず Probe Lift を 0.2、Surface Reach を 0.4 メートルに設定します。</li><li>必要に応じて、<strong>Biome Names From</strong> にベイク済みデータアセットを指定すると、インスペクターで名前付きのバイオームを選択できます。実行時の判定には、実際にヒットした地形のデータを使用します。</li><li><strong>Add Surface Effect</strong> をクリックします。バイオームを明示的に選び、対応する <strong>Particle Preset</strong> を指定します。例えば水には Water Splash、岩には Rock Dust、乾いた地面には Sand Dust、雪には Snow Puffs を使用できます。独自プレハブには Custom を選びます。</li><li>各エフェクトの <strong>Emissions Per Metre</strong>、Minimum Movement Speed、Surface Offset、Scale を設定します。まずは 1 メートルあたり 8 回の放出、Minimum Movement Speed 0.1 から始めます。</li><li>Play モードで動作を確認し、ゲームカメラに合わせて Particle Distance と Particle Limit を調整します。</li></ol>
+<div class="table-wrap"><table><thead><tr><th>設定項目</th><th>意味</th><th>初期設定の目安</th></tr></thead><tbody>
+<tr><td>Foot Offset</td><td>プレイヤーの下の地表をサンプリングするためのローカル位置です。</td><td>足裏付近に配置します。プレイヤーのルートが地面の高さにある場合は 0 にできます。</td></tr>
+<tr><td>Surface Layers</td><td>地表を検索する物理レイヤーです。</td><td>地形の MeshCollider を含め、プレイヤーは除外します。Trigger コライダーは無視されます。</td></tr>
+<tr><td>Probe Lift / Surface Reach</td><td>レイは足元のポイントの上から開始し、プレイヤーのローカル上方向に沿ってその下まで届きます。</td><td>0.2 / 0.4 メートル。プレイヤーが地表から離れすぎていると何も放出されません。</td></tr>
+<tr><td>Maximum Movement Step</td><td>通常移動として認める、1 フレームあたりの足元ポイントの最大移動距離です。</td><td>5 メートル。テレポート時には移動経路に沿ったエフェクトを生成しません。</td></tr>
+<tr><td>Biome / Biome ID</td><td>このエフェクトを選択する地表バイオームです。</td><td>新しいエフェクトでは選択が必須です。同じバイオームを対象とするルールが複数ある場合、最初に設定したエフェクトが使われます。</td></tr>
+<tr><td>Particle Preset</td><td>見た目を選択します。</td><td>手続き的に生成される Water Splash、Rock Dust などの組み込みタイプ、または独自プレハブ用の Custom を選びます。</td></tr>
+<tr><td>Emissions Per Metre</td><td>地表を 1 メートル移動するごとの放出イベント数です。</td><td>8。速く移動すると 1 秒あたりの放出が増え、静止中は放出しません。</td></tr>
+<tr><td>Minimum Movement Speed</td><td>メートル毎秒で表した移動速度のしきい値です。</td><td>0.1。小さな動きを無視したい場合は増やします。</td></tr>
+<tr><td>Surface Offset / Scale</td><td>ヒット面の法線方向の生成位置と、エフェクト全体の均一スケールです。</td><td>0.03 メートル / 1。</td></tr>
+<tr><td>Particle Distance / Particle Limit</td><td>新規放出を許可するカメラからの距離と、このプレイヤーの全エフェクトで共有するパーティクル総数の上限です。</td><td>40 メートル / 500 個。</td></tr>
+</tbody></table></div>
+<div class="callout"><p><strong>ベイクはこうした反応に役立ちます。</strong> 地表の検索にはコンパクトなベイク済み三角形データを使用し、メッシュの Read/Write が無効でも動作できます。現在の動的バイオームと十分に強いダスティングを解決できるため、水のバイオームが氷に覆われている場合は氷や雪のエフェクトを選択できます。エフェクトルールは動的バイオームのスロットを消費しません。</p><p>エフェクトは、アニメーションの足音イベントや計測された衝突力ではなく、移動距離に基づいて発生します。水深や浮力は計算しません。プリセットが外観を決め、どのバイオームに使うかはユーザーが指定します。</p></div>
+<p>静止中、Surface Reach の範囲外、Particle Distance を超えた位置、未設定の地表に移動した場合は、新しい放出が止まります。すでに生成されたパーティクルは自然に終了します。手前に通常のコライダーがあると、その下の地形への判定が遮られ、別のオブジェクトの上では地形の粉じんが発生しません。このコンポーネントは Play モードで動作します。スキャッターパーティクルには編集中のプレビュー用に別の Preview Particles ボタンがあります。</p>
+<h2 id="materials">マテリアルとカスタムメッシュ</h2>
+<p>マテリアルは <strong>DPT scatter interaction</strong> に対応している必要があります。GPU Instancing だけでは不十分です。まず付属の SH_DPT_VCTerrain シェーダーを使用して反応を確認し、その後にカスタムマテリアルへ置き換えてください。</p>
+<p>曲がりの計算には、メッシュの境界内でのローカル Y 高さを使用します。最も低い部分を固定し、先端ほど変位を大きくします。カスタムの草は根元から先端への方向をローカル +Y に合わせ、ピボットとバウンズを確認してください。横向きのメッシュや同じバウンズに含まれる無関係なジオメトリは、不自然な曲がりマスクの原因になります。</p>
+<p>カスタムシェーダーには、通常のスキャッターインスタンシング設定に加え、DPT スキャッターの頂点インタラクション処理とその対応プロパティが必要です。風の関数だけを追加してもプレイヤーによる曲がりは追加されません。可視パスとシャドウパスで頂点処理を一致させてください。</p>
+<p>風の調整は <a href="terrain-material-settings.html#wind">地形マテリアルの設定</a>、バリエーション、元メッシュ、マテリアルは <a href="scatter-system.html#variants">カスタムメッシュの設定</a> を参照してください。</p>
+<h2 id="multiple-players">プレイヤー、NPC、制限事項</h2>
+<p>スキャッターに影響を与えたい近くのキャラクターそれぞれに Interactor を追加します。プレイヤーと NPC は同じ共有シェーダーデータを使い、見た目の曲がりには Trigger コライダーや衝突コールバックは必要ありません。</p>
+<p>システムは同時に <strong>有効で Strength が正の Interactor を最大 8 個</strong> まで扱います。近い 8 キャラクターを自動選択するのではなく、登録順で処理します。大勢のキャラクターがいるシーンでは、必要なものだけ有効にしてください。</p>
+<p>複数のキャラクターが重なると、押しの効果が合成されますが、スキャッターグループの Bend Distance の上限は守られます。Height Tolerance は橋の上下、洞窟の床、積層された空間で反応を分離するのに役立ちます。</p>
+<p>草が戻る動きはキャラクターの現在位置に従います。このバージョンでは、足跡の軌跡を保存したり、キャラクターが離れた後のスプリング状の復元遅延をシミュレートしたりしません。</p>
+<h2 id="collision">物理的な衝突とゲームプレイ</h2>
+<p>地形の衝突メッシュとプレイヤーの移動・衝突設定は、Scatter Interactor とは別に管理してください。Interactor は描画上の影響を与えるものであり、プレイヤーコントローラーではなく、キャラクターが地形の上に立てるようにする機能でもありません。</p>
+<p>インスタンシングされたスキャッターは、岩、木、プロップごとの個別コライダーを生成しません。プレイヤーを遮ったり、物理的に反応したりする障害物には、適切なコライダーとゲームプレイ処理を備えた別のシーンオブジェクトを使用してください。その周囲の草はインスタンシングしたままにできます。</p>
+<p>Flow、Lake の波紋、ダスティング、スキャッターの曲がりは見た目を変更する機能です。水の浮力、氷の摩擦、滑りやすい衝突挙動、移動する水量などは追加しません。ゲームプレイ上の挙動は独自のコントローラーか <a href="demo-components.html">デモとランタイムガイド</a> を参考に実装してください。ベイク済み地表データの検索では、曲がった草の頂点やパーティクルを測定しません。</p>
+<h2 id="performance">パフォーマンスとカリング</h2>
+<p>インタラクションは、配置を再構築したり草のインスタンスごとに GameObject を生成したりせず、対応するスキャッター頂点シェーダーに処理を追加します。負荷はメッシュの頂点数、可視インスタンス数、アクティブな Interactor の数によって変わります。密度の高い草は、ゲームカメラと対象デバイスで確認してください。</p>
+<p>レンダラーは、設定されたインタラクションの Bend Distance を CPU/GPU カリングのバウンズに反映します。<a href="scatter-system.html#lod">距離、LOD、個体数の制限</a> を利用して遠方のディテールを管理してください。風の動きに対するバウンズは別設定です。</p>
+<h2 id="troubleshooting">インタラクションのトラブルシューティング</h2>
+<div class="table-wrap"><table><thead><tr><th>症状</th><th>確認する順序</th></tr></thead><tbody>
+<tr><td>草が動かない</td><td>草が表示されていること、Scatter Output が Meshes または Both であること、Player Interaction が有効であること、Bend Distance が 0 より大きいこと、マテリアルが DPT scatter interaction に対応していることを確認します。次に Interactor が有効で Strength が 0 より大きいか確認します。</td></tr>
+<tr><td>キャラクターの一部に近い草だけが反応する</td><td>Centre Offset、Radius、Height Tolerance を確認します。中心を上半身ではなく草の根元付近に配置します。</td></tr>
+<tr><td>別の階の草まで動いてしまう</td><td>Height Tolerance を小さくし、中心の高さとスキャッターの向きを確認します。</td></tr>
+<tr><td>根元が動く、または横向きに曲がる</td><td>カスタムメッシュのローカル Y、ピボット、バウンズを確認します。シンプルな直立した草メッシュで試し、メッシュ制作上の問題と Interactor 設定上の問題を切り分けます。</td></tr>
+<tr><td>風は動くが、プレイヤーには反応しない</td><td>風とインタラクションは別々のシェーダー機能です。グループの Player Interaction の切り替えを確認し、付属の地形シェーダーと比較します。</td></tr>
+<tr><td>一部の NPC が影響を与えない</td><td>Interactor の上限 8 個を確認します。無効なコンポーネントや Strength 0 は影響しません。また、追加された正の Strength を持つキャラクターが距離順に自動的に並べ替えられることはありません。</td></tr>
+<tr><td>パーティクルが曲がった先端を追従しない</td><td>パーティクルの発生基準は配置 Transform であり、シェーダーで変形した頂点位置ではありません。放出オフセットを調整するか、先端追従が必要な場合は別のエフェクトを使用します。</td></tr>
+<tr><td>草は曲がるが、草片や花粉が出ない</td><td>Scatter Output を Both にして Particle Preset を選び、Emission Trigger を Player Movement にします。Emitter Fraction と Rate / Emitter が 0 より大きく、移動速度が Minimum Movement Speed を超え、Interactor の Strength が正であることを確認します。Player Interaction、Bend Distance、カメラ距離も確認してください。</td></tr>
+<tr><td>足元に水しぶきや砂ぼこりが出ない</td><td>DPT_PlayerSurfaceEffects が有効で、Foot Offset が足元付近にあり、Surface Layers に地形が含まれ、Surface Reach が地面まで届くことを確認します。Bake Surface Data を実行し、対応する MeshCollider と Surface Target を確認して、バイオームにプリセットを割り当てます。Play モードで移動しながら試してください。</td></tr>
+<tr><td>プリセットが見えている地表と一致しない</td><td>エフェクトで選択した Biome ID を確認し、編集を変更した後は再ベイクします。動的ダスティングが十分に強いと、そのバイオームが選択されることがあります。別の反応が必要な場合は、そのダスティングのバイオームにもルールを追加します。</td></tr>
+<tr><td>プレイヤーがスキャッターの岩を通り抜けてしまう</td><td>見た目のインタラクションでは岩のコライダーは追加されません。ゲームプレイで障害物にする場合は別の衝突用オブジェクトを使用します。</td></tr>
+</tbody></table></div>
+<h2 id="support">サポート</h2><p>サポートが必要な場合は、Unity のバージョン、Scatter Object と Scatter Interactor のスクリーンショット、使用しているメッシュとマテリアル、Scene ビューと Play モードのどちらで問題が起きるかをお知らせください。高さの問題では、草の根元に対するプレイヤーの中心位置が分かる画像も添えてください。</p><p><a href="https://dptgames.github.io/#contact">DPT Games のお問い合わせフォーム</a>、または <a href="https://discord.gg/EkQykfzP5X">DPT Games Discord</a> をご利用ください。</p><p class="back-top"><a href="#top">ページの先頭に戻る</a></p><footer class="footer">DPT Vertex 3D Terrain ドキュメント · 各種設定項目名は英語表記を使用しています。スキャッターの作成、マテリアルエフェクト、ランタイム例については関連ガイドをご覧ください。</footer></main></body></html>
