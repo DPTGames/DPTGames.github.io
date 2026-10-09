@@ -1,5 +1,6 @@
-<!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="再利用可能なバイオーム駆動 3D Scatter、LOD、風、カスタムメッシュ、ライブ季節変化を設定します。"><link rel="alternate" hreflang="en" href="../scatter-system.html"><link rel="alternate" hreflang="ja" href="scatter-system.html"><link rel="alternate" hreflang="ko" href="../ko/scatter-system.html"><title>3D Scatter ガイド | DPT Games</title><style>
+<!DOCTYPE html>
+
+<html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="バイオーム別 3D Scatter、パーティクル、滝の水しぶき、風、プレイヤーとのインタラクションを設定します。" name="description"/><link href="../scatter-system.html" hreflang="en" rel="alternate"/><link href="scatter-system.html" hreflang="ja" rel="alternate"/><link href="../ko/scatter-system.html" hreflang="ko" rel="alternate"/><title>3D Scatter ガイド | DPT Games</title><style>
 
 :root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
@@ -16,24 +17,20 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 @media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
 
 </style></head>
-<body><main id="top"><nav class="site-nav" aria-label="ドキュメント"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a href="index.html">Vertex 3D Terrain ガイド</a><a href="biomes.html">バイオームガイド</a><a href="terrain-material-settings.html">Terrain Material Settings</a><a href="scatter-system.html" aria-current="page">3D Scatter ガイド</a><a href="demo-components.html">デモ &amp; ランタイムガイド</a></nav><nav class="language-nav" aria-label="言語"><a href="../scatter-system.html" lang="en" hreflang="en">English</a><a href="scatter-system.html" lang="ja" hreflang="ja" aria-current="page">日本語</a><a href="../ko/scatter-system.html" lang="ko" hreflang="ko">한국어</a></nav><header><h1>3D Scatter ガイド</h1><p class="lead">再利用可能な設定から、複数の Terrain Atlas バイオームを対象に草、花、キノコ、小石、カスタムメッシュを配置します。</p></header><nav class="toc" aria-label="このページの内容"><h2>このページの内容</h2><ul><li><a href="#overview">Scatter Library の仕組み</a></li><li><a href="#quick-start">最初の Scatter Object を作成する</a></li><li><a href="#target-biomes">1つの設定で複数バイオームを対象にする</a></li><li><a href="#placement">配置設定</a></li><li><a href="#variants">内蔵プリセットとカスタムメッシュ</a></li><li><a href="#lod">距離、LOD、Renderer 設定</a></li><li><a href="#wind">風の設定</a></li><li><a href="#live-response">ライブバイオームによる密度と色の変化</a></li><li><a href="#live-crossfade">ライブ変更中に Scatter をフェードさせる</a></li><li><a href="#seasonal-profiles">季節ごとのスナップショットと折りたたみ式プロファイル</a></li><li><a href="#runtime-data">ランタイム Scatter とベイク済み地形データ</a></li><li><a href="#performance">パフォーマンスと実用上の制限</a></li><li><a href="#troubleshooting">Scatter のトラブルシューティング</a></li><li><a href="#support">サポート</a></li></ul></nav><p class="table-hint">小さい画面では、横に長い表を左右にスクロールしてすべての列を確認してください。</p>
-
-<div class="intro"><p>3D Scatter システムは、Terrain Atlas のバイオームデータからインスタンス化されたメッシュを直接配置します。<strong>Scatter Object</strong> には、再利用可能な配置ルールと Mesh Variant のセットが保存されます。同じ草の設定をバイオームごとに作り直す代わりに、1つのオブジェクトへ複数の <strong>Target Biomes</strong> を追加し、必要に応じて各ターゲットに個別の Density Multiplier を設定できます。</p><p>Scatter は、草、花、キノコ、石、小型プロップなど、繰り返し配置するサーフェスディテール向けです。Terrain メッシュそのものは編集せず、各インスタンスに Collider を作成せず、配置物を個別の GameObject として生成することもありません。</p></div>
-
+<body><main id="top"><nav aria-label="ドキュメント" class="site-nav"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a href="index.html">Vertex 3D Terrain ガイド</a><a href="biomes.html">バイオームガイド</a><a href="terrain-material-settings.html">Terrain Material Settings</a><a aria-current="page" href="scatter-system.html">3D Scatter ガイド</a><a href="player-collision.html">プレイヤーとの衝突・操作</a><a href="demo-components.html">デモ &amp; ランタイムガイド</a></nav><nav aria-label="言語" class="language-nav"><a href="../scatter-system.html" hreflang="en" lang="en">English</a><a aria-current="page" href="scatter-system.html" hreflang="ja" lang="ja">日本語</a><a href="../ko/scatter-system.html" hreflang="ko" lang="ko">한국어</a></nav><header><h1>3D Scatter ガイド</h1><p class="lead">再利用可能な設定から、複数の Terrain Atlas バイオームに草、花、キノコ、小石、カスタムメッシュ、パーティクル効果を配置します。</p></header><nav aria-label="このページの内容" class="toc"><h2>このページの内容</h2><ul><li><a href="#overview">Scatter Library の仕組み</a></li><li><a href="#quick-start">最初の Scatter Object を作成する</a></li><li><a href="#target-biomes">1つの設定で複数バイオームを対象にする</a></li><li><a href="#placement">配置設定</a></li><li><a href="#variants">内蔵プリセットとカスタムメッシュ</a></li><li><a href="#particles">Scatter の配置地点からパーティクルを発生させる</a></li><li><a href="#particle-presets">パーティクルのプリセットを選ぶ</a></li><li><a href="#player-particle-reactions">プレイヤーの移動でパーティクルを発生させる</a></li><li><a href="#waterfall-splash">滝の水しぶきと霧</a></li><li><a href="#player-interaction">プレイヤーに反応する草</a></li><li><a href="#lod">距離、LOD、Renderer 設定</a></li><li><a href="#wind">風の設定</a></li><li><a href="#live-response">ライブバイオームによる密度と色の変化</a></li><li><a href="#live-crossfade">ライブ変更中に Scatter をフェードさせる</a></li><li><a href="#seasonal-profiles">季節ごとのスナップショットと折りたたみ式プロファイル</a></li><li><a href="#runtime-data">ランタイム Scatter とベイク済み地形データ</a></li><li><a href="#performance">パフォーマンスと実用上の制限</a></li><li><a href="#troubleshooting">Scatter のトラブルシューティング</a></li><li><a href="#support">サポート</a></li></ul></nav><p class="table-hint">小さい画面では、横に長い表を左右にスクロールしてすべての列を確認してください。</p>
+<div class="intro"><p>3D Scatter システムは、Terrain Atlas のバイオームデータからインスタンス化したメッシュとパーティクル発生地点を直接配置します。<strong>Scatter Object</strong> は、メッシュの Variant、パーティクル効果、またはその両方に使う再利用可能な配置ルールを持ちます。バイオームごとに同じ草の設定を作り直す必要はなく、1 つのオブジェクトへ複数の <strong>Target Biomes</strong> を追加し、必要に応じて各ターゲットの Density Multiplier を調整できます。</p><p>Scatter は、草、花、キノコ、石、小型プロップなど、繰り返し配置するサーフェスディテール向けです。Terrain メッシュそのものは編集せず、各インスタンスに Collider を作成せず、配置物を個別の GameObject として生成することもありません。</p></div>
 <h2 id="overview">Scatter Library の仕組み</h2>
 <p>Scatter の編集は各バイオーム Inspector の内部ではなく、Terrain Atlas の Biome Library 全体に対して行います。Vertex 3D Terrain ウィンドウの <strong>3D Scatter</strong> セクションを開いて Library を作成、編集します。</p>
 <div class="table-wrap"><table><thead><tr><th>項目</th><th>役割</th><th>重要なポイント</th></tr></thead><tbody>
-<tr><td>Scatter Object</td><td>再利用可能な配置ルール、Wind の選択、1つ以上の Mesh Variant を保存します。</td><td>草を1回だけ設定し、Scatter Object 全体を複製せずに複数バイオームへ割り当てられます。</td></tr>
-<tr><td>Target Biome</td><td>選択した Terrain Atlas バイオームが寄与する場所で、その Scatter Object の生成を許可します。</td><td>各 Target には 0～2 の Density Multiplier を個別設定できます。</td></tr>
+<tr><td>Scatter Object</td><td>再利用可能な配置ルール、Mesh Variant、パーティクル効果、メッシュの風・Player Interaction の設定を保持します。</td><td>草を1回だけ設定し、Scatter Object 全体を複製せずに複数バイオームへ割り当てられます。</td></tr>
+<tr><td>Target Biome</td><td>選択した Terrain Atlas バイオームが寄与する場所で、その Scatter Object の生成を許可します。</td><td>各 Target には 0～2 の Density Multiplier を個別設定できます。</td></tr><tr><td>Scatter Output</td><td><strong>Meshes</strong>、<strong>Particles</strong>、<strong>Both</strong> の出力方法を選びます。</td><td>同じバイオームと配置ルールからメッシュとパーティクル発生地点を作れます。</td></tr>
 <tr><td>Mesh Variant</td><td>内蔵プリセットまたは Custom Mesh と、その相対的な選択確率を設定します。</td><td>複数 Variant で同じ配置ルールを共有できます。</td></tr>
 <tr><td>Scatter Settings</td><td>Seed、Batching、Distance、LOD Transition、Far Density、安全上限を設定します。</td><td>各 Scatter Object で重複して設定するのではなく、Scatter Library 全体で共有されます。</td></tr>
 <tr><td>Active Terrain Renderer</td><td>Profile を選択中の Terrain Root に接続し、GPU Instancing で描画を送信します。</td><td>数千個の Instance を Scene 上の GameObject として作成する方式ではありません。</td></tr>
 </tbody></table></div>
-
 <h2 id="quick-start">最初の Scatter Object を作成する</h2>
-<ol><li><strong>Terrain Atlas</strong> パイプラインを使用し、Terrain にバイオームデータがペイントされていることを確認します。</li><li>Vertex 3D Terrain ウィンドウで <strong>3D Scatter</strong> を開きます。Profile がまだない場合は Scatter Library を作成します。</li><li><strong>+ Add Scatter Object</strong> を選び、Meadow Grass など分かりやすい名前を付けます。</li><li><strong>Target Biomes</strong> で現在の Library から1つ以上のバイオームを選びます。</li><li>最初は各 Target の Density Multiplier を 1 にします。</li><li>全体の <strong>Density</strong>（1平方メートルあたりの Clump 数）、<strong>Spacing</strong>、<strong>Coverage</strong> 範囲、Slope、Scale、Surface Alignment を設定します。</li><li>Mesh Variant を追加します。まずは内蔵 Grass プリセット、または Custom Mesh を割り当てて試します。</li><li>Material を割り当てるか確認し、必要な場合は GPU Instancing を有効にします。大きな設定変更後に Preview が更新されていない場合は <strong>Rebuild Scatter</strong> を使用します。</li></ol>
+<ol><li><strong>Terrain Atlas</strong> パイプラインを使用し、Terrain にバイオームデータがペイントされていることを確認します。</li><li>Vertex 3D Terrain ウィンドウで <strong>3D Scatter</strong> を開きます。Profile がまだない場合は Scatter Library を作成します。</li><li><strong>+ Add Scatter Object</strong> を選び、Meadow Grass など分かりやすい名前を付けます。</li><li><strong>Target Biomes</strong> で現在の Library から1つ以上のバイオームを選びます。</li><li>最初は各 Target の Density Multiplier を 1 にします。</li><li>全体の <strong>Density</strong>（1平方メートルあたりの Clump 数）、<strong>Spacing</strong>、<strong>Coverage</strong> 範囲、Slope、Scale、Surface Alignment を設定します。</li><li><strong>Scatter Output</strong> は草の設定では <strong>Meshes</strong> を選びます。内蔵 <strong>Grass</strong> プリセットまたは Custom Mesh の Mesh Variant を追加します。パーティクルを使う場合は、後述の<a href="#particles">パーティクル設定</a>を参照してください。</li><li>Material を割り当てるか確認し、必要な場合は GPU Instancing を有効にします。大きな設定変更後に Preview が更新されていない場合は <strong>Rebuild Scatter</strong> を使用します。</li></ol>
 <div class="example"><p><strong>例：</strong>Meadow Grass を1つ作り、Lush Grass を ×1.0、Dry Meadow を ×0.65、Forest Soil を ×0.25 で Target に追加します。同じ Grass Mesh、Colour Ramp、Roughness、Wind 設定を3つの Surface で再利用できます。</p></div>
-
 <h2 id="target-biomes">1つの設定で複数バイオームを対象にする</h2>
 <p>1つの Scatter Object から任意数の Terrain Atlas バイオームを Target にできます。Biome Picker には現在のバイオーム名と数値 ID が表示されます。<strong>+ Add Target Biome</strong> でリストを追加します。</p>
 <div class="table-wrap"><table><thead><tr><th>設定</th><th>意味</th><th>例</th></tr></thead><tbody>
@@ -42,10 +39,9 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 </tbody></table></div>
 <p>ペイントされたブレンド領域では、Scatter Object が対象としている複数バイオームの寄与を合計して評価します。そのため Grass/Forest の境界でも、別々の重複定義を用意せず、同じ Scatter Object を連続して使用できます。</p>
 <p>配置が受理された各 Instance には、その位置で寄与している Target に基づいた「所有バイオーム」が保持されます。これにより、1つの再利用可能な Grass Object が複数バイオームを対象としていても、Live Biome Modifier が片方だけを変更した場合、そのバイオームに属する Instance だけを独立して反応させられます。</p>
-
-<h2 id="placement">配置設定</h2>
+<h2 id="placement">配置設定</h2><div class="callout" id="scatter-output"><p><strong>Scatter Output の場所：</strong>Vertex 3D Terrain ウィンドウで <strong>3D Scatter</strong> を展開し、Scatter Object の名前または矢印をクリックして開きます。<strong>Scatter Output</strong> は <strong>Target Biomes</strong> のすぐ下、<strong>Placement</strong> の上にあります。<strong>Meshes</strong>、<strong>Particles</strong>、<strong>Both</strong> から選びます。</p><p>Placement の <strong>Player Interaction</strong> は <strong>Static Scatter</strong> の隣にあります。有効にすると、ボタンの下に <strong>Bend Distance</strong> が表示されます。</p></div>
 <div class="table-wrap"><table><thead><tr><th>設定</th><th>意味</th><th>調整の目安</th></tr></thead><tbody>
-<tr><td>Density: 0–100 clumps/m²</td><td>Target Biome の Multiplier と Live Runtime Density が適用される前の基本的な期待 Instance 密度です。</td><td>低い値から始め、Instance Count と遠景の Coverage を確認しながら増やします。</td></tr>
+<tr><td>Player Interaction / Bend Distance</td><td>対応する Scatter Mesh が付近の Scatter Interactor から離れる向きに曲がります。Bend Distance はワールド単位の先端移動量の上限です。</td><td>草や柔らかい植物に有効にします。<a href="player-collision.html#quick-start">Player Collision &amp; Interaction Guide</a> を参照してください。Particles 専用出力にはこのメッシュ設定はありません。</td></tr><tr><td>Scatter Output</td><td><strong>Meshes</strong> は設定した Variant を描画し、<strong>Particles</strong> は Mesh Variant なしでパーティクル発生地点を作り、<strong>Both</strong> は両方を組み合わせます。</td><td>既存の Scatter Object は Meshes が標準です。Both は Mesh Variant の配置地点を利用します。</td></tr><tr><td>Density: 0–100 clumps/m²</td><td>Target Biome の Multiplier と Live Runtime Density が適用される前の基本的な期待 Instance 密度です。</td><td>低い値から始め、Instance Count と遠景の Coverage を確認しながら増やします。</td></tr>
 <tr><td>Coverage Min / Max: 0–1</td><td>すべての Target Biome の合計 Coverage が指定範囲内にある場所だけを配置対象にします。</td><td>薄いブレンドを除外するには Min を上げます。完全なバイオーム内部を除外するには Max を 1 未満に下げます。Max 1 なら通常どおり内部への配置を許可します。</td></tr>
 <tr><td>Spacing</td><td>この Scatter Object の Clump 中心同士に必要な最小ワールド距離です。Terrain Tile の境界をまたいでも適用されます。0 では制限しません。</td><td>密集や重なりを減らすには増やします。最終 Instance 数が Density の期待値より少なくなることがあります。中心間距離なので、大きな Mesh の外形同士は重なる場合があります。</td></tr>
 <tr><td>Max Slope: 0–90°</td><td>指定した角度より急な Surface を除外します。</td><td>Grass は Rock や Cliff Debris より低めの上限が適することが多いです。</td></tr>
@@ -54,11 +50,9 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Offset</td><td>サンプリングした Surface Normal に沿って Instance を移動します。</td><td>Mesh が浮いて見える、または埋まる場合に小さな正負の値で調整します。</td></tr>
 <tr><td>Enable Wind</td><td>この Scatter Object で DPT Scatter Wind を使用します。この設定は、割り当てた Shader が DPT Scatter Wind に対応している場合のみ使用できます。</td><td>対応 Shader を使用する Grass、Flower、その他の柔らかい Mesh で有効にします。硬い Prop では無効のままにします。VCCORE Material は独自の Wind Data を使用するため、この設定は必要ありません。</td></tr>
 </tbody></table></div>
-
 <h3 id="shoreline">岸辺だけに Reeds を配置する</h3>
 <ol><li>Reeds の Scatter Object を作り、Target は <strong>Water のみ</strong>にします。</li><li><strong>0.15～0.65</strong> のような Coverage 範囲を使うと、Water が Mud とブレンドしている場所には Reeds を許可し、Coverage 1 の純粋な Water は除外できます。</li><li>ペイントされた Transition Width と Coverage 範囲を調整して帯の位置を決め、その後 Density と Spacing で量と間隔を調整します。</li></ol>
 <p>Coverage はすべての Target Biome の寄与を合計します。Water と Mud の両方を Target にすると、その Transition 全体で合計 Coverage が 1 になる場合があり、同じ範囲設定では除外されます。必要な境界を表す部分 Coverage を持つバイオームだけを Target にしてください。Coverage は配置可能な Surface を絞り込み、バイオームごとの <strong>Density Multiplier</strong> はそこに出現する Clump 数を変更します。</p>
-
 <h2 id="variants">内蔵プリセットとカスタムメッシュ</h2>
 <p>各 Scatter Object には複数の Mesh Variant を設定できます。<strong>Relative Chance</strong> は相対的な選択 Weight であり、合計を 100 にする必要はありません。配置 Seed を変えずに内蔵 Mesh の形だけを変えたい場合は、異なる <strong>Shape Seed</strong> を使用します。Preset の説明は Tooltip で確認できます。</p>
 <div class="table-wrap"><table><thead><tr><th>内蔵プリセット</th><th>適した用途</th><th>形状の補足</th></tr></thead><tbody>
@@ -81,7 +75,72 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <h3>Custom Mesh</h3>
 <p><strong>Custom Mesh</strong> を選択し、3D Mesh、必要に応じた Submesh Index、Material、必要に応じた Distant Mesh を割り当てます。Distant Mesh がない場合は Near Mesh を再利用します。Custom Mesh は作成済みの Normal、Vertex Colour、UV3 Surface Data を保持し、内蔵の Shading、Metallic、Smoothness、Emissive 設定で書き換えられることはありません。対応する DPT Scatter Wind を有効にすると、Wind/Biome Data を持つ Runtime Copy が準備され、元の Asset は変更されません。</p>
 <div class="callout"><p><strong>Material の選択は重要です。</strong> Scatter は GPU Instancing を使用します。Mesh Data と互換性のある Material を使用し、必要に応じて GPU Instancing を有効にしてください。Variant Material を空にすると、適切な場合は元の Terrain Material が使用されます。</p></div>
-
+<h2 id="particles">Scatter の配置地点からパーティクルを発生させる</h2>
+<div class="callout"><p><strong>設定項目の場所：</strong>Vertex 3D Terrain ウィンドウで <strong>3D Scatter</strong> を開き、Scatter Object を展開して <strong>Scatter Output</strong> を <strong>Particles</strong> または <strong>Both</strong> に設定します。続いて <strong>Particle Effect</strong> を展開します。先頭に <strong>Particle Preset</strong> と <strong>Emission Trigger</strong> が表示されます。<strong>Custom</strong> を選ぶと <strong>Particle Prefab</strong> 欄が表示されます。</p><p><strong>Preview Particles</strong>、<strong>Follow Live Biome</strong>、<strong>Follow Flow Speed</strong> は、それぞれのパーティクル用インスペクターにある切り替えボタンです。青色が有効を表し、もう一度押すと無効になります。</p></div>
+<p>花粉、浮遊胞子、火の粉など、繰り返し発生するパーティクル効果には Scatter Object を使用します。メッシュの Scatter と同じ <strong>Target Biomes</strong>、<strong>Density</strong>、<strong>Coverage</strong>、<strong>Spacing</strong>、傾斜条件、配置設定を使用します。</p>
+<h3 id="particle-triggers">パーティクルを発生させる条件と発生位置</h3>
+<p><strong>Particle Effect</strong> 内の <strong>Emission Trigger</strong> を設定します。<strong>Continuous</strong> はカメラ範囲内の対象配置地点から <strong>Rate / Emitter</strong> に従い自動で発生させます。<strong>Player Movement</strong> は移動中の <strong>Scatter Interactor</strong> が配置地点に近づいたときだけ発生し、半径、強度、高さの許容範囲を考慮します。停止中や <strong>Minimum Movement Speed</strong> 未満では新規発生しません。出力には <strong>Particles</strong> または <strong>Both</strong> と <strong>Particle Preset</strong> の選択が必要です。<strong>Preview Particles</strong> ボタンは編集時のプレビューを有効にするもので、風だけでは Player Movement の発生条件になりません。</p>
+<ul><li><strong>Both：</strong>この Scatter Object のメッシュ配置地点がパーティクルの発生地点にもなります。<strong>Emitter Fraction</strong> で発生可能な地点の割合を選び、<strong>Emission Offset</strong> で各地点からの相対位置を指定します。オブジェクト内のすべての Mesh Variant が同じパーティクル設定を共有します。</li><li><strong>Particles：</strong>Mesh Variant を必要とせず、バイオームと配置ルールに従って独立した発生地点を作ります。</li><li><strong>ほかの Scatter Object：</strong>出力とパーティクル設定はオブジェクトごとに独立しています。同じ Profile に別の花粉用 Scatter Object を作っても、別の Grass Object の草や花には紐付きません。既存の草の配置地点から発生させるには、その草の Scatter Output を <strong>Both</strong> にします。</li></ul>
+<div class="example"><p><strong>例：</strong>付近に 100 個の草の配置地点があるとき、<strong>Emitter Fraction 0.1</strong> なら約 10 地点が選ばれます。<strong>Rate / Emitter 1</strong> なら、ライブバイオーム倍率や発生地点／パーティクル上限を適用する前で毎秒約 10 回の発生となります。水滴と霧を組み合わせた Prefab は、1 回の発生イベントで複数のパーティクルを出すことがあります。</p></div>
+<ol><li>Scatter Object を作成して <strong>Target Biomes</strong> を選びます。</li><li>オブジェクトの設定を開き、<strong>Target Biomes</strong> の下、<strong>Placement</strong> の上にある <strong>Scatter Output</strong> を見つけます。メッシュなしの効果には <strong>Particles</strong>、Mesh Variant も使う場合は <strong>Both</strong> を選択します。</li><li><strong>Particle Effect</strong> を展開し、<strong>Particle Preset</strong> から <strong>Pollen</strong>、<strong>Grass Flecks</strong>、<strong>Water Splash</strong> などを選びます。自作の効果には <strong>Custom</strong> を選択し、表示される <strong>Particle Prefab</strong> を割り当てます。</li><li><strong>Emitter Fraction</strong> と <strong>Rate / Emitter</strong> を低い値から始め、Offset と Rotation を調整します。</li><li><strong>Preview Particles</strong> を有効にして Scene View で確認します。編集時のプレビューは初期状態で無効ですが、ランタイムでの発生には必要ありません。</li><li>距離、発生地点数、パーティクル数の上限を設定し、ゲームカメラから効果を確認します。</li></ol>
+<div class="table-wrap"><table><thead><tr><th>設定</th><th>意味</th><th>初期値・目安</th></tr></thead><tbody>
+<tr><td>Particle Preset / Particle Prefab</td><td>形状、色、寿命、速度、重力、ノイズなどの動作モジュールを指定します。</td><td>内蔵 Preset はマテリアルと数式による粒子形状も含めてコードから生成され、Prefab や Sprite は不要です。<strong>Custom</strong> では自作の Particle Prefab を指定します。<strong>Water Splash</strong> は水滴、<strong>Mist</strong> は霧、<strong>Waterfall Splash</strong> は水滴と霧を組み合わせます。</td></tr>
+<tr><td>Emission Trigger</td><td><strong>Continuous</strong> は常時発生、<strong>Player Movement</strong> は配置地点の近くで Scatter Interactor が移動した場合に発生します。</td><td>既存の効果は Continuous が初期設定です。<strong>Both</strong> の場合は Player Interaction を有効にし、対応 Material を使い、Bend Distance を 0 より大きくします。</td></tr>
+<tr><td>Minimum Movement Speed</td><td>移動速度のしきい値（m/s）。Player Movement の場合に表示されます。</td><td>初期値 0.1。小さな動きを無視するには上げます。Interactor の Maximum Movement Step を超えるテレポートでは発生しません。</td></tr>
+<tr><td>Emitter Fraction: 0–1</td><td>発生可能な Scatter 配置地点の割合。通常のライブバイオーム変化中も選択が維持されます。</td><td>初期値 0.1。0 では発生地点を選びません。</td></tr>
+<tr><td>Rate / Emitter</td><td>選択された付近の各配置地点から毎秒発生する回数。ライブバイオーム倍率の適用前の値です。</td><td>初期値 1。発生地点が多いほど総発生頻度が増えます。</td></tr>
+<tr><td>Emission Offset</td><td>各配置地点からのローカル位置オフセット。配置物の Scale を含みます。</td><td>初期値 (0, 0.5, 0)。花粉を植物の上へ配置するには上げ、地面に寄せるには下げます。</td></tr>
+<tr><td>Emission Rotation</td><td>効果のローカル回転角度（度）。</td><td>初期値 (−90, 0, 0)。前向きに作成された粒子形状を上向きにします。</td></tr>
+<tr><td>Particle Distance</td><td>新規発生を許可する最大カメラ距離。Profile の Maximum Distance によっても制限されます。</td><td>初期値 40 m。発生が止まっても既存の粒子は寿命まで残ります。</td></tr>
+<tr><td>Emitter Limit: 1–1024</td><td>その Scatter Group が同時に使用する付近の発生地点数の上限。</td><td>初期値 128。高密度の地形では配置地点を制限付きで抽出します。</td></tr>
+<tr><td>Particle Limit</td><td>子 System 間で共有される、その Group の生存パーティクル数の上限。</td><td>初期値 1000。大きな透明粒子や重なる粒子が多い場合は低めから始めます。</td></tr>
+<tr><td>Preview Particles</td><td>Scene View で効果をアニメーション表示します。</td><td>編集中に有効にし、不要になったら無効にします。</td></tr>
+</tbody></table></div>
+<h3 id="particle-presets">パーティクルのプリセットを選ぶ</h3>
+<p><strong>Particle Preset</strong> のドロップダウンは Scatter、Player Surface Effects、Waterfall Emitter で共有されます。Preset は見た目を決め、<strong>Emission Trigger</strong> または Component が発生タイミングを決めます。Preset がバイオームを自動選択することはありません。9 種類の内蔵選択肢はすべてプロシージャルです。移動、色、寿命はコードで設定され、URP Shader が読み込み済み Sprite を使わず数式で粒子形状を描画します。自作の ParticleSystem Prefab には <strong>Custom</strong> を使用できます。</p>
+<div class="table-wrap"><table><thead><tr><th>Preset</th><th>効果</th><th>使用例</th></tr></thead><tbody>
+<tr><td>Pollen</td><td>小さく漂う黄色の粒子。</td><td>草原の花粉やプレイヤーが植物を揺らしたときの花粉。</td></tr>
+<tr><td>Grass Flecks</td><td>上向きに飛び、重力を受ける細長い緑色の破片。</td><td>草の中を走るとき。</td></tr>
+<tr><td>Water Splash</td><td>重力を受ける短い上向きの水滴。</td><td>水バイオーム上を移動するとき。</td></tr>
+<tr><td>Mist</td><td>ゆっくり漂う淡い霧状の粒子。</td><td>水蒸気や柔らかい滝の霧。</td></tr>
+<tr><td>Rock Dust / Sand Dust</td><td>灰褐色または砂色の柔らかい粉じん。</td><td>岩場や乾燥地での移動。</td></tr>
+<tr><td>Snow Puffs</td><td>弱い重力で動く小さく淡い粒子。</td><td>雪または氷の Dusting バイオーム上の移動。</td></tr>
+<tr><td>Embers</td><td>漂う小さなオレンジ色の火の粉。</td><td>高温または焼け焦げたバイオーム。</td></tr>
+<tr><td>Waterfall Splash</td><td>水滴と霧の子 System を組み合わせます。</td><td>付属の滝の着水効果。</td></tr>
+<tr><td>Custom</td><td>自作 ParticleSystem Prefab 用の Particle Prefab 欄を表示します。</td><td>自作の落ち葉、火花、水滴などの反応。</td></tr>
+</tbody></table></div>
+<h3 id="player-particle-reactions">プレイヤーが Scatter を揺らしたときに発生させる</h3>
+<ol><li>草の <strong>Scatter Object</strong> を開き、<strong>Scatter Output</strong> を <strong>Both</strong> にします。</li><li><strong>Static Scatter</strong> の横にある <strong>Player Interaction</strong> を有効にし、<strong>Bend Distance</strong> を 0 より大きくします。対応 Material を使用します。</li><li><strong>Particle Effect</strong> を展開し、<strong>Particle Preset</strong> を <strong>Grass Flecks</strong> または <strong>Pollen</strong>、<strong>Emission Trigger</strong> を <strong>Player Movement</strong> にします。</li><li><strong>Emitter Fraction 0.2</strong>、<strong>Rate / Emitter 15</strong>、<strong>Minimum Movement Speed 0.1</strong> から始めます。植物の高さに合わせて Emission Offset を調整し、Particle Limit で上限を設定します。</li><li>プレイヤーの足元付近に <strong>DPT_ScatterInteractor</strong> を追加し、Play Mode で草の中を走ります。立ち止まると新規発生は停止し、既存の粒子は寿命まで残ります。</li></ol>
+<p>判定は Shader で変形した頂点を読み取るのではなく、Scatter の根元に対する移動中 Interactor の接触範囲を使用します。移動サンプル間を連続判定して高速通過も拾い、高さ範囲を考慮し、<strong>Maximum Movement Step</strong> を超えるテレポートは無視します。<strong>Particles</strong> 専用出力でも、メッシュの Bend を有効にせずに同じ Trigger を利用できます。ライブバイオームの Strength と Density は引き続き発生頻度に掛けられます。<strong>Static Scatter</strong> はこれらの Modifier に依存しないままです。</p>
+<p>Scatter Mesh がない場所で足元に水しぶきや粉じんを出す場合は、<a href="player-collision.html#surface-effects">Player Surface Effects とベイク済みバイオームデータ</a>を使用します。</p>
+<h3>ライブバイオーム反応と自然な消え方</h3>
+<p>ライブバイオームの Strength と <strong>Scatter Density</strong> は、対象バイオーム ID に属する配置地点の新規発生頻度に乗算されます。いずれかを下げると発生数が減り、0 にすると新規発生は止まって既存の粒子は自然に寿命を迎えます。<strong>Static Scatter</strong> はこれらのライブ Modifier に左右されません。</p>
+<p>段階的な消失はパーティクル自体の寿命によって実現します。メッシュ用の <strong>Live Crossfade</strong> はパーティクルの透明度を制御しません。粒子の色は選択したプロシージャル Preset または Custom Prefab で決まります。ライブの <strong>Scatter Colour Multiplier</strong> はメッシュ用の Tint であり、粒子の色は変更しません。</p>
+<div class="example"><p><strong>草原の花粉：</strong>草の Group で <strong>Both</strong> と <strong>Pollen</strong> を選び、<strong>Emitter Fraction 0.1</strong>、<strong>Rate / Emitter 1</strong>、<strong>Particle Distance 25</strong>、<strong>Particle Limit 300</strong> から始めます。冬に向けて草バイオームの Live Density を 0 までアニメーションさせると、新しい粒子は減り、発生済みの花粉は漂いながら消えます。</p></div>
+<h3>プロシージャル Preset、Custom Prefab、上限</h3>
+<p>有効な Scatter Group ごとに 1 つの共有生成エフェクト、または 1 つの Custom Prefab インスタンスを使用します。草の Clump ごとに Particle GameObject を作りません。Emitter は World Space Simulation と手動発生を使用するため、Prefab の自動 Rate と Burst は無効になります。通常の各子 System は 1 回の発生イベントにつき 1 回ずつ発生し、水滴と霧の複合効果などを構成できます。<strong>Particle Limit</strong> は子 System 間で配分されます。</p>
+<p>内蔵 Preset は、有効な効果が必要になったときだけ ParticleSystem と Material を生成します。効果を差し替えたり無効にしたりすると生成 Object と Material は解放されます。使用しているのは Unity ParticleSystem なので、プロシージャル生成だけでフレームレートが向上するとは限りません。Custom Prefab には使用する Render Pipeline に合う Material を指定してください。</p>
+<p>発生地点は配置 Transform と Terrain の移動に追従します。発生済みの粒子は World Space に残ります。Shader の風や Player Bending は発生地点を動かしません。植物の静止位置に合わせて <strong>Emission Offset</strong> を調整します。Preset や Custom Prefab の変更、<strong>Meshes</strong> への切り替え、Renderer の無効化を行うと、生成済みの効果は直ちに解放されます。</p>
+<p class="back-top"><a href="#top">ページ先頭へ戻る</a></p>
+<h2 id="waterfall-splash">滝の水しぶきと霧</h2>
+<p><strong>DPT_WaterfallSplashEmitter</strong> は、滝の下に手動配置する着水用の帯状エフェクトです。各着水位置に Scatter Profile や GameObject を用意せず、帯の範囲全体に共有パーティクル効果を発生させます。</p>
+<p>Component を有効にすると、Play Mode 中、カメラ範囲内で <strong>Emission Rate</strong> に従って継続的に発生します。水やプレイヤーとの衝突を待ちません。編集時には <strong>Preview Particles</strong> を有効にしてください。任意でライブバイオームと Flow を連動させ、新規発生を減らしたり止めたりできます。</p>
+<ol><li>滝の根元に GameObject を作り、Add Component から <strong>DPT_WaterfallSplashEmitter</strong> を追加します。</li><li>標準のプロシージャル <strong>Waterfall Splash</strong> を使うか、別の <strong>Particle Preset</strong> を選びます。自作の効果を使う場合は <strong>Custom</strong> を選択し、表示された <strong>Particle Prefab</strong> を指定します。</li><li><strong>Splash Width</strong> と <strong>Splash Depth</strong> を調整して着水範囲を覆います。選択時の Gizmo に帯が表示されます。</li><li>上向きの噴射には <strong>Spray Direction (0, 1, 0)</strong> を使い、<strong>Emission Rate</strong> と <strong>Particle Limit</strong> を調整します。</li><li><strong>Preview Particles</strong> を有効にして編集中に確認します。</li><li>必要なら以下の方法で水バイオームと Flow Speed に連動させます。</li></ol>
+<div class="table-wrap"><table><thead><tr><th>設定</th><th>意味</th><th>初期値・使い方</th></tr></thead><tbody>
+<tr><td>Splash Width / Splash Depth</td><td>Object のローカル X/Z 軸に沿った着水帯の大きさ。</td><td>3 / 0.5。滝の根元に合わせて Object の位置と回転を調整します。</td></tr>
+<tr><td>Spray Direction</td><td>Object のローカル軸で指定する方向。</td><td>(0, 1, 0) で上向きに噴射します。Material の Texture Heading とは独立しています。</td></tr>
+<tr><td>Emission Rate</td><td>帯全体での 1 秒あたりの発生回数。</td><td>40。Waterfall Splash や複合 Custom Prefab は、1 イベントで複数の子 System から発生する場合があります。</td></tr>
+<tr><td>Particle Distance / Particle Limit</td><td>新規発生を許可するカメラ距離と、子 System 全体で共有する生存粒子数上限。</td><td>60 m / 1000 個。</td></tr>
+<tr><td>Follow Live Biome</td><td>紐付けたバイオームのライブ Strength と Scatter Density で発生頻度を変化させます。</td><td>Terrain Material と Biome ID を指定します。ライブ反応を下げると新規発生が止まり、既存の粒子は寿命まで残ります。</td></tr>
+<tr><td>Follow Flow Speed</td><td>ライブバイオームへの紐付け時、Full Emission Speed に対する Flow Speed の絶対値でも発生頻度を調整します。</td><td><strong>Directional</strong> と <strong>Back and Forth</strong> は発生可能です。Flow 停止、対応する有効 Flow がない場合、<strong>Lake</strong> Mode では新規水しぶきは停止します。</td></tr>
+<tr><td>Full Emission Speed</td><td>設定された発生頻度が最大になるテクスチャ Flow Speed の絶対値。</td><td>0.15。Shader Animation の値であり、落下する水の物理速度ではありません。</td></tr>
+</tbody></table></div>
+<div class="callout"><p><strong>着水エフェクトは手動で配置します。</strong> Component は滝の落下点を検出せず、衝撃力を計算しません。<strong>Waterfall Projection</strong> は水面をアニメーションさせ、この Component が目に見える水しぶきと霧を担当します。紐付けたエフェクトは <strong>Scatter Density</strong> にも従います。水 Slot の Scatter Density が 0 なら、Flow が有効でも新規粒子は発生しません。独立して頻度を制御する場合は紐付けない Emitter を使用します。</p></div>
+<p>静かな水には、水 Material で <strong>Lake</strong> Mode を選びます。Flow に連動した Waterfall Splash は Lake Mode で停止しますが、紐付けていない装飾エフェクトは設定した頻度で継続できます。</p>
+<p class="back-top"><a href="#top">ページ先頭へ戻る</a></p>
+<h2 id="player-interaction">プレイヤーに反応して草を曲げる</h2>
+<p>対応する草や植物の Scatter Object で <strong>Player Interaction</strong> を有効にし、プレイヤーに <strong>DPT_ScatterInteractor</strong> を追加します。近くのメッシュの先端がプレイヤーから離れる向きに曲がり、根元は固定されます。この機能は風と独立して動作します。</p>
+<p><a href="player-collision.html">Player Collision &amp; Interaction Guide</a> では設定方法、Radius、Height Tolerance、Bend Distance、NPC、物理 Collider の扱いを説明しています。草ごとの Collider を作らずに、歩いて通過したときの見た目の反応を実現したい場合に参照してください。</p>
 <h2 id="lod">距離、LOD、Renderer 設定</h2>
 <p><strong>Scatter Settings</strong> を展開します。よく使う設定は <strong>Distance &amp; LOD</strong> と <strong>Preview &amp; Shadows</strong> にまとめられています。Cell Size、Wind Bounds、Tile ごとの上限、Up Mode、Runtime Discovery は <strong>Advanced</strong> を開きます。Placement 設定はコンパクトなペア Slider を使い、Scale Range は X/Y ではなく Min/Max と表示されます。</p>
 <div class="table-wrap"><table><thead><tr><th>設定</th><th>意味</th><th>確認ポイント</th></tr></thead><tbody>
@@ -108,34 +167,25 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Animate Preview</td><td>Wind や Animated Material のために Scene View を継続的に更新します。静止 Preview では無効にできます。</td></tr>
 <tr><td>Runtime Discovery</td><td>初期状態では Off です。Play 中に定期的な Discovery が必要なら有効にします。Nested Terrain Hierarchy や LOD Membership を変更した後は <code>DPT_ScatterRenderer.RefreshSources()</code> を呼ぶこともできます。直接の Child の変更は自動更新されます。</td></tr>
 </tbody></table></div>
-
 <h2 id="wind">風の設定</h2>
 <p>DPT Scatter Wind には2段階の設定があります。<strong>Material</strong> 側では Shader 内の Wind 機能を有効／無効にし、Scatter Object 側の <strong>Enable Wind</strong> では、その Scatter Object が DPT Scatter Wind を使用するかを指定します。Scatter Object の Enable Wind は、割り当てた Shader に <code>_DPT_SCATTER_WIND</code> Boolean Keyword がある場合のみ使用できます。これにより Vertex 3D Terrain は、その Shader が DPT Scatter Wind に対応していることを判別します。</p>
-
 <h3>Vertex Terrain Material で使用する場合</h3>
 <ol><li>Material の <a href="terrain-material-settings.html#wind">Wind</a> セクションを開き、<strong>Enable Wind</strong> を有効にします。</li><li><strong>Wind Strength</strong> を控えめな値から設定します。</li><li><strong>Height To Tip</strong> を Scatter Mesh の Object Space 上のおおよその高さに合わせます。これにより Base を固定したまま Tip 側で十分な Wind Movement が得られます。</li><li><strong>Compass Heading</strong> と <strong>Vertical Pitch</strong> を設定します。</li><li>3D Scatter セクションへ戻り、DPT Scatter Wind を使用したい各 Scatter Object で <strong>Enable Wind</strong> を有効にします。</li><li>強く動く Tip が Camera / Frustum 境界付近で消える場合は、Scatter Settings の <strong>Wind Bounds</strong> を増やします。</li></ol>
 <p>Pebbles など硬い Scatter は、同じ Material を使用していても Scatter Object 側の Enable Wind を無効のままにできます。</p>
-
 <h3>VCCORE Material</h3>
 <p>VCCORE は独自の Authoring 済み Wind System を使用するため、Scatter Object の <strong>Enable Wind</strong> は意図的に使用不可になります。これは正常な動作です。<strong>Stylized Color Swapper &amp; Material Optimizer</strong> でモデルに Wind をペイントした場合、または DPT Asset Pack に Wind Data が設定済みのモデルを使用する場合、Scatter 用の追加 Wind 設定は必要ありません。Wind の有効化や調整は VCCORE Material 側の Wind 設定を使用してください。</p>
-
 <h3>独自の Shader Graph に DPT Scatter Wind を追加する</h3>
 <p>Custom Shader にすでに独自の Wind System がある場合は、そのまま既存の Wind を使用してください。以下の設定が必要なのは、Custom Shader Graph で Vertex Terrain Shader と同じ DPT Scatter Wind 機能を使用したい場合だけです。</p>
 <p><strong>SH_DPT_VCTerrain</strong> を開き、下の画像に示す <strong>Scatter Wind</strong> ブロックをコピーして、自分の Shader Graph に貼り付けます。次に Blackboard に以下の項目を追加し、Reference 名を完全に一致させてください。</p>
-
 <div class="table-wrap"><table><thead><tr><th>Blackboard 項目</th><th>Type</th><th>Reference</th></tr></thead><tbody>
 <tr><td>Wind Strength</td><td>Float</td><td><code>_Wind_Strength</code></td></tr>
 <tr><td>Wind Direction</td><td>Vector 3</td><td><code>_Wind_Direction</code></td></tr>
 <tr><td>Height To Tip</td><td>Float</td><td><code>_Height_To_Tip</code></td></tr>
 <tr><td>DPT Scatter Wind</td><td>Boolean Keyword</td><td><code>_DPT_SCATTER_WIND</code></td></tr>
 </tbody></table></div>
-
 <ol><li>付属の Vertex Terrain Shader Graph から Scatter Wind ブロック全体をコピーし、自分の Shader Graph に貼り付けます。</li><li>まだ存在しない場合は、上記4つの Blackboard 項目を追加します。</li><li><strong>Wind Strength</strong>、<strong>Wind Direction</strong>、<strong>Height To Tip</strong>、<strong>DPT Scatter Wind</strong> を、参照画像と同じ位置へ再接続します。</li><li>最後の <strong>DPT Scatter Wind</strong> の Output を Graph の <strong>Vertex Position</strong> Input に接続します。</li><li>Graph を保存し、その Shader を使用する Material を Custom Mesh Variant に割り当てます。</li><li>Material 側で DPT Scatter Wind Keyword を有効にし、その後 Scatter Object の <strong>Enable Wind</strong> を有効にします。</li></ol>
-
-<figure class="doc-figure"><img src="../assets/dpt-scatter-wind-shader-graph-ja.png" alt="DPT Scatter Wind ブロック、Blackboard Property、Vertex Position への接続を示す Shader Graph の参照画像。"><figcaption>Custom Shader Graph に DPT Scatter Wind を追加するための参照設定です。Scatter Wind ブロックをコピーし、上記4つの Blackboard 項目を同じ Reference 名で作成して、画像どおりに再接続します。最後の出力は Vertex Position に接続します。</figcaption></figure>
-
+<figure class="doc-figure"><img alt="DPT Scatter Wind ブロック、Blackboard Property、Vertex Position への接続を示す Shader Graph の参照画像。" src="../assets/dpt-scatter-wind-shader-graph-ja.png"/><figcaption>Custom Shader Graph に DPT Scatter Wind を追加するための参照設定です。Scatter Wind ブロックをコピーし、上記4つの Blackboard 項目を同じ Reference 名で作成して、画像どおりに再接続します。最後の出力は Vertex Position に接続します。</figcaption></figure>
 <div class="callout"><p><strong>既存の Vertex Animation がある場合：</strong>Shader Graph ですでに Vertex Position を変更している場合は、現在の Deformation Chain を単純に置き換えるのではなく、その既存の Object Space Position に Scatter Wind ブロックを組み込んでください。</p></div>
-
 <h2 id="live-response">ライブバイオームによる密度と色の変化</h2>
 <p>Terrain Surface に使用する4つの Live Biome Modifier Slot は、Target Biome ID に属する Scatter も制御できます。これにより、季節システムで地面と Vegetation を同時に変化させられます。</p>
 <div class="table-wrap"><table><thead><tr><th>Scatter Response 設定</th><th>意味</th><th>Neutral 値</th></tr></thead><tbody>
@@ -145,7 +195,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <p>例えば Winter Slot では、Grass Biome の Snow Dusting を増やしながら Scatter Density を下げ、Colour Multiplier を淡い霜色へ変化させられます。同じ再利用可能な Grass Object が Forest Biome も対象にしている場合でも、その Forest 所有 Instance は、その Biome ID が Live Slot の Target になっていない限り独立したままです。</p>
 <div class="example"><p><strong>季節変化の例：</strong>Summer は Scatter Density を 1、Colour Multiplier を White にします。Winter のピークでは Density を 0.05～0.25 程度、Colour Multiplier を冷たい淡色にしてみてください。付属の Dynamic Biome Demo Controller には、Dusting と同時にこれらの値を動かす Winter Animation の例が含まれます。</p></div>
 <p>Material 側の設定は <a href="terrain-material-settings.html#live-biomes">Terrain Material Settings</a>、サンプル Controller は <a href="demo-components.html#dynamic-biome-controller">デモ &amp; ランタイムガイド</a> を参照してください。</p>
-
 <h3 id="live-crossfade">Live 変更中に Scatter をフェードさせる</h3>
 <ol>
 <li><strong>3D Scatter → Scatter Settings → Distance &amp; LOD</strong> を開きます。</li>
@@ -155,7 +204,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 </ol>
 <p><strong>Live Crossfade</strong> はディザリングによって可視性を変化させます。Live Population が変わるにつれて、Mesh とその Shadow の表示範囲が徐々に減少または回復します。CPU / GPU のどちらの Scatter Rendering でも動作し、既存の Instance Position は保持されます。Live Density が 0 になると、対象の Scatter と Shadow は完全に非表示になります。アニメーションを逆に進めると、同じ位置にフェードインします。</p>
 <div class="callout"><p><strong>反応する Scatter を選択します。</strong> Live Density、Colour、Surface Override などの Live Biome Animation を無視したい Scatter Object では、<strong>Static Scatter</strong> を有効にしてください。Static Object には Live Crossfade が適用されません。ただし、Paint や Sculpt による配置更新は引き続き行われます。</p><p>DPT Scatter Fade に対応していない Material は従来の可視性制御のまま動作します。Scatter Object の Authoring 用 <strong>Density</strong> を変更する操作や Placement を Rebuild する操作は、Live Density Animation とは別です。<strong>Transition</strong> は距離による LOD の切り替えを制御し、<strong>Live Crossfade</strong> は Live Biome の変化を制御します。</p></div>
-
 <h3 id="seasonal-profiles">季節ごとのスナップショットと折りたたみ式プロファイル</h3>
 <p><a href="demo-components.html#dynamic-biome-controller">Dynamic Biome Demo Controller</a> では、Material の外観を <strong>Environment Profiles</strong> としてキャプチャできます。Material を編集し、<strong>+ Capture Current Settings as NEW Profile</strong> を選択してください。各 Profile は保存された独立したスナップショットです。その後の Material 編集は、再キャプチャするまで保存済み Profile に反映されません。</p>
 <p>Profile の矢印または名前をクリックすると、折りたたみと展開を切り替えられます。折りたたんだ状態でも Header に名前と Sequence Position が表示され、最初の Profile には <strong>START</strong> と表示されます。新規キャプチャした Profile は自動的に展開されます。展開すると <strong>Name</strong>、<strong>Transition Seconds</strong>、Easing、<strong>Channels to Animate</strong> を編集でき、Capture、Apply、並べ替え、削除の操作も利用できます。<strong>Animate To Profile</strong> は現在の外観からチェック済み Channel をブレンドし、完了後はその状態を維持します。</p>
@@ -167,19 +215,16 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <p>これらのルールは Sequence Playback、Edit Mode の Preview / Scrubbing、<strong>Animate To Profile</strong> に適用されます。各 Live Biome Modifier Slot で指定できる Target Biome ID は最大3つです。これは任意の数のバイオームを追加できる Scatter Object の <strong>Target Biomes</strong> List とは別のものです。</p>
 <div class="example"><p><strong>春 → 冬 → 春 → 熱波：</strong>Spring では Water の Dusting Strength を 0 にしてキャプチャします。Winter では Ice Dusting、春に戻る Profile では Strength を 0、Heatwave では Sand Dusting をキャプチャします。Heatwave への移行開始時に Sand が直ちに選ばれるため、最初に Ice が増えて最後に Sand に切り替わることはありません。乾季用の Snapshot で Target Biome を追加している場合、そのバイオームも Transition の開始時から Live Modifier の対象になります。</p></div>
 <p>Scene View で Dusting をペイントする際、赤い Dusting Preview は Brush Handle より先に描画されるため、選択した Brush Handle の色をハイライト上でも確認できます。</p>
-
 <h2 id="runtime-data">ランタイム Scatter とベイク済み地形データ</h2>
 <p>Scatter の配置は Main Thread 上で同期的に生成され、その後 Rendering 用に Cache されます。Readable な Terrain Mesh では、その Mesh から配置 Geometry を直接取得します。Non-readable な Terrain Mesh でも、Scatter Geometry を含む対応した <strong>DPT_TerrainSurfaceData</strong> Asset を使用できるため、この Runtime Path のためだけに Terrain の Read/Write を有効のままにする必要はありません。</p>
 <ol><li>Bake の前に Scatter Profile を割り当てます。</li><li>Terrain を Editor で編集できる状態で <strong>Bake Surface Data</strong> を使用します。Scatter Profile が割り当てられている場合、Gameplay Surface 情報に加えて、配置用 Vertex、Normal、Triangle、Biome Channel も含まれます。</li><li>各 Source Terrain の <strong>DPT_TerrainSurfaceTarget</strong> に Baked Asset を割り当てたままにし、Build に含めます。</li><li>Terrain Geometry、Painting、Biome ID、Topology を変更した後は再 Bake します。Gameplay 用のみの Bake や古い Bake では Scatter 配置に十分ではありません。</li><li>Terrain の Read/Write を無効にした状態で Build をテストします。Renderer が Scatter Geometry Bake を要求する場合は現在の Data を用意するか、その Source Mesh を Readable のままにしてください。</li></ol>
 <p>Bake された配置 Array 自体は Memory を使用します。Terrain の Read/Write を無効にしても Scatter Data そのものがなくなるわけではありません。大規模な Population の生成や Rebuild には Main Thread の処理時間が必要になる場合があります。この Terrain Data の選択肢は、DPT Wind Copy の準備で Readable Mesh Channel が必要になる場合など、Authoring 済み Custom Mesh 側の要件をなくすものではありません。</p>
-
 <h2 id="performance">パフォーマンスと実用上の制限</h2>
-<ul><li>Scatter は Instance ごとに GameObject を作るのではなく、GPU Instanced Draw を使用します。</li><li>配置は Terrain Mesh から生成され Cache されます。通常の Camera 移動や Live Density の変更では Terrain Scatter Distribution は再構築されません。</li><li>Camera Distance と Frustum Culling は Scatter の Batch / Cell 単位で動作します。そのため Cell Size は Grouping Overhead と Culling Precision の両方に影響します。</li><li>Far Density は安価な Distant Mesh を使うだけでなく、遠距離の Population 自体を減らせます。</li><li>大きな Terrain で非常に高い Density を使うと Candidate または Instance の Safety Cap に到達することがあります。上限を最大化する目標ではなく、Setup を Profile すべき Warning として扱ってください。</li><li>Custom Mesh は Instancing に適した構成にし、数千個表示する場合は不要な Vertex / Submesh / Material Complexity を避けてください。</li></ul>
+<ul><li>Scatter は Instance ごとに GameObject を作るのではなく、GPU Instanced Draw を使用します。</li><li>配置は Terrain Mesh から生成され Cache されます。通常の Camera 移動や Live Density の変更では Terrain Scatter Distribution は再構築されません。</li><li>Camera Distance と Frustum Culling は Scatter の Batch / Cell 単位で動作します。そのため Cell Size は Grouping Overhead と Culling Precision の両方に影響します。</li><li>Far Density は安価な Distant Mesh を使うだけでなく、遠距離の Population 自体を減らせます。</li><li>大きな Terrain で非常に高い Density を使うと Candidate または Instance の Safety Cap に到達することがあります。上限を最大化する目標ではなく、Setup を Profile すべき Warning として扱ってください。</li><li>Custom Mesh は Instancing に適した構成にし、数千個表示する場合は不要な Vertex / Submesh / Material Complexity を避けてください。</li></ul><p>パーティクルについては、メッシュの LOD とは別に <strong>Emitter Fraction</strong>、<strong>Rate / Emitter</strong>、<strong>Particle Distance</strong>、<strong>Emitter Limit</strong>、<strong>Particle Limit</strong> を調整します。透明度のある大きな粒子や重なった Mist は、粒子数が少なくても負荷が高くなる場合があります。パーティクルのシミュレーションや頂点の Bending は、ベイク済みのゲームプレイ用地表クエリを変更しません。</p>
 <p>Runtime Discovery は Opt-in なので、安定した Terrain Hierarchy では Play 中に毎秒 Full Search を行う必要はありません。内蔵 Variant の Signature は Profile が変わるまで Cache されます。設定済み Mesh Cache は Active Renderer がまだ使用している Mesh を保持し、Rebuild 後に不要になった Entry を解放します。最後の Renderer を無効にすると共有 Scatter Cache が Clear されます。Profile の変更では引き続き Regeneration が必要になる場合があります。</p>
-
 <h2 id="troubleshooting">Scatter のトラブルシューティング</h2>
 <div class="table-wrap"><table><thead><tr><th>症状</th><th>この順に確認</th></tr></thead><tbody>
-<tr><td>Scatter が表示されない</td><td>Terrain Atlas Mode、Scatter Library、Target Biomes、基本 Density、Target Density Multiplier、Coverage Min/Max、Maximum Slope、Material、Scene Preview を確認し、その後 Rebuild Scatter を使用します。</td></tr>
+<tr><td>草がプレイヤーに反応しない</td><td><a href="player-collision.html#troubleshooting">Player Interaction の確認項目</a>に従い、Group のトグル、Bend Distance、対応 Shader、Interactor の中心位置、Radius、Height Tolerance を確認します。</td></tr><tr><td>滝の水しぶきが突然止まる</td><td>Particle Distance、Follow Live Biome、Terrain Material、Biome ID、Live Strength、Scatter Density を確認します。Follow Flow Speed を使う場合は、対応する Flow が有効で速度が 0 でないことを確認してください。Lake Mode では Flow に連動する水しぶきが止まります。</td></tr><tr><td>Live Density が 0 でも粒子が漂い続ける</td><td>既存の粒子は選択した効果の Lifetime を最後まで再生します。内蔵 Preset の Lifetime はコードで定義されています。早く消す場合は Custom Prefab を使い、その Start Lifetime を短くします。</td></tr><tr><td>パーティクルが表示されない</td><td><strong>Scatter Output</strong> を <strong>Particles</strong> または <strong>Both</strong> にして <strong>Particle Preset</strong> を選ぶか、<strong>Custom</strong> と <strong>Particle Prefab</strong> を指定します。Target Biomes、配置密度、Emitter Fraction、Rate / Emitter、カメラ距離、Particle Limit と Preview Particles を確認します。Player Movement を使用する場合は移動する Interactor と Minimum Movement Speed も確認してください。</td></tr><tr><td>Scatter が表示されない</td><td>Terrain Atlas Mode、Scatter Library、Target Biomes、基本 Density、Target Density Multiplier、Coverage Min/Max、Maximum Slope、Material、Scene Preview を確認し、その後 Rebuild Scatter を使用します。</td></tr>
 <tr><td>違うバイオームに Scatter が出る</td><td>現在の Target Biome の名前 / ID と、設定後に Terrain 側の順序を変更していないか確認します。重複または意図しない Target を削除します。</td></tr>
 <tr><td>ブレンド境界が空きすぎる</td><td>Coverage の Min と Max、Target Density Multiplier を確認します。Coverage はすべての Target Biome を合計します。岸辺の帯では Water と Mud の両方ではなく Water だけを Target にします。</td></tr>
 <tr><td>Clump が重なりすぎる</td><td>Spacing を上げ、Scale Min/Max を確認します。Spacing はこの Scatter Object 内の中心同士を離す設定で、Mesh の外形全体や別 Scatter Object との間隔ではありません。最終 Count が減る場合があります。</td></tr>
@@ -204,6 +249,5 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>雪で Terrain は変わるが Grass は変わらない</td><td>Scatter Object が Live Slot と同じ Biome ID を Target にしているか、Scatter Density / Colour Multiplier が Neutral のままではないか、Live-biome の Master Switch が On か、Scatter Renderer が同じ互換 Material を使用しているか確認します。</td></tr>
 <tr><td>Scatter Density を変えてもすぐに反映されない</td><td>Profile の Authoring Density だけでなく、Live Material の Scatter Response を変更しているか確認します。Profile Density は配置そのものを変更するため Rebuild が必要になる場合があります。Live Scatter Density は Submit される Population を変更します。</td></tr>
 </tbody></table></div>
-
 <h2 id="support">サポート</h2><p>サポートが必要な場合は、Unity のバージョン、関係する Terrain Atlas の Biome ID、Scatter Object と Scatter Settings のスクリーンショット、使用中の Material、Renderer の Status Line を含めてください。配置の問題では Terrain Scale、Density、問題が純粋な単一バイオームで起きるか Blend 上で起きるかも記載してください。</p><p><a href="https://dptgames.github.io/#contact">DPT Games お問い合わせフォーム</a>、または <a href="https://discord.gg/EkQykfzP5X">DPT Games Discord</a> をご利用ください。</p><p class="back-top"><a href="#top">ページの先頭へ</a></p><footer class="footer">DPT Vertex 3D Terrain ドキュメント · 操作項目を見つけやすいよう英語の Control 名を使用しています。English / 日本語 / 한국어 のリンクはページ上部から切り替えられます。</footer></main></body>
 </html>
