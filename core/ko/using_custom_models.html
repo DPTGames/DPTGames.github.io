@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="alternate" hreflang="en" href="https://dptgames.github.io/core/using_custom_models.html"><link rel="alternate" hreflang="ja" href="https://dptgames.github.io/core/ja/using_custom_models.html"><link rel="alternate" hreflang="ko" href="https://dptgames.github.io/core/ko/using_custom_models.html"><title>VCCORE 커스텀 모델 및 텍스처 사용 가이드</title><style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        @page {
+            size: A4;
+            margin: 15mm 15mm;
+            background-color: #0f172a;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            font-size: 11pt;
+            line-height: 1.5;
+        }
+        h1, h2, h3, h4 {
+            color: #38bdf8;
+            margin-bottom: 10px;
+        }
+        h1 {
+            font-size: 26pt;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 10px;
+            margin-top: 0;
+            color: #bae6fd;
+        }
+        h2 {
+            font-size: 16pt;
+            background-color: #1e293b;
+            padding: 8px 12px;
+            border-left: 5px solid #38bdf8;
+            page-break-after: avoid;
+            margin-top: 25px;
+        }
+        h3 {
+            font-size: 13pt;
+            page-break-after: avoid;
+            color: #7dd3fc;
+            margin-top: 20px;
+        }
+        p {
+            margin: 0 0 12px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            page-break-inside: auto;
+        }
+        tr {
+            page-break-inside: avoid;
+        }
+        th, td {
+            border: 1px solid #334155;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #1e293b;
+            color: #7dd3fc;
+            font-weight: bold;
+            font-size: 10.5pt;
+        }
+        td {
+            background-color: #0f172a;
+        }
+        td strong {
+            color: #bae6fd;
+        }
+        ul, ol {
+            margin: 10px 0 15px 0;
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            font-size: 12pt;
+            color: #94a3b8;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+        .note {
+            background-color: #1e293b;
+            border-left: 4px solid #10b981;
+            padding: 12px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+        .warning {
+            background-color: #1e293b;
+            border-left: 4px solid #ef4444;
+            padding: 12px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+        code, pre {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: #020617;
+            color: #a5f3fc;
+            border-radius: 4px;
+            font-size: 10pt;
+        }
+        code {
+            padding: 2px 5px;
+        }
+        .divider {
+            border: 0;
+            height: 1px;
+            background: #1e293b;
+            margin: 30px 0;
+        }
+        .note a {
+            color: #38bdf8;
+            text-decoration: none; 
+            transition: color 0.2s ease-in-out;
+        }
+        .note a:hover {
+            color: #7dd3fc;
+            text-decoration: underline; 
+        }
+    
+
+.language-nav{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 26px}
+.language-nav a{display:inline-block;padding:7px 16px;border:1px solid #40516b;border-radius:6px;color:#7dd3fc;text-decoration:none;background:#1e293b}
+.language-nav a[aria-current="page"]{color:#0f172a;background:#38bdf8;border-color:#38bdf8;font-weight:700}
+.language-nav a:hover{border-color:#7dd3fc;background:#0c4a6e;color:#f8fafc}
+.language-nav a[aria-current="page"]:hover{background:#38bdf8;color:#0f172a}
+.language-nav a:focus-visible{outline:3px solid #fbbf24;outline-offset:3px}
+html[lang="ja"] body{line-height:1.75;line-break:strict}
+html[lang="ja"] th,html[lang="ja"] td{overflow-wrap:anywhere}
+html[lang="ko"] body{line-height:1.72;word-break:keep-all;overflow-wrap:break-word}
+nav.core-nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+table{max-width:100%;overflow-wrap:break-word}
+pre{overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:700px){body{padding:22px 18px}h1{font-size:21pt}table{display:block;overflow-x:auto}th,td{min-width:95px;padding:8px}}
+@media print{.language-nav{display:none}}
+</style></head><body>
+<nav class="core-nav" style="background:#1e293b;padding:12px;border-bottom:2px solid #38bdf8;margin-bottom:16px;"><a href="../../index.html" style="color:#38bdf8">← 문서 허브</a><span style="color:#64748b">|</span><a href="index.html" style="color:#f8fafc">Core 개요</a><a href="shader_variation.html" style="color:#f8fafc">Shader Variation</a><a href="using_custom_models.html" style="color:#f8fafc">커스텀 모델</a></nav>
+<nav class="language-nav" aria-label="Language / 言語 / 언어"><a href="../using_custom_models.html" lang="en" hreflang="en">English</a><a href="../ja/using_custom_models.html" lang="ja" hreflang="ja">日本語</a><a href="using_custom_models.html" lang="ko" hreflang="ko" aria-current="page">한국어</a></nav>
+
+<h1>VCCORE 셰이더에서 커스텀 모델과 텍스처 사용하기</h1>
+<p class="subtitle">DPT Core 셰이더 프레임워크를 사용해 커스텀 또는 외부 2D 텍스처를 대상 메시에 적용하는 기술 가이드입니다.</p>
+<h2>개요</h2>
+<p>DPT 프레임워크는 텍스처를 사용하지 않는 고도로 최적화된 커스텀 버텍스 파이프라인에 맞춰 설계되었지만, 마스터 셰이더는 일반적인 2D 텍스처 맵 설정도 지원합니다. 이 가이드에서는 텍스처 기반 렌더링을 올바르게 사용하기 위한 머티리얼 할당 규칙, 슬롯 종속성 및 워크플로 조정 방법을 설명합니다.</p>
+<h2>머티리얼 설정 단계</h2>
+<h3>1. 에셋 할당</h3>
+<p>프로젝트에서 <code>M_DPT_VCCORE</code>라는 이름의 Core 마스터 머티리얼을 찾으세요. 이를 대상 GameObject의 <strong>Mesh Renderer</strong> 컴포넌트에 직접 할당합니다.</p>
+<h3>2. 텍스처 맵 할당</h3><p>다음 규칙에 따라 Material Inspector의 해당 텍스처 슬롯에 이미지를 넣으세요.</p>
+<table><thead><tr><th style="width:35%">셰이더 텍스처 슬롯</th><th>필요한 입력 에셋 및 설정</th></tr></thead><tbody>
+<tr><td><strong>Base Color</strong></td><td>기본 확산 반사/알베도 맵을 지정합니다. Prefab Painter에서 색상 곱셈이 깨끗하게 적용되도록 채도가 낮거나 회색조인 기본 텍스처를 권장합니다.</td></tr>
+<tr><td><strong>Metallic/AO/Smoothness Packed</strong></td><td>에디터의 <em>Texture Channel Packer</em> 도구로 생성한 통합 패킹 텍스처를 지정합니다. 프래그먼트 셰이더가 R, G 및 A 채널을 독립적으로 추출해 샘플링합니다.</td></tr>
+<tr><td><strong>Use Normal Texture(토글)</strong></td><td>이 체크박스를 켜서 노멀 맵 슬롯을 표시하고 표면 탄젠트 벡터 계산을 활성화합니다.</td></tr>
+<tr><td><strong>Normal Map</strong></td><td><em>Use Normal Texture</em>를 켰을 때만 표시됩니다. 제작한 노멀 맵을 할당하고 Unity 임포트 설정에서 텍스처 타입을 <strong>Normal map</strong>으로 지정하세요.</td></tr>
+</tbody></table>
+<h3>3. 매개변수 강도 보정</h3><p>텍스처를 설정한 뒤 Inspector 아래쪽의 슬라이더로 메시 표면의 재질 표현을 조정합니다.</p>
+<ul><li><strong>Metallic Strength:</strong> 패킹 텍스처의 빨간색 채널에서 읽는 금속성 반사 강도를 제어합니다. 금속성이 높으면 물리적 재질 특성을 보존하도록 색조 변형이 자동으로 제한됩니다.</li><li><strong>Smoothness Strength:</strong> 패킹 텍스처의 알파 채널에서 가져온 표면의 미세 거칠기를 바탕으로 매끈함을 조정합니다.</li><li><strong>AO Strength:</strong> 초록색 채널에서 추출한 오클루전 깊이와 그림자의 선명도를 조정합니다.</li><li><strong>Normal Strength:</strong> 지정한 노멀 맵 벡터의 방향성 강도 및 시각적으로 보이는 표면 굴곡의 깊이를 조절합니다.</li></ul>
+<h2>커스텀 모델에서 버텍스 컬러 사용</h2>
+<p>일반적인 2D 텍스처가 아닌 버텍스 컬러가 있는 커스텀 모델을 사용한다면 Workflow Setup에서 <strong>Use Vertex Colors</strong>를 켤 수 있습니다. 하지만 외부 메시는 DPT 공식 에셋의 UV 및 버텍스 스트림에 저장된 특수한 데이터가 없으므로 절차적 디테일 시스템을 반드시 비활성화해야 합니다.</p>
+<div class="warning"><strong>필수 규칙: Procedural Details 비활성화</strong><p>커스텀 모델을 사용할 때는 <strong>Use Procedural Details</strong>를 반드시 끄세요. Bark, Rock, Leather 등의 절차적 생성 모듈은 DPT 공식 에셋에 맞게 조정된 정확한 버텍스 가중치 매핑에 의존합니다. 일반 커스텀 메시에서 켠 채로 사용하면 셰이딩 오류, 왜곡된 노멀 및 시각적 아티팩트가 발생할 수 있습니다.</p></div>
+<p>커스텀 모델에서도 전체 절차적 디테일 기능을 사용하려면 메시 버텍스 데이터를 DPT 전용 파이프라인으로 패킹해야 합니다. 이러한 통합을 의뢰하려면 아래 지원 및 커스텀 통합 섹션을 참고하세요.</p>
+
+<hr class="divider"><h2 id="support">지원, 문의 및 커스텀 통합</h2>
+<p>기술 지원, 버그 신고, 에셋 설정 및 일반적인 문의는 문의 양식을 통해 연락해 주세요. 가장 확실한 공식 지원 창구입니다.</p>
+<p>커스텀 테크니컬 아트 작업도 문의할 수 있습니다. 자체 버텍스 데이터 패킹, 절차적 나뭇결 매핑, GPU 바람 시스템, 게임용 LOD 예산 관리 등 외부 3D 모델을 DPT 생태계에 통합해야 한다면 요구사항과 작업 가능 여부를 상담해 주세요.</p>
+<div class="note"><strong>이메일 문의(권장):</strong><br>문제 해결, 버그 신고, 퍼블리셔 라이선스 및 프리랜스 문의는 <strong><a href="https://dptgames.github.io/#contact">DPT Games Hub 문의 양식</a></strong>을 이용해 주세요.</div>
+<div class="note"><strong>DPT 커뮤니티 Discord:</strong><br>직접적인 지원에는 문의 양식을 권장하지만, 피드백을 나누거나 사용자와 교류하려면 <strong><a href="https://discord.gg/EkQykfzP5X" target="_blank" rel="noopener noreferrer">Discord 서버</a></strong>에도 참여할 수 있습니다.</div>
+
+</body></html>

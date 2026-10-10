@@ -1,8 +1,10 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>DPT Games VCCORE Material System - User Guide</title>
+<meta content="width=device-width, initial-scale=1" name="viewport"/><meta charset="utf-8"/>
+<title>DPT Games VCCORE Material System - User Guide</title>
 <style>
     *, *::before, *::after { box-sizing: border-box; }
     @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
@@ -41,272 +43,237 @@
         color: #7dd3fc;
         text-decoration: underline; 
     }
+
+.language-nav{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 26px}
+.language-nav a{display:inline-block;padding:7px 16px;border:1px solid #40516b;border-radius:6px;color:#7dd3fc;text-decoration:none;background:#1e293b}
+.language-nav a[aria-current="page"]{color:#0f172a;background:#38bdf8;border-color:#38bdf8;font-weight:700}
+.language-nav a:hover{border-color:#7dd3fc;background:#0c4a6e;color:#f8fafc}
+.language-nav a[aria-current="page"]:hover{background:#38bdf8;color:#0f172a}
+.language-nav a:focus-visible{outline:3px solid #fbbf24;outline-offset:3px}
+html[lang="ja"] body{line-height:1.75;line-break:strict}
+html[lang="ja"] th,html[lang="ja"] td{overflow-wrap:anywhere}
+html[lang="ko"] body{line-height:1.72;word-break:keep-all;overflow-wrap:break-word}
+nav.core-nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+table{max-width:100%;overflow-wrap:break-word}
+pre{overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:700px){body{padding:22px 18px}h1{font-size:21pt}table{display:block;overflow-x:auto}th,td{min-width:95px;padding:8px}}
+@media print{.language-nav{display:none}}
 </style>
-</head>
+<link href="https://dptgames.github.io/core/index.html" hreflang="en" rel="alternate"/><link href="https://dptgames.github.io/core/ja/index.html" hreflang="ja" rel="alternate"/><link href="https://dptgames.github.io/core/ko/index.html" hreflang="ko" rel="alternate"/></head>
 <body>
-<nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
-    <a href="../index.html" style="color: #38bdf8; margin-right: 15px;">&larr; Back to Hub</a>
-    <span style="color: #64748b;">|</span>
-    <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Core Overview</a>
-    <a href="shader_variation.html" style="color: #f8fafc; margin-right: 15px;">Shader Variation</a>
-    <a href="using_custom_models.html" style="color: #f8fafc;">Custom Models</a>
-</nav>
-    <h1>DPT Games VCCORE Material System</h1>
-    <div style="margin-bottom: 20px;"><span style="font-size: 11pt; font-style: normal;">To provide the highest possible performance and compatibility with modern Unity rendering features (like the GPU Resident Drawer and SRP Batcher), all DPT asset packages share a single, unified Master Shader Graph and Material.</span></div>
-
-    <h2>The One Material Philosophy</h2>
-    <p>Instead of cluttering your project with dozens of unique materials that break batching and increase draw calls, our assets are designed to share one material. The inspector dynamically adapts to show only the properties relevant to the workflow you are currently using.</p>
-    <p><strong>Important:</strong> Runtime cost is determined only by the features actively enabled on the material. If a feature is not used by an asset (e.g., no valid data is supplied), the shader bypasses that feature path entirely, resulting in no runtime GPU cost from that system.</p>
-
-    <h2>Mixing Packages &amp; Best Practices</h2>
-    <p>If you are using multiple DPT packages within the same scene (e.g., combining Harvestable Nature with Interactive Props), you will maximize your performance by assigning the exact same Material asset to all of them.</p>
-
-    <div class="warning">
-        <strong>Important Setup Rule for Mixed Projects:</strong><br><br>
-        <p>We highly recommend sharing a single instance of the <code>M_DPT_VCCORE</code> Master Material across all assets to maximize performance and batching efficiency.</p>
-        <p>Because the shader uses dynamic branching and keyword compilation, standard assets that do not use advanced features (like Normal Map arrays or procedural details) will safely bypass those systems with minimal additional runtime cost, even if they share the material with interactive or complex assets that do use them.</p>
+<nav class="core-nav" style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
+<a href="../index.html" style="color: #38bdf8; margin-right: 15px;">← Back to Hub</a>
+<span style="color: #64748b;">|</span>
+<a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Core Overview</a>
+<a href="shader_variation.html" style="color: #f8fafc; margin-right: 15px;">Shader Variation</a>
+<a href="using_custom_models.html" style="color: #f8fafc;">Custom Models</a>
+</nav><nav aria-label="Language / 言語 / 언어" class="language-nav"><a aria-current="page" href="index.html" hreflang="en" lang="en">English</a><a href="ja/index.html" hreflang="ja" lang="ja">日本語</a><a href="ko/index.html" hreflang="ko" lang="ko">한국어</a></nav>
+<h1>DPT Games VCCORE Material System</h1>
+<div style="margin-bottom: 20px;"><span style="font-size: 11pt; font-style: normal;">To provide the highest possible performance and compatibility with modern Unity rendering features (like the GPU Resident Drawer and SRP Batcher), all DPT asset packages share a single, unified Master Shader Graph and Material.</span></div>
+<h2>The One Material Philosophy</h2>
+<p>Instead of cluttering your project with dozens of unique materials that break batching and increase draw calls, our assets are designed to share one material. The inspector dynamically adapts to show only the properties relevant to the workflow you are currently using.</p>
+<p><strong>Important:</strong> Runtime cost is determined only by the features actively enabled on the material. If a feature is not used by an asset (e.g., no valid data is supplied), the shader bypasses that feature path entirely, resulting in no runtime GPU cost from that system.</p>
+<h2>Mixing Packages &amp; Best Practices</h2>
+<p>If you are using multiple DPT packages within the same scene (e.g., combining Harvestable Nature with Interactive Props), you will maximize your performance by assigning the exact same Material asset to all of them.</p>
+<div class="warning">
+<strong>Important Setup Rule for Mixed Projects:</strong><br/><br/>
+<p>We highly recommend sharing a single instance of the <code>M_DPT_VCCORE</code> Master Material across all assets to maximize performance and batching efficiency.</p>
+<p>Because the shader uses dynamic branching and keyword compilation, standard assets that do not use advanced features (like Normal Map arrays or procedural details) will safely bypass those systems with minimal additional runtime cost, even if they share the material with interactive or complex assets that do use them.</p>
+</div>
+<h2>Dynamic Interface Features</h2>
+<p>To further reduce clutter, the VCCORE interface is context-aware:</p>
+<ul>
+<li><strong>Workflow Setup:</strong> Toggling <em>Use Vertex Colors</em> will automatically hide the standard Base Color and Metallic/AO texture slots, as the shader shifts to reading mesh data.</li>
+<li><strong>Nested Properties:</strong> Advanced toggles like <em>Use Normal Texture</em> or procedural detail settings will only display their respective strength sliders and texture slots when actively checked.</li>
+</ul>
+<div class="warning">
+<strong>Vertex Colors Gates More Than Just Textures:</strong><br/><br/>
+<em>Use Vertex Colors</em> doesn't just hide the standard texture slots — it also fully hides the <strong>Emission System</strong>, <strong>Wind System</strong>, and <strong>Procedural Details</strong> sections when disabled. These systems rely on the vertex-color-driven pipeline, so if you're working with a standard texture-based workflow, none of these sections will appear in the Inspector, regardless of which packages you own. Re-enable <em>Use Vertex Colors</em> to access them. <em>Stylized Lighting</em> and the Metallic/Non-Metallic Tint controls are not affected by this and remain available either way.
     </div>
-
-    <h2>Dynamic Interface Features</h2>
-    <p>To further reduce clutter, the VCCORE interface is context-aware:</p>
-    <ul>
-        <li><strong>Workflow Setup:</strong> Toggling <em>Use Vertex Colors</em> will automatically hide the standard Base Color and Metallic/AO texture slots, as the shader shifts to reading mesh data.</li>
-        <li><strong>Nested Properties:</strong> Advanced toggles like <em>Use Normal Texture</em> or procedural detail settings will only display their respective strength sliders and texture slots when actively checked.</li>
-    </ul>
-
-    <div class="warning">
-        <strong>Vertex Colors Gates More Than Just Textures:</strong><br><br>
-        <em>Use Vertex Colors</em> doesn't just hide the standard texture slots — it also fully hides the <strong>Emission System</strong>, <strong>Wind System</strong>, and <strong>Procedural Details</strong> sections when disabled. These systems rely on the vertex-color-driven pipeline, so if you're working with a standard texture-based workflow, none of these sections will appear in the Inspector, regardless of which packages you own. Re-enable <em>Use Vertex Colors</em> to access them. <em>Stylized Lighting</em> and the Metallic/Non-Metallic Tint controls are not affected by this and remain available either way.
-    </div>
-
-    <h2>Ecosystem Detection &amp; Adaptive UI</h2>
-    <p>To ensure a completely seamless setup experience across our modular catalog, the Master Material Inspector features an automated <strong>Ecosystem Detection System</strong>. Instead of overwhelming your workspace with settings for packages you do not own, the layout dynamically matches your active project files.</p>
-    
-    <h3>How It Works</h3>
-    <p>Each DPT package contains an explicit signature file. When a package is loaded or imported, the editor performs a lightweight project scan once to update your layout capabilities dynamically:</p>
-    <ul>
-        <li><strong>Tailored Workspace:</strong> Advanced property blocks—such as <em>Vegetation Systems</em>, <em>Procedural Details</em>, <em>Emission</em>, or <em>DPT Package Normals</em>—remain entirely hidden from the UI unless you own a package that explicitly uses them.</li>
-        <li><strong>Additive Progression:</strong> When you purchase and import an additional DPT package, its built-in signature file is detected immediately. The Inspector unhides the new settings automatically across the project, completely preserved and without disabling or resetting any configurations for assets you already own.</li>
-        <li><strong>Independent Core Updating:</strong> Because features are verified strictly by the presence of these signature tags, you can update the Core framework folder at any time without needing to modify or re-download your existing thematic asset expansion packs.</li>
-    </ul>
-
-    <div class="note">
-        <strong>No Manual Setup:</strong><br><br>
+<h2>Ecosystem Detection &amp; Adaptive UI</h2>
+<p>To ensure a completely seamless setup experience across our modular catalog, the Master Material Inspector features an automated <strong>Ecosystem Detection System</strong>. Instead of overwhelming your workspace with settings for packages you do not own, the layout dynamically matches your active project files.</p>
+<h3>How It Works</h3>
+<p>Each DPT package contains an explicit signature file. When a package is loaded or imported, the editor performs a lightweight project scan once to update your layout capabilities dynamically:</p>
+<ul>
+<li><strong>Tailored Workspace:</strong> Advanced property blocks—such as <em>Vegetation Systems</em>, <em>Procedural Details</em>, <em>Emission</em>, or <em>DPT Package Normals</em>—remain entirely hidden from the UI unless you own a package that explicitly uses them.</li>
+<li><strong>Additive Progression:</strong> When you purchase and import an additional DPT package, its built-in signature file is detected immediately. The Inspector unhides the new settings automatically across the project, completely preserved and without disabling or resetting any configurations for assets you already own.</li>
+<li><strong>Independent Core Updating:</strong> Because features are verified strictly by the presence of these signature tags, you can update the Core framework folder at any time without needing to modify or re-download your existing thematic asset expansion packs.</li>
+</ul>
+<div class="note">
+<strong>No Manual Setup:</strong><br/><br/>
         This discovery scan executes natively inside Unity during compilation passes. There are no manual serial keys, activation panels, custom preprocessor directives, or complex scripting configuration arrays to manage.
     </div>
-
-    <h2>Procedural Details</h2>
-    <p>When the <em>Use Procedural Details</em> toggle is enabled, the Inspector reveals controls for dynamically generating micro-surface details based on the vertex data of the mesh. Rather than relying on unique, memory-heavy textures, these details are calculated mathematically on the GPU.</p>
-
-    <p>While the exact features available (such as Rock, Leather, or Bark) depend on the DPT packages present in your project, the adjustment sliders share a universal behavior across all types:</p>
-    
-    <ul>
-        <li><strong>Strength:</strong> Controls the intensity of the generated normals. Increasing this value makes the procedural bumps and crevices appear deeper and more pronounced under scene lighting.</li>
-        <li><strong>Width:</strong> Adjusts the scaling of the procedural pattern. <em>Note: Increasing the width slider actually increases the tiling frequency, resulting in visually smaller, denser details across the surface.</em></li>
-        <li><strong>Value (Where applicable):</strong> Certain procedural features include an additional Value slider. This adjusts the base color contrast of the generated detail, allowing you to lighten or darken the procedural overlay against the object's original color.</li>
-    </ul>
-
-    <h2>Procedural Detail Array</h2>
-    <p>To ensure maximum compatibility with the SRP Batcher and GPU Resident Drawer, all procedural surface details (such as Bark, Leather, Rock, and Metallic imperfections) are packed into a single, highly optimized <strong>Texture2D Array</strong>.</p>
-
-    <p>This universal array is shared across all DPT packages. The Master Shader dynamically selects the correct texture slice per-mesh via the vertex color alpha channel, meaning no material changes or additional draw calls are ever required.</p>
-
-    <ul>
-        <li><strong>No Setup:</strong> The array is completely pre-configured. When you enable <em>Use Procedural Details</em> on the material, the correct normals and detail data are applied instantly.</li>
-        <li><strong>Memory Efficiency:</strong> To keep VRAM footprints strictly minimized, all procedural detail textures within the array are authored at a highly optimized 512x512 resolution. Because these are tiled micro-details, they maintain crisp visual fidelity without bloating your memory budget.</li>
-        <li><strong>Dynamic Branching:</strong> If a mesh does not use procedural details (or if the detail sliders are set to zero), the shader's internal branching safely bypasses the array sampling logic entirely to ensure minimal GPU overhead.</li>
-    </ul>
-
-    <div class="note">
-        <strong>Mobile & Low-Memory Projects:</strong><br><br>
+<h2>Procedural Details</h2>
+<p>When the <em>Use Procedural Details</em> toggle is enabled, the Inspector reveals controls for dynamically generating micro-surface details based on the vertex data of the mesh. Rather than relying on unique, memory-heavy textures, these details are calculated mathematically on the GPU.</p>
+<p>While the exact features available (such as Rock, Leather, or Bark) depend on the DPT packages present in your project, the adjustment sliders share a universal behavior across all types:</p>
+<ul>
+<li><strong>Strength:</strong> Controls the intensity of the generated normals. Increasing this value makes the procedural bumps and crevices appear deeper and more pronounced under scene lighting.</li>
+<li><strong>Width:</strong> Adjusts the scaling of the procedural pattern. <em>Note: Increasing the width slider actually increases the tiling frequency, resulting in visually smaller, denser details across the surface.</em></li>
+<li><strong>Value (Where applicable):</strong> Certain procedural features include an additional Value slider. This adjusts the base color contrast of the generated detail, allowing you to lighten or darken the procedural overlay against the object's original color.</li>
+</ul>
+<h2>Procedural Detail Array</h2>
+<p>To ensure maximum compatibility with the SRP Batcher and GPU Resident Drawer, all procedural surface details (such as Bark, Leather, Rock, and Metallic imperfections) are packed into a single, highly optimized <strong>Texture2D Array</strong>.</p>
+<p>This universal array is shared across all DPT packages. The Master Shader dynamically selects the correct texture slice per-mesh via the vertex color alpha channel, meaning no material changes or additional draw calls are ever required.</p>
+<ul>
+<li><strong>No Setup:</strong> The array is completely pre-configured. When you enable <em>Use Procedural Details</em> on the material, the correct normals and detail data are applied instantly.</li>
+<li><strong>Memory Efficiency:</strong> To keep VRAM footprints strictly minimized, all procedural detail textures within the array are authored at a highly optimized 512x512 resolution. Because these are tiled micro-details, they maintain crisp visual fidelity without bloating your memory budget.</li>
+<li><strong>Dynamic Branching:</strong> If a mesh does not use procedural details (or if the detail sliders are set to zero), the shader's internal branching safely bypasses the array sampling logic entirely to ensure minimal GPU overhead.</li>
+</ul>
+<div class="note">
+<strong>Mobile &amp; Low-Memory Projects:</strong><br/><br/>
         While the default detail array is highly optimized at 512x512, a 256x256 variant is also included in the Core folder for strict mobile or VR memory budgets. You can swap this out directly in the Material Inspector under the Procedural Details texture slot.
     </div>
-
-    <div class="note">
-        <strong>Wood Grain Value Map:</strong><br><br>
+<div class="note">
+<strong>Wood Grain Value Map:</strong><br/><br/>
         In addition to the normal array, the system uses a single, dedicated packed texture to handle the base color value adjustments for the Procedural Wood Grain. This operates automatically alongside the detail array when Wood features are active.
     </div>
-    <div class="note">
-        <strong>Fur Detail Value:</strong><br><br>
+<div class="note">
+<strong>Fur Detail Value:</strong><br/><br/>
         The Fur detail, unlike the other detail textures, only alters the base color through the Fur Detail Value slider.
     </div>
-    <h2>Stylized Lighting &amp; Shadow Shaping</h2>
-    <p>The VCCORE shader includes an optional <strong>Stylized Lighting</strong> mode, which replaces the default smooth PBR falloff with an art-directable light/shadow split, plus independent control over shadow color and darkness. When <em>Stylized Lighting</em> is disabled, the material behaves exactly as standard PBR — the system is fully bypassed with no runtime cost.</p>
-
-    <h3>Shadow Terminator &amp; Light Terminator (Range: 0.0 &ndash; 1.0)</h3>
-    <p>These two properties define where, across the surface, the transition from lit to shadowed occurs:</p>
-    <ul>
-        <li><strong>0.0</strong> anchors that edge toward the fully lit result.</li>
-        <li><strong>1.0</strong> anchors that edge toward the fully shadowed (dark) result.</li>
-    </ul>
-    <p>Widening the gap between the two terminators softens and broadens the transition, spreading it out toward a smooth, natural gradient similar to standard Lambertian shading. Narrowing the gap tightens and hardens the transition, up to a fully solid, hard-edged shadow line when they overlap.</p>
-
-    <div class="note">
-        <strong>Default Values:</strong><br><br>
+<h2>Stylized Lighting &amp; Shadow Shaping</h2>
+<p>The VCCORE shader includes an optional <strong>Stylized Lighting</strong> mode, which replaces the default smooth PBR falloff with an art-directable light/shadow split, plus independent control over shadow color and darkness. When <em>Stylized Lighting</em> is disabled, the material behaves exactly as standard PBR — the system is fully bypassed with no runtime cost.</p>
+<h3>Shadow Terminator &amp; Light Terminator (Range: 0.0 – 1.0)</h3>
+<p>These two properties define where, across the surface, the transition from lit to shadowed occurs:</p>
+<ul>
+<li><strong>0.0</strong> anchors that edge toward the fully lit result.</li>
+<li><strong>1.0</strong> anchors that edge toward the fully shadowed (dark) result.</li>
+</ul>
+<p>Widening the gap between the two terminators softens and broadens the transition, spreading it out toward a smooth, natural gradient similar to standard Lambertian shading. Narrowing the gap tightens and hardens the transition, up to a fully solid, hard-edged shadow line when they overlap.</p>
+<div class="note">
+<strong>Default Values:</strong><br/><br/>
         Out of the box, <em>Shadow Terminator</em> is set to <strong>0.3</strong> and <em>Light Terminator</em> to <strong>0.5</strong> — a fairly narrow band that produces a crisp, contrasty stylized shadow line rather than a soft gradient. <em>Shadow Tint</em> defaults to black and <em>Shadow Strength</em> defaults to <strong>1.0</strong>, so enabling Stylized Lighting will produce a visible effect immediately without needing to adjust any other settings first.
     </div>
-
-    <div class="note">
-        <strong>Terminators Cannot Cross:</strong><br><br>
-        <em>Shadow Terminator</em> and <em>Light Terminator</em> are clamped so that one can never pass the other. Dragging one past the other's position will instead drag the second value along with it, preserving their relative order at all times.
+<div class="note">
+<strong>Terminators Cannot Cross:</strong><br/><br/>
+<em>Shadow Terminator</em> and <em>Light Terminator</em> are clamped so that one can never pass the other. Dragging one past the other's position will instead drag the second value along with it, preserving their relative order at all times.
     </div>
-
-    <p>Under the hood, the terminator transition is driven by a half-lambert value — the surface normal's dot product with the light direction, remapped from its native <code>-1&hellip;1</code> range into <code>0&hellip;1</code>. A value of <strong>0</strong> corresponds to surfaces facing directly away from the light, while <strong>1</strong> corresponds to surfaces facing directly toward it. <em>Shadow Terminator</em> and <em>Light Terminator</em> act as the lower and upper thresholds against this value, which is why spreading them toward 0 and 1 produces a full-range, gradual falloff across the whole surface, while narrowing the range hardens the transition into a sharper line.</p>
-
-    <h3>Light Normal Smoothness (Range: 0.0 &ndash; 1.0)</h3>
-    <p>When lighting low-poly meshes with detailed normal maps, sharp lighting terminators can sometimes cause pixelated or jagged shadow edges along polygon boundaries. The <em>Light Normal Smoothness</em> slider allows you to smoothly blend between your detailed normal map and the mesh's clean vertex normals specifically for lighting dot-product calculations.</p>
-    <p>This eliminates jagged shadow terminators on low-poly geometry while preserving 100% of your normal map's texture bump details in specular reflections and direct light highlights!</p>
-
-    <h3>Shadow Strength (Range: 0.0 &ndash; 1.0)</h3>
-    <p>Controls how strongly the shadowed region is darkened and tinted:</p>
-    <ul>
-        <li><strong>0.0:</strong> The shadow region is left untouched (white), regardless of the <em>Shadow Tint</em> color or the terminator settings.</li>
-        <li><strong>1.0:</strong> The shadow region is fully darkened and takes on the <em>Shadow Tint</em> color at full intensity.</li>
-    </ul>
-
-    <div class="warning">
-        <strong>Shadow Strength Gates the Terminators:</strong><br><br>
+<p>Under the hood, the terminator transition is driven by a half-lambert value — the surface normal's dot product with the light direction, remapped from its native <code>-1…1</code> range into <code>0…1</code>. A value of <strong>0</strong> corresponds to surfaces facing directly away from the light, while <strong>1</strong> corresponds to surfaces facing directly toward it. <em>Shadow Terminator</em> and <em>Light Terminator</em> act as the lower and upper thresholds against this value, which is why spreading them toward 0 and 1 produces a full-range, gradual falloff across the whole surface, while narrowing the range hardens the transition into a sharper line.</p>
+<h3>Light Normal Smoothness (Range: 0.0 – 1.0)</h3>
+<p>When lighting low-poly meshes with detailed normal maps, sharp lighting terminators can sometimes cause pixelated or jagged shadow edges along polygon boundaries. The <em>Light Normal Smoothness</em> slider allows you to smoothly blend between your detailed normal map and the mesh's clean vertex normals specifically for lighting dot-product calculations.</p>
+<p>This eliminates jagged shadow terminators on low-poly geometry while preserving 100% of your normal map's texture bump details in specular reflections and direct light highlights!</p>
+<h3>Shadow Strength (Range: 0.0 – 1.0)</h3>
+<p>Controls how strongly the shadowed region is darkened and tinted:</p>
+<ul>
+<li><strong>0.0:</strong> The shadow region is left untouched (white), regardless of the <em>Shadow Tint</em> color or the terminator settings.</li>
+<li><strong>1.0:</strong> The shadow region is fully darkened and takes on the <em>Shadow Tint</em> color at full intensity.</li>
+</ul>
+<div class="warning">
+<strong>Shadow Strength Gates the Terminators:</strong><br/><br/>
         Because <em>Shadow Strength</em> controls the overall visibility of the shadow effect, leaving it at 0.0 will make <em>Shadow Terminator</em> and <em>Light Terminator</em> appear to have no effect — the shadow shape is still being calculated, but it resolves to white either way. Increase <em>Shadow Strength</em> above 0 to see the terminator shaping take effect.
     </div>
-
-    <h3>Shadow Tint</h3>
-    <p>Sets the color applied to the shadowed side of the surface. This color is blended in according to <em>Shadow Strength</em>, then multiplied against Base Color before final output — allowing for cool/warm shadow color grading (e.g. blue-tinted shadows on a warm-lit object) without any additional lights or post-processing.</p>
-
-    <h3>Shadow Rim Lighting (Bounce &amp; Edge Glow)</h3>
-    <p>The VCCORE shader includes an integrated ambient shadow bounce and rim lighting system evaluated directly in Emission. This allows models to display vibrant, cool-toned outlines or atmospheric backlighting on their shadowed sides without being crushed or darkened by direct light attenuation.</p>
-    <ul>
-        <li><strong>Shadow Rim Color (HDR):</strong> Independent HDR color control for the ambient shadow glow.</li>
-        <li><strong>Shadow Rim Sharpness:</strong> Controls the silhouette tightness of the edge highlight. Higher values push the reflection into a razor-thin line along the grazing angle, while lower values create a broad, gentle ambient fade.</li>
-        <li><strong>Shadow Rim Strength:</strong> Master intensity multiplier for the bounce lighting luminance.</li>
-    </ul>
-    <div class="note">
-        <strong>Surface-Modulated Highlights &amp; Cavity Masking:</strong><br><br>
+<h3>Shadow Tint</h3>
+<p>Sets the color applied to the shadowed side of the surface. This color is blended in according to <em>Shadow Strength</em>, then multiplied against Base Color before final output — allowing for cool/warm shadow color grading (e.g. blue-tinted shadows on a warm-lit object) without any additional lights or post-processing.</p>
+<h3>Shadow Rim Lighting (Bounce &amp; Edge Glow)</h3>
+<p>The VCCORE shader includes an integrated ambient shadow bounce and rim lighting system evaluated directly in Emission. This allows models to display vibrant, cool-toned outlines or atmospheric backlighting on their shadowed sides without being crushed or darkened by direct light attenuation.</p>
+<ul>
+<li><strong>Shadow Rim Color (HDR):</strong> Independent HDR color control for the ambient shadow glow.</li>
+<li><strong>Shadow Rim Sharpness:</strong> Controls the silhouette tightness of the edge highlight. Higher values push the reflection into a razor-thin line along the grazing angle, while lower values create a broad, gentle ambient fade.</li>
+<li><strong>Shadow Rim Strength:</strong> Master intensity multiplier for the bounce lighting luminance.</li>
+</ul>
+<div class="note">
+<strong>Surface-Modulated Highlights &amp; Cavity Masking:</strong><br/><br/>
         The rim lighting system dynamically responds to surface properties. Polished metallic surfaces automatically sharpen their rim outline into crisp highlights, while matte surfaces produce soft ambient bounce shading. Furthermore, the system incorporates dual-threshold AO masking ("Cavity Killer") to ensure hollow interiors (such as sockets or pipe bores) stay pitch-black without chopping up exterior silhouette outlines.
     </div>
-
-    <h3>Real-Time Cast Shadow Controls (Cast Shadow Min / Max)</h3>
-    <p>In addition to self-shading terminators, VCCORE provides independent threshold and softness controls for real-time cast shadows (such as tree leaves or character shadows falling onto your props in URP):</p>
-    <ul>
-        <li><strong>Cast Shadow Min:</strong> Defines the threshold where incoming real-time cast shadows begin to appear.</li>
-        <li><strong>Cast Shadow Max:</strong> Defines the threshold where incoming real-time cast shadows reach full opacity.</li>
-    </ul>
-    <p>Widening the range between Min and Max softens incoming cast shadow edges, while narrowing the range creates crisp, razor-sharp cel-shaded cast shadows that match your self-shading terminators. The system includes built-in safety clamping to prevent shadow map bias flickering at high slider values.</p>
-
-    <h3>Scene Shadow Helpers (URP Only)</h3>
-    <p>Because <em>Shadow Terminator</em>, <em>Light Terminator</em>, <em>Shadow Tint</em>, and <em>Shadow Strength</em> are all self-shading effects baked into this material, they're entirely separate from Unity's own real-time cast shadows and scene color grading. You may wish to adjust your shadow settings in your URP asset and volume profile to match the shadow settings of the objects.</p>
-
-    <h2>Emission System</h2>
-    <p>The VCCORE shader includes a highly optimized emission system. When <strong>Enable Emission</strong> is toggled on in the inspector, you can control the glow intensity and color for any designated emissive areas on the mesh.</p>
-
-    <div class="note">
-        <strong>Requires the Emission Package Signature:</strong><br><br>
+<h3>Real-Time Cast Shadow Controls (Cast Shadow Min / Max)</h3>
+<p>In addition to self-shading terminators, VCCORE provides independent threshold and softness controls for real-time cast shadows (such as tree leaves or character shadows falling onto your props in URP):</p>
+<ul>
+<li><strong>Cast Shadow Min:</strong> Defines the threshold where incoming real-time cast shadows begin to appear.</li>
+<li><strong>Cast Shadow Max:</strong> Defines the threshold where incoming real-time cast shadows reach full opacity.</li>
+</ul>
+<p>Widening the range between Min and Max softens incoming cast shadow edges, while narrowing the range creates crisp, razor-sharp cel-shaded cast shadows that match your self-shading terminators. The system includes built-in safety clamping to prevent shadow map bias flickering at high slider values.</p>
+<h3>Scene Shadow Helpers (URP Only)</h3>
+<p>Because <em>Shadow Terminator</em>, <em>Light Terminator</em>, <em>Shadow Tint</em>, and <em>Shadow Strength</em> are all self-shading effects baked into this material, they're entirely separate from Unity's own real-time cast shadows and scene color grading. You may wish to adjust your shadow settings in your URP asset and volume profile to match the shadow settings of the objects.</p>
+<h2>Emission System</h2>
+<p>The VCCORE shader includes a highly optimized emission system. When <strong>Enable Emission</strong> is toggled on in the inspector, you can control the glow intensity and color for any designated emissive areas on the mesh.</p>
+<div class="note">
+<strong>Requires the Emission Package Signature:</strong><br/><br/>
         Like Procedural Details, the Emission System is part of the <strong>Ecosystem Detection System</strong> — the entire section is hidden from the Inspector unless you own a DPT package that includes the Emission signature file. It also requires <em>Use Vertex Colors</em> to be enabled, as it does not appear in texture-based workflows.
     </div>
-
-    <h3>Global vs. Per-Instance Emission</h3>
-    <p>The emission system is designed to work seamlessly with the <strong>One Material Philosophy</strong>, allowing for both global and per-object control:</p>
-    <ul>
-        <li><strong>Global Material Emission:</strong> The <em>Emissive Color</em> and baseline <em>Emission Strength</em> properties in the Material Inspector act as a master setting. Whatever color and intensity you set here applies universally to <em>every</em> object in your scene sharing this material.</li>
-        <li><strong>Per-Instance Emission:</strong> The emission system natively hooks into the <code>DPT_ShaderVariation</code> script. If an object has this script attached, the script's <em>Instance Color</em> (and Alpha channel) will multiply against the material's master emissive settings, allowing you to recolor the glow and adjust its intensity on a per-object basis without duplicating the material.</li>
-    </ul>
-
-    <h3>Metallic Emissive Color</h3>
-    <p>The Emission workflow features a dedicated <strong>Metallic Emissive Color</strong> property alongside the standard Base Emissive Color. You can now independently customize and drive emissive glow hues on metallic hardware (such as iron runes, copper pipes, or steel vents) entirely separately from non-metallic base materials on the same mesh!</p>
-
-    <div class="warning">
-        <strong>The Metallic Object Exception:</strong><br><br>
+<h3>Global vs. Per-Instance Emission</h3>
+<p>The emission system is designed to work seamlessly with the <strong>One Material Philosophy</strong>, allowing for both global and per-object control:</p>
+<ul>
+<li><strong>Global Material Emission:</strong> The <em>Emissive Color</em> and baseline <em>Emission Strength</em> properties in the Material Inspector act as a master setting. Whatever color and intensity you set here applies universally to <em>every</em> object in your scene sharing this material.</li>
+<li><strong>Per-Instance Emission:</strong> The emission system natively hooks into the <code>DPT_ShaderVariation</code> script. If an object has this script attached, the script's <em>Instance Color</em> (and Alpha channel) will multiply against the material's master emissive settings, allowing you to recolor the glow and adjust its intensity on a per-object basis without duplicating the material.</li>
+</ul>
+<h3>Metallic Emissive Color</h3>
+<p>The Emission workflow features a dedicated <strong>Metallic Emissive Color</strong> property alongside the standard Base Emissive Color. You can now independently customize and drive emissive glow hues on metallic hardware (such as iron runes, copper pipes, or steel vents) entirely separately from non-metallic base materials on the same mesh!</p>
+<div class="warning">
+<strong>The Metallic Object Exception:</strong><br/><br/>
         Due to how the shader processes specular reflection data, <strong>metallic objects cannot have their emission color changed per-instance via the script</strong>. Instead, metallic emission is controlled globally by the dedicated <em>Metallic Emissive Color</em> property in the Material Inspector. However, you <em>can</em> still use the <code>DPT_ShaderVariation</code> script (via the Alpha channel) to control the <strong>emission strength</strong> of these metallic objects on a per-instance basis.
     </div>
-
-    <div class="note">
-        <strong>The "White Base" Strategy for Perfect Tinting:</strong><br><br>
+<div class="note">
+<strong>The "White Base" Strategy for Perfect Tinting:</strong><br/><br/>
         If you want to use the <code>DPT_ShaderVariation</code> script to dynamically change the glow color of different objects (e.g., a red potion and a blue potion using the exact same material), set the master <strong>Emissive Color in the Material Inspector to pure White</strong>. Because the script uses mathematical multiplication, a white base allows the script's color to dictate 100% of the final glow hue. <em>Note: this only applies to non-metallic surfaces — see the Metallic Object Exception above, as metallic emission hue cannot be changed per-instance regardless of the base color setting.</em>
-    </div>
-
-    <div class="note">
-        <strong>Advanced Setup: Independent Body & Glow Colors</strong><br><br>
+</div>
+<div class="note">
+<strong>Advanced Setup: Independent Body &amp; Glow Colors</strong><br/><br/>
         Because the <code>DPT_ShaderVariation</code> script passes a single color per <code>MeshRenderer</code>, the object's body tint and emissive glow will share the same hue. If you need an object to have contrasting colors (e.g., a dark blue sword with bright orange glowing runes), the industry-standard best practice is to separate the glowing runes into a floating decal child mesh. This allows you to apply one variation script to the sword body, and a separate variation script to the rune mesh, keeping both perfectly batched under the same master material.
     </div>
-
-    <h2>Wind System &amp; Wind Movement</h2>
-    <p>The VCCORE shader incorporates a lightweight, procedural GPU vertex displacement wind system. When <strong>Wind Waving</strong> is enabled, natural harmonic wind waves and directional sways are evaluated entirely on the GPU vertex shader without CPU bone skinning or vertex physics overhead.</p>
-
-    <div class="note">
-        <strong>Requires the Wind Package Signature:</strong><br><br>
+<h2>Wind System &amp; Wind Movement</h2>
+<p>The VCCORE shader incorporates a lightweight, procedural GPU vertex displacement wind system. When <strong>Wind Waving</strong> is enabled, natural harmonic wind waves and directional sways are evaluated entirely on the GPU vertex shader without CPU bone skinning or vertex physics overhead.</p>
+<div class="note">
+<strong>Requires the Wind Package Signature:</strong><br/><br/>
         Like Procedural Details and Emission, the Wind System is gated by the <strong>Ecosystem Detection System</strong> — this section is only displayed if your project contains a DPT package that includes the Wind signature file (such as Harvestable Nature or Foliage packs). It also requires <em>Use Vertex Colors</em> to be active.
     </div>
-
-    <h3>Wind Strength</h3>
-    <p>Controls the master speed and amplitude of the vertex displacement oscillation. Set this to <strong>0.0</strong> to completely freeze all movement on the object while keeping the wind pipeline active.</p>
-
-    <h3>360&deg; Directional Controls (Compass &amp; Pitch)</h3>
-    <p>Rather than requiring confusing 3D vector math coordinates, the VCCORE Wind Inspector provides an intuitive, artist-friendly 2-slider spherical control system:</p>
-    <ul>
-        <li><strong>Compass Heading (0&deg; &ndash; 359&deg;):</strong> Controls the horizontal direction of both the physical sway displacement and the traveling wave ripples across your world:
+<h3>Wind Strength</h3>
+<p>Controls the master speed and amplitude of the vertex displacement oscillation. Set this to <strong>0.0</strong> to completely freeze all movement on the object while keeping the wind pipeline active.</p>
+<h3>360° Directional Controls (Compass &amp; Pitch)</h3>
+<p>Rather than requiring confusing 3D vector math coordinates, the VCCORE Wind Inspector provides an intuitive, artist-friendly 2-slider spherical control system:</p>
+<ul>
+<li><strong>Compass Heading (0° – 359°):</strong> Controls the horizontal direction of both the physical sway displacement and the traveling wave ripples across your world:
             <ul>
-                <li><strong>0&deg;:</strong> Blowing East (+X)</li>
-                <li><strong>90&deg;:</strong> Blowing North (+Z)</li>
-                <li><strong>180&deg;:</strong> Blowing West (&minus;X)</li>
-                <li><strong>270&deg;:</strong> Blowing South (&minus;Z)</li>
-            </ul>
-        </li>
-        <li><strong>Vertical Pitch (&minus;45&deg; &ndash; +45&deg;):</strong> Adjusts the vertical tilt of the wind. A pitch of <code>0&deg;</code> produces a flat, ground-parallel breeze, positive values create rising updrafts (lifting foliage and leaves), and negative values create downward drafts along hillside slopes.</li>
-    </ul>
-
-    <div class="note">
-        <strong>Hardware-Normalized Unit Vectors:</strong><br><br>
-        Under the hood, the Editor GUI automatically converts your Compass Heading and Pitch into a pre-normalized 3D unit vector. This ensures wind displacement speed and wave frequency remain 100% uniform in all 360&deg; directions without wasting GPU ALU cycles or causing mathematical division-by-zero crashes.
+<li><strong>0°:</strong> Blowing East (+X)</li>
+<li><strong>90°:</strong> Blowing North (+Z)</li>
+<li><strong>180°:</strong> Blowing West (−X)</li>
+<li><strong>270°:</strong> Blowing South (−Z)</li>
+</ul>
+</li>
+<li><strong>Vertical Pitch (−45° – +45°):</strong> Adjusts the vertical tilt of the wind. A pitch of <code>0°</code> produces a flat, ground-parallel breeze, positive values create rising updrafts (lifting foliage and leaves), and negative values create downward drafts along hillside slopes.</li>
+</ul>
+<div class="note">
+<strong>Hardware-Normalized Unit Vectors:</strong><br/><br/>
+        Under the hood, the Editor GUI automatically converts your Compass Heading and Pitch into a pre-normalized 3D unit vector. This ensures wind displacement speed and wave frequency remain 100% uniform in all 360° directions without wasting GPU ALU cycles or causing mathematical division-by-zero crashes.
     </div>
-
-    <h2>Color Variation</h2>
-    <p>Per-instance color and brightness variation is handled by the <code>DPT_ShaderVariation</code> component, which writes variation data directly to Unity's GPU instancing buffer without duplicating or modifying the shared material.</p>
-
-    <ul>
-        <li><strong>Using the DPT Prefab Painter:</strong> The component is added and configured automatically when Randomize Brightness is enabled. No manual setup is required.</li>
-        <li><strong>Placing objects manually:</strong> Add the <code>DPT_ShaderVariation</code> component to any object or root parent in your scene and adjust the <em>Instance Color</em> swatch directly in the Inspector.</li>
-    </ul>
-
-    <div class="note">
-        <strong>One Material To Rule Them All:</strong><br><br>
+<h2>Color Variation</h2>
+<p>Per-instance color and brightness variation is handled by the <code>DPT_ShaderVariation</code> component, which writes variation data directly to Unity's GPU instancing buffer without duplicating or modifying the shared material.</p>
+<ul>
+<li><strong>Using the DPT Prefab Painter:</strong> The component is added and configured automatically when Randomize Brightness is enabled. No manual setup is required.</li>
+<li><strong>Placing objects manually:</strong> Add the <code>DPT_ShaderVariation</code> component to any object or root parent in your scene and adjust the <em>Instance Color</em> swatch directly in the Inspector.</li>
+</ul>
+<div class="note">
+<strong>One Material To Rule Them All:</strong><br/><br/>
         Because variation data is pushed directly to the GPU instance buffer, your shared material is never cloned, duplicated, or modified — regardless of how many objects carry unique color values. Your batching and GPU Resident Drawer compatibility remain completely intact.
     </div>
-
-    <h3>Metallic &amp; Non-Metallic Tint Control</h3>
-    <p>The Master Material includes separate toggles and intensity sliders for metallic and non-metallic surface regions, giving precise control over how instanced color tinting from <code>DPT_ShaderVariation</code> is applied across different material types on the same mesh.</p>
-    <ul>
-        <li><strong>Script Dependency:</strong> These toggles act purely as shader gatekeepers. They have <strong>no effect on their own</strong> and cause no visual changes unless a <code>DPT_ShaderVariation</code> component is actively passing color data to the mesh via the RSUV pipeline.</li>
-        <li><strong>Non-Metallic Tint:</strong> Controls whether diffuse, non-metallic surface regions receive the instanced color tint. When disabled, non-metallic areas are excluded from tinting entirely.</li>
-        <li><strong>Metallic Tint:</strong> Controls whether metallic surface regions participate in tinting. When disabled, metallic areas are isolated from the tint and preserve their physically accurate specular reflection characteristics.</li>
-    </ul>
-    <div class="note">
-        <strong>Optimized Keyword Architecture:</strong><br><br>
+<h3>Metallic &amp; Non-Metallic Tint Control</h3>
+<p>The Master Material includes separate toggles and intensity sliders for metallic and non-metallic surface regions, giving precise control over how instanced color tinting from <code>DPT_ShaderVariation</code> is applied across different material types on the same mesh.</p>
+<ul>
+<li><strong>Script Dependency:</strong> These toggles act purely as shader gatekeepers. They have <strong>no effect on their own</strong> and cause no visual changes unless a <code>DPT_ShaderVariation</code> component is actively passing color data to the mesh via the RSUV pipeline.</li>
+<li><strong>Non-Metallic Tint:</strong> Controls whether diffuse, non-metallic surface regions receive the instanced color tint. When disabled, non-metallic areas are excluded from tinting entirely.</li>
+<li><strong>Metallic Tint:</strong> Controls whether metallic surface regions participate in tinting. When disabled, metallic areas are isolated from the tint and preserve their physically accurate specular reflection characteristics.</li>
+</ul>
+<div class="note">
+<strong>Optimized Keyword Architecture:</strong><br/><br/>
         To ensure maximum runtime performance and minimal shader memory overhead, redundant shader compilation keywords for Metallic and Non-Metallic Tinting have been stripped from the pipeline. The tint gates now execute via high-speed dynamic branching, resulting in faster project build times and fewer shader variants without losing any tinting capability!
     </div>
-    
-    <h3>Tint Strength Sliders (Range: -2.0 to 1.0)</h3>
-    <p>Both sliders share the same asymmetric range, allowing control beyond simple tint blending in either direction:</p>
-    <ul>
-        <li><strong>0.0:</strong> No tint is applied to that surface type.</li>
-        <li><strong>1.0:</strong> Full tint intensity is applied uniformly, matching the instance color exactly.</li>
-        <li><strong>Negative values (-2.0 to 0.0):</strong> Inverts the tint direction on that surface type, creating contrast effects between different regions of the same mesh. For example, darkening the wood of a chest while simultaneously making its metal fastenings appear brighter — useful for stylized aesthetics without any additional lights or post-processing.</li>
-    </ul>
-
-    <p>Full technical documentation for the <code>DPT_ShaderVariation</code> component, including brightness range settings and the HDR tinting system, can be found in the <a href="shader_variation.html" style="color: #38bdf8;">Shader Variation</a> guide.</p>
-    
-<hr class="divider">
-<h2 id="support">Support, Contact & Custom Integration</h2>
-
+<h3>Tint Strength Sliders (Range: -2.0 to 1.0)</h3>
+<p>Both sliders share the same asymmetric range, allowing control beyond simple tint blending in either direction:</p>
+<ul>
+<li><strong>0.0:</strong> No tint is applied to that surface type.</li>
+<li><strong>1.0:</strong> Full tint intensity is applied uniformly, matching the instance color exactly.</li>
+<li><strong>Negative values (-2.0 to 0.0):</strong> Inverts the tint direction on that surface type, creating contrast effects between different regions of the same mesh. For example, darkening the wood of a chest while simultaneously making its metal fastenings appear brighter — useful for stylized aesthetics without any additional lights or post-processing.</li>
+</ul>
+<p>Full technical documentation for the <code>DPT_ShaderVariation</code> component, including brightness range settings and the HDR tinting system, can be found in the <a href="shader_variation.html" style="color: #38bdf8;">Shader Variation</a> guide.</p>
+<hr class="divider"/>
+<h2 id="support">Support, Contact &amp; Custom Integration</h2>
 <p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form. This is the primary and most reliable way to get help with any problems you encounter with the packages.</p>
-
 <p>You can also use this form to inquire about custom freelance technical art services. If your project requires external 3D models to be integrated into the DPT ecosystem—including bespoke vertex-data packing, procedural wood grain mapping, GPU wind systems, or game-ready LOD budgeting—get in touch to discuss your specific needs and availability.</p>
-
 <div class="note">
-    <strong>Email Contact:</strong><br>
+<strong>Email Contact:</strong><br/>
     For troubleshooting, bug reports, publisher licensing, and freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
 </div>
-
 <div class="note">
-    <strong>DPT Community Discord:</strong><br>
+<strong>DPT Community Discord:</strong><br/>
     While the contact form is the best way to get direct help with issues, you are also welcome to join the <strong><a href="https://discord.gg/EkQykfzP5X" target="_blank">Discord Server</a></strong> to share feedback and connect with other users.
 </div>
 </body>

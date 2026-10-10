@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="alternate" hreflang="en" href="https://dptgames.github.io/core/shader_variation.html"><link rel="alternate" hreflang="ja" href="https://dptgames.github.io/core/ja/shader_variation.html"><link rel="alternate" hreflang="ko" href="https://dptgames.github.io/core/ko/shader_variation.html"><title>DPT_ShaderVariation コンポーネントガイド</title><style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        @page {
+            size: A4;
+            margin: 15mm 15mm;
+            background-color: #0f172a;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            font-size: 11pt;
+            line-height: 1.5;
+        }
+        h1, h2, h3, h4 {
+            color: #38bdf8;
+            margin-bottom: 10px;
+        }
+        h1 {
+            font-size: 26pt;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 10px;
+            margin-top: 0;
+            color: #bae6fd;
+        }
+        h2 {
+            font-size: 16pt;
+            background-color: #1e293b;
+            padding: 8px 12px;
+            border-left: 5px solid #38bdf8;
+            page-break-after: avoid;
+            margin-top: 25px;
+        }
+        h3 {
+            font-size: 13pt;
+            page-break-after: avoid;
+            color: #7dd3fc;
+            margin-top: 20px;
+        }
+        p {
+            margin: 0 0 12px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            page-break-inside: auto;
+        }
+        tr {
+            page-break-inside: avoid;
+        }
+        th, td {
+            border: 1px solid #334155;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #1e293b;
+            color: #7dd3fc;
+            font-weight: bold;
+            font-size: 10.5pt;
+        }
+        td {
+            background-color: #0f172a;
+        }
+        td strong {
+            color: #bae6fd;
+        }
+        ul, ol {
+            margin: 10px 0 15px 0;
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            font-size: 14pt;
+            color: #94a3b8;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+        .note {
+            background-color: #1e293b;
+            border-left: 4px solid #10b981;
+            padding: 12px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+        .warning {
+            background-color: #1e293b;
+            border-left: 4px solid #ef4444;
+            padding: 12px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+        code, pre {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: #020617;
+            color: #a5f3fc;
+            border-radius: 4px;
+            font-size: 10pt;
+        }
+        code {
+            padding: 2px 5px;
+        }
+        pre {
+            padding: 12px;
+            display: block;
+            white-space: pre-wrap;
+            border: 1px solid #1e293b;
+            page-break-inside: avoid;
+        }
+        .troubleshooting-q {
+            font-weight: bold;
+            color: #bae6fd;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            page-break-after: avoid;
+        }
+        .troubleshooting-a {
+            margin-bottom: 15px;
+        }
+        .divider {
+            border: 0;
+            height: 1px;
+            background: #1e293b;
+            margin: 30px 0;
+        }
+            .note a {
+        color: #38bdf8;
+        text-decoration: none; 
+        transition: color 0.2s ease-in-out;
+    }
+
+    .note a:hover {
+        color: #7dd3fc;
+        text-decoration: underline; 
+    }
+    
+
+.language-nav{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 26px}
+.language-nav a{display:inline-block;padding:7px 16px;border:1px solid #40516b;border-radius:6px;color:#7dd3fc;text-decoration:none;background:#1e293b}
+.language-nav a[aria-current="page"]{color:#0f172a;background:#38bdf8;border-color:#38bdf8;font-weight:700}
+.language-nav a:hover{border-color:#7dd3fc;background:#0c4a6e;color:#f8fafc}
+.language-nav a[aria-current="page"]:hover{background:#38bdf8;color:#0f172a}
+.language-nav a:focus-visible{outline:3px solid #fbbf24;outline-offset:3px}
+html[lang="ja"] body{line-height:1.75;line-break:strict}
+html[lang="ja"] th,html[lang="ja"] td{overflow-wrap:anywhere}
+html[lang="ko"] body{line-height:1.72;word-break:keep-all;overflow-wrap:break-word}
+nav.core-nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+table{max-width:100%;overflow-wrap:break-word}
+pre{overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:700px){body{padding:22px 18px}h1{font-size:21pt}table{display:block;overflow-x:auto}th,td{min-width:95px;padding:8px}}
+@media print{.language-nav{display:none}}
+</style></head><body>
+<nav class="core-nav" style="background:#1e293b;padding:12px;border-bottom:2px solid #38bdf8;margin-bottom:16px;"><a href="../../index.html" style="color:#38bdf8">← ドキュメント一覧</a><span style="color:#64748b">|</span><a href="index.html" style="color:#f8fafc">Core 概要</a><a href="shader_variation.html" style="color:#f8fafc">Shader Variation</a><a href="using_custom_models.html" style="color:#f8fafc">カスタムモデル</a></nav>
+<nav class="language-nav" aria-label="Language / 言語 / 언어"><a href="../shader_variation.html" lang="en" hreflang="en">English</a><a href="shader_variation.html" lang="ja" hreflang="ja" aria-current="page">日本語</a><a href="../ko/shader_variation.html" lang="ko" hreflang="ko">한국어</a></nav>
+
+<h1>DPT_ShaderVariation コンポーネント</h1>
+<p><code>DPT_ShaderVariation</code> は、シーン内のアセットに対するインスタンスごとの色の変更を管理します。DPT Prefab Painter で配置した場合は自動的に動作しますが、カスタム GameObject、空のルート親オブジェクト、モジュラー Prefab に手動で追加して、低負荷で色を調整することもできます。</p>
+<h2>基本アーキテクチャ</h2>
+<p>指定した色を読み込み、RGB チャンネルを正規化して 24 ビットの色相精度を保ち、残り 8 ビットを独立した輝度倍率としてエンコードします。このベクトルパッキング方式では色の歪みを抑えながら、最大 <strong>2.0 倍</strong>の HDR 明るさに対応します。生成した値は単一の符号なし 32 ビット整数（<code>uint</code>）に圧縮され、Renderer Shader User Value（RSUV）経由で GPU のインスタンシングバッファーに渡されます。</p>
+<p>色のバリエーションは GPU 側で <code>SetShaderUserValue</code> により処理されるため、共有マテリアルを複製、変更することはありません。異なる色のオブジェクトが多数あっても統合されたハードウェアドローコールで扱え、VRAM へのマテリアル複製による負荷を防ぎます。</p>
+<h2>コンポーネントの Inspector 項目</h2><p>Hierarchy から <code>DPT_ShaderVariation</code> が付いたオブジェクトを選んで設定します。</p>
+<table><thead><tr><th style="width:30%">項目</th><th>説明</th></tr></thead><tbody>
+<tr><td><strong>Instance Color</strong></td><td>このオブジェクトの GPU ストリームに渡す色合いと明るさの倍率。白（1,1,1,1）が中立です。暗い値ではオブジェクトが暗くなり、色の大きさが高い値では HDR の明るさになります。<strong>発光オブジェクトでは Alpha チャンネルが発光強度を直接制御します。</strong> プロパティを介して直接制御するか、フィールド変更を追跡できます。</td></tr>
+<tr><td><strong>Color Property Name</strong></td><td>標準マテリアルへのフォールバック時に使用するシェーダー変数名です。通常の URP シェーダーでは <code>_BaseColor</code> などを指定します。<strong>DPT マテリアルを検出した場合はこの項目がロックされ、編集できません。</strong> 非 DPT マテリアル専用です。</td></tr>
+<tr><td><strong>Update Every Frame</strong></td><td><strong>性能に関する注意：</strong>色の動的変更を追跡するために毎フレーム <code>Update()</code> を実行します。ダメージ時の点滅や発光の脈動など、ゲーム中に色が変化する場合だけ有効にしてください。通常の小道具では無効にして CPU 負荷をなくします。旧称は <em>Is Animated</em> です。</td></tr>
+</tbody></table>
+<div class="note">コンポーネントは空のルート親にも追加できます。階層内の Renderer をフィルター付きで収集するため、<code>LOD0</code>、<code>LOD1</code>、破壊された破片などの子メッシュにも色を適用でき、破壊可能なオブジェクトとも互換性があります。</div>
+<h2>高度なアーキテクチャ機能</h2>
+<h3>1. 動的な色更新（Update Every Frame）</h3>
+<p>Unity Animator がスクリプトフィールドをアニメーションさせたり、外部スクリプトが値を変更したりすると、シリアライズされたバッキングフィールド（<code>instanceColor</code>）が直接変更されます。通常の C# プロパティセッター（<code>InstanceColor</code>）を通らないため、一般的な実装では GPU に更新を送る必要があると検知できません。</p>
+<p>これを低負荷で解決するため、<strong>Update Every Frame</strong> を有効にすると内部の監視ループが動作します。</p>
+<pre><code>void Update()
+{
+    if (instanceColor != lastInstanceColor)
+    {
+        lastInstanceColor = instanceColor;
+        ApplyVariation();
+    }
+}</code></pre>
+<ul><li><strong>動的な小道具（大砲の導火線、被ダメージの点滅など）：</strong><code>Update Every Frame</code> を有効にすると、Animator や外部スクリプトによる変更をそのフレームで検知し、更新値を GPU へ送信します。<strong>Alpha チャンネルのアニメーションによる発光の脈動やフェード</strong>にも対応します。</li><li><strong>通常の背景オブジェクト（樽、岩など）：</strong>無効の場合は初期化時に一度だけ送信し、その後コンポーネント自身の動作を停止（<code>enabled = false</code>）します。多数のオブジェクトで発生する Unity とマネージコード間のライフサイクル負荷を防ぎ、CPU のフレーム処理への影響をなくします。</li></ul>
+<h3>2. アロケーションのない初期化</h3><p>実行時に大量の小道具を生成する際のガベージコレクション（GC）スパイクを避けるため、初期化中の配列アロケーションを回避しています。事前確保した非シリアライズの汎用リスト（<code>tempRendererList</code>、<code>filteredRenderers</code>）を使って階層を走査し、Renderer キャッシュを構築します。</p>
+<h3>3. 入れ子階層の保護</h3>
+<p>点火した導火線を子孫に持つ攻城兵器のような複雑な Prefab では、<code>GetComponentsInChildren&lt;Renderer&gt;()</code> のような通常の再帰検索を使うと、親コンポーネントが子の Renderer まで管理し、それぞれの色を上書きしてしまう場合があります。</p>
+<p><code>DPT_ShaderVariation</code> はキャッシュ構築時に、階層の下から適切な管理者を確認するフィルターを使用します。</p>
+<pre><code>for (int i = 0; i &lt; tempRendererList.Count; i++)
+{
+    Renderer rend = tempRendererList[i];
+    if (rend != null &amp;&amp; rend.GetComponentInParent&lt;DPT_ShaderVariation&gt;() == this)
+    {
+        filteredRenderers.Add(rend);
+    }
+}</code></pre>
+<p>親が子 Renderer を検索するとき、最も近くに存在する Variation 管理コンポーネントが自分自身かを確認します。導火線などの子オブジェクトに別の <code>DPT_ShaderVariation</code> があれば、親はその Renderer に干渉しません。これにより、主構造の色を親で管理しつつ、子ユニットの色を独立して制御できます。</p>
+<h2>性能と最適化への互換性</h2><p>各レンダリング方式との互換性は以下のとおりです。</p>
+<table><thead><tr><th>レンダリング方式</th><th>対応</th><th>注意事項</th></tr></thead><tbody>
+<tr><td><strong>GPU Resident Drawer（Unity 6+）</strong></td><td><strong>VCCore が必要</strong></td><td><strong>DPT VCCore マテリアル、または RSUV に対応したカスタムシェーダーの場合にのみ完全対応</strong>します。URP Default Lit などの通常マテリアルでは Material Property Block が必要となり、そのオブジェクトは GPU Resident Drawer から除外されます。</td></tr>
+<tr><td><strong>SRP Batcher（URP / HDRP）</strong></td><td>対応</td><td>共有シェーダーキーワード間の CPU ドローコールをまとめられます。</td></tr>
+<tr><td><strong>GPU Instancing</strong></td><td>対応</td><td>すべてのインスタンスが同一のマテリアルを使うため、通常の GPU インスタンシングを維持できます。</td></tr>
+<tr><td><strong>Static Batching</strong></td><td>非対応</td><td>GPU 駆動の処理との併用には適していません。オブジェクトに <strong>Batching Static</strong> を設定しないでください。メッシュの結合によって GPU Resident Drawer でのインスタンス処理が妨げられます。</td></tr>
+</tbody></table>
+<h3>MaterialPropertyBlock による動的フォールバック</h3>
+<p><code>VCCore</code> の代わりに URP Default Lit などの Unity 標準マテリアルを使う場合、コンポーネントは自動的にフォールバックします。<code>Color Property Name</code> の編集を許可し、<code>_BaseColor</code> や <code>_Color</code> などの一般的な色プロパティを検出して、<code>MaterialPropertyBlock</code>（MPB）経由でインスタンスごとの色を更新します。</p>
+<div class="warning"><strong>重要なパイプライン上の注意：</strong>MPB フォールバックはマテリアルの複製を避けるためメモリ効率は維持できますが、<strong>Material Property Block を使うと GPU Resident Drawer と SRP Batcher の両方が無効になります。</strong> Unity 6 以降の大量インスタンスを使うゲームでは、提供される VCCore マテリアルを使用して最適な経路を維持してください。</div>
+<h2>トラブルシューティング</h2>
+<p class="troubleshooting-q">Inspector では色が変わるのにメッシュに反映されない</p><p class="troubleshooting-a">メッシュに <strong>Batching Static</strong> が設定されていないことを確認してください。また、シェーダーが <code>unity_RendererUserValue</code> に対応しているか、標準マテリアルへのフォールバック時は <code>Color Property Name</code> で指定した名前と一致しているかを確認してください。</p>
+<p class="troubleshooting-q">Animator やスクリプトが色を変更しても画面が変わらない</p><p class="troubleshooting-a">Inspector の <strong>Update Every Frame</strong> を確認します。無効なら、コンポーネントは初期化後に自分自身を停止するため、Animator や外部スクリプトによるフィールド変更を検出しません。</p>
+<p class="troubleshooting-q">親コンポーネントが子の色アニメーションを上書きしてしまう</p><p class="troubleshooting-a">子オブジェクト自身に <code>DPT_ShaderVariation</code> を追加してください。入れ子階層の保護機能は、子が独自の管理コンポーネントを持つことを前提にしています。</p>
+
+<hr class="divider"><h2 id="support">サポート・お問い合わせ・カスタム統合</h2>
+<p>技術的な質問、不具合報告、アセットの設定や一般的なサポートについては、お問い合わせフォームからご連絡ください。サポートを受けるための主な窓口です。</p>
+<p>カスタムのテクニカルアート開発についてもご相談いただけます。独自の頂点データパッキング、プロシージャルな木目表現、GPU 風システム、ゲーム向け LOD の調整など、外部 3D モデルを DPT エコシステムに統合する作業が必要な場合は、要件と対応可能性をご相談ください。</p>
+<div class="note"><strong>メールでのお問い合わせ（推奨）：</strong><br>トラブルシューティング、不具合報告、パブリッシャーライセンス、制作依頼については、<strong><a href="https://dptgames.github.io/#contact">DPT Games Hub のお問い合わせフォーム</a></strong>をご利用ください。</div>
+<div class="note"><strong>DPT コミュニティ Discord：</strong><br>直接的なサポートにはお問い合わせフォームを推奨しますが、意見交換やフィードバックには <strong><a href="https://discord.gg/EkQykfzP5X" target="_blank" rel="noopener noreferrer">Discord サーバー</a></strong>もご利用いただけます。</div>
+
+</body></html>
