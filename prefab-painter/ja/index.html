@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta content="width=device-width, initial-scale=1" name="viewport"/><meta charset="utf-8"/>
+<title>DPT Prefab Painter - ユーザーガイド</title>
+<style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        @page {
+            size: A4;
+            margin: 15mm 15mm;
+            background-color: #0f172a;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            font-size: 11pt;
+            line-height: 1.5;
+        }
+        h1, h2, h3, h4 {
+            color: #38bdf8;
+            margin-bottom: 10px;
+        }
+        h1 {
+            font-size: 26pt;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 10px;
+            margin-top: 0;
+            color: #bae6fd;
+        }
+        h2 {
+            font-size: 16pt;
+            background-color: #1e293b;
+            padding: 8px 12px;
+            border-left: 5px solid #38bdf8;
+            page-break-after: avoid;
+            margin-top: 25px;
+        }
+        h3 {
+            font-size: 13pt;
+            page-break-after: avoid;
+            color: #7dd3fc;
+            margin-top: 20px;
+        }
+        p {
+            margin: 0 0 12px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            page-break-inside: auto;
+        }
+        tr {
+            page-break-inside: avoid;
+        }
+        th, td {
+            border: 1px solid #334155;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #1e293b;
+            color: #7dd3fc;
+            font-weight: bold;
+            font-size: 10.5pt;
+        }
+        td {
+            background-color: #0f172a;
+        }
+        td strong {
+            color: #bae6fd;
+        }
+        ul, ol {
+            margin: 10px 0 15px 0;
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            font-size: 14pt;
+            color: #94a3b8;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+        .note {
+            background-color: #1e293b;
+            border-left: 4px solid #10b981;
+            padding: 12px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+        .warning {
+            background-color: #1e293b;
+            border-left: 4px solid #ef4444;
+            padding: 12px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+        code, pre {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: #020617;
+            color: #a5f3fc;
+            border-radius: 4px;
+            font-size: 10pt;
+        }
+        code {
+            padding: 2px 5px;
+        }
+        pre {
+            padding: 12px;
+            display: block;
+            white-space: pre-wrap;
+            border: 1px solid #1e293b;
+            page-break-inside: avoid;
+        }
+        .troubleshooting-q {
+            font-weight: bold;
+            color: #bae6fd;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            page-break-after: avoid;
+        }
+        .troubleshooting-a {
+            margin-bottom: 15px;
+        }
+        hr.divider {
+            border: none;
+            border-top: 1px solid #334155;
+            margin: 30px 0;
+        }
+        .shortcut-tag {
+            display: inline-block;
+            background-color: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 3px;
+            padding: 1px 6px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 9.5pt;
+            color: #a5f3fc;
+        }
+        .note a {
+            color: #38bdf8;
+            text-decoration: none; 
+            transition: color 0.2s ease-in-out;
+        }
+        .note a:hover {
+            color: #7dd3fc;
+            text-decoration: underline; 
+        }
+    
+
+/* Language links match the navigation treatment used in Terrain Material Settings. */
+.language-nav { display:flex; flex-wrap:wrap; gap:10px; margin:0 0 28px; }
+.language-nav a { display:inline-block; padding:6px 16px; border:1px solid #40516b; border-radius:6px; color:#38bdf8; text-decoration:none; }
+.language-nav a:hover { color:#bae6fd; border-color:#7dd3fc; }
+.language-nav a[aria-current="page"] { color:#0f172a; background:#38bdf8; border-color:#38bdf8; font-weight:700; }
+.language-nav a:focus-visible { outline:3px solid #fbbf24; outline-offset:3px; }
+html[lang="ja"] body { line-height:1.85; line-break:strict; }
+html[lang="ja"] td, html[lang="ja"] th, html[lang="ko"] td, html[lang="ko"] th { overflow-wrap:anywhere; }
+@media (max-width:650px) { body { padding:20px 16px; } th,td { padding:7px; } .language-nav { gap:7px; } }
+@media print { .language-nav { display:none; } }
+</style>
+<link href="../index.html" hreflang="en" rel="alternate"/><link href="index.html" hreflang="ja" rel="alternate"/><link href="../ko/index.html" hreflang="ko" rel="alternate"/></head>
+<body>
+<nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
+<a href="https://dptgames.github.io/" style="color: #38bdf8; text-decoration: none;">← DPT Games ホームページ</a>
+</nav><nav aria-label="Language" class="language-nav"><a href="../index.html" hreflang="en" lang="en">English</a><a aria-current="page" href="index.html" hreflang="ja" lang="ja">日本語</a><a href="../ko/index.html" hreflang="ko" lang="ko">한국어</a></nav>
+<h1>DPT Games Prefab Painter</h1>
+<p>ランダムな位置・回転・スケールやオブジェクトごとの色の変化を使い、シーン内にプレハブを直接ペイントできます。必要な機能が揃っているので、導入後すぐに作業を始められます。</p>
+<h3>主な機能</h3>
+<ul>
+<li>URP対応。インスペクターのウィンドウ幅に合わせてレイアウトが変化</li>
+<li>クリック前に確認できる実寸のホログラム型プレハブプレビュー</li>
+<li>エディターのウィンドウ幅に応じて調整されるコンパクトなUI</li>
+<li>回転するホバープレビューとサムネイルグリッドを備えたプレハブパレット</li>
+<li>ドラッグ＆ドロップでプレハブを追加。範囲選択とドラッグでの削除に対応</li>
+<li>保存可能なパレットプリセットでバイオーム用・小物用セットを即座に切り替え</li>
+<li>ショートカットによるアイテム選択（<code>Shift + 1–0</code> ／テンキー）と選択解除（<code>Shift + D</code>）。番号バッジを使ってペイント中でもプレハブを切り替え可能</li>
+<li>地形テクスチャ（スプラットマップ）によるフィルタリング。プレビューのリアルタイム除外とグループ別設定に対応</li>
+<li>配置レイヤー、親オブジェクト、スプラットマップをグループごとに設定可能</li>
+<li>ペイント時にC#コンポーネントを自動追加</li>
+<li>ペイント、スキャッター、ライン、グリッド、パス、計測モード</li>
+<li>パスモードで複数グループを連続配置。既存セグメントも再計算して継ぎ目を調整</li>
+<li>配置後の回転調整による正確な位置合わせ</li>
+<li>Smart Clearanceと切り替え可能なCheck Clearanceで重なりを制御</li>
+<li>エディター内の物理シミュレーションで自然に落下・整列</li>
+<li>次の機能と連携： <code>DPT_ShaderVariation</code> 。追加のドローコールなしでオブジェクトごとの色変更が可能</li>
+<li>UnityのUndo履歴に完全対応</li>
+</ul>
+<div style="background-color: #1e293b; padding: 15px; border-radius: 6px; margin-bottom: 30px; border: 1px solid #334155; line-height: 1.8;">
+<strong style="color: #38bdf8; display: block; margin-bottom: 8px;">クイックナビゲーション：</strong>
+<a href="#getting-started" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">はじめに</a>
+<a href="#prefab-palette" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">プレハブパレット</a>
+<a href="#painting-controls" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">ペイントと操作</a>
+<a href="#visuals-variation" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">表示とバリエーション</a>
+<a href="#transform-placement" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">変形と配置</a>
+<a href="#hierarchy-tags-layers-scripts" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">階層、タグ、レイヤー、スクリプト</a>
+<a href="#texture-packer" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">テクスチャチャンネルパッカー</a>
+<a href="#shortcuts" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">ショートカット一覧</a>
+<a href="#troubleshooting" style="color: #a5f3fc; margin-right: 20px; text-decoration: none;">トラブルシューティング</a>
+<a href="#support" style="color: #a5f3fc; text-decoration: none;">サポート</a>
+</div>
+<h2 id="getting-started">はじめに</h2>
+<p>数ステップでペインターを開き、アセットの配置を始められます。</p>
+<h3>クイックスタート</h3>
+<ol>
+<li>Unityのメニューバーから <strong>Tools → DPT Games → Prefab Painter</strong> を開きます。ウィンドウはドッキングとサイズ変更に対応しています。狭い場合はコントロールが縦に並び、広い場合は複数列で表示されます。</li>
+<li>個々のプレハブを既存グループへドラッグして追加できます。フォルダー階層を自動整理するには、最上位フォルダーをパレット上部の <strong>Create Groups from Subfolders</strong> へドロップします。直下の子フォルダーごとに名前付きグループが作成され、さらに深いフォルダーの内容は最も近い上位グループへまとめられます。</li>
+<li>地形や地面のレイヤーに合わせて <strong>Paintable Layer</strong> を設定します。</li>
+<li>必要な場合のみ <strong>Parent Object</strong> を割り当てるか、 <strong>New</strong> をクリックして新規作成します。親オブジェクトの手動指定は必須ではありません。</li>
+<li>緑色の <strong>START PAINTING [']</strong> ボタンをクリックします。これでツールが有効になりますが、初期設定では通常のブラシペイントに <strong>Ctrl</strong> キーを押し続ける必要があります。</li>
+<li>シーン上で <code>Ctrl + Left Click</code> を押しながらドラッグするとプレハブをペイントできます。代わりに、ペイントボタンの下にある <strong>Require Ctrl to Paint</strong> をオフにすると、 <strong>Left Click + Drag</strong> だけでペイントできます。</li>
+</ol>
+<div class="note">
+<strong>元に戻す：</strong> ペイント、消去、ライン、グリッド、パスはすべてUnityのUndoに登録されます。 <code>Ctrl + Z</code> と <code>Ctrl + Y</code> を利用できます。
+    </div>
+<h2 id="prefab-palette">プレハブパレット</h2>
+<p>パレットでは配置対象のプレハブを管理します。複数グループ、保存できるプリセット、追加・削除の各種操作に対応しています。</p>
+<div class="note"><strong>フォルダーを自動グループ化：</strong> 親フォルダーを、パレットグループの上にある <strong>Create Groups from Subfolders</strong> 領域へドロップすると、直下の子フォルダーから自動的にグループが作成されます。たとえば <code>Nature/Trees</code>、 <code>Nature/Rocks</code> 、 <code>Nature/Plants</code> は3つのグループになります。さらに深い階層は対応する上位グループに含まれます。親フォルダー直下のプレハブは親フォルダー名のグループに入ります。同名のグループは再利用され、重複プレハブはスキップされます。フォルダーを <strong>既存グループ</strong>へドロップした場合は、すべてそのグループに追加されます。大量のフォルダーも段階的に読み込まれます。数字キーによる切り替えは最初の10グループのみで、追加グループはウィンドウから選択できます。</div>
+<table>
+<thead>
+<tr>
+<th style="width: 30%;">操作</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>使用中のパレットファイルと「名前を付けて保存」</strong></td>
+<td>現在のパレットをプロジェクト内の再利用可能なアセットとして保存します。オブジェクトフィールドから別のパレットを読み込み、小物セットやバイオームテーマを切り替えられます。</td>
+</tr>
+<tr>
+<td><strong>サムネイルグリッド</strong></td>
+<td>読み込んだプレハブのアイコンを表示します。サムネイルにカーソルを合わせると、オブジェクトが自動回転する拡大高解像度プレビューが表示されます。右クリックするとプレハブを開く、バリアントを作成する、有効状態を切り替えるなどの操作ができます。</td>
+</tr>
+<tr>
+<td><strong>アイテムのショートカット選択 [Shift + 1–0] と全選択解除 [Shift + D]</strong></td>
+<td>単一グループがアクティブなとき、最初の10プレハブには番号バッジ（<span class="shortcut-tag">1</span>–<span class="shortcut-tag">0</span>）が表示されます。選択を切り替えるには <code>Shift + [1–0]</code> を押します（またはLine／Pathモードでは <code>1–0</code> を <code>Ctrl + Alt</code> 押しながら直接入力することもできます）。ラインやパスの編集中も切り替え可能で、テンキーにも対応しています。全選択を解除するには <code>Shift + D</code> を押すと作業を中断せず選択を解除できます。グループを変更しても選択内容は保持され、番号バッジは新しいグループに切り替わります。</td>
+</tr>
+<tr>
+<td><strong>出現ウェイト</strong></td>
+<td>パレット内のプレハブを1つ以上選択すると <strong>選択アイテム設定</strong> パネルが表示されます。 <strong>Spawn Weight</strong> スライダーまたは入力欄で、他のプレハブに対する出現頻度を設定します。値2は値1のプレハブの2倍の頻度になります。サムネイルに表示される小さな <strong>w</strong> バッジは標準以外のウェイトが設定されている印です。ウェイトはパレットファイルに保存されます。</td>
+</tr>
+<tr>
+<td><strong>グループと個別設定</strong></td>
+<td>グループは <strong>+ Group</strong> で追加できます。または親フォルダーを <strong>Create Groups from Subfolders</strong>にドロップして自動作成できます。最初の10グループは <span class="shortcut-tag">1</span>–<span class="shortcut-tag">9</span> / <span class="shortcut-tag">0</span> で切り替えます。それ以降のグループはエディター内で選択できます。どのグループも有効にしていない場合、全グループからペイントできます。グループごとにSpawn Layer、Paintable Layer、Parent Object、Terrain Splatmapを個別設定できます。</td>
+</tr>
+<tr>
+<td><strong>範囲選択</strong></td>
+<td>サムネイルグリッド上でドラッグすると複数のプレハブを選択できます。まとめて移動・削除するときに便利です。</td>
+</tr>
+<tr>
+<td><strong>シーンへドラッグ</strong></td>
+<td>パレット内のプレハブをSceneビューへドラッグすると、1個ずつ手動配置できます。</td>
+</tr>
+<tr>
+<td><strong>削除エリアへドロップ</strong></td>
+<td>選択したプレハブをこの領域へドラッグすると、パレットから削除できます。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="painting-controls">ペイント操作</h2>
+<p>パネル上部の <strong>Paint</strong>、 <strong>Erase</strong>、 <strong>Recolor</strong>、 <strong>Measure</strong> タブを選びます。Erase、Recolor、Measureのショートカットを同じモードで押すとPaintへ戻ります。緑色の大きなボタンでペイントを開始し、赤いボタンで停止します。 <strong>Start Paintingはツールを有効にするだけです。Require Ctrl to Paintをオフにしない限り、Ctrlキーは必要です。</strong> オフにすると左クリックとドラッグだけでペイントできます。Altによる視点操作、Ctrl+Altのライン、Ctrl+Shiftのグリッド、パス編集はそれぞれ専用の操作を維持します。</p>
+<h3>配置モード</h3>
+<table>
+<thead>
+<tr>
+<th style="width: 30%;">モード</th>
+<th>使い方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ペイントモード</strong></td>
+<td>標準モードです。 <code>Ctrl + Left Click</code> を押しながらドラッグするとブラシ範囲内のサーフェスへ連続配置します。 <strong>Require Ctrl to Paint</strong> をオフにして左クリックとドラッグだけでもペイントできます。Scatterモードが有効な場合、概算生成数（<code>~N</code>）が表示されます。</td>
+</tr>
+<tr>
+<td><strong>スキャッターモード [O]</strong></td>
+<td>1回のストロークでブラシ全体に多数のプレハブをランダム配置します。広い範囲の草や岩など、密集した地表物の配置に適しています。 <span class="shortcut-tag">O</span>でオン／オフを切り替えます。</td>
+</tr>
+<tr>
+<td><strong>ラインモード</strong></td>
+<td>キーを押しながら <code>Ctrl + Alt + Drag</code> 開始地点から直線状にプレハブを配置します。ラインは連続クリック間の接続位置を記憶し、角や複数セグメントでも余分な隙間や重なりなく端を揃えます。作業中にグループを切り替えて壁や門など異なる部品も接続できます。</td>
+</tr>
+<tr>
+<td><strong>グリッドモード</strong></td>
+<td>キーを押しながら <code>Ctrl + Shift + Drag</code> 一定間隔のグリッドに沿ってプレハブを配置します。床タイル、箱、作物など規則的な配置に便利です。グリッドの間隔はブラシ半径と独立しており、ドラッグ中にグリッド範囲を調整できます。</td>
+</tr>
+<tr>
+<td><strong>パスペイント [G]</strong></td>
+<td>滑らかな曲線パスに沿ってプレハブを配置します。 <span class="shortcut-tag">G</span> でパスモードに入り、 <code>Ctrl + Left Click</code> でノードを追加します。もう一度 <span class="shortcut-tag">G</span> を押すか <span class="shortcut-tag">Enter</span> で終了します。弦長による反復計算で実際の寸法を求め、急なカーブでも壁などの端を正確に繋ぎます。途中でグループを切り替えられ、各セグメントは割り当てられたプレハブを個別に管理します。既存ノードのハンドルをクリックして選択し、パレットのアイテムやグループを変更すると、そのセグメントを後から更新することもできます。</td>
+</tr>
+<tr>
+<td><strong>計測モード [Q / Shift+Q]</strong></td>
+<td>シーン内の距離を確認するための計測ツールです。 <span class="shortcut-tag">Q</span> でライン計測、 <span class="shortcut-tag">Shift + Q</span> でグリッド計測を行います。別のモードへ切り替えても計測結果は <span class="shortcut-tag">ESC</span> を押すまで画面に残ります。</td>
+</tr>
+</tbody>
+</table>
+<h3>ブラシ設定</h3>
+<p><strong>Require Ctrl to Paint：</strong> 互換性のため初期状態ではオンです。オフにすると、ペイントが有効な間は左クリックとドラッグだけでペイント、消去、リカラーができます。シーンの通常操作時に誤配置を防ぎたい場合はオンのままにしてください。Ctrl+AltのラインとCtrl+Shiftのグリッドは常に使用可能です。右クリックによるカメラ操作は変わりません。</p>
+<table>
+<thead>
+<tr>
+<th style="width: 30%;">設定</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ライブプレハブプレビュー [F]</strong></td>
+<td>実際の配置位置、回転、スケールを確認できる1:1のホログラムプレビューをシーン内に表示します。 <span class="shortcut-tag">F</span>でオン／オフを切り替えます。</td>
+</tr>
+<tr>
+<td><strong>ペイント対象レイヤー</strong></td>
+<td>このレイヤー上のサーフェスにのみプレハブを配置します。地形や地面メッシュと同じレイヤーを選んでください。異なる場合、レイキャストが通過して配置できません。</td>
+</tr>
+<tr>
+<td><strong>地形スプラットマップを使用</strong></td>
+<td>Unity Terrain上にペイントするとき、草、土、岩など特定のTerrain Layerと最小ブレンドウェイトで生成位置を制限します。土の道に草が出るなどの誤配置を防ぎます。全配置モードに適用され、リアルタイムプレビューの除外やグループ別設定にも対応します。</td>
+</tr>
+<tr>
+<td><strong>ブラシ形状 [C]</strong></td>
+<td>ブラシ範囲を円形と四角形で切り替えます。 <span class="shortcut-tag">C</span> で切り替えます。</td>
+</tr>
+<tr>
+<td><strong>ブラシ半径 [ [ / ] ]</strong></td>
+<td>ブラシの範囲を調整します。 <span class="shortcut-tag">[</span> で縮小し、 <span class="shortcut-tag">]</span> で拡大します。</td>
+</tr>
+<tr>
+<td><strong>配置をランダム化 [U]</strong></td>
+<td>オンにするとカーソルの中心ではなくブラシ半径内のランダムな位置に配置されます。ScatterだけでなくPaint、Line、Gridなどすべての配置モードに影響します。 <span class="shortcut-tag">U</span>で切り替えます。オフにしてもブラシ半径の設定は保持されます。</td>
+</tr>
+<tr>
+<td><strong>最小間隔 [M / Shift+M]</strong></td>
+<td>オブジェクト間の最短距離を指定します。 <span class="shortcut-tag">M</span> で増やし、 <span class="shortcut-tag">Shift+M</span> で減らします。Smart Clearanceが有効な場合はオブジェクトの大きさも考慮されます（「変形と配置」を参照）。</td>
+</tr>
+<tr>
+<td><strong>生成間隔 [X / Shift+X]</strong></td>
+<td>ドラッグ中の配置間隔（時間）を制御します。値が小さいほど高速に配置されます。 <span class="shortcut-tag">X</span> で間隔を長くし、 <span class="shortcut-tag">Shift+X</span> で短くします。</td>
+</tr>
+<tr>
+<td><strong>間隔をパス長に合わせる [S]</strong></td>
+<td>Path Paintのときだけ表示されます。オンにするとパスを閉じるため間隔をわずかに伸縮します。道路など寸法が固定されたモジュール部品では、継ぎ目を防ぐためオフにしてください。</td>
+</tr>
+<tr>
+<td><strong>ブラシハンドルの色</strong></td>
+<td>シーンビューのブラシ円の色を変更します。地形と色が似ていて見づらいときに調整してください。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="visuals-variation">表示とバリエーション</h2>
+<p>DPTシェーダーパイプラインによるオブジェクトごとの見た目の変化です。追加のマテリアルを作らず、GPUバッチングを維持したまま多様性を加えられます。</p>
+<table>
+<thead>
+<tr>
+<th style="width: 30%;">設定</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>明るさをランダム化 [B]</strong></td>
+<td>配置した各プレハブに対し <code>DPT_ShaderVariation</code> コンポーネントを使って明るさをランダムに変更します。同一アセットの反復による単調なライティングを和らげます。</td>
+</tr>
+<tr>
+<td><strong>色合いを適用 [V]</strong></td>
+<td>プレハブに基本色と任意のHSV変化を適用します。DPTシェーダーを使う草木、岩、その他のアセットの色調に変化を付けられます。</td>
+</tr>
+</tbody>
+</table>
+<div class="note">
+<strong>シェーダー連携：</strong> DPTシェーダーはGPUのRenderer Shader User Value（RSUV）ストリームからインスタンスごとの変化を読み取ります。Unity 6のGPU Resident Drawerと互換性があり、変化によってドローコール数は増えません。標準URP Litの代替シェーダーが検出されたときのみColor Property Name欄を編集でき、その場合はMaterial Property Blockを使用します。
+    </div>
+<h2 id="transform-placement">変形と配置</h2>
+<p>配置したプレハブの向き、スケール、名前、シーン階層での整理方法を設定します。</p>
+<table>
+<thead>
+<tr>
+<th style="width: 30%;">設定</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>地面に揃える [N]</strong></td>
+<td>配置したオブジェクトの上方向を、接触面の法線に合わせます。斜面や起伏のある地形に便利です。</td>
+</tr>
+<tr>
+<td><strong>Y回転をランダム化 [Y]</strong></td>
+<td>各プレハブを垂直軸の周りにランダム回転させます。同じアセットを多数配置しても単調に見えにくくなります。</td>
+</tr>
+<tr>
+<td><strong>スケールをランダム化 [L]</strong></td>
+<td>指定した最小値と最大値の間でスケールをランダムに設定します。オフにすると固定スケールのスライダーが表示されます。</td>
+</tr>
+<tr>
+<td><strong>固定スケール</strong></td>
+<td>Randomize Scaleがオフのときに表示されます。すべてのプレハブに同じスケール倍率を適用します。</td>
+</tr>
+<tr>
+<td><strong>積み重ねを許可 [K]</strong></td>
+<td>オンにすると、既にペイントしたオブジェクトの上にも配置できます。岩に苔や小石を重ねる場合などに便利です。オフの場合は同じ親の下にあるペイント済みオブジェクト上への配置を防ぎます。</td>
+</tr>
+<tr>
+<td><strong>コライダー基準で配置 [P]</strong></td>
+<td>ピボットではなくコライダーの境界下面を基準に配置します。中心からずれたピボットを持つオブジェクトが地面に埋まるのを防ぎます。コライダーがない場合は一時的なコライダーが生成されます。</td>
+</tr>
+<tr>
+<td><strong>Smart Clearance [I]</strong></td>
+<td>オブジェクトの物理的な大きさを考慮して配置間隔を判定します。Min Spacingが小さくても重なりを防ぎ、Min Spacingを増やすとオブジェクト本来の大きさに追加の隙間を設けられます。</td>
+</tr>
+<tr>
+<td><strong>Check Clearance切り替え [D]</strong></td>
+<td>オブジェクト同士の重なり確認をオン／オフにします。オフにすると検査を省略するため、多少重なってもよい大量のScatter配置では大幅に高速化できます。 <span class="shortcut-tag">D</span>で切り替えます。</td>
+</tr>
+<tr>
+<td><strong>物理落下 [H]</strong></td>
+<td>配置後に短いエディター内物理シミュレーションを実行し、重力で自然に着地させます。岩の山や凹凸のある地形などに便利です。落下開始位置のオフセット上限が引き上げられており、より高い位置から落とせます。</td>
+</tr>
+<tr>
+<td><strong>配置後に回転 [J]</strong></td>
+<td>Scatter、Line、Grid、Pathで配置した後、マウス移動でグループを回転できる状態になります。配置済みオブジェクトの中心を軸に回転し、サーフェスへの接地もリアルタイムで調整されます。クリックで確定します。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="hierarchy-tags-layers-scripts">階層、タグ、スクリプト</h2>
+<p>配置したオブジェクトの整理、タグ・レイヤーの上書き、ペイント時のコンポーネント追加を設定します。</p>
+<table>
+<thead>
+<tr>
+<th style="width:30%;">設定</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>親オブジェクトと名前</strong></td>
+<td>親オブジェクトの指定は任意です。指定するとすべてのプレハブがその子として配置されます。名前を入力して <strong>New</strong> を押すと新しい親を作れます。配置した子オブジェクトは選択した命名規則に従って連番になります。グループ別に異なる親を設定することもできます。</td>
+</tr>
+<tr>
+<td><strong>命名規則</strong></td>
+<td>配置されたオブジェクト名の接頭辞やパターンを設定します。たとえば <code>Rock_001</code>, <code>Rock_002</code>のように連番を付けられます。</td>
+</tr>
+<tr>
+<td><strong>タグとレイヤーの上書き</strong></td>
+<td>プレハブ元の設定を無視して、配置オブジェクトに指定のタグとレイヤーを適用します。子オブジェクトにも適用するか選択でき、グループごとの上書きにも対応します。</td>
+</tr>
+<tr>
+<td><strong>スクリプトコンポーネントの自動追加</strong></td>
+<td>
+                    プレハブバリアントを作成せず、ペイントしたプレハブに任意のC#コンポーネントを自動追加できます。
+                    <ul>
+<li><strong>Root</strong> ：生成されたルートオブジェクトに追加します。</li>
+<li><strong>Named Child</strong> ：名前が一致する子オブジェクトに追加します（大文字・小文字を区別）。</li>
+<li><strong>Skip If Already Exists</strong> ：既にあるコンポーネントの重複追加を防ぎます。</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="texture-packer">テクスチャチャンネルパッカー</h2>
+<p>DPTシェーダーは、メタリック、オクルージョン、ディテール、スムースネスを1枚にまとめたパックテクスチャを使用します。内蔵パッカーは <strong>Tools → DPT Games → Texture Channel Packer</strong>から起動できます。</p>
+<ol>
+<li>元のテクスチャを次のチャンネルに割り当てます。
+            <ul>
+<li><strong>赤：</strong> メタリック</li>
+<li><strong>緑：</strong> オクルージョン</li>
+<li><strong>青：</strong> ディテール／マスク</li>
+<li><strong>アルファ：</strong> スムースネス</li>
+</ul>
+</li>
+<li>チャンネルごとのオプションを設定します。
+            <ul>
+<li><strong>Invert：</strong> 値を反転します（<code>1.0 - value</code>）。ラフネスマップからスムースネスマップへ変換する場合に使います。</li>
+<li><strong>Convert Brightness：</strong> RGBの平均輝度（<code>(R + G + B) / 3</code>）からグレースケール値を算出します。アルファのない24ビットRGBテクスチャを使う場合に有効にしてください。</li>
+</ul>
+</li>
+<li>スロットを空欄にした場合、 <strong>Empty Value</strong> スライダーでそのチャンネルの固定値を指定できます。</li>
+<li>最後に <strong>Pack and Save Texture</strong> をクリックしてパックテクスチャを生成します。</li>
+</ol>
+<h3>必要なUnityインポート設定</h3>
+<p>パック前に、すべてのソーステクスチャについてUnityインスペクターで次を確認してください。</p>
+<ul>
+<li><strong>Read/Write：有効</strong> ：パッカーがピクセルを読み取るために必要です。無効だとエラーになります。</li>
+<li><strong>sRGB（Color Texture）：無効</strong> ：これらは色ではなくデータテクスチャです。オンだとメタリック、ラフネス、AO値が変わってしまいます。</li>
+<li><strong>Alpha Is Transparency：有効</strong> ：スムースネスチャンネルが0〜1の範囲で正しく読み取られるようにします。</li>
+</ul>
+<div class="note">
+<strong>明るさへの変換：</strong> 内蔵の <strong>Convert Brightness</strong> オプションは、24ビットRGBマップからスカラー値をエディター内で生成します。外部ツールは不要です。
+    </div>
+<h2 id="shortcuts">ショートカット一覧</h2>
+<p>これらのショートカットはペインターのウィンドウが開いていてペイントが有効な場合に使用できます。Unity標準のエディターショートカットとは干渉しません。</p>
+<table>
+<thead>
+<tr>
+<th style="width: 25%;">ショートカット</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="shortcut-tag">'</span></td>
+<td>ペイントの開始／停止</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">F</span></td>
+<td>ライブプレハブプレビューの切り替え（1:1ホログラム）</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">Ctrl + Left Click</span></td>
+<td>押しながらドラッグして連続ペイント。 <strong>Require Ctrl to Paint</strong> をオフにすると、ペイント開始後は左クリック＋ドラッグだけで操作できます。</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">Ctrl + Right Click</span></td>
+<td>ブラシ下の配置済みオブジェクトを消去</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">Ctrl + Alt + Drag</span></td>
+<td>ラインモード：直線に沿って配置。連続セグメントの接続位置を保持</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">Ctrl + Shift + Drag</span></td>
+<td>グリッドモード：独立したグリッド間隔で配置</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">G</span></td>
+<td>パスペイントモードを開始／終了（弦長の反復計算）</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">Q</span></td>
+<td>計測モード：ライン計測</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">Shift + Q</span></td>
+<td>計測モード：グリッド計測</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">Enter</span></td>
+<td>現在のパスを確定してプレハブを配置</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">ESC</span></td>
+<td>現在のパスを消去／保持された計測表示を終了</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">S</span></td>
+<td>Stretch Spacing To Fitを切り替え（Path Paint中のみ表示）</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">[</span> / <span class="shortcut-tag">]</span></td>
+<td>ブラシ半径を縮小／拡大</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">C</span></td>
+<td>円形／四角形ブラシを切り替え</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">O</span></td>
+<td>Scatterモードを切り替え</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">U</span></td>
+<td>Randomize Placementを切り替え（すべての配置モード）</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">M</span> / <span class="shortcut-tag">Shift+M</span></td>
+<td>最小間隔を増やす／減らす</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">X</span> / <span class="shortcut-tag">Shift+X</span></td>
+<td>生成間隔を長くする／短くする</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">N</span></td>
+<td>Align to Groundを切り替え</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">Y</span></td>
+<td>Randomize Y Rotationを切り替え</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">L</span></td>
+<td>Randomize Scaleを切り替え</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">K</span></td>
+<td>Allow Stackingを切り替え</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">P</span></td>
+<td>Place By Colliderを切り替え</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">I</span></td>
+<td>Smart Clearanceを切り替え</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">D</span></td>
+<td>Check Clearanceを切り替え（大量配置ではオフにすると高速化）</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">H</span></td>
+<td>Use Physics Fallを切り替え</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">J</span></td>
+<td>Post-Placement Rotateを切り替え</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">B</span></td>
+<td>Randomize Brightnessを切り替え</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">V</span></td>
+<td>Apply Color Tintを切り替え</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">1</span>–<span class="shortcut-tag">9</span> / <span class="shortcut-tag">0</span></td>
+<td>パレットグループを切り替え（連続するLine／Pathの間隔を再計算）</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">Shift + 1</span>–<span class="shortcut-tag">0</span> / <span class="shortcut-tag">Numpad</span></td>
+<td>アクティブなプレハブの最初の10個を個別に選択／解除。Line／PathではCtrl+Altを押しながらShiftなしの1–0でも操作可能</td>
+</tr>
+<tr>
+<td><span class="shortcut-tag">Shift + D</span></td>
+<td>現在選択中のプレハブをすべて解除</td>
+</tr>
+</tbody>
+</table>
+<h2 id="troubleshooting">トラブルシューティング</h2>
+<div class="troubleshooting-q">ペイントしてもプレハブが配置されない</div>
+<div class="troubleshooting-a">最も多い原因はレイヤーの不一致です。ペインターはPaintable Layerに指定されたレイヤーのサーフェスにのみ配置します。地形／地面メッシュとペインターのPaintable Layerが一致するか確認してください。また、ペイントが有効でボタンが赤い <strong>Stop Painting</strong>になっているか確認します。</div>
+<div class="troubleshooting-q">Use Terrain Splatmapsをオンにすると地形上に配置されない</div>
+<div class="troubleshooting-a">選択したTerrain Layerが配置したいテクスチャ（例：Layer 0の草）と一致していて、ブラシ位置のウェイトが <strong>Min Weight</strong> 以上か確認してください。境界のブレンドが薄い場合はMin Weightを0.2〜0.3などに下げると移行部分にも配置できる場合があります。</div>
+<div class="troubleshooting-q">オブジェクトが重なったり、互いにめり込む</div>
+<div class="troubleshooting-a">まず <strong>Smart Clearance [I]</strong> を有効にし、 <strong>Check Clearance [D]</strong> もオンになっているか確認します。オブジェクトの大きさを考慮して安全な間隔を確保します。追加の隙間が必要な場合は <strong>Min Spacing</strong>を上げます。間隔のチェックは同じ親にある子オブジェクト同士で行われ、別の親に属するオブジェクト間ではチェックされません。</div>
+<div class="troubleshooting-q">オブジェクトが塔のように積み重なる</div>
+<div class="troubleshooting-a">意図的に重ねたい場合を除き、 <strong>Allow Stacking [K]</strong> をオフにしてください。オフにすると、同じ親にある以前ペイントしたオブジェクトの上には配置しません。</div>
+<div class="troubleshooting-q">すべて同じ見た目で色の変化がない</div>
+<div class="troubleshooting-a">まず <strong>Randomize Brightness [B]</strong> または <strong>Apply Color Tint [V]</strong> が有効か確認してください。プレハブがDPTシェーダーを使用しているかも確認します。標準URP LitシェーダーはインスタンスごとのRSUV変化に対応していません。</div>
+<div class="troubleshooting-q">誤った場所にペイントした。元に戻せる？</div>
+<div class="troubleshooting-a">はい。ペイント、消去、ライン、グリッド、パスはUnityのUndoに対応しています。 <code>Ctrl + Z</code> で取り消せます。またEraseモードに切り替えて <code>Ctrl + Right Click</code> でオブジェクトを個別に削除することもできます。</div>
+<div class="troubleshooting-q">Physics Fallを有効にしても効果がない</div>
+<div class="troubleshooting-a">プレハブにコライダーがあるか確認してください。ない場合は <strong>Place By Collider [P]</strong> を有効にすると物理システムと連携できるようになります。シミュレーションはエディター内で短時間行われます。元の位置に戻る場合は、スクリプトがTransformを上書きしていないか確認してください。</div>
+<div class="troubleshooting-q">スケールや回転のランダム化でGPUバッチングは壊れる？</div>
+<div class="troubleshooting-a">いいえ。Unity 6のGPU Resident DrawerとSRP Batcherは、インスタンスごとに異なるTransform行列を扱えます。位置、回転、スケールのランダム化によってドローコール数が増えることはありません。</div>
+<hr class="divider"/>
+<h2 id="support">サポート、お問い合わせ、カスタム連携</h2>
+<p>技術的な質問、バグ報告、アセット設定、その他のサポートが必要な場合は、お問い合わせフォームからメールでご連絡ください。パッケージの問題を相談する際の最も確実な窓口です。</p>
+<p>このフォームでは、カスタムのテクニカルアート制作についても相談できます。外部3DモデルのDPTシステムへの統合、専用の頂点データパッキング、プロシージャルな木目マッピング、GPU風表現、ゲーム向けLOD最適化など、必要な作業と対応状況をお問い合わせください。</p>
+<div class="note">
+<strong>メールでのお問い合わせ（推奨）：</strong><br/>
+    トラブルシューティング、バグ報告、パブリッシャーライセンス、受託制作に関するお問い合わせは、 <strong><a href="https://dptgames.github.io/#contact">DPT Games Hubのお問い合わせフォーム</a></strong>をご利用ください。
+</div>
+<div class="note">
+<strong>DPTコミュニティDiscord：</strong><br/>
+    直接サポートを受けるにはフォームが最適ですが、コミュニティでのフィードバックや他のユーザーとの交流には <strong><a href="https://discord.gg/EkQykfzP5X" target="_blank">Discordサーバー</a></strong> も利用できます。
+</div>
+</body>
+</html>
