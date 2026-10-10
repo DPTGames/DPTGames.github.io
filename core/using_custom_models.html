@@ -1,9 +1,11 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Using Custom Models &amp; Textures With VCCORE Shader</title>
-    <style>
+<meta content="width=device-width, initial-scale=1" name="viewport"/><meta charset="utf-8"/>
+<title>Using Custom Models &amp; Textures With VCCORE Shader</title>
+<style>
         *, *::before, *::after {
             box-sizing: border-box;
         }
@@ -128,91 +130,91 @@
             color: #7dd3fc;
             text-decoration: underline; 
         }
-    </style>
-</head>
-<body>
-<nav style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
-    <a href="../index.html" style="color: #38bdf8; margin-right: 15px;">&larr; Back to Hub</a>
-    <span style="color: #64748b;">|</span>
-    <a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Core Overview</a>
-    <a href="shader_variation.html" style="color: #f8fafc; margin-right: 15px;">Shader Variation</a>
-    <a href="using_custom_models.html" style="color: #f8fafc;">Custom Models</a>
-</nav>
-
-    <h1>Using Custom Models &amp; Textures With VCCORE Shader</h1>
-    <p class="subtitle">A comprehensive technical guide for mapping custom or external 2D texture assets onto target meshes using the core DPT shader framework.</p>
-
-    <h2>Overview</h2>
-    <p>Although the DPT framework is tailored for ultra-optimized, textureless custom vertex pipelines, the master shader architecture natively accommodates full 2D texture map configurations. This standalone document outlines the assignment rules, slot dependencies, and workflow adjustments required to execute texture-based rendering lanes successfully.</p>
-
-    <h2>Step-by-Step Material Setup</h2>
     
-    <h3>1. Asset Assignment</h3>
-    <p>Locate the master core material asset in your project directory named <code>M_DPT_VCCORE</code>. Assign this material directly to the Mesh Renderer component of your target game object.</p>
-
-    <h3>2. Texture Map Allocation</h3>
-    <p>Populate the designated image slots within the material Inspector according to the following hardware layout mapping rules:</p>
-
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 35%;">Shader Texture Slot</th>
-                <th>Required Input Asset &amp; Configuration</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Base Color</strong></td>
-                <td>Assign your primary diffuse/albedo map. To maintain clean mathematical color multiplication via the painter window, use a desaturated or grayscale base profile.</td>
-            </tr>
-            <tr>
-                <td><strong>Metallic/AO/Smoothness Packed</strong></td>
-                <td>Assign the standalone composite texture file compiled via the <em>Texture Channel Packer</em> editor tool. The fragment shader isolates and samples the R, G, and A tracks natively.</td>
-            </tr>
-            <tr>
-                <td><strong>Use Normal Texture (Toggle)</strong></td>
-                <td>Enable this checkbox explicitly to reveal the normal map target slot and activate surface tangent vector calculations.</td>
-            </tr>
-            <tr>
-                <td><strong>Normal Map</strong></td>
-                <td>Visible only when <em>Use Normal Texture</em> is checked. Assign your authored normal map asset here. Ensure its import settings in Unity are set to <strong>Normal map</strong>.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h3>3. Parameter Scale Calibration</h3>
-    <p>Once your texture assets are assigned, fine-tune their physical behavior on the mesh surface using the integrated modifier sliders at the base of the inspector:</p>
-    <ul>
-        <li><strong>Metallic Strength:</strong> Controls the reflectivity intensity parsed from the packed texture's red channel. High metallicity values automatically suppress hue variations to preserve physical material attributes.</li>
-        <li><strong>Smoothness Strength:</strong> Scales the surface micro-roughness derived from the packed texture's alpha channel.</li>
-        <li><strong>AO Strength:</strong> Adjusts the occlusion depth and shadow clarity extracted from the packed texture's green channel.</li>
-        <li><strong>Normal Strength:</strong> Modulates the directional intensity and apparent depth of the assigned normal map vectors.</li>
-    </ul>
-
+.language-nav{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 26px}
+.language-nav a{display:inline-block;padding:7px 16px;border:1px solid #40516b;border-radius:6px;color:#7dd3fc;text-decoration:none;background:#1e293b}
+.language-nav a[aria-current="page"]{color:#0f172a;background:#38bdf8;border-color:#38bdf8;font-weight:700}
+.language-nav a:hover{border-color:#7dd3fc;background:#0c4a6e;color:#f8fafc}
+.language-nav a[aria-current="page"]:hover{background:#38bdf8;color:#0f172a}
+.language-nav a:focus-visible{outline:3px solid #fbbf24;outline-offset:3px}
+html[lang="ja"] body{line-height:1.75;line-break:strict}
+html[lang="ja"] th,html[lang="ja"] td{overflow-wrap:anywhere}
+html[lang="ko"] body{line-height:1.72;word-break:keep-all;overflow-wrap:break-word}
+nav.core-nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+table{max-width:100%;overflow-wrap:break-word}
+pre{overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:700px){body{padding:22px 18px}h1{font-size:21pt}table{display:block;overflow-x:auto}th,td{min-width:95px;padding:8px}}
+@media print{.language-nav{display:none}}
+</style>
+<link href="https://dptgames.github.io/core/using_custom_models.html" hreflang="en" rel="alternate"/><link href="https://dptgames.github.io/core/ja/using_custom_models.html" hreflang="ja" rel="alternate"/><link href="https://dptgames.github.io/core/ko/using_custom_models.html" hreflang="ko" rel="alternate"/></head>
+<body>
+<nav class="core-nav" style="background: #1e293b; padding: 10px; border-bottom: 2px solid #38bdf8; margin-bottom: 20px;">
+<a href="../index.html" style="color: #38bdf8; margin-right: 15px;">← Back to Hub</a>
+<span style="color: #64748b;">|</span>
+<a href="index.html" style="color: #f8fafc; margin-left: 15px; margin-right: 15px;">Core Overview</a>
+<a href="shader_variation.html" style="color: #f8fafc; margin-right: 15px;">Shader Variation</a>
+<a href="using_custom_models.html" style="color: #f8fafc;">Custom Models</a>
+</nav><nav aria-label="Language / 言語 / 언어" class="language-nav"><a aria-current="page" href="using_custom_models.html" hreflang="en" lang="en">English</a><a href="ja/using_custom_models.html" hreflang="ja" lang="ja">日本語</a><a href="ko/using_custom_models.html" hreflang="ko" lang="ko">한국어</a></nav>
+<h1>Using Custom Models &amp; Textures With VCCORE Shader</h1>
+<p class="subtitle">A comprehensive technical guide for mapping custom or external 2D texture assets onto target meshes using the core DPT shader framework.</p>
+<h2>Overview</h2>
+<p>Although the DPT framework is tailored for ultra-optimized, textureless custom vertex pipelines, the master shader architecture natively accommodates full 2D texture map configurations. This standalone document outlines the assignment rules, slot dependencies, and workflow adjustments required to execute texture-based rendering lanes successfully.</p>
+<h2>Step-by-Step Material Setup</h2>
+<h3>1. Asset Assignment</h3>
+<p>Locate the master core material asset in your project directory named <code>M_DPT_VCCORE</code>. Assign this material directly to the Mesh Renderer component of your target game object.</p>
+<h3>2. Texture Map Allocation</h3>
+<p>Populate the designated image slots within the material Inspector according to the following hardware layout mapping rules:</p>
+<table>
+<thead>
+<tr>
+<th style="width: 35%;">Shader Texture Slot</th>
+<th>Required Input Asset &amp; Configuration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Base Color</strong></td>
+<td>Assign your primary diffuse/albedo map. To maintain clean mathematical color multiplication via the painter window, use a desaturated or grayscale base profile.</td>
+</tr>
+<tr>
+<td><strong>Metallic/AO/Smoothness Packed</strong></td>
+<td>Assign the standalone composite texture file compiled via the <em>Texture Channel Packer</em> editor tool. The fragment shader isolates and samples the R, G, and A tracks natively.</td>
+</tr>
+<tr>
+<td><strong>Use Normal Texture (Toggle)</strong></td>
+<td>Enable this checkbox explicitly to reveal the normal map target slot and activate surface tangent vector calculations.</td>
+</tr>
+<tr>
+<td><strong>Normal Map</strong></td>
+<td>Visible only when <em>Use Normal Texture</em> is checked. Assign your authored normal map asset here. Ensure its import settings in Unity are set to <strong>Normal map</strong>.</td>
+</tr>
+</tbody>
+</table>
+<h3>3. Parameter Scale Calibration</h3>
+<p>Once your texture assets are assigned, fine-tune their physical behavior on the mesh surface using the integrated modifier sliders at the base of the inspector:</p>
+<ul>
+<li><strong>Metallic Strength:</strong> Controls the reflectivity intensity parsed from the packed texture's red channel. High metallicity values automatically suppress hue variations to preserve physical material attributes.</li>
+<li><strong>Smoothness Strength:</strong> Scales the surface micro-roughness derived from the packed texture's alpha channel.</li>
+<li><strong>AO Strength:</strong> Adjusts the occlusion depth and shadow clarity extracted from the packed texture's green channel.</li>
+<li><strong>Normal Strength:</strong> Modulates the directional intensity and apparent depth of the assigned normal map vectors.</li>
+</ul>
 <h2>Using Vertex Colors on Custom Models</h2>
-    <p>If you are using your own vertex-colored models instead of standard 2D textures, you can enable the <strong>Use Vertex Colors</strong> toggle in the Workflow Setup. However, because external meshes do not contain the highly specific, proprietary data packed into the UV and vertex streams of official DPT packages, you must disable the procedural detail systems.</p>
-
-    <div class="warning">
-        <strong>Mandatory Rule: Disable Procedural Details</strong><br><br>
+<p>If you are using your own vertex-colored models instead of standard 2D textures, you can enable the <strong>Use Vertex Colors</strong> toggle in the Workflow Setup. However, because external meshes do not contain the highly specific, proprietary data packed into the UV and vertex streams of official DPT packages, you must disable the procedural detail systems.</p>
+<div class="warning">
+<strong>Mandatory Rule: Disable Procedural Details</strong><br/><br/>
         When using custom models, you must ensure the <strong>Use Procedural Details</strong> toggle is disabled. The procedural generation module (handling bark, rock, leather, etc.) relies on an exact vertex-weight mapping pipeline calibrated exclusively for DPT native assets. Leaving this enabled on standard custom models will result in broken shading, distorted normals, and visual artifacts.
     </div>
-    
-    <p>If you want your custom models to utilize the full procedural detail ecosystem, your mesh vertex data must be packed using the proprietary DPT pipeline. See the <em>Support &amp; Custom Pipeline Integration</em> section below for freelance services to handle this integration.</p>
-
-<hr class="divider">
-<h2 id="support">Support, Contact & Custom Integration</h2>
-
+<p>If you want your custom models to utilize the full procedural detail ecosystem, your mesh vertex data must be packed using the proprietary DPT pipeline. See the <em>Support &amp; Custom Pipeline Integration</em> section below for freelance services to handle this integration.</p>
+<hr class="divider"/>
+<h2 id="support">Support, Contact &amp; Custom Integration</h2>
 <p>For all technical assistance, bug reports, asset configuration help, and general support, please reach out via email using the Contact Form. This is the primary and most reliable way to get help with any problems you encounter with the packages.</p>
-
 <p>You can also use this form to inquire about custom freelance technical art services. If your project requires external 3D models to be integrated into the DPT ecosystem—including bespoke vertex-data packing, procedural wood grain mapping, GPU wind systems, or game-ready LOD budgeting—get in touch to discuss your specific needs and availability.</p>
-
 <div class="note">
-    <strong>Email Contact (Preferred for all Support):</strong><br>
+<strong>Email Contact (Preferred for all Support):</strong><br/>
     For troubleshooting, bug reports, publisher licensing, and freelance inquiries, please use the <strong><a href="https://dptgames.github.io/#contact">Contact Form on the DPT Games Hub</a></strong>.
 </div>
-
 <div class="note">
-    <strong>DPT Community Discord:</strong><br>
+<strong>DPT Community Discord:</strong><br/>
     While the contact form is the best way to get direct help with issues, you are also welcome to join the <strong><a href="https://discord.gg/EkQykfzP5X" target="_blank">Discord Server</a></strong> to share feedback and connect with other users.
 </div>
 </body>

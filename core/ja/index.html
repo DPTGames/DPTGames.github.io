@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="alternate" hreflang="en" href="https://dptgames.github.io/core/index.html"><link rel="alternate" hreflang="ja" href="https://dptgames.github.io/core/ja/index.html"><link rel="alternate" hreflang="ko" href="https://dptgames.github.io/core/ko/index.html"><title>DPT Games VCCORE マテリアルシステム</title><style>
+    *, *::before, *::after { box-sizing: border-box; }
+    @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+    body {
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        color: #f8fafc;
+        background-color: #0f172a;
+        margin: 0; padding: 40px;
+        font-size: 11pt; line-height: 1.5;
+    }
+    h1, h2, h3 { color: #38bdf8; margin-bottom: 10px; }
+    h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+    h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
+    h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
+    p { margin: 0 0 12px 0; }
+    ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+    li { margin-bottom: 6px; }
+    .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+    .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+    .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+    code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+    code { padding: 2px 5px; }
+    .divider {
+            border: 0;
+            height: 1px;
+            background: #1e293b;
+            margin: 30px 0;
+        }
+    .note a {
+        color: #38bdf8;
+        text-decoration: none; 
+        transition: color 0.2s ease-in-out;
+    }
+
+    .note a:hover {
+        color: #7dd3fc;
+        text-decoration: underline; 
+    }
+
+
+.language-nav{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 26px}
+.language-nav a{display:inline-block;padding:7px 16px;border:1px solid #40516b;border-radius:6px;color:#7dd3fc;text-decoration:none;background:#1e293b}
+.language-nav a[aria-current="page"]{color:#0f172a;background:#38bdf8;border-color:#38bdf8;font-weight:700}
+.language-nav a:hover{border-color:#7dd3fc;background:#0c4a6e;color:#f8fafc}
+.language-nav a[aria-current="page"]:hover{background:#38bdf8;color:#0f172a}
+.language-nav a:focus-visible{outline:3px solid #fbbf24;outline-offset:3px}
+html[lang="ja"] body{line-height:1.75;line-break:strict}
+html[lang="ja"] th,html[lang="ja"] td{overflow-wrap:anywhere}
+html[lang="ko"] body{line-height:1.72;word-break:keep-all;overflow-wrap:break-word}
+nav.core-nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+table{max-width:100%;overflow-wrap:break-word}
+pre{overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:700px){body{padding:22px 18px}h1{font-size:21pt}table{display:block;overflow-x:auto}th,td{min-width:95px;padding:8px}}
+@media print{.language-nav{display:none}}
+</style></head><body>
+<nav class="core-nav" style="background:#1e293b;padding:12px;border-bottom:2px solid #38bdf8;margin-bottom:16px;"><a href="../../index.html" style="color:#38bdf8">← ドキュメント一覧</a><span style="color:#64748b">|</span><a href="index.html" style="color:#f8fafc">Core 概要</a><a href="shader_variation.html" style="color:#f8fafc">Shader Variation</a><a href="using_custom_models.html" style="color:#f8fafc">カスタムモデル</a></nav>
+<nav class="language-nav" aria-label="Language / 言語 / 언어"><a href="../index.html" lang="en" hreflang="en">English</a><a href="index.html" lang="ja" hreflang="ja" aria-current="page">日本語</a><a href="../ko/index.html" lang="ko" hreflang="ko">한국어</a></nav>
+
+<h1>DPT Games VCCORE マテリアルシステム</h1>
+<p class="subtitle">DPT アセット共通のマスターシェーダーとマテリアルを使用し、GPU Resident Drawer や SRP Batcher など、最新の Unity レンダリング機能との互換性と高い性能を実現します。</p>
+<h2>1 つのマテリアルを共有する設計思想</h2>
+<p>大量の個別マテリアルでバッチ処理を分断しドローコールを増やす代わりに、DPT アセットは同じマテリアルを共有するよう設計されています。Inspector は使用中のワークフローに応じて必要な設定のみを表示します。</p>
+<p><strong>重要：</strong>実行時の負荷は、マテリアル上で実際に有効な機能によって決まります。アセットがある機能を使用せず、有効な入力データもない場合は、シェーダーがその処理経路をスキップするため、そのシステムによる GPU 負荷は発生しません。</p>
+<h2>複数パッケージの併用と推奨設定</h2>
+<p>Harvestable Nature と Interactive Props など、複数の DPT パッケージを同じシーンで使う場合は、すべてに<strong>同一の Material アセット</strong>を割り当てることで性能を最大限に引き出せます。</p>
+<div class="warning"><strong>複数パッケージを使用する場合の重要な設定：</strong><p>バッチ処理効率を高めるため、すべてのアセットで単一の <code>M_DPT_VCCORE</code> マスターマテリアルを共有することを強く推奨します。</p><p>シェーダーは動的分岐とキーワードコンパイルを使用します。Normal Map 配列や Procedural Details のような高度な機能を使わない通常のアセットも、それらを使用する複雑なアセットとマテリアルを共有できます。不要な処理は最小限の実行時負荷でスキップされます。</p></div>
+<h2>動的な Inspector インターフェース</h2>
+<p>VCCORE の Inspector は状況に応じて表示項目を切り替え、不要な設定を隠します。</p>
+<ul><li><strong>Workflow Setup：</strong><em>Use Vertex Colors</em> を有効にすると、メッシュデータを読む方式に切り替わるため、通常の Base Color と Metallic/AO のテクスチャスロットが自動的に非表示になります。</li><li><strong>入れ子になった設定：</strong><em>Use Normal Texture</em> やプロシージャルディテールのような高度な設定は、対応するトグルを有効にした場合にのみ強度スライダーとテクスチャスロットを表示します。</li></ul>
+<div class="warning"><strong>Use Vertex Colors はテクスチャ以外の機能も制御します：</strong><p><em>Use Vertex Colors</em> を無効にすると、通常のテクスチャスロットだけでなく、<strong>Emission System、Wind System、Procedural Details</strong> も非表示になります。これらは頂点カラーを使用する処理経路に依存するため、導入済みパッケージに関係なく通常のテクスチャ方式では表示されません。再び有効にすると設定できます。一方、<em>Stylized Lighting</em> と Metallic/Non-Metallic Tint の設定は影響を受けません。</p></div>
+<h2>エコシステム検出と適応型 UI</h2>
+<p>マスターマテリアルの Inspector は、導入済みパッケージを自動判定する <strong>Ecosystem Detection System</strong> を備えています。所有していないパッケージの設定を表示せず、現在のプロジェクトに合わせて構成を変えます。</p>
+<h3>動作の仕組み</h3>
+<p>各 DPT パッケージには固有のシグネチャーファイルがあります。読み込みまたはインポート時に、エディターは軽量なプロジェクトスキャンを実施して利用できる機能を更新します。</p>
+<ul><li><strong>必要な項目だけを表示：</strong><em>Vegetation Systems、Procedural Details、Emission、DPT Package Normals</em> などは、その機能を使うパッケージのシグネチャーが存在する場合だけ表示されます。</li><li><strong>追加パッケージに対応：</strong>別の DPT パッケージを追加するとシグネチャーが検出され、既存の設定を無効化・リセットせずに新しい項目が自動的に表示されます。</li><li><strong>Core を個別更新可能：</strong>機能判定はシグネチャーに基づくため、テーマ別アセットパックを変更したり再ダウンロードしたりせずに Core フォルダーを更新できます。</li></ul>
+<div class="note"><strong>手動設定は不要：</strong><p>検出は Unity のコンパイル処理中に自動実行されます。シリアルキー、認証画面、独自プリプロセッサーディレクティブ、複雑なスクリプト設定配列は不要です。</p></div>
+<h2>プロシージャルディテール</h2>
+<p><em>Use Procedural Details</em> を有効にすると、メッシュの頂点データに基づいて微細な表面ディテールを生成する設定が表示されます。個別の大容量テクスチャを使う代わりに、GPU 上で数学的に計算されます。</p>
+<p>Rock、Leather、Bark など、利用できる機能は導入済みの DPT パッケージによって異なりますが、スライダーの基本的な意味は共通です。</p>
+<ul><li><strong>Strength：</strong>生成される法線の強さを制御します。大きくすると、凹凸や溝が光の当たり方によってより深く見えます。</li><li><strong>Width：</strong>模様のスケールを調整します。<strong>注意：</strong>このスライダーを上げるとタイリング頻度が増し、模様は視覚的に小さく密になります。</li><li><strong>Value（対応する機能のみ）：</strong>生成されたディテールのベースカラーのコントラストを調整し、元のオブジェクトより明るく、または暗くできます。</li></ul>
+<h2>Procedural Detail Array</h2>
+<p>SRP Batcher と GPU Resident Drawer への互換性を高めるため、Bark、Leather、Rock や金属表面の微細なディテールなどは、最適化された単一の <strong>Texture2D Array</strong> に格納されています。</p>
+<p>この配列はすべての DPT パッケージで共有されます。マスターシェーダーが頂点カラーの Alpha チャンネルを使用してメッシュごとに適切なテクスチャスライスを選択するため、マテリアルを変更したりドローコールを増やしたりする必要はありません。</p>
+<ul><li><strong>設定不要：</strong>配列は構成済みです。マテリアルの <em>Use Procedural Details</em> を有効にすると、必要な法線とディテールが適用されます。</li><li><strong>メモリ効率：</strong>各ディテールテクスチャは最適化された <strong>512×512</strong> 解像度です。繰り返し使用する微細な模様の鮮明さを保ちながら VRAM 消費を抑えます。</li><li><strong>動的分岐：</strong>メッシュがディテールを使わない場合や関連スライダーが 0 の場合は、配列サンプリングの処理がスキップされます。</li></ul>
+<div class="note"><strong>モバイル・低メモリ環境：</strong><p>厳しいモバイルや VR のメモリ制限向けに、Core フォルダーには <strong>256×256</strong> の配列も同梱されています。Material Inspector の Procedural Details テクスチャスロットから差し替えられます。</p></div>
+<div class="note"><strong>Wood Grain Value Map：</strong><p>法線配列とは別に、Procedural Wood Grain のベースカラー値を調整する専用のパック済みテクスチャが 1 つあります。Wood 機能を有効にするとディテール配列と連携して自動的に使用されます。</p></div>
+<div class="note"><strong>Fur Detail Value：</strong><p>Fur ディテールは、他のディテールテクスチャとは異なり、Fur Detail Value スライダーを通してベースカラーのみを変更します。</p></div>
+<h2>Stylized Lighting と影の形状</h2>
+<p>VCCORE には任意で有効化できる <strong>Stylized Lighting</strong> モードがあります。標準的な PBR の滑らかな減衰を、アートディレクション可能な明暗の境界に置き換え、影の色と暗さを独立して調整します。無効時は通常の PBR と同様に動作し、この処理による実行時負荷は発生しません。</p>
+<h3>Shadow Terminator と Light Terminator（範囲：0.0～1.0）</h3>
+<p>表面上で明るい領域から暗い領域へ移る境界を指定します。</p><ul><li><strong>0.0：</strong>境界が完全に照らされた側に寄ります。</li><li><strong>1.0：</strong>境界が完全に影になった暗い側に寄ります。</li></ul>
+<p>2 つの値の間隔を広げると、通常の Lambert シェーディングのように柔らかく広いグラデーションになります。近づけると境界が硬くなり、同じ位置では明確なセルシェーディングの境界線になります。</p>
+<div class="note"><strong>初期値：</strong><p>Shadow Terminator は <strong>0.3</strong>、Light Terminator は <strong>0.5</strong> で、コントラストのある比較的シャープな境界を作ります。Shadow Tint は黒、Shadow Strength は <strong>1.0</strong> なので、Stylized Lighting を有効にするだけで効果を確認できます。</p></div>
+<div class="note"><strong>2 つの Terminator は交差できません：</strong><p>Shadow Terminator と Light Terminator にはクランプ処理があり、一方を他方の値を越えてドラッグすると、もう一方も連動して移動します。</p></div>
+<p>内部では、表面法線とライト方向の内積を元の <code>-1…1</code> から <code>0…1</code> に変換した half-Lambert 値に基づいて境界を計算します。<strong>0</strong> は光と逆向きの面、<strong>1</strong> は光に正対する面です。2 つの Terminator がこの値の下限・上限を定めるため、0 と 1 に向けて広げるほど滑らかになり、近づけるほど鋭くなります。</p>
+<h3>Light Normal Smoothness（範囲：0.0～1.0）</h3>
+<p>細かな法線マップを持つローポリメッシュでは、シャープな明暗境界がポリゴン沿いにギザギザになる場合があります。<em>Light Normal Smoothness</em> は、照明の内積計算に使う法線をディテール法線マップと滑らかな頂点法線の間でブレンドします。</p>
+<p>これにより、鏡面反射と直接光のハイライトに法線マップの細かな凹凸を残しながら、ギザギザした影の境界を抑えられます。</p>
+<h3>Shadow Strength（範囲：0.0～1.0）</h3><p>影の領域の暗さと色付けの強さを制御します。</p>
+<ul><li><strong>0.0：</strong>Shadow Tint や Terminator の設定に関係なく、影側の色は変更されません（白）。</li><li><strong>1.0：</strong>影の領域は設定した Shadow Tint の色と強さを完全に反映します。</li></ul>
+<div class="warning"><strong>Shadow Strength が Terminator の見え方を決めます：</strong><p>Shadow Strength が <strong>0.0</strong> の場合も境界は計算されますが、影の効果が白に解決されるため、Terminator を動かしても見た目が変わりません。効果を確認するには 0 より大きくしてください。</p></div>
+<h3>Shadow Tint</h3><p>影側に適用する色です。Shadow Strength に応じてブレンドされた後、最終出力前に Base Color に乗算されます。追加ライトやポストプロセスなしで、暖色系の光に青い影を組み合わせるなどの演出ができます。</p>
+<h3>Shadow Rim Lighting（反射光とエッジグロー）</h3>
+<p>VCCORE は影側の環境反射光とリムライトを Emission で直接計算します。直接光の減衰に影響されず、暗い側の輪郭を鮮やかに、または背面から照らされたように表現できます。</p>
+<ul><li><strong>Shadow Rim Color (HDR)：</strong>影側の環境グローに使う独立した HDR カラー。</li><li><strong>Shadow Rim Sharpness：</strong>輪郭ハイライトの鋭さ。大きいほど細い線になり、小さいほど幅広く柔らかい光になります。</li><li><strong>Shadow Rim Strength：</strong>環境反射光の輝度を制御する全体倍率。</li></ul>
+<div class="note"><strong>表面特性と空洞によるマスキング：</strong><p>磨かれた金属では輪郭が鋭く、マットな表面では柔らかくなるよう、リムライトは表面の材質に反応します。2 段階の AO マスク（Cavity Killer）によって、外周シルエットの光を損なわずにソケットやパイプの内部を暗く保ちます。</p></div>
+<h3>リアルタイム投影影の制御（Cast Shadow Min / Max）</h3>
+<p>自己シェーディングの Terminator に加え、URP で木の葉やキャラクターなどがオブジェクトに落とすリアルタイム影のしきい値と柔らかさを独立して調整できます。</p>
+<ul><li><strong>Cast Shadow Min：</strong>受け取ったリアルタイム影が現れ始めるしきい値。</li><li><strong>Cast Shadow Max：</strong>その影が最大の不透明度になるしきい値。</li></ul>
+<p>Min と Max の間隔を広げると柔らかい影に、狭めるとセルシェーディングに合う鮮明な影になります。大きな値でもシャドウマップのバイアスによるちらつきを避ける安全なクランプ処理があります。</p>
+<h3>シーンの影に関する補助設定（URP のみ）</h3><p>Shadow Terminator、Light Terminator、Shadow Tint、Shadow Strength はマテリアル内部の自己シェーディングであり、Unity のリアルタイム影やシーンのカラーグレーディングとは別です。必要に応じて URP アセットや Volume Profile の影設定を調整し、表現を一致させてください。</p>
+<h2>Emission System</h2>
+<p>VCCORE には最適化された Emission System があります。Inspector で <strong>Enable Emission</strong> を有効にすると、メッシュで発光対象として指定された領域の色と強さを設定できます。</p>
+<div class="note"><strong>Emission のパッケージシグネチャーが必要：</strong><p>Emission System は Ecosystem Detection System によって管理されます。Emission シグネチャーファイルを含む DPT パッケージが存在しない場合、Inspector に項目は表示されません。頂点カラー方式のため <em>Use Vertex Colors</em> も有効にする必要があります。</p></div>
+<h3>マテリアル共通の発光とインスタンス別の発光</h3>
+<p>1 つのマテリアルを共有しながら、全体設定と個別設定の両方に対応します。</p>
+<ul><li><strong>Global Material Emission：</strong>Material Inspector の <em>Emissive Color</em> と <em>Emission Strength</em> が全体の設定です。同じマテリアルを使用するシーン内のすべてのオブジェクトに適用されます。</li><li><strong>Per-Instance Emission：</strong><code>DPT_ShaderVariation</code> コンポーネントの <em>Instance Color</em> と Alpha チャンネルがマテリアルの発光設定に乗算され、マテリアルを複製せずにオブジェクトごとの色と強さを変更できます。</li></ul>
+<h3>Metallic Emissive Color</h3><p>通常の Base Emissive Color とは別に <strong>Metallic Emissive Color</strong> があり、同じメッシュの金属部品（鉄製ルーン、銅製パイプ、換気口など）の発光色を非金属部分とは独立して制御できます。</p>
+<div class="warning"><strong>金属オブジェクトの例外：</strong><p>鏡面反射の処理上、<strong>金属領域の発光色はスクリプトを使ってインスタンスごとに変更できません</strong>。色は Material Inspector の Metallic Emissive Color で共通に指定します。ただし、<code>DPT_ShaderVariation</code> の Alpha チャンネルを使って、発光<strong>強度</strong>だけはオブジェクトごとに制御できます。</p></div>
+<div class="note"><strong>正確な色付けには白いベースカラー：</strong><p>同一マテリアルで赤いポーションと青いポーションの発光色を変える場合は、Material Inspector の Emissive Color を純白にします。乗算なのでスクリプト側の色がそのまま最終的な色を決定します。<em>これは非金属領域のみで有効です。金属領域の発光色はベースを白にしてもインスタンス別に変更できません。</em></p></div>
+<div class="note"><strong>高度な設定：本体と発光を異なる色にする：</strong><p><code>DPT_ShaderVariation</code> は MeshRenderer ごとに 1 つの色を渡すため、本体の色付けと発光は同じ色相を共有します。濃い青の剣にオレンジのルーンを光らせるには、ルーンを別の子メッシュに分け、本体とルーンに個別の Variation コンポーネントを使用してください。同じマスターマテリアルのままバッチ処理できます。</p></div>
+<h2>Wind System と風による動き</h2>
+<p>VCCORE は軽量な GPU 頂点変位の風システムを備えています。<strong>Wind Waving</strong> を有効にすると、自然な波や方向性のある揺れを頂点シェーダーで計算します。CPU 側のボーンスキニングや頂点物理演算は不要です。</p>
+<div class="note"><strong>Wind のパッケージシグネチャーが必要：</strong><p>Wind System は Ecosystem Detection System に管理されます。Harvestable Nature や Foliage パックなど、Wind シグネチャーファイルを含むパッケージが存在すると表示されます。また、<em>Use Vertex Colors</em> を有効にする必要があります。</p></div>
+<h3>Wind Strength</h3><p>頂点変位の揺れの速度と振幅を全体的に調整します。<strong>0.0</strong> に設定すると、風システム自体は有効なまま動きが完全に停止します。</p>
+<h3>360° の風向設定（Compass と Pitch）</h3>
+<p>3D ベクトルを直接入力する代わりに、2 つのスライダーで方向を決められます。</p>
+<ul><li><strong>Compass Heading（0°～359°）：</strong>横方向の揺れと、ワールド内を進む風の波の向きを設定します。<ul><li><strong>0°：</strong>東（+X）</li><li><strong>90°：</strong>北（+Z）</li><li><strong>180°：</strong>西（−X）</li><li><strong>270°：</strong>南（−Z）</li></ul></li><li><strong>Vertical Pitch（−45°～+45°）：</strong>風の上下方向の傾き。<code>0°</code> は水平の風、正の値は上昇気流、負の値は斜面に沿う下降気流を表します。</li></ul>
+<div class="note"><strong>正規化済みの単位ベクトル：</strong><p>Editor GUI は Compass Heading と Pitch を正規化済みの 3D 単位ベクトルに変換します。全方向で風の速度と周波数が一定になり、不要な GPU 演算やゼロ除算を避けられます。</p></div>
+<h2>Color Variation</h2>
+<p>インスタンスごとの色と明るさは <code>DPT_ShaderVariation</code> コンポーネントによって制御されます。共通マテリアルを複製・変更せず、Unity の GPU インスタンスバッファーに直接データを書き込みます。</p>
+<ul><li><strong>DPT Prefab Painter を使用：</strong>Randomize Brightness を有効にすると、コンポーネントが自動追加・設定されます。手動設定は不要です。</li><li><strong>オブジェクトを手動配置：</strong>シーン内のオブジェクトや親オブジェクトに <code>DPT_ShaderVariation</code> を追加し、Inspector の <em>Instance Color</em> で調整します。</li></ul>
+<div class="note"><strong>共有マテリアルを維持：</strong><p>バリエーションは GPU インスタンスバッファー経由で渡されるため、異なる色を持つオブジェクトが大量に存在してもマテリアルは複製・変更されず、GPU Resident Drawer との互換性とバッチ処理が保たれます。</p></div>
+<h3>金属・非金属の色付け制御</h3>
+<p>マスターマテリアルには、金属部と非金属部それぞれにトグルと強度スライダーがあり、<code>DPT_ShaderVariation</code> の色付けを材質ごとに制御できます。</p>
+<ul><li><strong>スクリプトが必要：</strong>トグル自体は処理の有効・無効を決めるだけです。RSUV 経由で色を送る <code>DPT_ShaderVariation</code> がなければ見た目は変わりません。</li><li><strong>Non-Metallic Tint：</strong>非金属部を色付けするか指定します。無効にすると非金属部はインスタンス色の影響を受けません。</li><li><strong>Metallic Tint：</strong>金属部への色付けを指定します。無効にすると金属部は色変更の対象外となり、元の物理的な鏡面反射特性を保ちます。</li></ul>
+<div class="note"><strong>最適化されたキーワード構造：</strong><p>金属・非金属の色付けに関する不要なシェーダーキーワードは削除され、速い動的分岐で切り替えます。バリエーションの機能を残しながら、シェーダーバリアント数とビルド時間を削減します。</p></div>
+<h3>Tint Strength スライダー（範囲：−2.0～1.0）</h3>
+<p>金属・非金属の両方で、同じ非対称の値範囲を使用します。</p>
+<ul><li><strong>0.0：</strong>該当する表面の色付けを無効にします。</li><li><strong>1.0：</strong>インスタンスカラーをそのまま反映する最大の色付け強度です。</li><li><strong>負の値（−2.0～0.0）：</strong>色付け方向を反転して、同じメッシュ内の材質間でコントラストを生み出します。たとえば宝箱の木材を暗くし、同時に金属の留め具を明るく見せることができます。</li></ul>
+<p>明るさの範囲、HDR の色付けを含む <code>DPT_ShaderVariation</code> の技術仕様は <a href="shader_variation.html">Shader Variation ガイド</a>を参照してください。</p>
+
+<hr class="divider"><h2 id="support">サポート・お問い合わせ・カスタム統合</h2>
+<p>技術的な質問、不具合報告、アセットの設定や一般的なサポートについては、お問い合わせフォームからご連絡ください。サポートを受けるための主な窓口です。</p>
+<p>カスタムのテクニカルアート開発についてもご相談いただけます。独自の頂点データパッキング、プロシージャルな木目表現、GPU 風システム、ゲーム向け LOD の調整など、外部 3D モデルを DPT エコシステムに統合する作業が必要な場合は、要件と対応可能性をご相談ください。</p>
+<div class="note"><strong>メールでのお問い合わせ（推奨）：</strong><br>トラブルシューティング、不具合報告、パブリッシャーライセンス、制作依頼については、<strong><a href="https://dptgames.github.io/#contact">DPT Games Hub のお問い合わせフォーム</a></strong>をご利用ください。</div>
+<div class="note"><strong>DPT コミュニティ Discord：</strong><br>直接的なサポートにはお問い合わせフォームを推奨しますが、意見交換やフィードバックには <strong><a href="https://discord.gg/EkQykfzP5X" target="_blank" rel="noopener noreferrer">Discord サーバー</a></strong>もご利用いただけます。</div>
+
+</body></html>
