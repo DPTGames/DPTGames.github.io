@@ -1,5 +1,6 @@
-<!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Terrain 전체의 외형, 바람, Live Biome 효과 및 런타임 Scatter 반응을 조정합니다."><link rel="alternate" hreflang="en" href="../terrain-material-settings.html"><link rel="alternate" hreflang="ja" href="../ja/terrain-material-settings.html"><link rel="alternate" hreflang="ko" href="terrain-material-settings.html"><title>Terrain Material 설정 | DPT Games</title><style>
+<!DOCTYPE html>
+
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="Terrain 전체의 외형, 바람, Live Biome 효과 및 런타임 Scatter 반응을 조정합니다." name="description"/><link href="../terrain-material-settings.html" hreflang="en" rel="alternate"/><link href="../ja/terrain-material-settings.html" hreflang="ja" rel="alternate"/><link href="terrain-material-settings.html" hreflang="ko" rel="alternate"/><title>Terrain Material 설정 | DPT Games</title><style>
 
 :root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
@@ -16,8 +17,7 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 @media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
 
 </style></head>
-<body><main id="top"><nav class="site-nav" aria-label="문서"><a href="https://dptgames.github.io/">DPT Games 홈페이지</a><a href="index.html">Vertex 3D Terrain 가이드</a><a href="biomes.html">바이옴 가이드</a><a href="terrain-material-settings.html" aria-current="page">Terrain Material 설정</a><a href="scatter-system.html">3D Scatter 가이드</a><a href="demo-components.html">데모 &amp; 런타임 가이드</a></nav><nav class="language-nav" aria-label="언어"><a href="../terrain-material-settings.html" lang="en" hreflang="en">English</a><a href="../ja/terrain-material-settings.html" lang="ja" hreflang="ja">日本語</a><a href="terrain-material-settings.html" lang="ko" hreflang="ko" aria-current="page">한국어</a></nav><header><h1>Terrain Material 설정</h1><p class="lead">Terrain 전체의 외형을 조정하고 Live Biome 효과를 제어합니다.</p></header><nav class="toc" aria-label="이 페이지의 내용"><h2>이 페이지의 내용</h2><ul><li><a href="#setup">올바른 Material을 찾고 안전하게 시작하기</a></li><li><a href="#global-surface">Global Surface 설정</a></li><li><a href="#wind">Scatter Mesh용 Wind 설정</a></li><li><a href="#distance-fades">품질 Fade 설정</a></li><li><a href="#anti-tiling">반복 Texture 줄이기</a></li><li><a href="#live-biomes">Live Biome Modifier: 선택 Surface와 Scatter 변경하기</a></li><li><a href="#flow">Surface Flow 애니메이션</a></li><li><a href="#dusting">페인트한 Mask로 눈 또는 먼지 추가하기</a></li><li><a href="#workflows">세 가지 실용적인 Material Workflow</a></li><li><a href="#faq">자주 묻는 질문</a></li><li><a href="#troubleshooting">Material 효과가 없거나 잘못 보일 때</a></li><li><a href="#support">지원</a></li></ul></nav><p class="table-hint">작은 화면에서는 넓은 표를 좌우로 스크롤하여 모든 열을 확인할 수 있습니다.</p><div class="intro"><p>Terrain Material은 이를 사용하는 Object의 최종 외형을 제어합니다. Biome Preset은 하나의 Surface를 정의하고 Material 설정은 전체 외형을 조정하거나 선택한 Biome ID에 Live Effect를 추가합니다. 같은 Material이 DPT Scatter Wind와 Live Scatter Response도 구동할 수 있습니다.</p><p>하나의 Terrain Surface를 수정하려면 Biome Inspector를 사용합니다. Grass, Flower, Pebble, Mushroom 또는 Custom Mesh 배치는 <a href="scatter-system.html">3D Scatter 가이드</a>에서 설정합니다. Terrain 전체의 Normal Detail을 약하게 하거나 Wind Direction을 바꾸거나 먼 거리 Variation을 줄이거나 선택한 Biome ID와 그 Scatter에 Animated Effect를 적용하려면 Material을 사용합니다.</p></div>
-
+<body><main id="top"><nav aria-label="문서" class="site-nav"><a href="https://dptgames.github.io/">DPT Games 홈페이지</a><a href="index.html">Vertex 3D Terrain 가이드</a><a href="biomes.html">바이옴 가이드</a><a aria-current="page" href="terrain-material-settings.html">Terrain Material 설정</a><a href="scatter-system.html">3D Scatter 가이드</a><a href="player-collision.html">플레이어 충돌 및 Scatter 상호작용</a><a href="demo-components.html">데모 &amp; 런타임 가이드</a></nav><nav aria-label="언어" class="language-nav"><a href="../terrain-material-settings.html" hreflang="en" lang="en">English</a><a href="../ja/terrain-material-settings.html" hreflang="ja" lang="ja">日本語</a><a aria-current="page" href="terrain-material-settings.html" hreflang="ko" lang="ko">한국어</a></nav><header><h1>Terrain Material 설정</h1><p class="lead">Terrain 전체의 외형을 조정하고 Live Biome 효과를 제어합니다.</p></header><nav aria-label="이 페이지의 내용" class="toc"><h2>이 페이지의 내용</h2><ul><li><a href="#setup">올바른 Material을 찾고 안전하게 시작하기</a></li><li><a href="#global-surface">Global Surface 설정</a></li><li><a href="#wind">Scatter Mesh용 Wind 설정</a></li><li><a href="#distance-fades">품질 Fade 설정</a></li><li><a href="#anti-tiling">반복 Texture 줄이기</a></li><li><a href="#live-biomes">Live Biome Modifier: 선택 Surface와 Scatter 변경하기</a></li><li><a href="#flow">강, 호수 및 폭포 표면 애니메이션</a></li><li><a href="#lake-water">호수 또는 연못 설정하기</a></li><li><a href="#waterfall-effects">폭포 물보라와 안개 추가하기</a></li><li><a href="#particle-response">파티클과 Live Biome 변화</a></li><li><a href="#dusting">페인트한 Mask로 눈 또는 먼지 추가하기</a></li><li><a href="#workflows">세 가지 실용적인 Material Workflow</a></li><li><a href="#faq">자주 묻는 질문</a></li><li><a href="#troubleshooting">Material 효과가 없거나 잘못 보일 때</a></li><li><a href="#support">지원</a></li></ul></nav><p class="table-hint">작은 화면에서는 넓은 표를 좌우로 스크롤하여 모든 열을 확인할 수 있습니다.</p><div class="intro"><p>Terrain Material은 이를 사용하는 Object의 최종 외형을 제어합니다. Biome Preset은 하나의 Surface를 정의하고 Material 설정은 전체 외형을 조정하거나 선택한 Biome ID에 Live Effect를 추가합니다. 같은 Material이 DPT Scatter Wind와 Live Scatter Response도 구동할 수 있습니다.</p><p>하나의 Terrain Surface를 수정하려면 Biome Inspector를 사용합니다. Grass, Flower, Pebble, Mushroom 또는 Custom Mesh 배치는 <a href="scatter-system.html">3D Scatter 가이드</a>에서 설정합니다. Terrain 전체의 Normal Detail을 약하게 하거나 Wind Direction을 바꾸거나 먼 거리 Variation을 줄이거나 선택한 Biome ID와 그 Scatter에 Animated Effect를 적용하려면 Material을 사용합니다.</p></div>
 <h2 id="setup">올바른 Material을 찾고 안전하게 시작하기</h2>
 <ol><li>Terrain의 MeshRenderer를 선택하고 지정된 Material을 엽니다.</li><li>Terrain Atlas Workflow에서는 전용 <strong>SH_DPT_VCTerrain</strong> Shader를 사용하는지 확인합니다. 제공되는 Terrain Material은 DPT_VCTerrain_Mat입니다.</li><li>Compile된 Colour-ramp Atlas, Detail Texture Array 및 Biome Count가 의도한 Library에서 온 것인지 확인합니다. Terrain Tool의 Texture Compile Workflow로 갱신합니다.</li><li>대표적인 Surface 몇 개가 포함된 작은 Test Area를 페인트합니다.</li><li>일반적인 Global Multiplier는 1 근처에서 시작합니다. Control 하나만 바꾸고 Test Area를 비교한 뒤 도움이 되지 않으면 이전 값으로 되돌립니다.</li><li>이 Terrain에 독립적인 설정이 필요하다면 큰 변경 전에 별도 Material을 사용하거나 Make Standalone Copy를 실행합니다.</li></ol>
 <p>전용 Inspector가 Terrain Surface Setup을 자동으로 활성화합니다. 생성된 Atlas, Array 및 Biome Count는 Library Workflow에서 서로 연결된 Output입니다. 하나만 임의로 바꾸면 Material 입력끼리 맞지 않을 수 있습니다.</p>
@@ -30,7 +30,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Mesh의 River Channel을 실제로 더 깊게 만들고 싶습니다</td><td>Terrain의 Geometry/Path Tool을 사용합니다. Parallax와 Flow는 물리적인 Channel을 만들지 않습니다.</td></tr>
 <tr><td>먼 거리 Texture Pattern이 너무 복잡합니다</td><td>Quality Fade, Anti-Tiling 설정 및 Texture Scale을 조정합니다.</td></tr>
 </tbody></table></div>
-
 <h2 id="global-surface">Global Surface 설정</h2>
 <p>이 Control은 Terrain의 Surface Rendering에 영향을 줍니다. 최종 결과는 Biome 자체 설정과 Compile된 Map에도 의존합니다. Neutral Multiplier라고 해서 Source Surface 자체가 Neutral한 것은 아닙니다.</p>
 <div class="table-wrap"><table><thead><tr><th>Control</th><th>값을 올렸을 때</th><th>낮춰야 할 때</th></tr></thead><tbody>
@@ -44,12 +43,10 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Parallax Extrusion</td><td>Texture Detail의 돌출/함몰 Depth 착시가 강해집니다.</td><td>낮은 Viewing Angle에서 Relief가 왜곡될 때. 0은 해당 Parallax 기여를 우회합니다. Terrain Vertex와 Collider는 움직이지 않습니다.</td></tr>
 </tbody></table></div>
 <div class="example"><p><strong>Terrain 전체가 너무 복잡해 보인다면:</strong> 먼저 Global Normal Strength를 조금 낮추고 Game Camera에서 Parallax를 확인한 뒤 Texture Tiling을 확인합니다. 모든 Biome 설정을 바로 낮추지 마십시오. Material 수준의 조정만으로 충분할 수 있습니다.</p></div>
-
 <p>Packed PBR Texture의 Blue Channel에 저장된 Height는 <a href="biomes.html#packed-height">Biome Mapping Dropdown에서 MRAO + Height (B)</a>를 선택한 뒤 Auto Generate에 포함시킵니다. 일반 MRAO는 B를 무시합니다. Compile 시 기존 Generated Detail Texture가 우선하며 Height/Parallax는 Texture Relief만 바꾸고 Terrain Geometry는 변경하지 않습니다.</p>
 <p>내장 Scatter에서는 <a href="scatter-system.html#variants">Mesh Variant</a>에서 <strong>Smoothness</strong>, <strong>Metallic</strong>, <strong>Emissive</strong>를 설정합니다. 생성 Mesh는 UV3 Metallic/Packed Roughness와 Vertex-alpha Emission Data를 제공합니다. 호환 Material이 이 값을 Decode하며 Global Emission Control도 결과에 영향을 줄 수 있습니다.</p>
 <p>가파른 Extruded Wall에서는 Terrain Sampler가 Interpolated Smooth Normal 때문에 Texture Projection이 무너지는 현상을 방지합니다. Bevel은 Edge Shape를 바꾸고 Smooth Brush는 Geometry를 바꿉니다. 둘 다 늘어난 Projection Line을 숨기기 위해 필요한 기능은 아닙니다. 오래된 Material에서 문제가 남는다면 현재 Terrain Shader Graph와 Ground Sampler를 사용하는지 확인하고 Projection 및 Normal 설정을 점검하십시오.</p>
-
-<h2 id="wind">Scatter Mesh용 Wind 설정</h2>
+<h2 id="wind">Scatter Mesh용 Wind 설정</h2><p>플레이어가 다가올 때 잔디가 휘어지는 효과는 별도의 <a href="player-collision.html#quick-start">Player Interaction 설정 가이드</a>를 참고하십시오. Wind가 없어도 작동하며, 호환되는 동일한 Scatter Group에서 두 기능을 함께 사용할 수 있습니다.</p>
 <p>Wind Foldout은 Wind가 활성화된 Scatter Mesh가 공유하는 Wind 값을 제어합니다. Scatter Object는 <a href="scatter-system.html#placement">3D Scatter</a> 설정에서 Wind 사용 여부를 선택합니다. Scatter Object에서 Wind를 끄면 해당 Object는 Wind Feature Path를 사용하지 않으며 추가 Wind Culling Padding도 필요하지 않습니다.</p>
 <div class="table-wrap"><table><thead><tr><th>Control</th><th>의미</th><th>조정 방법</th></tr></thead><tbody>
 <tr><td>Wind Strength</td><td>Scatter Wind Setup에서 사용하는 전체 Displacement Strength입니다.</td><td>낮게 시작하고 Mesh Base와 Tip을 함께 확인하며 올립니다. 큰 값에서는 Animated Geometry가 너무 일찍 Cull되지 않도록 Scatter Settings의 Wind Bounds Padding을 늘려야 할 수 있습니다.</td></tr>
@@ -57,7 +54,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Wind Direction</td><td>Compass Heading과 Vertical Pitch에서 만들어지는 Normalized 3D Direction입니다.</td><td>Heading으로 수평 방향을, Pitch로 위/아래 움직임을 설정합니다. 공유 Material 값이므로 같은 Material을 사용하는 모든 호환 Wind Scatter가 반응할 수 있습니다.</td></tr>
 </tbody></table></div>
 <div class="callout"><p><strong>Height To Tip은 Mesh Scale Control이 아닙니다.</strong> Object-space Height가 Wind Mask로 변환되는 방식만 바꿉니다. Mesh 자체 크기가 잘못됐다면 Scatter Object의 Scale Min / Max를 변경하십시오.</p></div>
-
 <h2 id="distance-fades">품질 Fade 설정</h2>
 <p>Parallax, Anti-Tiling, Seam Blend 및 Normal Fade Control은 Detail이 화면에서 작아질수록 각 효과를 줄입니다. 먼 거리 Visual Noise를 줄이고 보기 어려운 Detail에 드는 비용도 낮출 수 있습니다.</p>
 <p><strong>Label에 “Distance”라고 되어 있어도 정확한 Meter Cutoff가 아니라 Fade Scale로 생각하십시오.</strong> Shader는 Surface Detail이 한 Screen Pixel에서 차지하는 크기에도 반응합니다. Camera FOV, Display Resolution 및 View Angle에 따라 Fade가 눈에 띄는 위치가 달라질 수 있습니다.</p>
@@ -68,7 +64,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Normal Fade Distance</td><td>세밀한 Normal-map Lighting Detail.</td><td>먼 Surface가 Shimmer하거나 Grainy해 보이면 낮추고 중요한 Detail이 너무 빨리 사라지면 올립니다.</td></tr>
 </tbody></table></div>
 <p>매우 작거나 0인 Fade Scale은 해당 기여를 제거하거나 크게 제한합니다. 실제 Game Camera의 일반 Resolution과 FOV에서 판단하십시오. 유지하려는 Detail에 맞춰 Biome Strength와 Global Strength도 일관되게 설정합니다.</p>
-
 <h2 id="anti-tiling">반복 Texture 줄이기</h2>
 <p>Anti-Tiling은 넓은 영역에서 같은 Texture 반복이 눈에 덜 띄도록 Variation을 추가합니다. 먼저 <strong>해당 Biome의 Anti-Tiling</strong>을 활성화하거나 높입니다. Material Control은 그 Variation의 형태를 조정하며 Biome의 Anti-Tiling 기여가 0이면 의도한 효과가 나타나지 않습니다.</p>
 <div class="table-wrap"><table><thead><tr><th>Control</th><th>의미</th><th>권장 접근</th></tr></thead><tbody>
@@ -78,7 +73,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Brightness Contrast</td><td>Brightness Variation의 강도입니다.</td><td>조금씩 올립니다. 너무 강하면 페인트 얼룩처럼 보이거나 원래 Material이 가려질 수 있습니다.</td></tr>
 </tbody></table></div>
 <p>Source Texture의 눈에 띄는 Landmark와 Tiling Scale도 확인하십시오. Anti-Tiling은 적절한 Source와 절제된 Variation에서 가장 잘 작동합니다. 의도적인 Stripe, Grain Direction 또는 Flowing Channel에는 Pattern과 충돌한다면 Variation을 줄이십시오.</p>
-
 <h2 id="live-biomes">Live Biome Modifier: 선택 Surface와 Scatter 변경하기</h2>
 <p>Live/Dynamic Biomes를 활성화하면 네 개의 Modifier Slot을 사용할 수 있습니다. 각 Slot은 최대 세 개의 Biome ID를 대상으로 하는 Material Adjustment 그룹입니다. Mesh를 다시 페인트하거나 Scatter Placement를 Rebuild하지 않고도 상대 Blend Weight, Surface Property, Flow, Dusting 및 해당 Biome ID가 소유한 Scatter의 Live Response를 바꿀 수 있습니다.</p>
 <ol><li>Biome Library에서 현재 Numeric ID를 확인합니다.</li><li>Master Live-biome Switch를 활성화합니다.</li><li>Slot 하나를 활성화하고 Target Count와 ID를 설정합니다.</li><li>처음에는 Weight Multiplier와 Surface Multiplier를 1로 둡니다.</li><li>한 값만 변경하고 Pure Patch와 해당 Biome이 다른 Surface와 섞이는 Border를 모두 확인합니다.</li></ol>
@@ -94,24 +88,40 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Scatter Colour Multiplier</td><td>Target Biome ID의 Generated Scatter Colour를 곱합니다.</td><td>White가 Neutral입니다. Frost/Snow Response에는 옅고 차가운 HDR Multiplier를 사용할 수 있습니다. Terrain Biome Colour 자체는 바뀌지 않습니다.</td></tr>
 </tbody></table></div>
 <p>네 Slot 모두 동일한 Scatter Response 규칙을 사용합니다. <strong>Scatter Density 1</strong>과 <strong>HDR Intensity 0의 White Scatter Colour Multiplier</strong>가 Slot 1을 포함한 Neutral 값입니다. Terrain Dusting은 Scatter Tint와 별개입니다. 예상치 못한 색상이 있으면 Multiplier뿐 아니라 겹치는 Slot Target과 Shader의 Scatter Input도 확인하십시오.</p>
-
 <h3>Weight 변경으로 할 수 있는 것과 없는 것</h3>
 <p>50% Grass와 50% Rock으로 페인트된 Border를 생각해 보십시오. Rock Multiplier를 2로 설정하면 Normalize되기 전 Rock 기여도가 두 배가 되어 Border가 Rock 쪽으로 기울어집니다. Rock Weight가 전혀 없는 Pure Grass 영역은 Rock Multiplier를 올려도 Rock으로 바뀌지 않습니다.</p>
 <p>Weight는 Terrain에 이미 존재하는 Blend를 변경합니다. 새로운 Terrain Height를 만들거나 Shoreline을 이동시키거나 Depression을 Water Volume으로 채우지 않습니다. Pure Patch에서 유일한 Biome 기여도를 제거하는 것도 새 Surface를 만드는 유용한 방법이 아닙니다. 먼저 대체 Surface를 페인트하십시오.</p>
 <p>첫 Setup에서는 각 Biome을 하나의 Slot에서만 Target으로 지정하십시오. 겹치는 Slot Target은 Weight, Surface 및 Scatter Response가 함께 적용되어 결과를 예측하기 어렵게 만들 수 있습니다. 결과가 혼란스럽다면 Slot을 하나씩 비활성화하십시오.</p><p>Scatter Response는 각 Scatter Instance의 Owning Biome ID에 연결됩니다. 하나의 재사용 가능한 Scatter Object가 여러 Biome을 Target으로 해도 각 Target에서 만들어진 Instance는 해당 Biome의 Live Slot에 독립적으로 반응할 수 있습니다. <a href="scatter-system.html#live-response">3D Scatter 가이드의 Live Biome Response</a>를 참고하십시오.</p>
-
-<h2 id="flow">Surface Flow 애니메이션</h2>
-<p>Flow는 Target Surface의 외형을 시간에 따라 움직입니다. River-like Material, Lava 또는 기타 Moving Detail에 유용합니다. Vertex, Particle 또는 Character를 움직이지 않으며 Water Simulation을 제공하지 않습니다.</p>
-<div class="table-wrap"><table><thead><tr><th>Control</th><th>의미</th><th>예</th></tr></thead><tbody>
-<tr><td>Enable Flow</td><td>Slot의 Target Biome에 Animation을 활성화합니다.</td><td>페인트한 River Surface의 ID를 Target으로 지정합니다.</td></tr>
-<tr><td>Direction / heading</td><td>Surface Texture Coordinate Space에서의 Direction입니다.</td><td>0°는 +U, 90°는 +V, 180°는 −U, 270°는 −V입니다. Compass 설명은 Texture Direction 참고용이며 모든 Mesh에서 실제 지리 방향을 보장하지 않습니다.</td></tr>
-<tr><td>Flow Speed: −1–1</td><td>Texture Animation 속도입니다.</td><td>0은 정지, 음수는 반대 방향입니다. Meter/Second 단위의 물리 속도가 아닙니다.</td></tr>
-<tr><td>Back and Forth</td><td>계속 한 방향으로 흐르는 대신 왕복 움직임을 만듭니다.</td><td>Tide-like 또는 부드럽게 흔들리는 Surface에 시험합니다.</td></tr>
-<tr><td>Waterfall Projection</td><td>Material의 Waterfall-oriented Projection을 사용합니다.</td><td>적합한 Geometry에서 아래로 흐르는 효과에 유용합니다. World-up Convention을 사용하므로 Curved World 또는 다른 Orientation에서는 확인이 필요합니다.</td></tr>
+<h2 id="flow">강, 호수 및 폭포 표면 애니메이션</h2>
+<p>물로 페인트한 바이옴을 대상으로 하는 Live Slot에서 <strong>Enable Flow</strong>를 활성화한 다음 <strong>Flow Mode</strong>를 선택합니다. 이 모드는 Terrain Mesh를 움직이거나 물리적인 Water Simulation을 수행하는 대신 Surface Detail을 애니메이션합니다. 물이 다른 표면에 부딪히는 지점에는 <a href="#waterfall-effects">물보라 파티클</a>을 별도로 추가합니다.</p>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>의미</th><th>권장 설정 방법</th></tr></thead><tbody>
+<tr><td>Enable Flow</td><td>Slot이 대상으로 지정한 Biome ID의 표면 애니메이션을 활성화합니다.</td><td>Live Biome Master Switch를 켜고 해당 Slot을 Active로 설정합니다.</td></tr>
+<tr><td>Flow Mode: Directional</td><td>설정한 Heading 방향으로 Surface Detail을 연속적으로 흐르게 합니다.</td><td>강, 용암 및 아래로 흐르는 폭포 표면에 사용합니다.</td></tr>
+<tr><td>Flow Mode: Back and Forth</td><td>한 방향으로 계속 흐르는 대신 앞뒤로 왕복합니다.</td><td>의도적인 밀물 또는 파도 움직임에 사용합니다. 잔잔하게 겹치는 잔물결에는 Lake를 선택합니다.</td></tr>
+<tr><td>Flow Mode: Lake</td><td>파도의 강도를 일정하게 유지하면서 부드러운 잔물결 움직임을 겹칩니다.</td><td>한 방향으로 계속 흐르는 것처럼 보이면 안 되는 호수와 연못에 사용합니다.</td></tr>
+<tr><td>Compass Heading</td><td>Texture Space 기준 방향으로, 0°는 +U, 90°는 +V, 180°는 −U, 270°는 −V입니다.</td><td>Directional에서는 강의 흐름에 맞춥니다. Lake에서는 강물의 흐름이 아닌 잔물결 패턴의 방향을 지정합니다.</td></tr>
+<tr><td>Flow Speed / Ripple Speed: −1–1</td><td>Surface Animation의 속도입니다. Lake Mode에서는 Label이 Ripple Speed로 바뀝니다.</td><td>0이면 멈추고 음수이면 방향이 반전됩니다. 초당 미터 단위의 실제 물리 속도가 아닙니다.</td></tr>
+<tr><td>Waterfall Projection</td><td>가파른 표면에 특수한 World-up Projection을 사용합니다.</td><td>적절한 폭포 Geometry에서 Directional Flow와 함께 사용합니다. Lake는 이 설정을 무시하며 Control도 비활성화합니다. Curved Terrain과 Planetoid에서 결과를 확인하십시오.</td></tr>
 </tbody></table></div>
-<p>Anti-Tiling 활성/비활성 상태를 비교하십시오. 강한 Rotation Variation은 의도한 Flow Direction과 충돌할 수 있습니다. Demo Controller는 각 Slot의 Waterfall Projection을 노출하며 Material Setting을 Pull/Push할 때도 이를 유지합니다.</p>
-
-<h2 id="dusting">페인트한 Mask로 눈 또는 먼지 추가하기</h2>
+<p>Anti-Tiling을 켰을 때와 껐을 때의 애니메이션을 비교하십시오. Rotation Variation이 강하면 의도한 Flow Direction과 충돌할 수 있습니다.</p>
+<h3 id="lake-water">호수 또는 연못 설정하기</h3>
+<ol><li>적절한 Texture, Scale, Colour Ramp 및 Smoothness로 물 바이옴을 페인트합니다.</li><li>해당 물 바이옴을 Target으로 설정한 Live Modifier Slot을 활성화합니다.</li><li>Enable Flow를 켜고 <strong>Flow Mode → Lake</strong>를 선택합니다.</li><li>낮은 <strong>Ripple Speed</strong>에서 시작하고 Compass Heading으로 패턴의 방향을 조정합니다.</li><li>Game Camera에서 결과를 확인합니다. 수면을 멈추려면 Ripple Speed를 0으로 설정합니다.</li></ol>
+<p>Lake Mode는 표면 전체를 한 방향으로 미끄러뜨리거나 파도의 강도를 반복적으로 높였다 낮추는 대신 여러 잔물결 움직임을 겹칩니다. Speed는 움직임의 빠르기만 제어하며 Mesh Wave, Water Height, Buoyancy 또는 Collision은 변경하지 않습니다.</p>
+<div class="callout"><p><strong>하나의 Slot은 모든 Target에 동일한 Flow Mode를 적용합니다.</strong> 호수와 강의 움직임을 다르게 하려면 별도의 Water Biome ID로 페인트한 뒤 각각 다른 Live Slot에서 Target으로 지정하십시오. 동일한 Biome ID와 Material을 공유하는 영역은 Flow Setting도 공유합니다. Lake Mode는 기존 네 개의 Slot을 사용하며 Dynamic Biome Slot을 추가하지 않습니다.</p></div>
+<h3>계절 Snapshot의 Water Setting</h3>
+<p><a href="demo-components.html#dynamic-biome-controller">Dynamic Biome Demo Controller</a>는 Slot 설정과 함께 Lake Mode, Back and Forth, Heading, Speed 및 Waterfall Projection을 캡처합니다. 두 Flag가 모두 활성화된 경우 Lake가 Back and Forth보다 우선합니다. 캡처된 설정을 적용할 때 Waterfall Flag도 유지됩니다.</p>
+<p>봄, 겨울 및 건기의 외형을 Profile로 저장한 다음 체크한 Live Modifier Channel을 애니메이션할 수 있습니다. Profile 사이에서 Target Biomes가 변경되면 전환 시작 시 목적지 목록이 적용됩니다. 시작 Dusting Strength가 0이거나 Dusting이 비활성화되어 있거나 Slot이 비활성 상태여도 전환 시작 시 목적지 Dusting Biome이 적용됩니다. 따라서 겨울에 물이 Ice로 바뀌거나 폭염에 Sand로 바뀔 때 이전 Overlay를 먼저 증가시킬 필요가 없습니다. <a href="scatter-system.html#seasonal-profiles">계절 Snapshot 규칙</a>을 참고하십시오.</p>
+<p class="back-top"><a href="#top">맨 위로</a></p><p>내장 Particle의 외형은 코드와 수학적 Shader Shape로 생성됩니다. Custom Particle은 지정된 Prefab과 Material의 외형을 사용합니다. Terrain의 Scatter Colour Multiplier, Wind 및 Player Interaction은 호환되는 Scatter Mesh에 영향을 주며 Particle System 자체를 다시 칠하거나 휘게 만들지 않습니다. 각각의 설정은 <a href="scatter-system.html#particles">Scatter Particle 설정</a>과 <a href="player-collision.html">플레이어 충돌 및 Scatter 상호작용 가이드</a>를 참고하십시오.</p>
+<p>Scatter Group은 <strong>Meshes</strong>, <strong>Particles</strong> 또는 <strong>Both</strong>를 출력으로 사용할 수 있습니다. Particle Effect는 소속 Biome의 Live Strength와 Scatter Density를 사용하여 새 Emission량을 조정하지만 Static Scatter는 이러한 Live Modifier를 무시합니다. Emission이 중단된 뒤 Particle이 남아 있는 시간은 Procedural Preset의 Lifetime 또는 Custom Prefab의 Start Lifetime으로 결정됩니다.</p>
+<p>플레이어가 움직여 건드린 Grass에서 Particle을 발생시키려면 해당 Scatter Object의 Particle Effect 설정을 열고 <a href="scatter-system.html#particle-presets">Particle Preset</a>을 선택한 다음 Emission Trigger를 <strong>Player Movement</strong>로 설정합니다. 이는 움직이는 Scatter Interactor에 반응하는 것으로 Material Wind는 Emission을 트리거하지 않습니다.</p>
+<h3 id="particle-response">파티클과 Live Biome 변화</h3>
+<p>Follow Flow Speed는 실제 충격을 측정하지 않고 Full Emission Speed에 대한 Texture Speed 절댓값을 사용합니다. Procedural Waterfall Splash Preset은 물방울과 Mist Child System을 생성하고 Particle Budget을 공유합니다. 내장 Effect는 Prefab, Particle Material 또는 Sprite 지정이 필요하지 않습니다. 직접 제작한 Prefab을 사용하려면 Custom을 선택하십시오. <a href="scatter-system.html#waterfall-splash">물보라 설정 전체</a>를 참고하십시오.</p>
+<p>Live Water와 연결하려면 <strong>Follow Live Biome</strong>을 활성화하고 <strong>Terrain Material</strong>과 물의 <strong>Biome ID</strong>를 지정합니다. 필요하면 <strong>Follow Flow Speed</strong>도 활성화합니다. Live Strength와 Scatter Density가 새 Emission량을 조정합니다. Flow 연결도 흐름이 느려지면 Emission을 줄이며 흐름이 멈추거나 Lake Mode로 바뀌면 새 물보라 Emission을 중단합니다. 기존 Particle은 자연스럽게 수명을 마칩니다.</p>
+<p>편집 중 효과를 보려면 <strong>Preview Particles</strong>를 활성화합니다. Particle Distance와 Particle Limit으로 성능 부담을 조정하십시오. Emitter는 수동으로 배치해야 하며 폭포의 바닥을 자동으로 찾지 않습니다.</p>
+<p><strong>Waterfall Projection</strong>은 움직이는 Surface의 외형을 담당합니다. 물방울과 안개를 만들려면 폭포 밑의 GameObject에 <strong>DPT_WaterfallSplashEmitter</strong>를 추가합니다. Particle Preset에서 Waterfall Splash를 선택하고 Splash Width와 Splash Depth로 충돌 구역을 맞춘 다음 Spray Direction과 Emission Rate를 조정합니다.</p>
+<p>플레이어가 물 위를 이동할 때 발생하는 물보라는 지속적으로 Emission하는 폭포 Component 대신 <a href="player-collision.html#surface-effects">Player Surface Effects</a>를 사용합니다. 물 바이옴과 Water Splash Preset을 지정하십시오. 베이크한 Surface Lookup은 Live Dusting으로 표면이 얼음으로 바뀌면 다른 효과를 선택할 수도 있습니다.</p>
+<div class="callout"><p><strong>물 파티클에는 두 가지 용도가 있습니다.</strong> 캐릭터가 물을 통과해 달릴 때는 <strong>Water Splash</strong> Preset을 사용하는 <a href="player-collision.html#surface-effects">Player Surface Effects</a>를 선택합니다. 폭포 아래에서 충돌 효과를 지속적으로 발생시키려면 <strong>Waterfall Splash</strong>를 사용하는 <strong>DPT_WaterfallSplashEmitter</strong>를 선택합니다.</p><p>Component Inspector 상단에는 <strong>Particle Preset</strong> Dropdown이 있습니다. 안개만 필요하면 <strong>Mist</strong>를 선택하고 자체 효과를 사용하려면 <strong>Custom</strong>을 선택하여 Particle Prefab 필드를 표시합니다. <strong>Preview Particles</strong>, <strong>Follow Live Biome</strong> 및 <strong>Follow Flow Speed</strong>는 Highlight Button이며 파란색이면 활성화된 상태입니다.</p></div>
+<h2 id="waterfall-effects">폭포 물보라와 안개 추가하기</h2><h2 id="dusting">페인트한 Mask로 눈 또는 먼지 추가하기</h2>
 <p><strong>Dusting과 Pulsing Emission은 같은 Vertex에서 함께 사용할 수 없습니다.</strong> 해당 영역에서는 하나를 선택하고 Dusting을 사용할 때 Biome Pulse를 비활성화하십시오. <a href="#faq">FAQ</a>를 참고하십시오.</p>
 <p>Dusting은 하나의 Biome을 다른 Biome 위에 Overlay합니다. 결과는 <strong>Dusting Mask를 페인트한 위치</strong>, <strong>Slot이 Target으로 지정한 Base Biome</strong>, <strong>Slope Threshold를 통과한 Surface</strong>의 세 조건을 조합합니다. Material Effect를 켠다고 Mask가 없는 모든 Surface를 덮지는 않습니다.</p>
 <ol><li>Snow 같은 Overlay Biome을 만들거나 선택합니다. 해당 ID와 이를 받아야 할 Ground Surface ID를 확인합니다.</li><li>Terrain에서 Dusting Tool을 사용해 Overlay가 허용되는 영역을 페인트하거나 Fill합니다.</li><li>Live Biomes를 활성화하고 Base Ground ID를 Target으로 하는 Material Slot을 활성화합니다.</li><li>해당 Slot의 Dusting Layer를 활성화하고 Dusting Biome ID를 Snow/Dust Preset으로 설정합니다.</li><li>중간 Strength와 낮은 Slope Threshold에서 시작합니다. Mask된 평평한 Upward-facing Patch를 먼저 확인합니다.</li><li>Slope Threshold를 올려 더 평평하고 위를 향한 영역으로 제한합니다. Strength로 허용된 Overlay의 양을 조정합니다.</li></ol>
@@ -122,7 +132,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 </tbody></table></div>
 <p>Dusting은 World-up Facing을 사용합니다. Planet의 옆면은 중심에서 바깥쪽을 향하더라도 자동으로 “Up”으로 취급되지 않습니다. 이 차이가 중요하다면 Object 전체 둘레에서 규칙을 확인하십시오.</p>
 <p>Overlay는 외형만 바꿉니다. Snow Mesh를 만들거나 Collision을 높이거나 자동으로 Slippery Physics를 만들지 않습니다. Gameplay Surface Query는 간소화된 Dusting Rule을 사용하므로 Shader의 Painted-mask 결과를 정확히 재현하지 않습니다. Gameplay에서 반환된 ID를 사용하기 전에 <a href="demo-components.html#query-limits">Query Accuracy</a>를 확인하십시오.</p>
-
 <h2 id="workflows">세 가지 실용적인 Material Workflow</h2>
 <h3>선택한 Ground를 젖어 보이게 만들기</h3>
 <ol><li>Ground를 페인트하고 일반 Biome 외형을 확인합니다.</li><li>해당 Ground ID를 Target으로 하는 Live Slot을 활성화합니다.</li><li>Distribution 대신 Material Response를 바꾸려면 Weight Multiplier를 1로 유지합니다.</li><li>Smoothness를 조금씩 올립니다. 더 어두운 Base Look도 필요하다면 Source Biome을 Duplicate한 뒤 Colour를 조정합니다.</li><li>Scene Lighting 아래에서 Highlight를 확인합니다. 이것은 젖어 보이는 Surface Effect일 뿐 Puddle과 Rain Behavior는 별도 Setup이 필요합니다.</li></ol>
@@ -130,7 +139,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <ol><li>실제 Bed가 필요하면 Path Tool로 Channel을 만듭니다.</li><li>폭에 맞는 Texture와 Scale을 사용해 River Surface를 페인트합니다.</li><li>하나의 Active Live Slot에서 해당 Biome을 Target으로 지정하고 Flow를 활성화합니다.</li><li>낮은 Speed부터 시작해 Detail이 의도한 경로를 따라 움직일 때까지 Heading을 바꿉니다.</li><li>Bend와 Projection 변화를 확인합니다. Scene에 전용 Water Geometry 또는 Gameplay Behavior가 필요하면 별도로 추가하십시오.</li></ol>
 <h3>계절 Snow Overlay와 Scatter를 함께 Fade하기</h3>
 <ol><li>Dusting Mask를 페인트하고 Base Target, Snow ID 및 Slope Threshold를 설정합니다.</li><li>관련 Grass 또는 Flower Scatter Object가 동일한 Base Biome ID를 Target으로 하는지 확인합니다.</li><li>Dusting Strength를 0과 1 근처에서, Scatter Density를 1과 0 근처에서, Scatter Colour Multiplier를 White와 옅고 차가운 Tint로 시험합니다.</li><li>자체 Controller에서 값을 Animate하거나 Demo의 Snow Cycle을 사용해 Terrain/Scatter가 연결된 Transition을 확인합니다.</li><li>Shared-material Scope를 확인해 의도한 Terrain Group만 변경되는지 확인합니다.</li><li>Footstep 또는 Surface Effect도 변경한다면 Runtime Tester를 Visual Result와 비교합니다. Scatter Visibility는 Baked Gameplay Surface Query를 변경하지 않습니다.</li></ol>
-
 <h2 id="faq">자주 묻는 질문</h2>
 <h3>Stylized Lighting을 켜면 Material이 너무 어두운 이유는 무엇인가요?</h3>
 <p><strong>Stylized Lighting</strong>에서는 AO가 Shadow로 취급되므로 강한 Occlusion이 Material을 훨씬 어둡게 만들 수 있습니다. Biome의 <strong>AO Strength</strong> 또는 Material의 <strong>Surface AO Strength</strong>를 낮춰 보십시오. Height 해석이 반대로 되어 있다면 Biome Inspector에서 <strong>Invert Height</strong>를 시험하고 필요에 따라 Detail을 다시 생성합니다. Library 전체를 바꾸기 전에 같은 Lighting에서 작은 Patch를 비교하십시오.</p>
@@ -138,7 +146,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <p><strong>Pulsing Emission과 Dusting은 서로 호환되지 않습니다.</strong> 하나의 Vertex 또는 Patch는 한 번에 하나의 Active Effect Layer만 가질 수 있습니다. 같은 영역에서는 <strong>Pulse</strong> 또는 <strong>Dusting</strong> 중 하나를 선택하십시오. Dusting을 사용할 Biome에서는 Pulse를 끄고 두 Effect가 같은 Vertex에서 공존할 것으로 기대하지 마십시오.</p>
 <h3>Terrain이 이동하거나 회전하면 Seam Blend가 움직이는 이유는 무엇인가요?</h3>
 <p><strong>Seam Blending은 World-oriented</strong>이므로 Object가 이동하거나 회전할 때 Projection Blend가 Object에 고정되어 따라가지 않습니다. Orbit 또는 회전 Planet에서는 특히 눈에 띌 수 있습니다. Material의 <strong>Seam Blend Fade Distance</strong>를 낮춰 Effect가 더 일찍 Fade하도록 하면 Game Camera에서 불일치가 덜 보입니다. 필요하면 0으로 비활성화할 수 있습니다. 이는 눈에 보이는 문제를 줄일 뿐 Blend가 Object를 따라가게 만들지는 않습니다.</p>
-
 <h2 id="troubleshooting">Material 효과가 없거나 잘못 보일 때</h2>
 <div class="table-wrap"><table><thead><tr><th>증상</th><th>이 순서로 확인</th></tr></thead><tbody>
 <tr><td>Material을 편집해도 아무것도 바뀌지 않습니다</td><td>선택한 Renderer가 해당 Material과 올바른 Terrain Shader를 사용하는지 확인합니다. Controller가 설정을 덮어쓰는지도 확인하십시오.</td></tr>
@@ -146,7 +153,7 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Live Slot이 효과가 없습니다</td><td>Master Switch, Active, Target Count 및 ID를 확인합니다. Weight 변경은 해당 Biome이 이미 페인트된 영역에 기여해야 합니다. Override는 Source Data와 Global Setting도 확인하십시오.</td></tr>
 <tr><td>Snow가 나타나지 않습니다</td><td>페인트한 Dusting Mask, Base Target ID, Overlay ID, Enable Switch, Strength 및 Slope Threshold를 확인합니다. Mask된 Upward-facing Flat Area에서 먼저 시험하십시오.</td></tr>
 <tr><td>Flow 방향이 잘못되었습니다</td><td>Texture-space Heading을 조정하거나 Speed 부호를 반대로 합니다. Projection 변경과 Anti-Tiling Rotation도 확인하십시오. Heading이 World North를 보장하지는 않습니다.</td></tr>
-<tr><td>Waterfall Projection이 계속 꺼집니다</td><td>해당 Demo-controller Slot의 Waterfall Projection 설정과 다른 Controller가 Material을 덮어쓰는지 확인합니다. Pull Settings From Material은 변경을 Push하기 전에 현재 Flag를 가져옵니다.</td></tr>
+<tr><td>Waterfall Projection을 조정할 수 없습니다</td><td>Flow Mode를 확인하십시오. Lake는 Waterfall Projection을 무시하고 Control을 비활성화합니다. 폭포에는 Directional을 사용하십시오. 현재 Demo Snapshot은 Waterfall Flag를 캡처하고 유지합니다.</td></tr><tr><td>호수가 한 방향으로 흐르는 것처럼 보입니다</td><td>Flow Mode → Lake를 선택하고 Ripple Speed를 조정하십시오. 활성 Demo Profile이 Directional 또는 Back and Forth 설정을 적용하고 있지 않은지 확인하십시오.</td></tr><tr><td>연결된 물보라 또는 Scatter Particle이 발생하지 않습니다</td><td>Particle Preset 선택, Custom 사용 시 Prefab 지정, Camera Distance, 편집 중 Preview Particles, Live Strength 및 Scatter Density를 확인하십시오.</td></tr>
 <tr><td>Terrain은 가까이서 맞지만 멀리서 달라집니다</td><td>Quality Fade Scale, Mipmap 및 Camera 설정을 확인합니다. Fade Label은 정확한 Meter Distance가 아닙니다.</td></tr>
 <tr><td>Seam Blend를 최대로 해도 Tile Crack이 보입니다</td><td>Geometry와 Tile Join을 확인합니다. Seam Blend는 Texture Projection Transition을 바꾸며 Mesh Connectivity를 바꾸지 않습니다.</td></tr>
 <tr><td>Shader Query에서는 Snow인데 화면에서는 보이지 않습니다</td><td>Gameplay Query를 말하는 것이라면 Runtime Dusting Test에 Painted Mask가 포함되지 않는다는 점을 기억하십시오. Pixel Sample이 아니라 근사치입니다.</td></tr>

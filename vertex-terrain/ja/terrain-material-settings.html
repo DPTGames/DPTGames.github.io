@@ -1,5 +1,6 @@
-<!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="地形全体の見た目、風、ライブバイオーム効果、ランタイムの Scatter Response を設定します。"><link rel="alternate" hreflang="en" href="../terrain-material-settings.html"><link rel="alternate" hreflang="ja" href="terrain-material-settings.html"><link rel="alternate" hreflang="ko" href="../ko/terrain-material-settings.html"><title>地形マテリアル設定 | DPT Games</title><style>
+<!DOCTYPE html>
+
+<html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="地形全体の見た目、風、ライブバイオーム効果、ランタイムの Scatter Response を設定します。" name="description"/><link href="../terrain-material-settings.html" hreflang="en" rel="alternate"/><link href="terrain-material-settings.html" hreflang="ja" rel="alternate"/><link href="../ko/terrain-material-settings.html" hreflang="ko" rel="alternate"/><title>地形マテリアル設定 | DPT Games</title><style>
 :root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
 main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
@@ -14,8 +15,7 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 @media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
 @media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
 </style></head>
-<body><main id="top"><nav class="site-nav" aria-label="ドキュメント"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a href="index.html">Vertex 3D Terrain ガイド</a><a href="biomes.html">バイオームガイド</a><a href="terrain-material-settings.html" aria-current="page">地形マテリアル設定</a><a href="scatter-system.html">3D Scatter ガイド</a><a href="demo-components.html">デモ・ランタイムガイド</a></nav><nav class="language-nav" aria-label="言語"><a href="../terrain-material-settings.html" lang="en" hreflang="en">English</a><a href="terrain-material-settings.html" lang="ja" hreflang="ja" aria-current="page">日本語</a><a href="../ko/terrain-material-settings.html" lang="ko" hreflang="ko">한국어</a></nav><header><h1>地形マテリアル設定</h1><p class="lead">地形全体の見た目を調整し、ライブバイオーム効果を設定します。</p></header><nav class="toc" aria-label="このページの内容"><h2>このページの内容</h2><ul><li><a href="#setup">正しいマテリアルを選んで始める</a></li><li><a href="#global-surface">地表全体の設定</a></li><li><a href="#wind">Scatter Mesh の風設定</a></li><li><a href="#distance-fades">品質フェード</a></li><li><a href="#anti-tiling">繰り返す模様を目立たなくする</a></li><li><a href="#live-biomes">ライブバイオーム：地表と Scatter を変える</a></li><li><a href="#flow">地表の流れをアニメーションする</a></li><li><a href="#dusting">塗ったマスクで雪やほこりを重ねる</a></li><li><a href="#workflows">三つの実用的な設定例</a></li><li><a href="#faq">よくある質問</a></li><li><a href="#troubleshooting">マテリアルの効果が出ない・合わないとき</a></li><li><a href="#support">サポート</a></li></ul></nav><p class="table-hint">小さい画面では、幅の広い表を横にスクロールするとすべての列を読めます。</p><div class="intro"><p>地形マテリアルは、それを使うオブジェクトの最終的な見た目を決めます。バイオームのプリセットは一つの地表を定義し、マテリアルの設定は全体を調整したり、指定した ID にライブ効果を加えたりします。同じマテリアルは、DPT Scatter の風とライブ Scatter Response にも使用できます。</p><p>一つの地表を直すならバイオームインスペクターを使います。Grass、Flower、Pebble、Mushroom、Custom Mesh の配置設定は <a href="scatter-system.html">3D Scatter ガイド</a>を参照してください。地形全体の法線を弱くする、風向きを変える、遠くの変化を減らす、特定のバイオームとその Scatter にライブ効果を加えるなど、広い範囲の変更にはマテリアルを使います。</p></div>
-
+<body><main id="top"><nav aria-label="ドキュメント" class="site-nav"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a href="index.html">Vertex 3D Terrain ガイド</a><a href="biomes.html">バイオームガイド</a><a aria-current="page" href="terrain-material-settings.html">地形マテリアル設定</a><a href="scatter-system.html">3D Scatter ガイド</a><a href="player-collision.html">プレイヤーとの衝突・Scatter インタラクション</a><a href="demo-components.html">デモ・ランタイムガイド</a></nav><nav aria-label="言語" class="language-nav"><a href="../terrain-material-settings.html" hreflang="en" lang="en">English</a><a aria-current="page" href="terrain-material-settings.html" hreflang="ja" lang="ja">日本語</a><a href="../ko/terrain-material-settings.html" hreflang="ko" lang="ko">한국어</a></nav><header><h1>地形マテリアル設定</h1><p class="lead">地形全体の見た目を調整し、ライブバイオーム効果を設定します。</p></header><nav aria-label="このページの内容" class="toc"><h2>このページの内容</h2><ul><li><a href="#setup">正しいマテリアルを選んで始める</a></li><li><a href="#global-surface">地表全体の設定</a></li><li><a href="#wind">Scatter Mesh の風設定</a></li><li><a href="#distance-fades">品質フェード</a></li><li><a href="#anti-tiling">繰り返す模様を目立たなくする</a></li><li><a href="#live-biomes">ライブバイオーム：地表と Scatter を変える</a></li><li><a href="#flow">川・湖・滝の表面をアニメーションする</a></li><li><a href="#lake-water">湖・池を設定する</a></li><li><a href="#waterfall-effects">滝の水しぶきとミストを追加する</a></li><li><a href="#particle-response">パーティクルとライブバイオームの変化</a></li><li><a href="#dusting">塗ったマスクで雪やほこりを重ねる</a></li><li><a href="#workflows">三つの実用的な設定例</a></li><li><a href="#faq">よくある質問</a></li><li><a href="#troubleshooting">マテリアルの効果が出ない・合わないとき</a></li><li><a href="#support">サポート</a></li></ul></nav><p class="table-hint">小さい画面では、幅の広い表を横にスクロールするとすべての列を読めます。</p><div class="intro"><p>地形マテリアルは、それを使うオブジェクトの最終的な見た目を決めます。バイオームのプリセットは一つの地表を定義し、マテリアルの設定は全体を調整したり、指定した ID にライブ効果を加えたりします。同じマテリアルは、DPT Scatter の風とライブ Scatter Response にも使用できます。</p><p>一つの地表を直すならバイオームインスペクターを使います。Grass、Flower、Pebble、Mushroom、Custom Mesh の配置設定は <a href="scatter-system.html">3D Scatter ガイド</a>を参照してください。地形全体の法線を弱くする、風向きを変える、遠くの変化を減らす、特定のバイオームとその Scatter にライブ効果を加えるなど、広い範囲の変更にはマテリアルを使います。</p></div>
 <h2 id="setup">正しいマテリアルを選んで始める</h2>
 <ol><li>地形の MeshRenderer を選び、割り当てたマテリアルを開きます。</li><li>Terrain Atlas では、専用の <strong>SH_DPT_VCTerrain</strong> シェーダーを使っているか確認します。付属マテリアルは DPT_VCTerrain_Mat です。</li><li>生成したカラーランプアトラス、細部テクスチャ配列、バイオーム数が、目的のライブラリのものであることを確認します。更新は地形ツールのテクスチャ生成機能を使います。</li><li>代表的な地表をいくつか含む、小さなテスト範囲を塗ります。</li><li>通常の全体倍率は 1 付近から始めます。一つずつ変更して比較し、改善しなければ前の値に戻します。</li><li>この地形だけの設定が必要なら、大きな変更の前に専用マテリアルを用意するか、Make Standalone Copy を使います。</li></ol>
 <p>専用インスペクターが地形用のサーフェス設定を有効にします。生成アトラス、配列、バイオーム数はライブラリ処理の関連する出力です。一つだけ任意に差し替えると、入力同士が一致しなくなることがあります。</p>
@@ -28,7 +28,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>実際に川床を深くしたい</td><td>地形の形状・パスツール。Parallax や Flow では物理的な水路を作れません。</td></tr>
 <tr><td>遠くの模様が細かすぎる</td><td>品質フェード、Anti-Tiling、テクスチャの Scale。</td></tr>
 </tbody></table></div>
-
 <h2 id="global-surface">地表全体の設定</h2>
 <p>これらの設定は、地形のサーフェス描画に影響します。最終的な効果は、バイオーム自身の設定と生成マップにも依存します。全体の倍率が中立でも、元の地表が中立な設定とは限りません。</p>
 <div class="table-wrap"><table><thead><tr><th>項目</th><th>上げたときの見え方</th><th>下げる場面</th></tr></thead><tbody>
@@ -42,12 +41,10 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Parallax Extrusion</td><td>テクスチャの凹凸による奥行きの錯覚が強くなります。</td><td>浅い視線角で歪むとき。0 はその視差処理を使わなくします。頂点やコライダーは動きません。</td></tr>
 </tbody></table></div>
 <div class="example"><p><strong>地形全体が騒がしく見える場合：</strong>まず全体の法線強度を少し下げ、ゲームカメラから視差を確認し、タイリングを確認します。すぐに全バイオームの設定を下げず、マテリアル側の調整だけで足りるか試してください。</p></div>
-
 <p>パック PBR テクスチャの青チャンネルに保存された Height は、<a href="biomes.html#packed-height">バイオームの Mapping ドロップダウンで MRAO + Height (B)</a> を選び、Auto Generate で取り込みます。通常の MRAO では B は無視されます。Compile 時は既存の Generated Detail テクスチャが優先され、Height / Parallax はテクスチャの凹凸表現を変えるだけで Terrain Geometry は変更しません。</p>
 <p>内蔵 Scatter では、<a href="scatter-system.html#variants">Mesh Variant</a> で <strong>Smoothness</strong>、<strong>Metallic</strong>、<strong>Emissive</strong> を設定します。生成 Mesh は UV3 に Metallic / Packed Roughness、Vertex Alpha に Emission Data を格納します。互換 Material がこれらを Decode し、Global Emission Control も引き続き結果へ影響できます。</p>
 <p>急な Extruded Wall では、Terrain Sampler が Smooth Normal の補間によって Texture Projection が潰れるのを防ぎます。Bevel は Edge Shape を変え、Smooth Brush は Geometry を変えます。どちらも Projection Line の伸びを隠すためだけに必要な操作ではありません。古い Material でまだ線が見える場合は、最新の Terrain Shader Graph と Ground Sampler を使用していることを確認し、Projection と Normal 設定を確認してください。</p>
-
-<h2 id="wind">Scatter Mesh の風設定</h2>
+<h2 id="wind">Scatter Mesh の風設定</h2><p>プレイヤーの接近で草を曲げるには、別の <a href="player-collision.html#quick-start">Player Interaction の設定ガイド</a>を参照してください。Wind を有効にする必要はなく、対応する同じ Scatter Group で両方を併用できます。</p>
 <p>Wind セクションは、Wind を有効にした Scatter Mesh が共有して使用する値を設定します。各 Scatter Object は <a href="scatter-system.html#placement">3D Scatter</a> 側の <strong>Enable Wind</strong> で風に参加します。Wind を無効にした Scatter は Wind Feature Path を使用せず、追加の Wind Bounds Padding も必要ありません。</p>
 <div class="table-wrap"><table><thead><tr><th>項目</th><th>意味</th><th>調整の目安</th></tr></thead><tbody>
 <tr><td>Wind Strength</td><td>Scatter の風変位全体の強さです。</td><td>低い値から始め、Mesh の根元と先端の両方を確認しながら上げます。大きな値では、動いた Geometry が早く Culling されないよう Scatter Settings の Wind Bounds Padding を増やす必要があります。</td></tr>
@@ -55,7 +52,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Wind Direction</td><td>Compass Heading と Vertical Pitch から作られる正規化済みの 3D 方向です。</td><td>Heading で水平の向き、Pitch で上向き・下向きの成分を設定します。Material の共有値なので、同じ互換 Material を使う Wind 対応 Scatter が同じ方向を参照できます。</td></tr>
 </tbody></table></div>
 <div class="callout"><p><strong>Height To Tip は Mesh の Scale 設定ではありません。</strong> Object Space 上の高さを Wind Mask に変換する方法だけを変えます。Mesh 自体のサイズを変える場合は Scatter Object の Scale Min / Max を調整してください。</p></div>
-
 <h2 id="distance-fades">品質フェード</h2>
 <p>Parallax、Anti-Tiling、Seam Blend、Normal のフェードは、細部が画面上で小さくなるにつれて、それぞれの効果を弱めます。遠くの見た目を落ち着かせ、見えにくい細部に掛ける処理も減らせます。</p>
 <p><strong>項目名が「Distance」でも、正確なメートル単位の境界ではなく、フェードのスケールとして扱います。</strong>シェーダーは、画面の一画素に収まる地表細部の大きさにも反応します。カメラの視野角、解像度、見る角度によって、フェードが目立ち始める位置は変わります。</p>
@@ -66,7 +62,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Normal Fade Distance</td><td>細かい法線マップの陰影。</td><td>遠くでちらつく・粒状に見えるなら下げ、重要な細部が早く消えるなら上げます。</td></tr>
 </tbody></table></div>
 <p>非常に小さい値や 0 は、該当する効果を除いたり、範囲を大きく制限したりします。通常の解像度・視野角のゲームカメラで判断してください。残したい細部に合わせて、バイオームと全体の強さも調整します。</p>
-
 <h2 id="anti-tiling">繰り返す模様を目立たなくする</h2>
 <p>Anti-Tiling は、広い範囲に同じ画像を繰り返すときの変化を加えます。まず、<strong>対象バイオームの Anti-Tiling</strong> を有効にするか強くします。マテリアルの設定はその変化を調整するもので、バイオーム側が 0 なら期待する効果は出ません。</p>
 <div class="table-wrap"><table><thead><tr><th>項目</th><th>意味</th><th>使い方の目安</th></tr></thead><tbody>
@@ -76,7 +71,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Brightness Contrast</td><td>明るさの変化の強さです。</td><td>徐々に上げます。強すぎると染みのようになり、元の素材が分かりにくくなります。</td></tr>
 </tbody></table></div>
 <p>元画像に目立つ特徴がないか、Scale が適切かも確認します。自然な元画像と控えめな変化が扱いやすい組み合わせです。方向を持つ縞、木目、流れなどでは、模様と競合する変化を弱くします。</p>
-
 <h2 id="live-biomes">ライブバイオーム：選択した地表と Scatter を変える</h2>
 <p>Live/Dynamic Biomes を有効にすると、四つの修正スロットを使えます。一つのスロットは最大三つの ID を対象に、重み、質感、流れ、ダスティングに加え、その ID が所有する Scatter のライブ反応も調整できます。メッシュを塗り直したり Scatter の配置を再構築したりせずに見た目を変えられます。</p>
 <ol><li>ライブラリで現在の ID を確認します。</li><li>ライブバイオーム全体のスイッチを有効にします。</li><li>一つのスロットを有効にし、対象数と ID を指定します。</li><li>最初は Weight Multiplier と質感の倍率を 1 にします。</li><li>一つだけ値を変え、その素材だけの範囲と、別の素材と混ざる境界の両方を確認します。</li></ol>
@@ -90,24 +84,40 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>Emissive：0～10</td><td>発光の倍率です。</td><td>元の発光細部に使います。元の寄与が 0 なら、掛け算では復元できません。</td></tr><tr><td>Scatter Density：0～1</td><td>Target Biome ID が所有する Scatter のライブ密度倍率です。</td><td>1 は Scatter Object 側で設定した量を維持し、0 はそのバイオームの Scatter を非表示にします。通常のライブ変更では配置を再構築せず、Renderer が Submit する Instance 数を変更します。</td></tr><tr><td>Scatter Colour Multiplier</td><td>Target Biome ID が所有する Generated Scatter の色を乗算します。</td><td>White が中立です。霜や雪の表現には淡い寒色の HDR 値を使えます。Terrain のバイオーム色そのものを変更する設定ではありません。</td></tr>
 </tbody></table></div>
 <p>4つの Slot はすべて同じ Scatter Response を使います。<strong>Scatter Density 1</strong> と、<strong>HDR Intensity 0 の White の Scatter Colour Multiplier</strong> が Slot 1 を含めた中立値です。Terrain Dusting と Scatter Tint は別の Path です。意図しない色が出る場合は、重複する Slot Target、Shader の Scatter Input、Multiplier を確認してください。</p>
-
 <h3>重みの変更でできること・できないこと</h3>
 <p>草 50%、岩 50% の境界を考えてみます。岩の倍率を 2 にすると、正規化の前の寄与が倍になり、境界は岩寄りになります。岩の重みがない草だけの場所は、岩の倍率を上げただけでは岩になりません。</p>
 <p>重みが変えるのは、すでに地形にある組み合わせです。地形の高さ、海岸線、水の体積は変わりません。一種類しかない場所で唯一の寄与を消しても、新しい地表を作る方法にはなりません。先に代わりの素材を塗ってください。</p>
 <p>最初は、一つのバイオームを一つのスロットだけで対象にします。対象が重なると、重み、Surface Override、Scatter Response が組み合わさって予測しづらくなります。分かりにくい場合は一つずつ無効にして確認します。</p><p>Scatter Response は、各 Scatter Instance が保持する所有バイオーム ID によって対応付けられます。1つの再利用 Scatter Object が複数のバイオームを Target にしていても、各 Target から生成された Instance は、そのバイオームの Live Slot に独立して反応できます。詳しくは <a href="scatter-system.html#live-response">3D Scatter ガイドのライブバイオーム反応</a>を参照してください。</p>
-
-<h2 id="flow">地表の流れをアニメーションする</h2>
-<p>Flow は、対象地表の見た目を時間とともに動かします。川、溶岩、その他の動く細部に使えます。頂点、パーティクル、キャラクターを動かす機能や、水のシミュレーションではありません。</p>
-<div class="table-wrap"><table><thead><tr><th>項目</th><th>意味</th><th>例</th></tr></thead><tbody>
-<tr><td>Enable Flow</td><td>対象バイオームのアニメーションを有効にします。</td><td>塗った川の ID を対象にします。</td></tr>
-<tr><td>方向・Heading</td><td>地表のテクスチャ座標内の方向です。</td><td>0° は +U、90° は +V、180° は −U、270° は −V です。方角の呼び方は目安で、すべてのメッシュで地理的な方向に一致するとは限りません。</td></tr>
-<tr><td>Flow Speed：−1～1</td><td>テクスチャの動く速さです。</td><td>0 は静止、負の値は逆方向です。メートル毎秒の物理速度ではありません。</td></tr>
-<tr><td>Back and Forth</td><td>一方向に流す代わりに往復させます。</td><td>潮のような、穏やかな変化に試します。</td></tr>
-<tr><td>Waterfall Projection</td><td>マテリアルの滝向けの投影を使います。</td><td>対応する形状で下向きの流れに使います。ワールド上方向を基準にするため、曲面の世界や異なる向きの形状では確認が必要です。</td></tr>
+<h2 id="flow">川・湖・滝の表面をアニメーションする</h2>
+<p>水面として塗ったバイオームを対象にライブスロットで <strong>Enable Flow</strong> を有効にし、<strong>Flow Mode</strong> を選びます。このモードが動かすのは地表テクスチャの細部であり、地形メッシュの移動や水の物理シミュレーションではありません。滝が別の地表に当たる場所には、<a href="#waterfall-effects">水しぶきのパーティクル</a>を別途追加します。</p>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>意味</th><th>使い方の目安</th></tr></thead><tbody>
+<tr><td>Enable Flow</td><td>スロットの対象バイオーム ID の表面アニメーションを有効にします。</td><td>ライブバイオーム全体のスイッチを有効にし、このスロットも Active にします。</td></tr>
+<tr><td>Flow Mode: Directional</td><td>設定した Heading に沿って表面の細部を一定方向に流します。</td><td>川、溶岩、下方向に流れる滝の表現に使用します。</td></tr>
+<tr><td>Flow Mode: Back and Forth</td><td>一方向へ流し続けず、往復させます。</td><td>意図的な押し寄せや潮の満ち引きに使用します。穏やかな波紋の重なりには Lake を選びます。</td></tr>
+<tr><td>Flow Mode: Lake</td><td>強さを一定に保ちながら、穏やかな波紋を複数重ねます。</td><td>一方向へ流れ続けているように見せたくない湖や池に使用します。</td></tr>
+<tr><td>Compass Heading</td><td>テクスチャ空間での向きです。0° は +U、90° は +V、180° は −U、270° は −V に相当します。</td><td>Directional では川の流れに合わせます。Lake では流れの方向ではなく、波紋パターンの向きを決めます。</td></tr>
+<tr><td>Flow Speed / Ripple Speed: −1–1</td><td>表面アニメーションの速さです。Lake モードでは表示名が Ripple Speed に変わります。</td><td>0 は停止、負の値は逆方向です。物理的なメートル毎秒ではありません。</td></tr>
+<tr><td>Waterfall Projection</td><td>急な面に対して、ワールドの上方向を基準とする専用の投影を使用します。</td><td>滝に適した形状と Directional Flow で使用します。Lake では無視され、この項目は無効になります。曲面地形や Planetoid では特に確認してください。</td></tr>
 </tbody></table></div>
-<p>Anti-Tiling の有効・無効を比較します。強い Rotation Variation は、意図した Flow Direction と競合する場合があります。デモコントローラーは各 Slot の Waterfall Projection を公開し、Material Settings を Pull / Push する際にもその値を保持します。</p>
-
-<h2 id="dusting">塗ったマスクで雪やほこりを重ねる</h2>
+<p>Anti-Tiling を有効・無効にして動きを比較してください。回転の変化が強いと、意図した流れの方向と競合することがあります。</p>
+<h3 id="lake-water">湖・池を設定する</h3>
+<ol><li>適切なテクスチャ、Scale、カラーランプ、Smoothness を設定した水のバイオームを塗ります。</li><li>その水のバイオームを対象とするライブモディファイアスロットを有効にします。</li><li>Enable Flow を有効にし、<strong>Flow Mode → Lake</strong> を選びます。</li><li><strong>Ripple Speed</strong> を低い値から始め、Compass Heading でパターンの向きを調整します。</li><li>ゲームカメラから確認します。表面の動きを止めるには Ripple Speed を 0 にします。</li></ol>
+<p>Lake モードは表面全体を一方向に滑らせたり、波の強さを増減させたりせず、複数の波紋の動きを重ねます。Speed が制御するのは動きの速さだけで、メッシュの波、実際の水位、浮力、衝突判定は変わりません。</p>
+<div class="callout"><p><strong>一つのスロットは、すべての対象に一つの Flow Mode を適用します。</strong>湖と川に別の動きを与えるには、水のバイオーム ID を分け、別々のライブスロットで対象にしてください。同じバイオーム ID とマテリアルを共有する領域では Flow 設定も共有されます。Lake は既存の 4 スロットを使い、動的バイオームスロットを追加しません。</p></div>
+<h3>季節スナップショットの水設定</h3>
+<p><a href="demo-components.html#dynamic-biome-controller">Dynamic Biome Demo Controller</a> は、Lake、Back and Forth、Heading、Speed、Waterfall Projection の設定を各スロットと一緒に記録します。両方のフラグが有効な場合は Lake が Back and Forth より優先されます。また、記録した設定を反映するときも Waterfall Projection のフラグが保持されます。</p>
+<p>春、冬、乾季などの見た目をプロファイルとして保存し、チェックしたライブモディファイアのチャンネルをアニメーションできます。プロファイル間で Target Biomes が変わる場合、移行先の一覧は開始時に適用されます。開始時の Dusting Strength が 0 の場合、Dusting が無効の場合、またはスロットが非アクティブな場合も、移行先の Dusting バイオームが開始時に適用されます。これにより、冬は水面を Ice に、熱波では Sand に変化させる場合でも、変更前のオーバーレイを一度増やす必要がありません。<a href="scatter-system.html#seasonal-profiles">季節スナップショットの規則</a>を参照してください。</p>
+<p class="back-top"><a href="#top">ページ先頭へ戻る</a></p><p>内蔵パーティクルの見た目はコードと数学的なシェーダー形状から生成されます。Custom の見た目は指定した Prefab と Material によって決まります。地形の Scatter Colour Multiplier、Wind、Player Interaction は互換 Scatter Mesh に作用し、パーティクルシステム自体の色や曲がり方を変更しません。別々の機能については<a href="scatter-system.html#particles">Scatter パーティクルの設定</a>と<a href="player-collision.html">プレイヤーとの衝突・Scatter インタラクションガイド</a>を参照してください。</p>
+<p>Scatter Group の出力には <strong>Meshes</strong>、<strong>Particles</strong>、<strong>Both</strong> を選べます。パーティクルの新規発生量は、対象バイオームの Live Strength と Scatter Density に応じて変化します。Static Scatter はこれらのライブモディファイアを無視します。発生が停止した後の残存時間は、手続き型プリセットの Lifetime または Custom Prefab の Start Lifetime によって決まります。</p>
+<p>プレイヤーが触れた草からパーティクルを出すには、Scatter Object の Particle Effect を開き、<a href="scatter-system.html#particle-presets">Particle Preset</a> を選んで Emission Trigger を <strong>Player Movement</strong> にします。動く Scatter Interactor に反応するものであり、マテリアルの Wind は発生のトリガーになりません。</p>
+<h3 id="particle-response">パーティクルとライブバイオームの変化</h3>
+<p>Follow Flow Speed は実際の衝撃を測るのではなく、Full Emission Speed に対するテクスチャ速度の絶対値を使用します。手続き生成の Waterfall Splash プリセットは水滴とミストの子システムを生成し、パーティクルの上限を共有します。内蔵エフェクトに Prefab、Particle Material、Sprite の割り当ては不要です。自作の Prefab を使う場合は Custom を選択します。詳しくは<a href="scatter-system.html#waterfall-splash">水しぶきの設定</a>を参照してください。</p>
+<p>ライブの水面と連動させる場合は <strong>Follow Live Biome</strong> を有効にし、<strong>Terrain Material</strong> と水の <strong>Biome ID</strong> を指定します。必要に応じて <strong>Follow Flow Speed</strong> も有効にします。ライブの強さと Scatter Density は新規パーティクルの発生量を調整し、Flow に連動させた場合は流れが遅くなるほど発生量も減ります。流れが停止した場合や Lake モードの場合は新規の水しぶきは停止します。既に発生したパーティクルは自然に消滅します。</p>
+<p>編集中に確認するには <strong>Preview Particles</strong> を有効にします。Particle Distance と Particle Limit で負荷を調整してください。Emitter は手動で配置するもので、滝の底を自動検出しません。</p>
+<p><strong>Waterfall Projection</strong> は表面が流れる見た目を担当します。水滴やミストを出すには、滝の根元の GameObject に <strong>DPT_WaterfallSplashEmitter</strong> を追加します。Particle Preset で Waterfall Splash を選び、Splash Width と Splash Depth で着水範囲を調整してから、Spray Direction と Emission Rate を設定します。</p>
+<p>プレイヤーが水面を移動するときの水しぶきには、常に発生する滝用コンポーネントではなく <a href="player-collision.html#surface-effects">Player Surface Effects</a> を使います。水のバイオームと Water Splash プリセットを指定してください。ベイク済みの地表情報を参照するため、ライブ Dusting によって氷に変わった場合は別の効果も選択できます。</p>
+<div class="callout"><p><strong>水のパーティクルは用途によって二種類あります。</strong>水の中を走るキャラクターの水しぶきには、<strong>Water Splash</strong> プリセットを選んだ <a href="player-collision.html#surface-effects">Player Surface Effects</a> を使用します。滝の落下地点で連続的に発生させるには、<strong>Waterfall Splash</strong> を設定した <strong>DPT_WaterfallSplashEmitter</strong> を使用します。</p><p>コンポーネントのインスペクターには <strong>Particle Preset</strong> のドロップダウンがあります。ミストだけなら <strong>Mist</strong>、自作のエフェクトを使うなら <strong>Custom</strong> を選び、表示される Particle Prefab を指定します。<strong>Preview Particles</strong>、<strong>Follow Live Biome</strong>、<strong>Follow Flow Speed</strong> は強調表示されるボタンで、青色が有効を示します。</p></div>
+<h2 id="waterfall-effects">滝の水しぶきとミストを追加する</h2><h2 id="dusting">塗ったマスクで雪やほこりを重ねる</h2>
 <p><strong>Dusting と Pulsing Emission は同じ頂点では併用できません。</strong>その領域ではどちらか一方を選び、Dusting を使う場合は Biome Pulse を無効にしてください。<a href="#faq">FAQ</a>も参照してください。</p>
 <p>Dusting は、一つのバイオームの上に別のバイオームを重ねます。結果は、<strong>ダスティングマスクを塗った場所</strong>、<strong>スロットの対象となる下地</strong>、<strong>傾斜条件を満たす場所</strong>の組み合わせです。マテリアルの効果を有効にするだけで、未塗装の全面を覆うわけではありません。</p>
 <ol><li>雪などの上に重ねるバイオームを選び、その ID と、受け側の地表の ID を確認します。</li><li>地形の Dusting ツールで、効果を許可する場所を塗るか塗りつぶします。</li><li>ライブバイオームを有効にし、下地の ID を対象にしたスロットを有効にします。</li><li>スロットの Dusting Layer を有効にし、Dusting Biome ID に雪・ほこりの ID を指定します。</li><li>強さは中程度、傾斜しきい値は低めから始め、マスクを塗った平らな場所で確認します。</li><li>しきい値を上げると、より平らで上向きの場所に制限できます。強さで、許可範囲内の被覆を調整します。</li></ol>
@@ -118,7 +128,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 </tbody></table></div>
 <p>ダスティングはワールド上方向を使います。惑星の側面は、中心から外向きでも「上向き」とは扱われません。この違いが重要なシーンでは、オブジェクト全周を確認してください。</p>
 <p>変わるのは見た目だけです。雪のメッシュ、衝突の高さ、滑る物理挙動は作られません。ゲームプレイの地表問い合わせは簡略化したルールを使い、シェーダーのマスク結果と完全には一致しません。ID をゲームプレイに使う前に、<a href="demo-components.html#query-limits">問い合わせの精度</a>を確認してください。</p>
-
 <h2 id="workflows">三つの実用的な設定例</h2>
 <h3>特定の地表を濡れたように見せる</h3>
 <ol><li>地表を塗り、通常の見た目を確認します。</li><li>その地表の ID を対象に、ライブスロットを有効にします。</li><li>分布ではなく質感を変えるため、Weight Multiplier は 1 にします。</li><li>Smoothness を少しずつ上げます。ベースの色も暗くしたい場合は、バイオームを複製して色を調整します。</li><li>シーン照明でハイライトを確認します。濡れたような見た目の効果なので、水たまりや雨の動作は別の仕組みで作ります。</li></ol>
@@ -126,7 +135,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <ol><li>実際の川床が必要なら、Path ツールで水路を作ります。</li><li>幅に合うテクスチャと Scale で、川の地表を塗ります。</li><li>一つの有効なライブスロットで、その ID を対象にし、Flow を有効にします。</li><li>低速から始め、目的の方向に動くまで Heading を調整します。</li><li>曲がり角と投影の切り替わりを確認します。専用の水形状やゲームプレイが必要なら別に追加します。</li></ol>
 <h3>季節の雪と Scatter を一緒に増減させる</h3>
 <ol><li>ダスティングマスクを塗り、下地の対象、雪の ID、傾斜しきい値を設定します。</li><li>対象となる Grass や Flower の Scatter Object が、同じ下地バイオーム ID を Target にしていることを確認します。</li><li>Dusting Strength を 0 と 1 付近、Scatter Density を 1 と 0 に近い値、Scatter Colour Multiplier を White と淡い寒色で比較します。</li><li>独自コントローラーでこれらの値を動かすか、デモの Snow Cycle で Terrain と Scatter が連動する季節変化を試します。</li><li>意図した地形グループだけに効くよう、マテリアルの共有範囲を確認します。</li><li>足音なども変更する場合は、ランタイムテスターと見た目を比較します。Scatter の表示量を変えても、ベイク済みの Gameplay Surface Query 自体は変わりません。</li></ol>
-
 <h2 id="faq">よくある質問</h2>
 <h3>Stylized Lighting を有効にすると Material が暗すぎるのはなぜですか？</h3>
 <p><strong>Stylized Lighting</strong> では AO が影として扱われるため、強い Occlusion によって Material が大幅に暗く見えることがあります。バイオームの <strong>AO Strength</strong> または Material の <strong>Surface AO Strength</strong> を下げてみてください。Height の解釈が逆なら、Biome Inspector で <strong>Invert Height</strong> を試し、必要に応じて Detail を再生成します。ライブラリ全体を変更する前に、同じ Lighting 条件で小さな範囲を比較してください。</p>
@@ -134,7 +142,6 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <p><strong>Pulsing Emission と Dusting は互換性がありません。</strong>同じ Vertex または Patch では、一度に一つの Effect Layer だけを使用できます。同じ領域では <strong>Pulse</strong> または <strong>Dusting</strong> のどちらかを選んでください。Dusting を使うバイオームでは Pulse を無効にし、両方が同じ頂点で共存することは期待しないでください。</p>
 <h3>Terrain を移動または回転すると Seam Blend がずれるのはなぜですか？</h3>
 <p><strong>Seam Blending は World-oriented</strong> なので、Object を移動または回転したときに Projection Blend が Object に固定されたまま追従しません。軌道運動や回転する Planet では特に目立つ場合があります。Material の <strong>Seam Blend Fade Distance</strong> を下げて Effect を早く Fade させ、Game Camera からのずれを目立ちにくくしてください。必要なら 0 にして無効化できます。これは見えるずれを減らすだけで、Blend を Object に追従させる機能ではありません。</p>
-
 <h2 id="troubleshooting">マテリアルの効果が出ない・合わないとき</h2>
 <div class="table-wrap"><table><thead><tr><th>症状</th><th>確認する順番</th></tr></thead><tbody>
 <tr><td>編集しても何も変わらない</td><td>対象 Renderer がそのマテリアルと地形シェーダーを使うか確認します。コントローラーが設定を上書きしていないかも確認します。</td></tr>
@@ -142,7 +149,7 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>ライブスロットが効かない</td><td>全体のスイッチ、Active、対象数、ID を確認します。重みではその素材が塗られている必要があり、質感では元データと全体設定も確認します。</td></tr>
 <tr><td>雪が出ない</td><td>マスク、下地の対象 ID、雪の ID、有効スイッチ、強さ、傾斜を確認します。まずマスクを塗った上向きの平面で試します。</td></tr>
 <tr><td>流れの向きが違う</td><td>テクスチャ空間の Heading または速度の符号を調整します。投影と回転変化も確認します。ワールドの北とは限りません。</td></tr>
-<tr><td>Waterfall Projection が解除される</td><td>対応するデモコントローラーの Slot で Waterfall Projection 設定を確認し、別の Controller が Material を上書きしていないか確認します。Pull Settings From Material は、変更を Push する前に現在の Flag を取り込みます。</td></tr>
+<tr><td>Waterfall Projection を調整できない</td><td>Flow Mode を確認してください。Lake では Waterfall Projection が無視され、項目が無効になります。滝には Directional を使用します。現在のデモスナップショットは Waterfall のフラグを記録・保持します。</td></tr><tr><td>湖が一方向に流れて見える</td><td>Flow Mode → Lake を選択し、Ripple Speed を調整してください。アクティブなデモプロファイルによって Directional または Back and Forth が適用されていないか確認します。</td></tr><tr><td>連動する水しぶきや Scatter パーティクルが発生しない</td><td>Particle Preset の選択、Custom の場合は Prefab の割り当て、Camera Distance、編集中の Preview Particles、Live Strength と Scatter Density を確認してください。</td></tr>
 <tr><td>近くは正しいが遠くで変わる</td><td>品質フェード、ミップマップ、カメラを確認します。フェードの値は正確なメートル距離ではありません。</td></tr>
 <tr><td>Seam Blend を最大にしてもタイルの裂け目が残る</td><td>形状と接続を確認します。Seam Blend は投影の境界を変えるもので、メッシュをつなぐ機能ではありません。</td></tr>
 <tr><td>問い合わせでは雪なのに見えない</td><td>ゲームプレイのダスティング判定は、塗ったマスクを含みません。画素の取得ではなく近似です。</td></tr>
