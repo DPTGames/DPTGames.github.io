@@ -1,0 +1,397 @@
+<!doctype html>
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="Créez et façonnez des terrains, peignez les surfaces et préparez-les pour vos scènes Unity." name="description"/><link href="../ko/index.html" hreflang="ko" rel="alternate"/><link href="../ja/index.html" hreflang="ja" rel="alternate"/><link href="index.html" hreflang="fr" rel="alternate"/><link href="../index.html" hreflang="en" rel="alternate"/><title>Guide Vertex 3D Terrain | DPT Games</title><style>
+:root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
+main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
+.site-nav{display:flex;flex-wrap:wrap;gap:8px 20px;border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:32px;font-size:.92rem}.site-nav [aria-current]{color:white;font-weight:700}
+.language-nav{display:flex;gap:10px;flex-wrap:wrap;margin:-12px 0 28px}.language-nav a{display:inline-block;padding:6px 16px;border:1px solid var(--border);border-radius:6px;text-decoration:none}.language-nav [aria-current]{color:#0f172a;background:var(--accent);border-color:var(--accent);font-weight:700}html[lang="ja"] body,html[lang="ko"] body{line-height:1.85;line-break:strict}html[lang="ja"] th,html[lang="ja"] td,html[lang="ko"] th,html[lang="ko"] td{overflow-wrap:anywhere}
+h1,h2,h3,h4{line-height:1.25;color:var(--accent)}h1{font-size:2.25rem;margin:0 0 14px}h2{font-size:1.65rem;margin:48px 0 18px;padding-top:12px;border-top:1px solid var(--border)}h3{font-size:1.22rem;margin:30px 0 12px}h4{font-size:1.06rem}
+p{margin:12px 0 18px}li{margin:7px 0}ul,ol{padding-left:25px}.lead{font-size:1.18rem;color:var(--muted);max-width:850px}.intro{margin:28px 0}.toc{background:var(--panel);padding:20px 24px;border:1px solid var(--border);border-radius:9px;margin:28px 0}.toc h2{margin:0 0 10px;padding:0;border:0;font-size:1.15rem}.toc ul{columns:2;column-gap:36px;margin:0}.toc li{break-inside:avoid}
+.callout,.example{background:var(--panel);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:14px 20px;margin:22px 0}.example{border-color:#a3e635}.callout p:last-child,.example p:last-child{margin-bottom:0}.callout p:first-child,.example p:first-child{margin-top:0}
+.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--border);border-radius:7px}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--border)}thead{background:#25354c}th{color:#f8fafc}td:first-child{font-weight:600;min-width:145px}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#172238}
+code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background:#27354c;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}kbd{white-space:nowrap;border:1px solid #50617a}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#09111f;border:1px solid var(--border);padding:20px;border-radius:7px}pre code{background:transparent;padding:0}
+.back-top{font-size:.88rem}.table-hint{display:none;color:var(--muted);font-size:.9rem}.footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);margin-top:34px;padding-top:16px}details{background:var(--panel);padding:14px 18px;border:1px solid var(--border);border-radius:7px;margin:16px 0}summary{cursor:pointer;font-weight:600;color:var(--accent)}.alias{display:block;scroll-margin-top:24px}
+@media(max-width:650px){main{padding:24px 18px 44px}h1{font-size:1.85rem}h2{font-size:1.4rem}.toc ul{columns:1}th,td{padding:11px 12px}.site-nav{gap:8px 16px}.table-wrap table{min-width:570px}.callout,.example{padding:13px 16px}.table-hint{display:block}}
+@media print{:root{color-scheme:light}body{background:white;color:#202020;font-size:10.5pt}main{max-width:none;padding:0}h1,h2,h3,h4,a{color:#075985}.site-nav,.language-nav,.back-top{display:none}.callout,.example,.toc,details,thead,tbody tr:nth-child(even){background:#f1f5f9}.table-wrap{overflow:visible}h2,h3{break-after:avoid}tr{break-inside:avoid}code,kbd,pre{background:#f1f5f9;color:#202020}a{overflow-wrap:anywhere}}
+.video-frame{width:100%;aspect-ratio:16/9;min-height:200px;background:#09111f;border:1px solid var(--border);border-radius:9px;overflow:hidden}.video-frame iframe{display:block;width:100%;height:100%;border:0}.video-link{font-size:.95rem}
+@media print{.video-frame{display:none}}
+</style></head>
+<body><main id="top"><nav aria-label="Documentation" class="site-nav"><a href="https://dptgames.github.io/">Accueil DPT Games</a><a aria-current="page" href="index.html">Guide Vertex 3D Terrain</a><a href="biomes.html">Guide des biomes</a><a href="../terrain-material-settings.html">Paramètres du matériau de terrain</a><a href="../scatter-system.html">Guide 3D Scatter</a><a href="../player-collision.html">Collisions et interactions du joueur</a><a href="demo-components.html">Guide de la démo et de l’exécution</a></nav><nav aria-label="Langue" class="language-nav"><a href="../index.html" hreflang="en" lang="en">English</a><a aria-current="page" href="index.html" hreflang="fr" lang="fr">Français</a><a href="../ja/index.html" hreflang="ja" lang="ja">日本語</a><a href="../ko/index.html" hreflang="ko" lang="ko">한국어</a></nav><header><h1>Guide Vertex 3D Terrain</h1><p class="lead">Créez les formes, peignez les surfaces et préparez vos terrains pour une scène Unity.</p></header><nav aria-label="On this page" class="toc"><h2>Sur cette page</h2><ul><li><a href="#tutorial">Regarder le tutoriel</a></li><li><a href="#quick-start">Créer votre premier terrain</a></li><li><a href="#section-one">Cibles, bibliothèques et paramètres des pinceaux</a></li><li><a href="#generators">Générer une forme initiale</a></li><li><a href="#section-two">Outils de géométrie et de surface</a></li><li><a href="#masks">Sélectionner et inverser des faces, limiter l'édition</a></li><li><a href="#gradients">Appliquer des surfaces selon la hauteur, la pente ou la direction</a></li><li><a href="#paths">Routes, lits de rivière, marches, tunnels et ponts</a></li><li><a href="#section-three">Travailler sur plusieurs tuiles de terrain</a></li><li><a href="#section-four">Enregistrer et optimiser le terrain</a></li><li><a href="#shortcuts">Raccourcis clavier et souris</a></li><li><a href="#glossary">Terminologie des guides</a></li><li><a href="#troubleshooting">Résoudre les problèmes courants</a></li><li><a href="#support">Assistance</a></li></ul></nav><p class="table-hint">Sur un petit écran, faites défiler horizontalement les tableaux larges pour lire toutes les colonnes.</p><div class="intro">
+<p>Vertex 3D Terrain permet de générer et de modifier des terrains composés de meshes directement dans Unity. Créez des surfaces classiques, des planètes ou des îles flottantes. Modifiez ensuite leur géométrie, peignez les surfaces, construisez des chemins et des structures, appliquez des gradients et travaillez sur plusieurs tuiles de terrain.</p>
+<p>Les <strong>outils de géométrie</strong> modifient le mesh physique, tandis que les <strong>outils de surface</strong> changent son apparence. Certains outils compatibles peuvent être utilisés ensemble pendant un même coup de pinceau, pour façonner et peindre simultanément le terrain.</p>
+</div>
+<section aria-labelledby="tutorial">
+<h2 id="tutorial">Regarder le tutoriel</h2>
+<p>Regardez le tutoriel de Vertex 3D Terrain puis suivez les étapes ci-dessous dans Unity.</p>
+<div class="video-frame">
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" height="540" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube-nocookie.com/embed/PwQeYMFUcso?playsinline=1" title="Tutoriel Vertex 3D Terrain" width="960"></iframe>
+</div>
+<p class="video-link"><a href="https://www.youtube.com/watch?v=PwQeYMFUcso" rel="noopener" target="_blank">Regarder sur YouTube (nouvel onglet)</a></p>
+</section>
+<h2 id="quick-start">Créer votre premier terrain</h2>
+<ol>
+<li>Ouvrez <strong>Tools → DPT Games → Vertex 3D Terrain</strong>.</li>
+<li>Ouvrez <strong>Create Terrain</strong> et choisissez le terrain à créer : <strong>Flat Terrain</strong>, <strong>Planet</strong> ou <strong>Floating Island</strong>.</li>
+<li>Choisissez <strong>Starting Biome</strong>, ou <strong>Top Biome</strong> et <strong>Bottom Biome</strong> pour une île flottante. Réglez la taille, la forme et la résolution du terrain. Les paramètres disponibles dépendent du type choisi. Une île flottante permet par exemple de contrôler sa largeur, sa longueur, la profondeur et la forme de sa face inférieure, la forme du plateau et les variations de surface.</li>
+<li>Définissez la position de création du terrain avec <strong>Spawn Position</strong>. Si <strong>Live Preview</strong> est activé, vérifiez l'échelle et la forme générales avant de générer le terrain.</li>
+<li>Cliquez sur le bouton de génération correspondant, tel que <strong>Generate Floating Island</strong>, <strong>Generate Planetoid</strong> ou <strong>Generate Surface</strong>.</li>
+<li>Le terrain généré peut être modifié avec les outils de géométrie et de surface. Selon le résultat voulu, sculptez ou déformez le mesh, peignez les biomes, créez des chemins, appliquez des gradients, sélectionnez les faces avec des masques ou combinez les outils compatibles pendant un même coup de pinceau.</li>
+<li>Commencez par modifier les formes générales avant d'ajouter des détails plus fins. Vous pourrez augmenter ultérieurement la densité géométrique locale là où cela sera nécessaire.</li>
+<li>Enregistrez le terrain une fois le résultat satisfaisant, ainsi que la scène Unity et les ressources générées que vous souhaitez conserver.</li>
+</ol>
+<div class="example">
+<p><strong>Un premier exercice utile :</strong> générez un petit terrain, modifiez une partie de sa silhouette avec Sculpt, puis essayez Paint, Path ou un autre outil de surface. Vous découvrirez ainsi rapidement les fonctions de génération et d'édition avant de travailler sur une scène plus grande.</p>
+</div>
+<h2 id="section-one">Cibles, bibliothèques et paramètres des pinceaux</h2>
+<h3>Choisir les objets à modifier</h3>
+<p>Le terrain actif fournit le mesh et les paramètres courants. Si le terrain comprend plusieurs objets, utilisez la liste des cibles pour choisir ceux qui peuvent être peints ou sculptés. <strong>Active</strong> et <strong>enabled for Paint/Sculpt</strong> n'ont pas la même fonction : sélectionner une tuile ne rend pas nécessairement toutes les tuiles voisines éditables.</p>
+<p>Ajoutez ou enregistrez les objets de terrain nécessaires, actualisez la liste après une modification de la scène et vérifiez les options Paint/Sculpt avant un coup de pinceau traversant une limite. Une cible doit contenir les composants mesh utilisés par l'outil. Un collider est également nécessaire pour les raycasts physiques pendant le jeu.</p>
+<div class="table-wrap"><table><thead><tr><th>Paramètre</th><th>Signification</th><th>Quand le modifier</th></tr></thead><tbody>
+<tr><td>Terrain Atlas</td><td>Utilise les textures compilées et les gradients de couleurs de la Biome Library pour afficher le sol peint.</td><td>Choisissez ce pipeline pour les roches, sables, herbes, surfaces évoquant l'eau et autres matières texturées. Le shader de terrain dédié est SH_DPT_VCTerrain.</td></tr>
+<tr><td>Direct Vertex Color</td><td>Enregistre les couleurs des surfaces directement sur les sommets du mesh au lieu d'utiliser les textures de biomes d'un atlas.</td><td>Choisissez-le pour un style plus simple fondé sur les couleurs. La quantité et l'emplacement des sommets limitent le niveau de détail des couleurs peintes.</td></tr>
+<tr><td>Biome Library</td><td>Bibliothèque réutilisable de préréglages de surface. Les deux pipelines possèdent des listes de préréglages distinctes dans la même bibliothèque.</td><td>Utilisez une bibliothèque partagée pour des terrains apparentés, ou une copie distincte lorsque leurs surfaces doivent évoluer indépendamment.</td></tr>
+<tr><td>Radius</td><td>Portée du pinceau en mètres dans le monde.</td><td>Utilisez un grand rayon pour les reliefs étendus et un petit rayon pour les finitions. Liez les rayons de géométrie et de peinture si les deux doivent couvrir la même zone.</td></tr>
+<tr><td>Geometry speed / strength</td><td>Vitesse à laquelle le mesh est déplacé pendant un coup de pinceau.</td><td>Réduisez cette valeur pour des modifications contrôlées. Une valeur élevée peut rapidement créer des creux profonds ou des pics élevés.</td></tr>
+<tr><td>Paint opacity</td><td>Intensité avec laquelle la surface choisie remplace ou se mélange avec la surface existante.</td><td>Les valeurs faibles permettent des passages légers et répétés ; 1 applique la surface choisie avec une intensité élevée.</td></tr>
+<tr><td>Blend sharpness</td><td>Netteté de la limite entre les biomes peints.</td><td>Réduisez cette valeur pour des transitions progressives et augmentez-la pour des zones plus distinctes. Elle n'ajoute aucun sommet au mesh.</td></tr>
+<tr><td>Brush shape</td><td>Circle, Square, Diamond ou Noise Jitter déterminent la forme de l'empreinte du pinceau.</td><td>Circle constitue un bon point de départ. Utilisez des formes rectilignes pour des bordures régulières et Jitter pour des tracés plus irréguliers.</td></tr>
+<tr><td>Pen pressure</td><td>Peut influencer Strength, Radius ou les deux, avec un seuil minimal de pression.</td><td>Choisissez Strength pour des coups de stylet progressifs, ou Radius pour élargir le pinceau lorsque vous appuyez davantage.</td></tr>
+<tr><td>Preview colours</td><td>Les couleurs d'aperçu de géométrie et de peinture identifient les deux zones d'action des pinceaux. Alpha contrôle leur transparence.</td><td>Choisissez des couleurs bien visibles sur votre terrain. Elles ne modifient pas les biomes peints.</td></tr>
+<tr><td>Worklight / Scene HUD</td><td>Éclairage de travail supplémentaire et affichage compact des outils actifs.</td><td>Utilisez-les pour mieux voir les formes et identifier les outils sélectionnés. Vérifiez également le résultat final avec l'éclairage réel de la scène.</td></tr>
+</tbody></table></div>
+<p>Changer de pipeline modifie la manière dont les données de surface sont utilisées. Enregistrez une copie avant de convertir un terrain terminé, puis comparez son apparence. Les détails texturés de Terrain Atlas ne seront pas identiques dans Direct Vertex Color.</p>
+<p>Pour les préréglages, les textures sources et les actions de la bibliothèque, consultez le <a href="biomes.html">guide des biomes</a>. Pour les réglages affectant tout un matériau, consultez les <a href="../terrain-material-settings.html">paramètres du matériau de terrain</a>. Pour le placement d'herbe, fleurs, champignons, pierres et meshes personnalisés selon les biomes, consultez le <a href="../scatter-system.html">guide 3D Scatter</a>.</p>
+<h2 id="generators">Générer une forme initiale</h2>
+<p>Ouvrez <strong>Create Terrain</strong>, puis choisissez <strong>Flat Terrain</strong>, <strong>Planet</strong> ou <strong>Floating Island</strong>. Chaque générateur crée un mesh avec le matériau de terrain et l'ajoute comme cible d'édition. Définissez une forme et un biome de départ adaptés avant de sculpter ou de peindre les détails.</p>
+<h3 id="generation-common">Position, aperçu et choix des biomes</h3>
+<p><strong>Live Preview</strong> affiche un mesh temporaire gris à résolution réduite dans la Scene View. Il permet d'apprécier la position, la taille et la silhouette. Le terrain définitif utilise la résolution complète sélectionnée : l'aperçu gris ne montre pas le rendu final des textures de biome.</p>
+<div class="table-wrap"><table><thead><tr><th>Spawn Position</th><th>Emplacement</th></tr></thead><tbody>
+<tr><td>World Origin</td><td>Commence à la position (0, 0, 0).</td></tr>
+<tr><td>Position Offset</td><td>Utilise la position absolue XYZ fournie, mesurée depuis l'origine du monde.</td></tr>
+<tr><td>Scene View Center</td><td>Utilise le point de pivot de la caméra de la Scene View.</td></tr>
+<tr><td>Ground Snapped View</td><td>Utilise les coordonnées X/Z de la vue avec Y = 0. N'effectue pas de raycast pour détecter une surface de terrain quelconque.</td></tr>
+</tbody></table></div>
+<p><strong>Starting Biome</strong> détermine la surface initiale des terrains plats et des planètes. Le sélecteur utilise le pipeline de surface et la bibliothèque actuels. Les îles flottantes ont des choix Top Biome et Bottom Biome distincts, décrits plus bas. Vous pourrez ensuite repeindre toutes les surfaces générées.</p>
+<h3 id="generation-flat">Flat Terrain</h3>
+<p>Choisissez <strong>Shape Preset</strong> : Flat Plane, Island Mountain, River Valley ou Crater Basin. Flat Terrain est une catégorie de générateur : ses préréglages de hauteur peuvent créer des collines et des dépressions.</p>
+<div class="table-wrap"><table><thead><tr><th>Paramètre</th><th>Utilisation</th></tr></thead><tbody>
+<tr><td>Surface Name</td><td>Nom de l'objet de terrain généré.</td></tr>
+<tr><td>Quick Size / Tile Size (Square)</td><td>Détermine la largeur et la longueur de la tuile carrée en mètres. Quick Size propose 25, 50, 100, 250, 500 et 1 000 m.</td></tr>
+<tr><td>Grid Subdivisions</td><td>Détermine la densité de la grille sur X et Z. Les boutons de densité proposent 32, 64, 128 et 256 comme valeurs de départ.</td></tr>
+<tr><td>High Density Borders</td><td>Double la densité permanente des bordures des tuiles tout en conservant la résolution choisie à l'intérieur. Cela facilite la gestion des coutures sans doubler la densité sur toute la tuile.</td></tr>
+<tr><td>Mesh Complexity</td><td>Affiche une estimation du nombre de sommets et de triangles ainsi que l'espacement de la grille. Vérifiez ces valeurs avant de créer un grand terrain très dense.</td></tr>
+</tbody></table></div>
+<p>Cliquez sur <strong>Generate Surface</strong> lorsque vous êtes prêt. Choisissez une densité suffisante pour les principales formes voulues, puis ajoutez des détails locaux plutôt que de créer toutes les tuiles à la résolution maximale.</p>
+<h3 id="generation-planet">Planet : mesh continu ou tuiles multiples</h3>
+<p>Réglez <strong>Planetoid Name</strong>, <strong>Starting Biome</strong>, <strong>Radius</strong> et <strong>Mesh Structure</strong>. Single Mesh crée un objet continu ; Multi Tile répartit plusieurs objets sur les six faces d'un cube.</p>
+<div class="table-wrap"><table><thead><tr><th>Structure</th><th>Paramètres de forme et de densité</th><th>Utilisation</th></tr></thead><tbody>
+<tr><td>Single Mesh</td><td>Shape Preset : Sphere, Cube ou Rounded Cube. Rounded Cube propose Roundness de 0 (cube) à 1 (sphère). Les formes cubiques utilisent Face Grid Density.</td><td>Base fermée et continue, y compris un monde en forme de boîte pouvant être inversé pour créer une pièce intérieure.</td></tr>
+<tr><td>Single Mesh Sphere</td><td>Sphere Topology : Cube Sphere, Icosphere ou UV Sphere. Cube Sphere utilise Face Grid Density, Icosphere le niveau récursif Subdivision Level et UV Sphere le paramètre Resolution.</td><td>Choisissez la répartition des triangles qui convient à la forme et aux modifications prévues. Les valeurs de densité des différentes topologies ne sont pas directement comparables.</td></tr>
+<tr><td>Multi Tile</td><td>Shape Preset : Planetoid ou Cube. Tiles Per Face (N×N), Tile Size calculé automatiquement, Tile Grid Subdivisions et High Density Borders.</td><td>Tuiles indépendantes et éditables. Nombre total de tuiles : 6 × N². N = 2 donne 24 tuiles, N = 4 en donne 96.</td></tr>
+</tbody></table></div>
+<p>En mode Multi Tile, Tile Size vaut (2 × Radius) / Tiles Per Face pour que les faces se rejoignent. High Density Borders double la densité des bordures de chaque tuile avant projection, y compris aux raccords entre faces et aux coins du cube. Cliquez sur <strong>Generate Planetoid</strong>, puis examinez les jointures et utilisez des pinceaux orientés selon la surface si World Up ne convient pas.</p>
+<p>Pour créer un intérieur, générez un Cube ou Rounded Cube avec Single Mesh, sélectionnez toutes ses faces avec Mask puis utilisez <a href="#invert-faces">Invert Faces</a>. Il s'agit d'une opération d'édition, pas d'un générateur distinct.</p>
+<h3 id="generation-island">Floating Island</h3>
+<p>L'île est un mesh fermé comprenant un plateau supérieur et une face inférieure sculptée. Choisissez son nom, sa position et ses deux biomes, puis inspectez la silhouette des deux faces.</p>
+<div class="table-wrap"><table><thead><tr><th>Paramètre</th><th>Effet</th></tr></thead><tbody>
+<tr><td>Top Biome / Bottom Biome</td><td>Surfaces distinctes pour le plateau supérieur et la face inférieure. Vous pouvez, par exemple, choisir de l'herbe au-dessus et de la roche en dessous.</td></tr>
+<tr><td>Edge Blend Width</td><td>Distance en mètres de chaque côté de la bordure sur laquelle les biomes se mélangent. La jonction elle-même reçoit un mélange égal. Choisir le même biome des deux côtés désactive ce réglage.</td></tr>
+<tr><td>Width (X), Length (Z), Underside Depth (Y)</td><td>Détermine les dimensions horizontales et la profondeur de la face inférieure de l'île.</td></tr>
+<tr><td>Plateau Shape</td><td>Contours Circular, Rounded Square ou Oval Long.</td></tr>
+<tr><td>Bottom Keel Shape</td><td>Profils Pointed Spire, Rounded Bowl, Stepped Crag ou Flat Taper.</td></tr>
+<tr><td>Top Surface Preset</td><td>Applique les préréglages de relief du terrain à la face supérieure. Choisissez Flat Plane si vous souhaitez démarrer avec un plateau plat.</td></tr>
+<tr><td>Rock Jaggedness</td><td>Ajoute des irrégularités rocheuses procédurales sur la face inférieure.</td></tr>
+<tr><td>Round Plateau Edge / Edge Radius</td><td>Courbe les rangées de sommets existantes pour arrondir la bordure. Cette opération ne crée pas de boucles géométriques supplémentaires : la grille doit être assez dense pour représenter la courbe.</td></tr>
+<tr><td>Grid Subdivisions</td><td>Détermine la densité du mesh de l'île. Augmentez-la uniquement si la silhouette ou les modifications prévues l'exigent.</td></tr>
+</tbody></table></div>
+<p>Cliquez sur <strong>Generate Floating Island</strong>. Edge Radius modifie la géométrie tandis que Edge Blend Width modifie la transition entre les biomes. Réglez-les séparément, puis examinez la face inférieure avant de peindre ou de placer du scatter.</p>
+<h3 id="generation-variation">Surface Variation</h3>
+<p>Activez <strong>Surface Variation</strong> pour appliquer des variations de hauteur déterministes aux terrains, planétoïdes et faces supérieures des îles flottantes générés. Cette fonction est distincte de Rock Jaggedness sur la face inférieure.</p>
+<div class="table-wrap"><table><thead><tr><th>Paramètre</th><th>Signification</th></tr></thead><tbody>
+<tr><td>Strength</td><td>Déplacement vertical maximal en mètres. Commencez avec une petite valeur pour préserver la forme de base.</td></tr>
+<tr><td>Feature Size</td><td>Taille approximative des grandes variations de bruit dans l'espace du monde. Une valeur élevée crée de plus grandes collines.</td></tr>
+<tr><td>Detail</td><td>Nombre de couches de bruit fractal, de 1 à 6. Un plus grand nombre ajoute des variations fines qui nécessitent une géométrie suffisamment dense.</td></tr>
+<tr><td>World Seed / Randomize</td><td>La valeur Seed permet de reproduire le même motif tant que vous ne la modifiez pas ou ne choisissez pas Randomize. Conservez cette valeur si vous souhaitez retrouver une configuration.</td></tr>
+</tbody></table></div>
+<p>Comparez les paramètres avec Live Preview, puis inspectez le résultat final à pleine résolution. Un bruit intense sur une grille peu dense ne peut pas produire des détails fins. L'ajout de variations de relief est indépendant de la peinture des textures de surface.</p>
+<h2 id="section-two">Outils de géométrie et de surface</h2>
+<p>Les outils de géométrie et de surface se sélectionnent séparément. Certains pinceaux peuvent fonctionner simultanément, pour sculpter et peindre au même endroit. Path, Mask et Gradient utilisent leurs propres procédures. Vérifiez les boutons actifs et Scene HUD avant de faire glisser la souris.</p>
+<p>Les réglages activables prennent la forme de boutons. Un outil de géométrie actif est surligné en vert, les réglages actifs ailleurs en bleu et les réglages désactivés en gris. Les commandes Path utilisent le même vert que les autres outils géométriques. Les actions liées sont regroupées sur une même rangée lorsque l'espace le permet.</p>
+<h3>Outils de géométrie : modifier le mesh</h3>
+<div class="table-wrap"><table><thead><tr><th>Outil</th><th>Effet</th><th>Exemple d'utilisation</th></tr></thead><tbody>
+<tr><td>Sculpt</td><td>Déplace les sommets vers le haut ou le bas selon Up, Surface Normal ou View Direction. Ctrl inverse le sens du déplacement.</td><td>Utilisez Up pour des collines ordinaires, Surface Normal pour une planète ou un mur et View Direction pour travailler selon un angle de vue particulier.</td></tr>
+<tr><td>Inflate</td><td>Pousse la surface vers l'extérieur selon sa forme locale ; le coup de pinceau inversé la tire vers l'intérieur.</td><td>Épaississez une protubérance rocheuse ou adoucissez une dépression.</td></tr>
+<tr><td>Smooth</td><td>Déplace les sommets vers une disposition plus régulière et lissée.</td><td>Éliminez les bosses abruptes après la sculpture. Des lissages répétés peuvent effacer les détails souhaités.</td></tr>
+<tr><td>Grab</td><td>Déplace une zone de géométrie avec un mouvement de glissement.</td><td>Déplacez latéralement une crête ou ajustez une silhouette sans reconstruire tout le relief.</td></tr>
+<tr><td>Cave</td><td>Modifie la géométrie pour créer des cavités, tunnels et surplombs grâce à la topologie dynamique.</td><td>Créez une ouverture organique. Utilisez un chemin de type tunnel lorsque vous souhaitez maîtriser son tracé et sa section.</td></tr>
+<tr><td>Clean-Up</td><td>Réduit la géométrie superflue ou irrégulière dans la zone du pinceau.</td><td>Nettoyez une région devenue trop dense après des modifications répétées de topologie. Vérifiez ensuite sa silhouette et les limites peintes.</td></tr>
+<tr><td>Path</td><td>Utilise une courbe à nœuds modifiables pour créer routes, tranchées, marches, tunnels ou ponts.</td><td>Créez un itinéraire répétable de largeur contrôlée. Consultez <a href="#paths">Chemins</a>.</td></tr>
+<tr><td>Mask</td><td>Sélectionne les faces avant d'appliquer une opération à la région choisie.</td><td>Soulevez un plateau, construisez un pilier ou aplatissez un mur. Consultez les <a href="#masks">masques de faces</a>.</td></tr>
+</tbody></table></div>
+<h3>Outils de surface : modifier l'apparence</h3>
+<div class="table-wrap"><table><thead><tr><th>Outil</th><th>Effet</th><th>Exemple d'utilisation</th></tr></thead><tbody>
+<tr><td>Paint</td><td>Applique le biome sélectionné ou un mélange pondéré de plusieurs biomes.</td><td>Ajoutez de la terre à un chemin ou un mélange contrôlé de roche et d'herbe.</td></tr>
+<tr><td>Fill</td><td>Applique une surface à toute une région connectée du biome actuel.</td><td>Remplacez une zone continue sans peindre chaque face individuellement.</td></tr>
+<tr><td>Smear</td><td>Étire les poids de surface existants le long du coup de pinceau.</td><td>Allongez une zone peinte en traînées sans choisir une nouvelle surface.</td></tr>
+<tr><td>Blend / Biome Blend</td><td>Adoucit les transitions existantes entre les biomes.</td><td>Cassez une bordure peinte trop nette. Cet outil lisse les poids de surface, pas la géométrie.</td></tr>
+<tr><td>Gradient</td><td>Répartit les biomes selon la hauteur, la pente ou une direction dans l'espace.</td><td>Placez de la neige près des sommets ou de la roche sur des faces escarpées. Consultez les <a href="#gradients">gradients</a>.</td></tr>
+<tr><td>Eyedropper</td><td>Échantillonne la surface sous le curseur.</td><td>Reprenez la peinture avec un biome déjà présent sur le terrain.</td></tr>
+<tr><td>Dusting</td><td>Peint, mélange, efface ou remplit le masque dusting utilisé par l'effet de surface.</td><td>Définissez les zones pouvant recevoir un dépôt de neige ou de poussière. Configurez son apparence dans les <a href="../terrain-material-settings.html#dusting">réglages dusting du matériau</a>.</td></tr>
+</tbody></table></div>
+<p>Avec un pinceau multibiome, sélectionnez les surfaces souhaitées et réglez leurs poids relatifs. Equalize Weights leur donne une influence égale. Noise rend leur répartition moins régulière. Effectuez un petit essai avant d'appliquer un mélange complexe à tout le terrain.</p>
+<h3>Topologie dynamique et normales</h3>
+<p><strong>Dynamic Topology</strong> ajoute de la géométrie lorsqu'une opération nécessite des triangles plus petits. Max Edge Length définit à partir de quelle longueur une arête est trop grande : une valeur plus faible crée une géométrie plus fine et coûte généralement davantage de mémoire et de calcul. Cet outil sert aux grottes et tunnels et peut être activé pour certaines fonctions de sculpture ou de peinture.</p>
+<p>Utilisez-le lorsque de grands triangles empêchent de créer la forme voulue. Il ne transforme pas automatiquement chaque mesh peu dense en grille régulière. Inspectez le wireframe après une modification importante et choisissez une limite adaptée à l'échelle de la scène.</p>
+<p>Le bouton global <strong>Smooth / Sharp</strong> à côté de <strong>Scene HUD</strong> contrôle l'ombrage des normales. Sharp accentue les polygones individuels ; Smooth adoucit l'éclairage entre les faces du mesh. Ce réglage est distinct du pinceau Smooth, qui déplace les sommets, et du <a href="../scatter-system.html#variants">Smoothing Angle</a> d'une variante scatter.</p>
+<h2 id="masks">Sélectionner des faces et créer des formes</h2>
+<ol><li>Activez Mask et choisissez une méthode de sélection : Brush pour peindre une zone, Single Face pour choisir des faces précises ou Flood Island pour sélectionner une région connectée.</li><li>Sélectionnez les faces qui définissent la zone souhaitée. Maintenez Shift pour retirer des faces de la sélection.</li><li>Utilisez Grow, Shrink ou Invert pour affiner la sélection. Select Slope utilise un intervalle d'angles ; Select Biome Faces utilise l'ID du biome choisi.</li><li>Utilisez Move ou Rotate pour ajuster les faces sélectionnées avec un gizmo dans la Scene View, ou choisissez une opération ou un préréglage de forme. Vérifiez la zone affectée avant d'appliquer les changements.</li><li>Inspectez le résultat de côté autant que du dessus. Utilisez Undo pour revenir en arrière et ajuster la sélection ou les paramètres si nécessaire.</li></ol>
+<h3>Sélection et limites de peinture</h3>
+<p><strong>Brush Drag</strong> sélectionne une région avec une empreinte Circle ou Square ; <strong>Single Face</strong> sélectionne des triangles individuels ; <strong>Flood Island</strong> sélectionne une zone connectée. Shift retire des faces. Grow et Shrink agrandissent ou réduisent la sélection d'une rangée de faces, Invert inverse la sélection et Clear l'efface. Le compteur indique le nombre total de faces sélectionnées sur les tuiles.</p>
+<p>Pour une sélection automatique, réglez <strong>Slope Angles</strong> et cliquez sur <strong>Select Slope</strong>, ou saisissez un ID de biome et utilisez <strong>Select Biome Faces</strong>. <strong>Select All</strong> est utile pour des opérations sur tout le mesh, par exemple l'inversion des faces.</p>
+<p><strong>Paint Edges</strong> s'applique à l'action <strong>Paint</strong> et aux formes générées avec peinture automatique. <strong>Sharp</strong> conserve une limite nette entre les faces ; <strong>Blended</strong> adoucit la transition de surface entre faces voisines. Ce réglage contrôle les limites peintes, tandis que le masque d'édition enregistré définit les zones qui peuvent être modifiées.</p>
+<h3 id="mask-transform">Déplacer et faire pivoter les faces masquées</h3>
+<ol><li>Sélectionnez les faces à modifier avec Mask.</li><li>Dans <strong>Surface Editing</strong>, passez de <strong>Select</strong> à <strong>Move</strong> ou <strong>Rotate</strong>.</li><li>Faites glisser le gizmo dans la Scene View. Move utilise les axes du monde et Rotate pivote la région sélectionnée autour de son centre.</li><li>Revenez à <strong>Select</strong> pour peindre ou affiner la sélection de faces.</li></ol>
+<p>Les sommets situés sur les limites communes suivent le déplacement des faces sélectionnées, étirant les faces voisines. Les copies soudées se déplacent ensemble sur les tuiles actives, ce qui maintient leur connexion à la géométrie adjacente. Examinez le résultat de côté après un grand déplacement ou une forte rotation.</p>
+<p>Appuyez sur <kbd>Escape</kbd> pendant un glissement pour l'annuler. Les modifications terminées prennent en charge Undo et Redo. Un <a href="#editing-mask">Editing Mask</a> enregistré continue de protéger ses limites verrouillées.</p>
+<h3 id="mask-level">Mettre à niveau selon X, Y ou Z</h3>
+<p>Choisissez l'axe du monde à côté de <strong>Level</strong>, puis appliquez-le aux faces sélectionnées. <strong>Y</strong> aligne la hauteur pour créer une plateforme horizontale. <strong>X</strong> ou <strong>Z</strong> alignent les coordonnées sur un axe horizontal pour créer un mur ou une face latérale. Les sommets sélectionnés sont déplacés vers la coordonnée moyenne sur cet axe, et les faces voisines suivent les sommets partagés, y compris sur les raccords entre tuiles.</p>
+<p>Utilisez <strong>Flatten</strong> pour aplatir les faces selon la normale moyenne de la sélection, par exemple sur une pente ou une partie de planète.</p>
+<h3>Actions sur les formes, surfaces et topologies</h3>
+<div class="table-wrap"><table><thead><tr><th>Opération</th><th>Signification</th><th>Conseils pratiques</th></tr></thead><tbody>
+<tr><td>Flat Plateau / extrusion</td><td>Déplace la région sélectionnée. Une hauteur positive la soulève, une hauteur négative l'abaisse. Taper contrôle la manière dont les côtés se rétrécissent ou s'élargissent.</td><td>Taper = 1 conserve des côtés droits, inférieur à 1 rétrécit vers l'intérieur et supérieur à 1 crée un surplomb. L'alignement World Up convient aux plateaux verticaux et l'alignement Surface aux terrains inclinés.</td></tr>
+<tr><td>Pillar</td><td>Construit une colonne classique, cylindrique ou carrée.</td><td>Height règle sa hauteur ; les niveaux, anneaux et paramètres Taper modifient le profil. Bevel permet d'arrondir les bordures.</td></tr>
+<tr><td>Arch</td><td>Construit une arche depuis la zone sélectionnée avec Crown Height, Vault Thickness, Curve Segments et Arch Profile.</td><td>Semicircular produit une arche ronde, Pointed Gothic un sommet pointu et Segmental une courbe plus aplatie. Align To Surface suit la normale moyenne de la sélection, y compris entre tuiles ; désactivez-le pour suivre la verticale du monde. Dynamic Topology peut ajouter des segments de courbe.</td></tr>
+<tr><td>Boulder</td><td>Crée un rocher à facettes, un dôme lissé ou une pointe irrégulière depuis la sélection.</td><td>Height contrôle la taille et Noise rend les formes moins régulières. Commencez avec une valeur Noise modérée pour évaluer la forme de base.</td></tr>
+<tr><td>Bevel</td><td>Adoucit les arêtes des formes générées compatibles.</td><td>Bevel Extrude Edge arrondit l'arête supérieure sans modifier la base du terrain. Width est limité pour les extrusions courtes et les masques étroits ; un seul segment crée un chanfrein, plusieurs segments forment une courbe. Les biseaux de piliers adoucissent les changements de profil et les coins verticaux ; ceux des arches se prolongent jusqu'à leurs pieds.</td></tr>
+<tr><td>Invert Faces</td><td>Inverse l'orientation des triangles sélectionnés et la direction de leur surface.</td><td>Utilisez Select All pour transformer une planète fermée de forme cubique en pièce intérieure. Cette action n'inverse pas la sélection.</td></tr>
+<tr><td>Move / Rotate</td><td>Affiche un gizmo dans la Scene View pour déplacer ou faire pivoter les faces sélectionnées.</td><td>Les faces voisines suivent les sommets partagés, y compris les limites soudées des tuiles actives. Revenez à Select pour modifier la sélection.</td></tr>
+<tr><td>Level</td><td>Aligne les sommets sur leur coordonnée moyenne selon l'axe X, Y ou Z sélectionné.</td><td>Utilisez Y pour les plateformes horizontales et X/Z pour les murs ou les faces latérales. Flatten suit plutôt la normale moyenne de la surface.</td></tr>
+<tr><td>Flatten</td><td>Aplatit la sélection selon son orientation moyenne.</td><td>Créez une région plane sur une surface inclinée sans l'aligner sur l'horizontale.</td></tr>
+<tr><td>Scale Mask</td><td>Redimensionne la sélection autour de son centre avec les facteurs X, Y et Z.</td><td>La valeur 1 ne modifie pas l'axe concerné. Privilégiez des facteurs positifs et de petits ajustements pour commencer.</td></tr>
+<tr><td>Subdivide Mask</td><td>Ajoute des triangles à la région sélectionnée.</td><td>À utiliser avant une édition détaillée si la zone ne possède pas assez de géométrie.</td></tr>
+<tr><td>Fill Hole</td><td>Rebouche les trous admissibles touchés par la sélection ; les nouvelles faces deviennent la sélection.</td><td>Peut réparer certaines bordures endommagées lorsque des bords de couture ou des sommets conservés définissent le contour manquant. Les bordures externes intactes restent ouvertes. Effacez d'abord tout Editing Mask actif.</td></tr>
+<tr><td>Delete Faces</td><td>Supprime les triangles sélectionnés et laisse une ouverture. Prend en charge Undo.</td><td>Les faces permanentes des limites de tuile sont protégées, même si elles n'ont pas de voisin. Les nœuds d'ouverture de tunnel restent supprimables. Inspectez l'ouverture et le collider après l'opération.</td></tr>
+<tr><td>Paint</td><td>Applique la surface choisie aux faces sélectionnées.</td><td>Attribuez un biome particulier à un plateau généré ou à une structure sans devoir le peindre à main levée.</td></tr>
+</tbody></table></div>
+<h3 id="editing-mask">Limiter l'édition à une zone enregistrée</h3>
+<ol><li>Utilisez Mask pour sélectionner les faces à modifier.</li><li>Cliquez sur <strong>Set Mask</strong> pour enregistrer cette sélection comme zone autorisée à l'édition.</li><li>Lorsque <strong>Editing Mask</strong> est activé, peignez et sculptez uniquement dans cette région. Les faces extérieures sont protégées. Les sommets des limites communes restent fixes pour éviter de séparer les faces voisines et les coutures soudées entre tuiles.</li><li>Désactivez Editing Mask pour suspendre la restriction puis réactivez-le pour la reprendre. Le raccourci par défaut est <kbd>Ctrl/Cmd + Shift + L</kbd>, modifiable dans la <a href="#custom-hotkeys">Hotkey Sheet</a>.</li><li>Utilisez <strong>Clear Editing Mask</strong> pour supprimer la zone enregistrée sans effacer la sélection de faces actuelle.</li></ol>
+<p>Le masque enregistré est distinct de la sélection courante. Agrandir, effacer ou remplacer cette sélection ne modifie pas le masque enregistré : cliquez à nouveau sur Set Mask si vous voulez changer ses limites. Une sélection étroite peut contenir peu de sommets mobiles car ceux de sa bordure doivent rester fixes.</p>
+<p>Effacez un Editing Mask actif avant une extrusion ou un remplissage de trous. Si une opération reconstruit des faces alors que le masque est suspendu, l'outil peut effacer ce masque et afficher une notification. Resélectionnez la zone après la modification de topologie puis utilisez Set Mask à nouveau.</p>
+<h3 id="invert-faces">Transformer une forme fermée en intérieur</h3>
+<p><strong>Invert Faces</strong> inverse l'ordre des sommets des triangles sélectionnés et la direction de leur surface. Pour créer une pièce à partir d'une planète cubique, utilisez <strong>Select All</strong> avec Mask, puis Invert Faces. Inspectez l'intérieur et vérifiez le collider du côté utilisé par le personnage. Cette action prend en charge Undo.</p>
+<p><strong>Invert</strong> inverse la sélection ; <strong>Invert Faces</strong> inverse la géométrie. Le recalcul des normales et les opérations compatibles de subdivision, nettoyage et génération des LODs conservent l'orientation choisie. Une surface partiellement inversée peut présenter des faces adjacentes orientées dans des sens opposés : examinez les raccords.</p>
+<h2 id="gradients">Appliquer des biomes selon la hauteur, la pente ou la direction</h2>
+<p>Les gradients convertissent une règle en une répartition de surfaces. Choisissez les biomes de début et de fin ou ajoutez des points intermédiaires pour plusieurs surfaces. La position dans le gradient détermine le mélange ; Strength contrôle son intensité et Sharpness la netteté des transitions.</p>
+<div class="table-wrap"><table><thead><tr><th>Mode</th><th>Utilisation</th><th>Méthode</th></tr></thead><tbody>
+<tr><td>Cone Volume</td><td>Pour une montagne ou une autre forme localisée.</td><td>Définissez la base, le sommet, le rayon et la plage d'altitude. Fit Mountain estime un cône approprié d'après le terrain actif ; Snap to Peak le déplace vers le point le plus haut. Tilt et Heading permettent de suivre une formation inclinée.</td></tr>
+<tr><td>Directional Line</td><td>Pour une transition dans une direction précise.</td><td>Positionnez les poignées de la ligne ou de la flèche dans la zone. Le début et la fin déterminent où chaque surface domine.</td></tr>
+<tr><td>Whole Altitude</td><td>Pour une règle d'altitude générale, par exemple herbe en bas et neige en haut.</td><td>Définissez une plage de hauteurs qui couvre votre terrain. Une plage entièrement au-dessus ou en dessous du relief risque de ne produire qu'un seul biome.</td></tr>
+<tr><td>Whole Slope</td><td>Pour une règle d'inclinaison, par exemple terre sur les surfaces plates et roche sur les falaises.</td><td>Choisissez la plage de pentes et comparez les zones horizontales et abruptes avant d'appliquer.</td></tr>
+</tbody></table></div>
+<div class="example"><p><strong>Exemple de montagne :</strong> appliquez d'abord un gradient d'altitude large allant de l'herbe à la neige. Ajoutez une passe selon la pente pour exposer la roche puis peignez les exceptions locales. Utilisez un Strength plus faible pour les passes suivantes si vous souhaitez conserver une partie de la répartition précédente.</p></div>
+<p>Le filtre pente/falaise d'un cône peut restreindre son application. Utilisez Live Preview pour placer la règle avant de la valider et réinitialisez le cône avant de travailler sur une nouvelle formation très différente. Le gradient de couleurs propre à un biome est un autre réglage : il colore les détails de sa texture sans définir de limite de neige selon l'altitude du monde.</p>
+<h2 id="paths">Routes, lits de rivière, marches, tunnels et ponts</h2>
+<h3>Commencer avec un chemin de surface</h3>
+<ol><li>Activez Path et choisissez Surface.</li><li>Ajoutez au moins deux nœuds dans la Scene View. Déplacez leurs poignées pour définir le trajet et ajoutez d'autres nœuds là où la courbe doit être contrôlée plus précisément.</li><li>Choisissez Width, Blend et une opération de sculpture. Commencez avec un chemin court.</li><li>Choisissez un seul biome ou un gradient sur le trajet. Utilisez Paint Path si vous ne souhaitez peindre qu'une bande de surface.</li><li>Utilisez Create Path pour modifier la géométrie ou Create &amp; Paint pour générer la forme et peindre sa surface.</li></ol>
+<div class="table-wrap"><table><thead><tr><th>Paramètre</th><th>Fonction</th><th>Exemple</th></tr></thead><tbody>
+<tr><td>Width</td><td>Largeur totale du couloir, y compris les accotements. La zone Blend extérieure ajoute une transition au-delà du centre du chemin.</td><td>Prévoyez une route assez large pour son usage et adoucissez ses raccords avec le terrain grâce à Blend.</td></tr>
+<tr><td>Node width scale</td><td>Multiplicateur de largeur du chemin à un nœud donné.</td><td>La valeur 1 utilise la largeur normale. Agrandissez un nœud pour une clairière ou une intersection plus large.</td></tr>
+<tr><td>Height offset</td><td>Décalage en hauteur du chemin par rapport à sa position de référence.</td><td>Utilisez un faible décalage positif pour un chemin surélevé ou négatif pour un canal peu profond.</td></tr>
+<tr><td>Strength</td><td>Intensité avec laquelle la géométrie rejoint le profil de chemin.</td><td>Utilisez une valeur modérée pour une première modification légère puis examinez le résultat avant de répéter.</td></tr>
+<tr><td>Max Height Gap</td><td>Écart maximal autorisé pour rechercher une surface de terrain sous le chemin.</td><td>Augmentez-le si la surface valide est trop éloignée du trajet. Ce réglage ne détermine pas la hauteur des marches.</td></tr>
+<tr><td>Grade and Level</td><td>Forme un couloir comparable à une route régulière.</td><td>Créez un trajet praticable à travers un terrain accidenté.</td></tr>
+<tr><td>Raise Embankment</td><td>Surélève le couloir.</td><td>Construisez une voie ou une levée au-dessus du sol environnant.</td></tr>
+<tr><td>Carve Trench / riverbed</td><td>Creuse un canal dans le terrain.</td><td>Créez un fossé de drainage ou le lit d'une rivière sous sa surface peinte.</td></tr>
+<tr><td>Smooth Corridor</td><td>Lisse la géométrie du trajet.</td><td>Adoucissez un chemin irrégulier sans choisir de nouveau profil d'élévation ou de creusement.</td></tr>
+<tr><td>Cross-section</td><td>Les profils Flat, Crowned et Curved Trench modifient la section du chemin.</td><td>Crown Height soulève le centre ; Trench Depth l'abaisse. Les deux représentent des distances géométriques.</td></tr>
+<tr><td>Edge smoothing</td><td>Adoucit la jonction extérieure avec le terrain.</td><td>Mélangez les accotements tout en gardant le centre, les marches ou le lit du canal bien définis.</td></tr>
+<tr><td>Closed loop</td><td>Reconnecte la fin du trajet à son début.</td><td>Utile pour une route en boucle. Inspectez la jonction au premier nœud.</td></tr>
+</tbody></table></div>
+<h3>Créer des marches</h3>
+<p>Choisissez l'opération Steps. <strong>Step Height</strong> contrôle l'élévation verticale de chaque marche et <strong>Step Depth</strong> la profondeur horizontale de sa surface, indépendamment l'une de l'autre. <strong>Step Bevel</strong> définit l'arrondi des bords : une faible valeur produit une bordure nette, une grande valeur un bord plus usé et arrondi.</p>
+<p>Adaptez la hauteur et la profondeur à la taille du personnage et examinez l'escalier de côté. Le biseau doit adoucir l'arête sans supprimer la surface plate de la marche. La géométrie doit être suffisamment dense : un long escalier sur un terrain grossier peut nécessiter davantage de topologie.</p>
+<h3>Peindre le centre et les berges</h3>
+<p>Un gradient de chemin change les biomes le long du parcours. Une position 0 correspond au début et 1 à la fin. Ajoutez des points pour passer de terre à gravier puis à roche, par exemple. Les réglages Bank permettent de peindre un biome distinct de chaque côté. Bank Width est une fraction de la demi-largeur du chemin et non une distance en mètres. Une valeur de 0,35 utilise les 35 % extérieurs de la demi-largeur de chaque côté.</p>
+<p>L'aperçu permet de voir où les surfaces voisines se mélangent. Vérifiez les berges et les transitions avant de peindre. Un biome de rivière crée seulement une bande visuellement semblable à de l'eau ; sculptez un lit si vous avez besoin d'une véritable géométrie de canal.</p>
+<h3>Créer un tunnel</h3>
+<p>Passez en mode Tunnel et placez le trajet à travers le terrain. Choisissez Circle, Square ou Flat-Bottom Arch comme section. Le fond plat est utile pour créer une surface praticable.</p>
+<p><strong>Minimum cover depth</strong> représente l'épaisseur minimale de terrain solide au-dessus du tunnel. Un trajet peut être invalide même si son centre se trouve sous terre lorsque sa largeur ou sa hauteur traverse la surface extérieure. Examinez les zones rouges ou invalides de l'aperçu, enfoncez le trajet plus profondément, réduisez sa taille ou ajustez l'épaisseur exigée.</p>
+<p>Create Tunnel modifie la géométrie ; Paint Tunnel modifie l'apparence des parois. Inspectez les entrées, les sorties et les limites de tuiles après création.</p>
+<h3>Créer un pont</h3>
+<p>Passez en mode Bridge. Placez les extrémités sur les deux zones à relier et les nœuds intermédiaires au-dessus du vide. Flat Deck crée un tablier simple, Deep Girder un profil structurel plus profond et Arched Underside une arche sous une surface supérieure plate.</p>
+<p>Inspectez le pont d'en haut et d'en bas, notamment les jonctions avec les deux rives. Sur un monde incurvé, vérifiez qu'il ne traverse pas le terrain au lieu de supposer que son emplacement sera toujours correct.</p>
+<h3>Choisir précisément les extrémités</h3>
+<p>Le placement automatique est utilisé par défaut pour les tunnels et ponts. Pour fixer précisément une ouverture ou une jonction, utilisez Pick Start ou Pick End pour choisir une face d'extrémité ou un ensemble de faces connectées. Chaque extrémité est indépendante : vous pouvez définir uniquement le début, uniquement la fin ou les deux.</p>
+<p>Sélectionnez une région de faces connectées dont la bordure correspond à l'ouverture voulue. Une zone carrée ou rectangulaire convient à une extrémité bien régulière. Effacez la sélection d'une extrémité pour revenir au placement automatique. Après avoir supprimé ou reconstruit des faces proches d'une extrémité fixée, vérifiez-la et choisissez-la à nouveau si la topologie a changé.</p>
+<h2 id="section-three">Travailler sur plusieurs tuiles de terrain</h2>
+<p>Les tuiles divisent un grand terrain en plusieurs meshes. La gestion des voisins et des coutures permet aux opérations compatibles de fonctionner au-delà des limites communes, mais les objets doivent toujours être enregistrés et activés pour l'opération.</p>
+<ol><li>Utilisez un ensemble de tuiles généré ou vérifiez que les bordures prévues coïncident correctement.</li><li>Enregistrez les tuiles dans la liste des cibles et confirmez l'activation des options Paint/Sculpt.</li><li>Effectuez un petit coup de pinceau traversant une couture. Examinez la géométrie et la transition des surfaces.</li><li>Pour un chemin, tunnel ou élément généré traversant plusieurs tuiles, examinez toutes les jointures affectées après l'opération.</li><li>Enregistrez tous les meshes des tuiles concernées, pas seulement celui de la tuile active.</li></ol>
+<p>Le paramètre Seam Blend d'un matériau mélange les projections des textures. Il ne soude pas les bordures des meshes et ne répare pas les trous. Si une couture semble incorrecte, déterminez d'abord s'il s'agit d'un espace physique, de normales d'éclairage différentes ou d'une transition entre textures. Ces problèmes nécessitent des corrections différentes. Deux meshes qui se chevauchent ne constituent pas automatiquement un terrain raccordé.</p>
+<h2 id="section-four">Enregistrer et optimiser le terrain</h2>
+<h3>Garder les modifications faciles à gérer</h3>
+<p>Créez les grandes formes avant d'utiliser une topologie très fine. Utilisez des pinceaux plus petits pour les détails et évitez un Max Edge Length très faible sur une grande surface si ces triangles supplémentaires ne sont pas nécessaires. La densité géométrique influence les performances de l'édition, tandis que la résolution des textures affecte la mémoire et la qualité des surfaces. Réduire l'une ne corrige pas automatiquement l'autre.</p>
+<p>Les outils de géométrie et de surface compatibles partagent les données du pinceau pendant un coup combiné. Les déplacements des sommets réutilisent les buffers de peinture, tandis que les changements de topologie, les nouvelles données de couture et Undo/Redo actualisent les caches affectés. Cette opération est automatique et ne nécessite aucun réglage. Elle réduit les préparations répétées, mais le coût de la sculpture, de la topologie et de la régénération du scatter dépend toujours du terrain et du pinceau.</p>
+<h3>Calculer l'occlusion ambiante dans Direct Vertex Color</h3>
+<p>Le système d'AO par raycast ajoute des ombres dans les creux et les zones de contact du pipeline Direct Vertex Color. Il ne s'agit pas d'une lightmap et il ne remplace pas l'éclairage de la scène. Calculez l'AO après avoir terminé les grandes formes : les modifications géométriques ultérieures peuvent rendre cet ombrage obsolète.</p>
+<p>Ray Quality permet de trouver un compromis entre durée du calcul et qualité d'échantillonnage. Maximum Shadow Distance détermine la distance à laquelle la géométrie voisine influence l'ombre. Contrast règle son intensité. Commencez par un calcul de test et évitez de rendre totalement noires toutes les zones abritées.</p>
+<h3>Diviser le terrain en sections et générer les LODs</h3>
+<p>Chunking divise le terrain en une grille, par exemple 1×1, 2×2, 4×4 ou 8×8. De petites sections peuvent permettre à Unity de n'afficher que les parties utiles, mais créent davantage d'objets et de groupes de rendu. Choisissez une répartition adaptée à la scène plutôt que de toujours utiliser la grille la plus dense.</p>
+<p>LOD1 et LOD2 sont des meshes simplifiés. Les ratios indiquent quelle proportion de géométrie est conservée : plus le ratio est faible, moins il reste de triangles et plus les petites formes risquent d'être perdues. Les seuils de transition de Unity utilisent la hauteur relative à l'écran et non une distance en mètres. Le dernier seuil de culling détermine quand le groupe n'est plus affiché.</p>
+<p>Le collider généré utilise LOD2. Vérifiez que les escaliers, bordures et ouvertures produisent les collisions attendues. Si vous interrogez les surfaces par triangle, les données doivent correspondre au mesh réel du collider et à l'ordre de ses triangles. Des données calculées pour un mesh différent peuvent renvoyer un mauvais biome.</p>
+<p>Utilisez Hide Original Mesh si nécessaire, puis vérifiez que les deux versions ne sont pas affichées simultanément. La division et la génération de LODs sont des opérations de finition ; elles n'accélèrent pas automatiquement toutes les modifications du terrain d'origine.</p>
+<h3>Enregistrer les bonnes ressources</h3>
+<div class="table-wrap"><table><thead><tr><th>Action</th><th>Fonction</th><th>Vérifications après l'opération</th></tr></thead><tbody>
+<tr><td>Save / prefab export</td><td>Enregistre le mesh du terrain et ses données de surface pour les réutiliser dans les scènes.</td><td>Rouvrez le résultat et vérifiez les références de matériaux, l'apparence et les collisions.</td></tr>
+<tr><td>Compile Terrain Textures</td><td>Génère ou actualise les atlas et tableaux de textures de la bibliothèque.</td><td>Vérifiez les biomes modifiés récemment. Choisissez la résolution, la compression et les mipmaps selon le matériel ciblé.</td></tr>
+<tr><td>Make Standalone Copy</td><td>Crée un matériau et des textures indépendants pour un terrain qui doit être séparé des ressources de la bibliothèque partagée.</td><td>Vérifiez que les modifications ultérieures de la bibliothèque partagée ne changent pas ce terrain indépendant.</td></tr>
+<tr><td>Bake Surface Data</td><td>Enregistre les données associant triangles et biomes pour les requêtes du gameplay. Lorsqu'un profil scatter est affecté, inclut aussi la géométrie de placement nécessaire au scatter pendant le jeu sur les meshes de terrain non lisibles.</td><td>Recalculez après toute modification de géométrie, peinture, ID de biome ou topologie. Faites correspondre les données du gameplay au collider et celles du scatter au mesh de rendu. Consultez les <a href="../scatter-system.html">données de scatter pendant le jeu</a>.</td></tr>
+</tbody></table></div>
+<p>Les modifications d'un matériau affectent tous les objets qui l'utilisent. Dupliquer un GameObject ne lui attribue pas automatiquement des ressources indépendantes. Enregistrez un autre matériau ou utilisez Make Standalone Copy lorsque deux morceaux de terrain nécessitent des paramètres globaux différents.</p>
+<h2 id="shortcuts">Raccourcis clavier et souris</h2>
+<p>Les raccourcis ci-dessous sont les <strong>valeurs par défaut</strong>. Utilisez-les dans la Scene View. Leur contexte est important : une même touche peut avoir des fonctions différentes dans Mask, Path, Gradient ou Dusting. La saisie dans un champ éditable a priorité. Sur macOS, Cmd remplace Ctrl pour les raccourcis indiqués Ctrl/Cmd.</p>
+<ul><li>Les touches <kbd>[</kbd> et <kbd>]</kbd> ainsi que <kbd>Shift + mouse wheel</kbd> règlent Radius. <kbd>Ctrl/Cmd + Shift + PageUp</kbd> et <kbd>PageDown</kbd> permettent des modifications fines.</li><li><kbd>Ctrl/Cmd + Shift + Up</kbd> et <kbd>Down</kbd> modifient Geometry Rate ; <kbd>Ctrl/Cmd + Shift + Left</kbd> et <kbd>Right</kbd> règlent Surface Opacity. Les touches moins et égal agissent selon l'outil actif.</li><li><kbd>Ctrl + drag</kbd> inverse le sens des opérations Sculpt et Inflate compatibles. <kbd>Shift</kbd> effectue temporairement un lissage ou un mélange avec les pinceaux compatibles et retire des faces lors d'une sélection Mask.</li><li><kbd>Alt + Shift + 1…9, 0</kbd> sélectionne un biome dans le groupe visible de la palette. <kbd>Tab</kbd> / <kbd>Shift + Tab</kbd> change de groupe.</li><li><kbd>Escape</kbd> quitte l'interaction spéciale courante ou désactive l'outil. Quitter Path conserve ses nœuds. Utilisez Clear Nodes si vous souhaitez réellement supprimer le trajet.</li></ul>
+<h3 id="custom-hotkeys">Modifier les raccourcis dans Hotkey Sheet</h3>
+<ol><li>Ouvrez <strong>Hotkey Sheet</strong> dans la fenêtre du terrain. Recherchez une action ou une touche ou développez un groupe, par exemple Tools, Brush adjustments, Mask mode ou Path mode.</li><li>Cliquez sur le bouton de touche d'une action puis appuyez sur la nouvelle combinaison. Les touches modificatrices seules attendent la touche principale. <kbd>Escape</kbd> annule l'enregistrement.</li><li>Utilisez <strong>×</strong> pour effacer un raccourci, <strong>Reset</strong> pour rétablir celui d'une action ou <strong>Restore Defaults</strong> pour réinitialiser toute la liste.</li></ol>
+<p>Les modifications sont enregistrées automatiquement pour votre utilisateur de l'éditeur Unity et partagées entre projets. Les infobulles et Scene HUD affichent les touches configurées. Si une touche est déjà utilisée dans un contexte superposé, Hotkey Sheet identifie l'action concernée et refuse l'attribution. Modifiez ou effacez d'abord l'autre raccourci. Mask, Path et Gradient peuvent réutiliser une touche si leurs contextes ne se chevauchent pas ; les actions générales s'appliquent dans tous les modes.</p>
+<p>Les gestes de souris et les fonctions Undo/Redo de Unity restent fixes : Shift + molette change Radius ; Shift + glisser lisse ou mélange temporairement, ou retire des faces sélectionnées ; Ctrl + glisser abaisse ou dégonfle ; Ctrl + clic échantillonne un biome dans Paint ; Shift + clic contraint les nœuds Path sur X/Z. Utilisez Ctrl/Cmd + Z pour Undo, Ctrl/Cmd + Shift + Z ou Ctrl/Cmd + Y pour Redo. La saisie dans un champ éditable reste prioritaire hors enregistrement des raccourcis.</p>
+<details><summary>Complete default keyboard bindings</summary><p>Voici les réglages d'usine. Hotkey Sheet affiche vos affectations courantes. Les raccourcis généraux s'appliquent dans tous les modes ; ceux des pinceaux s'appliquent également à Dusting lorsque cela est compatible.</p><div class="table-wrap"><table><thead><tr><th>Raccourci par défaut</th><th>Action</th><th>Contexte</th></tr></thead><tbody>
+<tr><td><kbd>Escape</kbd></td><td>Désactiver les outils / terminer la sélection d'extrémité</td><td>Général</td></tr>
+<tr><td><kbd>[</kbd></td><td>Diminuer Radius / Width du chemin</td><td>Général</td></tr>
+<tr><td><kbd>]</kbd></td><td>Augmenter Radius / Width du chemin</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + PageDown</kbd></td><td>Diminuer Radius / Width par petits incréments</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + PageUp</kbd></td><td>Augmenter Radius / Width par petits incréments</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + Down</kbd></td><td>Diminuer Geometry Speed / Clean-Up Strength</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + Up</kbd></td><td>Augmenter Geometry Speed / Clean-Up Strength</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + Left</kbd></td><td>Diminuer Paint Opacity / Dusting Strength</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + Right</kbd></td><td>Augmenter Paint Opacity / Dusting Strength</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + -</kbd></td><td>Diminuer Geometry Strength et Surface Strength</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + =</kbd></td><td>Augmenter Geometry Strength et Surface Strength</td><td>Général</td></tr>
+<tr><td><kbd>Tab</kbd></td><td>Passer à la page de biomes suivante</td><td>Général</td></tr>
+<tr><td><kbd>Shift + Tab</kbd></td><td>Revenir à la page de biomes précédente</td><td>Général</td></tr>
+<tr><td><kbd>Alt + Shift + 1</kbd></td><td>Sélectionner le slot de biome 1</td><td>Général</td></tr>
+<tr><td><kbd>Alt + Shift + 2</kbd></td><td>Sélectionner le slot de biome 2</td><td>Général</td></tr>
+<tr><td><kbd>Alt + Shift + 3</kbd></td><td>Sélectionner le slot de biome 3</td><td>Général</td></tr>
+<tr><td><kbd>Alt + Shift + 4</kbd></td><td>Sélectionner le slot de biome 4</td><td>Général</td></tr>
+<tr><td><kbd>Alt + Shift + 5</kbd></td><td>Sélectionner le slot de biome 5</td><td>Général</td></tr>
+<tr><td><kbd>Alt + Shift + 6</kbd></td><td>Sélectionner le slot de biome 6</td><td>Général</td></tr>
+<tr><td><kbd>Alt + Shift + 7</kbd></td><td>Sélectionner le slot de biome 7</td><td>Général</td></tr>
+<tr><td><kbd>Alt + Shift + 8</kbd></td><td>Sélectionner le slot de biome 8</td><td>Général</td></tr>
+<tr><td><kbd>Alt + Shift + 9</kbd></td><td>Sélectionner le slot de biome 9</td><td>Général</td></tr>
+<tr><td><kbd>Alt + Shift + 0</kbd></td><td>Sélectionner le slot de biome 10</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + H</kbd></td><td>Activer ou désactiver Sculpt</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + I</kbd></td><td>Activer ou désactiver Inflate</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + U</kbd></td><td>Activer ou désactiver Smooth</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + J</kbd></td><td>Activer ou désactiver Grab</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + K</kbd></td><td>Activer ou désactiver Cave</td><td>Général</td></tr>
+<tr><td><kbd>Shift + N</kbd></td><td>Activer ou désactiver Clean-Up</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + O</kbd></td><td>Activer ou désactiver Path</td><td>Général</td></tr>
+<tr><td><kbd>Shift + M</kbd></td><td>Activer ou désactiver Face Mask</td><td>Général</td></tr>
+<tr><td><kbd>B</kbd></td><td>Activer ou désactiver Paint</td><td>Général</td></tr>
+<tr><td><kbd>Shift + B</kbd></td><td>Activer ou désactiver Dusting</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + F1</kbd></td><td>Activer ou désactiver Fill</td><td>Général</td></tr>
+<tr><td><kbd>Shift + J</kbd></td><td>Activer ou désactiver Smear</td><td>Général</td></tr>
+<tr><td><kbd>J</kbd></td><td>Activer ou désactiver Biome Blend</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + E</kbd></td><td>Activer ou désactiver Gradient</td><td>Général</td></tr>
+<tr><td><kbd>I</kbd></td><td>Activer ou désactiver Eyedropper</td><td>Général</td></tr>
+<tr><td><kbd>O</kbd></td><td>Pinceau Circle</td><td>Pinceau</td></tr>
+<tr><td><kbd>U</kbd></td><td>Pinceau Square</td><td>Pinceau</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + F2</kbd></td><td>Pinceau Diamond</td><td>Pinceau</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + F3</kbd></td><td>Pinceau Jitter</td><td>Pinceau</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + M</kbd></td><td>Activer ou désactiver le pinceau multibiome</td><td>Pinceau</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + X</kbd></td><td>Échanger les biomes primaire et secondaire</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + T</kbd></td><td>Activer ou désactiver Dynamic Topology</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + W</kbd></td><td>Activer ou désactiver Worklight</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + Q</kbd></td><td>Cadrer le terrain actif</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + L</kbd></td><td>Activer ou désactiver Editing Mask</td><td>Général</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + Y</kbd></td><td>Activer ou désactiver Scene Tools HUD</td><td>Général</td></tr>
+<tr><td><kbd>Backspace</kbd></td><td>Effacer la sélection de faces</td><td>Masque</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + Delete</kbd></td><td>Supprimer les faces masquées</td><td>Masque</td></tr>
+<tr><td><kbd>Shift + =</kbd></td><td>Agrandir Mask d'une rangée de faces</td><td>Masque</td></tr>
+<tr><td><kbd>Shift + -</kbd></td><td>Réduire Mask d'une rangée de faces</td><td>Masque</td></tr>
+<tr><td><kbd>Shift + U</kbd></td><td>Inverser la sélection de faces</td><td>Masque</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + F4</kbd></td><td>Sélectionner toutes les faces éditables</td><td>Masque</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + D</kbd></td><td>Effacer la sélection de faces</td><td>Masque</td></tr>
+<tr><td><kbd>Shift + W</kbd></td><td>Sélectionner les faces selon les limites de pente</td><td>Masque</td></tr>
+<tr><td><kbd>Shift + X</kbd></td><td>Sélectionner les faces du biome configuré</td><td>Masque</td></tr>
+<tr><td><kbd>Enter</kbd></td><td>Générer la forme de Mask sélectionnée</td><td>Masque</td></tr>
+<tr><td><kbd>Shift + Enter</kbd></td><td>Peindre les faces masquées</td><td>Masque</td></tr>
+<tr><td><kbd>Shift + S</kbd></td><td>Redimensionner les faces masquées avec Scale Factors</td><td>Masque</td></tr>
+<tr><td><kbd>Shift + L</kbd></td><td>Aligner les faces masquées selon X, Y ou Z</td><td>Masque</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + F8</kbd></td><td>Aplatir les faces masquées selon la surface</td><td>Masque</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + F5</kbd></td><td>Subdiviser les faces masquées</td><td>Masque</td></tr>
+<tr><td><kbd>Shift + Q</kbd></td><td>Remplir les limites du trou sélectionné</td><td>Masque</td></tr>
+<tr><td><kbd>Shift + F1</kbd></td><td>Préréglage d'extrusion ou de plateau</td><td>Masque</td></tr>
+<tr><td><kbd>Shift + F2</kbd></td><td>Préréglage Pillar</td><td>Masque</td></tr>
+<tr><td><kbd>Shift + F3</kbd></td><td>Préréglage Arch</td><td>Masque</td></tr>
+<tr><td><kbd>Shift + F4</kbd></td><td>Préréglage Boulder</td><td>Masque</td></tr>
+<tr><td><kbd>Shift + F5</kbd></td><td>Sélection de faces avec Brush</td><td>Masque</td></tr>
+<tr><td><kbd>Shift + F6</kbd></td><td>Sélection d'une face individuelle</td><td>Masque</td></tr>
+<tr><td><kbd>Shift + F7</kbd></td><td>Sélection d'une zone connectée avec Flood Island</td><td>Masque</td></tr>
+<tr><td><kbd>O</kbd></td><td>Pinceau de sélection de faces Circle</td><td>Masque</td></tr>
+<tr><td><kbd>U</kbd></td><td>Pinceau de sélection de faces Square</td><td>Masque</td></tr>
+<tr><td><kbd>Backspace</kbd></td><td>Effacer tous les nœuds Path</td><td>Chemin</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + Delete</kbd></td><td>Supprimer le nœud Path sélectionné</td><td>Chemin</td></tr>
+<tr><td><kbd>Shift + P</kbd></td><td>Effacer tous les nœuds Path (alternative)</td><td>Chemin</td></tr>
+<tr><td><kbd>Shift + F1</kbd></td><td>Chemin de surface</td><td>Chemin</td></tr>
+<tr><td><kbd>Shift + F2</kbd></td><td>Chemin Tunnel</td><td>Chemin</td></tr>
+<tr><td><kbd>Shift + F3</kbd></td><td>Chemin Bridge</td><td>Chemin</td></tr>
+<tr><td><kbd>Shift + F4</kbd></td><td>Chemin de surface : Grade and Level</td><td>Chemin</td></tr>
+<tr><td><kbd>Shift + F5</kbd></td><td>Chemin de surface : Raise Embankment</td><td>Chemin</td></tr>
+<tr><td><kbd>Shift + F6</kbd></td><td>Chemin de surface : Carve Trench / Riverbed</td><td>Chemin</td></tr>
+<tr><td><kbd>Shift + F7</kbd></td><td>Chemin de surface : Smooth Corridor</td><td>Chemin</td></tr>
+<tr><td><kbd>Shift + F8</kbd></td><td>Chemin de surface : Steps</td><td>Chemin</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + F6</kbd></td><td>Activer ou désactiver Closed Loop</td><td>Chemin</td></tr>
+<tr><td><kbd>Enter</kbd></td><td>Créer et peindre un chemin ou un tunnel, ou créer un pont</td><td>Chemin</td></tr>
+<tr><td><kbd>Shift + Enter</kbd></td><td>Peindre un chemin de surface ou les parois d'un tunnel</td><td>Chemin</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Enter</kbd></td><td>Créer la géométrie du chemin, du tunnel ou du pont</td><td>Chemin</td></tr>
+<tr><td><kbd>Shift + S</kbd></td><td>Sélectionner les faces de l'extrémité de départ</td><td>Chemin</td></tr>
+<tr><td><kbd>Shift + E</kbd></td><td>Sélectionner les faces de l'extrémité d'arrivée</td><td>Chemin</td></tr>
+<tr><td><kbd>O</kbd></td><td>Sélection d'extrémité : pinceau Circle</td><td>Chemin</td></tr>
+<tr><td><kbd>U</kbd></td><td>Sélection d'extrémité : pinceau Square</td><td>Chemin</td></tr>
+<tr><td><kbd>Ctrl/Cmd + Shift + F7</kbd></td><td>Sélection d'extrémité : Single Face</td><td>Chemin</td></tr>
+<tr><td><kbd>Shift + F1</kbd></td><td>Gradient Cone Volume</td><td>Gradient</td></tr>
+<tr><td><kbd>Shift + F2</kbd></td><td>Gradient Directional Line</td><td>Gradient</td></tr>
+<tr><td><kbd>Shift + F3</kbd></td><td>Gradient Whole Altitude</td><td>Gradient</td></tr>
+<tr><td><kbd>Shift + F4</kbd></td><td>Gradient Whole Slope</td><td>Gradient</td></tr>
+<tr><td><kbd>Enter</kbd></td><td>Appliquer le gradient de cône, d'altitude ou de pente</td><td>Gradient</td></tr>
+<tr><td><kbd>Shift + W</kbd></td><td>Ajuster le cône au terrain actif</td><td>Gradient</td></tr>
+<tr><td><kbd>Shift + S</kbd></td><td>Placer le cône sur le sommet le plus haut</td><td>Gradient</td></tr>
+<tr><td><kbd>Shift + F1</kbd></td><td>Peindre le Dusting</td><td>Dusting</td></tr>
+<tr><td><kbd>Shift + F2</kbd></td><td>Adoucir ou mélanger le Dusting</td><td>Dusting</td></tr>
+<tr><td><kbd>Shift + F3</kbd></td><td>Effacer le Dusting</td><td>Dusting</td></tr>
+<tr><td><kbd>Shift + F4</kbd></td><td>Remplir un biome avec Dusting</td><td>Dusting</td></tr>
+</tbody></table></div></details>
+<h2 id="glossary">Terminologie des guides</h2>
+<div class="table-wrap"><table><thead><tr><th>Terme</th><th>Définition simple</th></tr></thead><tbody>
+<tr><td>Mesh / vertex / face</td><td>La forme du terrain / un point de cette forme / un triangle reliant des points.</td></tr>
+<tr><td>Topology</td><td>Manière dont les sommets et les triangles sont reliés. Subdivision, suppression de faces et création de tunnels modifient la topologie.</td></tr>
+<tr><td>Biome</td><td>Préréglage réutilisable de surface du sol, par exemple herbe, neige ou roche. Il ne place pas automatiquement des plantes ou des ennemis et ne crée pas de météo.</td></tr>
+<tr><td>Biome ID</td><td>Indice numérique du préréglage dans la bibliothèque actuelle. Consultez votre propre bibliothèque : les IDs des exemples ne sont pas universels.</td></tr>
+<tr><td>Weight</td><td>Proportion d'une surface dans un mélange, indépendante de sa couleur et de sa hauteur physique.</td></tr>
+<tr><td>Material / shader</td><td>Les paramètres d'apparence enregistrés / le code de rendu qui les utilise.</td></tr>
+<tr><td>Atlas / texture array</td><td>Collections compilées de textures de surface de la bibliothèque, utilisées par le matériau de terrain.</td></tr>
+<tr><td>Normal map / parallax</td><td>Détails d'éclairage / illusion de profondeur d'une surface. Aucun des deux ne modifie la géométrie de collision du terrain.</td></tr>
+<tr><td>Bake</td><td>Calculer des données à l'avance puis enregistrer le résultat. Recalculez-les lorsque leurs sources changent.</td></tr>
+<tr><td>LOD</td><td>Version simplifiée d'un mesh utilisée quand il occupe moins de place à l'écran.</td></tr><tr><td>3D Scatter</td><td>Objets de surface instanciés sur GPU, tels que herbe, fleurs, champignons, pierres ou meshes personnalisés, placés selon les biomes de Terrain Atlas. Consultez le <a href="../scatter-system.html">guide 3D Scatter</a>.</td></tr>
+</tbody></table></div>
+<h2 id="troubleshooting">Résoudre les problèmes courants</h2>
+<div class="table-wrap"><table><thead><tr><th>Symptôme</th><th>Premières vérifications</th></tr></thead><tbody>
+<tr><td>The brush does nothing</td><td>Vérifiez la cible active, ses options Paint/Sculpt, l'outil sélectionné, Radius et Strength. Assurez-vous que la Scene View a le focus et qu'un champ de texte ne reçoit pas les touches.</td></tr>
+<tr><td>A brush cannot edit near the mask boundary</td><td>Vérifiez Editing Mask et la zone enregistrée. Les sommets des limites communes restent fixes pour protéger les faces voisines et les coutures soudées. Désactivez temporairement le masque ou sélectionnez une zone plus grande et utilisez Set Mask à nouveau.</td></tr>
+<tr><td>Extrusion or Fill Hole is unavailable</td><td>Effacez Editing Mask avant ces opérations. Effacer le masque d'édition enregistré est différent d'effacer la sélection actuelle de faces.</td></tr>
+<tr><td>A shortcut seems different from this guide</td><td>Les tableaux présentent les valeurs par défaut. Ouvrez Hotkey Sheet pour examiner vos raccourcis actuels, rechercher l'action et la réinitialiser au besoin.</td></tr>
+<tr><td>Painting looks angular</td><td>Les informations peintes dépendent de la géométrie du mesh. Vérifiez la densité des sommets, puis utilisez éventuellement une subdivision locale ou Dynamic Topology. Blend Sharpness change la transition, pas le nombre de triangles.</td></tr>
+<tr><td>A hill is too jagged</td><td>Réduisez la vitesse de déformation, utilisez un pinceau plus grand et vérifiez la topologie. Lissez légèrement la géométrie ; changer uniquement les normales ne modifie que l'éclairage.</td></tr>
+<tr><td>A tunnel breaks through the surface</td><td>Vérifiez la largeur, la hauteur et Minimum Cover Depth sur tout le trajet. Enfoncez le tunnel davantage ou réduisez sa section si nécessaire.</td></tr>
+<tr><td>A gradient paints one surface everywhere</td><td>Vérifiez que l'intervalle de hauteur ou de pente couvre le terrain, que le cône le recouvre et que les points du gradient utilisent les IDs de biome prévus.</td></tr>
+<tr><td>A seam appears between tiles</td><td>Recherchez d'abord un espace physique, puis vérifiez l'enregistrement des tuiles, l'activation des voisins, les normales et les réglages du matériau. Seam Blend ne peut pas refermer une ouverture géométrique.</td></tr>
+<tr><td>The appearance changes on another terrain</td><td>Vérifiez si les deux terrains utilisent la même bibliothèque, le même matériau ou les mêmes textures. Créez une copie indépendante si leurs réglages doivent être distincts.</td></tr>
+<tr><td>The character walks through or above a feature</td><td>Examinez le collider et vérifiez qu'il correspond au mesh modifié. Vérifiez aussi la simplification LOD2 si vous avez généré des colliders de sections.</td></tr>
+<tr><td>Gameplay reports the wrong biome</td><td>Recalculez les Surface Data après les modifications et faites correspondre l'ordre des triangles au collider touché. Une recherche par triangle nécessite un triangle de mesh valide ; un collider non-mesh ne retourne pas implicitement le biome 0. Consultez le <a href="demo-components.html">guide du Surface Raycast Tester</a> pour connaître les limites de ces requêtes.</td></tr>
+<tr><td>Editing becomes slow</td><td>Vérifiez le nombre de triangles, la portée des pinceaux et les réglages de Dynamic Topology. Réduisez les densités inutiles sur une copie puis mesurez à nouveau les performances. Vérifiez séparément la résolution des textures.</td></tr>
+</tbody></table></div>
+<h2 id="support">Assistance</h2><p>Si vous avez besoin d'aide, décrivez le résultat attendu, le contrôle utilisé et le résultat obtenu. Précisez votre version d'Unity, le pipeline de surface choisi et joignez une capture d'écran des paramètres concernés. Pour un problème de requête pendant le jeu, indiquez aussi le type de collider et la date du dernier calcul des Surface Data.</p><p>Utilisez le <a href="https://dptgames.github.io/#contact">formulaire de contact DPT Games</a> ou rejoignez le <a href="https://discord.gg/EkQykfzP5X">Discord DPT Games</a>.</p><p class="back-top"><a href="#top">Retour en haut</a></p><footer class="footer">Mis à jour le 20 octobre 2026.</footer></main>
+<!-- Cloudflare Web Analytics --><script data-cf-beacon='{"token": "8e179a1cf8eb4d4abe8a988a18e4a97b"}' src="https://static.cloudflareinsights.com/beacon.min.js" type="module"></script><!-- End Cloudflare Web Analytics -->
+</body></html>
