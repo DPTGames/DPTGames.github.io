@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="地形の形を作り、地表を塗り、シーンで使える状態に仕上げます。" name="description"/><link href="../index.html" hreflang="en" rel="alternate"/><link href="index.html" hreflang="ja" rel="alternate"/><link href="../ko/index.html" hreflang="ko" rel="alternate"/><title>Vertex 3D Terrain ガイド | DPT Games</title><style>
+<html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="地形の形を作り、地表を塗り、シーンで使える状態に仕上げます。" name="description"/><link href="../index.html" hreflang="en" rel="alternate"/><link href="../fr/index.html" hreflang="fr" rel="alternate"/><link href="index.html" hreflang="ja" rel="alternate"/><link href="../ko/index.html" hreflang="ko" rel="alternate"/><title>Vertex 3D Terrain ガイド | DPT Games</title><style>
 :root{color-scheme:dark;--bg:#0f172a;--panel:#1e293b;--text:#e2e8f0;--muted:#bdcbdc;--accent:#38bdf8;--border:#40516b}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Segoe UI","Yu Gothic","Meiryo",Arial,sans-serif}
 main{max-width:1120px;margin:auto;padding:36px 32px 64px}a{color:var(--accent);text-underline-offset:3px}a:hover{color:#bae6fd}a:focus-visible{outline:3px solid #fbbf24;outline-offset:4px}
@@ -17,7 +17,7 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 .video-frame{width:100%;aspect-ratio:16/9;min-height:200px;background:#09111f;border:1px solid var(--border);border-radius:9px;overflow:hidden}.video-frame iframe{display:block;width:100%;height:100%;border:0}.video-link,.video-note{font-size:.95rem}.video-note{color:var(--muted)}
 @media print{.video-frame{display:none}}
 </style></head>
-<body><main id="top"><nav aria-label="ドキュメント" class="site-nav"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a aria-current="page" href="index.html">Vertex 3D Terrain ガイド</a><a href="biomes.html">バイオームガイド</a><a href="terrain-material-settings.html">地形マテリアル設定</a><a href="scatter-system.html">3D Scatter ガイド</a><a href="player-collision.html">プレイヤーとの衝突・インタラクション</a><a href="demo-components.html">デモ・ランタイムガイド</a></nav><nav aria-label="言語" class="language-nav"><a href="../index.html" hreflang="en" lang="en">English</a><a aria-current="page" href="index.html" hreflang="ja" lang="ja">日本語</a><a href="../ko/index.html" hreflang="ko" lang="ko">한국어</a></nav><header><h1>Vertex 3D Terrain ガイド</h1><p class="lead">地形の形を作り、地表を塗り、シーンで使える状態に仕上げます。</p></header><nav aria-label="このページの内容" class="toc"><h2>このページの内容</h2><ul><li><a href="#tutorial">チュートリアル動画を見る</a></li><li><a href="#quick-start">最初の地形を作る</a></li><li><a href="#section-one">編集対象、ライブラリ、ブラシ設定</a></li><li><a href="#generators">土台となる形を生成する</a></li><li><a href="#section-two">形状ツールとサーフェスツール</a></li><li><a href="#masks">面を選択し、編集範囲を制限して形を作る</a></li><li><a href="#gradients">高さ・傾斜・方向で地表を配置する</a></li><li><a href="#paths">道、川床、階段、トンネル、橋</a></li><li><a href="#section-three">複数の地形タイルを編集する</a></li><li><a href="#section-four">地形を保存・最適化する</a></li><li><a href="#shortcuts">キーボード・マウス操作</a></li><li><a href="#glossary">このガイドで使う用語</a></li><li><a href="#troubleshooting">思ったとおりの結果にならないとき</a></li><li><a href="#support">サポート</a></li></ul></nav><p class="table-hint">小さい画面では、幅の広い表を横にスクロールするとすべての列を読めます。</p><div class="intro">
+<body><main id="top"><nav aria-label="ドキュメント" class="site-nav"><a href="https://dptgames.github.io/">DPT Games ホームページ</a><a aria-current="page" href="index.html">Vertex 3D Terrain ガイド</a><a href="biomes.html">バイオームガイド</a><a href="terrain-material-settings.html">地形マテリアル設定</a><a href="scatter-system.html">3D Scatter ガイド</a><a href="player-collision.html">プレイヤーとの衝突・インタラクション</a><a href="demo-components.html">デモ・ランタイムガイド</a></nav><nav aria-label="言語" class="language-nav"><a href="../index.html" hreflang="en" lang="en">English</a><a href="../fr/index.html" hreflang="fr" lang="fr">Français</a><a aria-current="page" href="index.html" hreflang="ja" lang="ja">日本語</a><a href="../ko/index.html" hreflang="ko" lang="ko">한국어</a></nav><header><h1>Vertex 3D Terrain ガイド</h1><p class="lead">地形の形を作り、地表を塗り、シーンで使える状態に仕上げます。</p></header><nav aria-label="このページの内容" class="toc"><h2>このページの内容</h2><ul><li><a href="#tutorial">チュートリアル動画を見る</a></li><li><a href="#quick-start">最初の地形を作る</a></li><li><a href="#section-one">編集対象、ライブラリ、ブラシ設定</a></li><li><a href="#generators">土台となる形を生成する</a></li><li><a href="#section-two">形状ツールとサーフェスツール</a></li><li><a href="#masks">面を選択し、編集範囲を制限して形を作る</a></li><li><a href="#gradients">高さ・傾斜・方向で地表を配置する</a></li><li><a href="#paths">道、川床、階段、トンネル、橋</a></li><li><a href="#section-three">複数の地形タイルを編集する</a></li><li><a href="#section-four">地形を保存・最適化する</a></li><li><a href="#shortcuts">キーボード・マウス操作</a></li><li><a href="#glossary">このガイドで使う用語</a></li><li><a href="#troubleshooting">思ったとおりの結果にならないとき</a></li><li><a href="#support">サポート</a></li></ul></nav><p class="table-hint">小さい画面では、幅の広い表を横にスクロールするとすべての列を読めます。</p><div class="intro">
 <p>Vertex 3D Terrain では、Unity 内でメッシュベースの地形を直接生成・編集できます。一般的な地面、惑星、浮島を作成し、その後で形状を変形し、サーフェスをペイントし、パスや構造物を作成し、グラデーションを適用し、複数の地形タイルをまたいで編集できます。</p>
 <p><strong>形状ツール</strong>は実際のメッシュを変更し、<strong>サーフェスツール</strong>は見た目を変更します。対応している形状ツールとサーフェスツールは同じストロークで同時に使用できるため、地形を変形しながらペイントすることもできます。</p>
 </div>
@@ -25,236 +25,234 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <h2 id="tutorial">チュートリアル動画を見る</h2>
 <p>Vertex 3D Terrain のチュートリアル動画を見ながら、下の手順を Unity で試してください。</p>
 <div class="video-frame">
-<iframe width="960" height="540" src="https://www.youtube-nocookie.com/embed/PwQeYMFUcso?playsinline=1&amp;cc_load_policy=1&amp;cc_lang_pref=ja&amp;hl=ja" title="Vertex 3D Terrain チュートリアル動画" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" height="540" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube-nocookie.com/embed/PwQeYMFUcso?playsinline=1&amp;cc_load_policy=1&amp;cc_lang_pref=ja&amp;hl=ja" title="Vertex 3D Terrain チュートリアル動画" width="960"></iframe>
 </div>
 <p class="video-note">音声は英語です。日本語字幕が表示されない場合は、動画の設定から［字幕］→［自動翻訳］→［日本語］を選んでください。</p>
-<p class="video-link"><a href="https://www.youtube.com/watch?v=PwQeYMFUcso" target="_blank" rel="noopener">YouTube で見る（新しいタブで開きます）</a></p>
+<p class="video-link"><a href="https://www.youtube.com/watch?v=PwQeYMFUcso" rel="noopener" target="_blank">YouTube で見る（新しいタブで開きます）</a></p>
 </section>
-
 <h2 id="quick-start">最初の地形を作る</h2>
 <ol>
 <li><strong>Tools → DPT Games → Vertex 3D Terrain</strong> を開きます。</li>
-<li><strong>Create Terrain</strong> を開き、作成する地形を <strong>Flat Terrain</strong>、<strong>Planet</strong>、<strong>Floating Island</strong> から選びます。</li>
-<li><strong>Starting Biome</strong> を選びます。Floating Island では <strong>Top Biome</strong> と <strong>Bottom Biome</strong> を選びます。地形のサイズ、形状、解像度も調整します。使用できる項目は地形タイプによって異なり、たとえば Floating Island では幅、長さ、下面の深さ、台地の形、下面の形、Surface Variation を設定できます。</li>
-<li><strong>Spawn Position</strong> で生成位置を選びます。<strong>Live Preview</strong> が有効なら、生成前に全体の大きさと輪郭を確認します。</li>
-<li>選択した地形タイプに応じて、<strong>Generate Floating Island</strong>、<strong>Generate Planetoid</strong>、<strong>Generate Surface</strong> などの生成ボタンをクリックします。</li>
+<li><strong>地形を作成</strong> を開き、作成する地形を <strong>平面地形</strong>、<strong>惑星</strong>、<strong>浮島</strong> から選びます。</li>
+<li><strong>初期バイオーム</strong> を選びます。浮島 では <strong>上面のバイオーム</strong> と <strong>下面のバイオーム</strong> を選びます。地形のサイズ、形状、解像度も調整します。使用できる項目は地形タイプによって異なり、たとえば 浮島 では幅、長さ、下面の深さ、台地の形、下面の形、サーフェスの起伏 を設定できます。</li>
+<li><strong>生成位置</strong> で生成位置を選びます。<strong>ライブプレビュー</strong> が有効なら、生成前に全体の大きさと輪郭を確認します。</li>
+<li>選択した地形タイプに応じて、<strong>浮島を生成</strong>、<strong>小惑星を生成</strong>、<strong>サーフェスを生成</strong> などの生成ボタンをクリックします。</li>
 <li>生成後は形状ツールとサーフェスツールで編集できます。メッシュをスカルプト・変形し、バイオームを塗り、パスやグラデーションを作成し、マスクで面を選択できます。対応する形状ツールとサーフェスツールは、同じストロークで組み合わせることもできます。</li>
 <li>細かなディテールを加える前に、まず全体の大きな形を整えます。細かい編集が必要な場所では、後から局所的に形状密度を増やせます。</li>
 <li>満足できる結果になったら、Unity シーンと保持したい生成アセットと一緒に地形を保存します。</li>
 </ol>
-<div class="example"><p><strong>最初の練習：</strong>小さな地形を生成し、Sculpt で輪郭の一部を変形してから、Paint、Path、または別のサーフェスツールを試します。大きなシーンに取りかかる前に、生成と編集の基本的な流れを短時間で確認できます。</p></div>
+<div class="example"><p><strong>最初の練習：</strong>小さな地形を生成し、スカルプト で輪郭の一部を変形してから、ペイント、パス、または別のサーフェスツールを試します。大きなシーンに取りかかる前に、生成と編集の基本的な流れを短時間で確認できます。</p></div>
 <h2 id="section-one">編集対象、ライブラリ、ブラシ設定</h2>
 <h3>何を編集するかを選ぶ</h3>
-<p>現在の編集対象から、メッシュと設定が読み込まれます。複数のオブジェクトで構成する地形では、対象リストでペイントやスカルプトを許可するオブジェクトを選びます。<strong>Active</strong> と <strong>Paint/Sculpt の許可</strong>は別の役割を持ちます。一つのタイルを選んでも、周囲のすべてのタイルが編集可能になるとは限りません。</p>
-<p>必要な地形を追加・登録し、シーンの構成を変えたら対象リストを更新します。境界をまたぐストロークの前に Paint/Sculpt のスイッチを確認してください。対象にはツールが使うメッシュのコンポーネントが必要です。ゲーム中に物理レイキャストで地形を検出する場合は、コライダーも必要になります。</p>
+<p>現在の編集対象から、メッシュと設定が読み込まれます。複数のオブジェクトで構成する地形では、対象リストでペイントやスカルプトを許可するオブジェクトを選びます。<strong>アクティブ</strong> と <strong>ペイント/スカルプト の許可</strong>は別の役割を持ちます。一つのタイルを選んでも、周囲のすべてのタイルが編集可能になるとは限りません。</p>
+<p>必要な地形を追加・登録し、シーンの構成を変えたら対象リストを更新します。境界をまたぐストロークの前に ペイント/スカルプト のスイッチを確認してください。対象にはツールが使うメッシュのコンポーネントが必要です。ゲーム中に物理レイキャストで地形を検出する場合は、コライダーも必要になります。</p>
 <div class="table-wrap"><table><thead><tr><th>設定</th><th>意味</th><th>変更する場面</th></tr></thead><tbody>
-<tr><td>Terrain Atlas</td><td>ライブラリから生成したテクスチャとカラーランプで、塗られた地表を描画します。</td><td>岩、砂、草、水のような地表など、テクスチャの細部を使いたい場合に選びます。専用シェーダーは SH_DPT_VCTerrain です。</td></tr>
-<tr><td>Direct Vertex Color</td><td>アトラスによるテクスチャ表現の代わりに、メッシュの頂点へ地表の色を保存します。</td><td>色を中心としたシンプルな表現に使います。頂点の数と配置によって、塗れる色の細かさが変わります。</td></tr>
-<tr><td>Biome Library</td><td>再利用できる地表プリセットの集まりです。二つのパイプラインは、同じライブラリ内に別々のプリセット一覧を持ちます。</td><td>関連する地形では同じライブラリを共有し、地表を独立して調整したい地形では別のコピーを使います。</td></tr>
-<tr><td>半径（Radius）</td><td>ワールド空間でのブラシの到達範囲です。単位はメートルです。</td><td>大きな地形には広い半径、仕上げには小さい半径を使います。形状とペイントで同じ範囲を使うなら、半径を連動させます。</td></tr>
+<tr><td>地形アトラス</td><td>ライブラリから生成したテクスチャとカラーランプで、塗られた地表を描画します。</td><td>岩、砂、草、水のような地表など、テクスチャの細部を使いたい場合に選びます。専用シェーダーは SH_DPT_VCTerrain です。</td></tr>
+<tr><td>直接頂点カラー</td><td>アトラスによるテクスチャ表現の代わりに、メッシュの頂点へ地表の色を保存します。</td><td>色を中心としたシンプルな表現に使います。頂点の数と配置によって、塗れる色の細かさが変わります。</td></tr>
+<tr><td>バイオームライブラリ</td><td>再利用できる地表プリセットの集まりです。二つのパイプラインは、同じライブラリ内に別々のプリセット一覧を持ちます。</td><td>関連する地形では同じライブラリを共有し、地表を独立して調整したい地形では別のコピーを使います。</td></tr>
+<tr><td>半径</td><td>ワールド空間でのブラシの到達範囲です。単位はメートルです。</td><td>大きな地形には広い半径、仕上げには小さい半径を使います。形状とペイントで同じ範囲を使うなら、半径を連動させます。</td></tr>
 <tr><td>形状の速度・強さ</td><td>ストロークでメッシュがどれだけ速く動くかを決めます。</td><td>慎重な作業では低くします。高すぎると、短いストロークでも深い溝や高い突起ができます。</td></tr>
 <tr><td>ペイントの不透明度</td><td>選んだ地表が、既存の地表を置き換えたり混ざったりする強さです。</td><td>低い値では弱いストロークを重ねて調整でき、1 では選んだ地表を強く適用します。</td></tr>
 <tr><td>ブレンドのシャープさ</td><td>塗ったバイオーム同士の境界の見え方を決めます。</td><td>低い値ではなだらかに、高い値では境界が明確になります。メッシュの頂点数は増えません。</td></tr>
-<tr><td>ブラシ形状</td><td>Circle、Square、Diamond、Noise Jitter でストロークの形を変えます。</td><td>最初は円形が扱いやすいです。直線的な輪郭には四角など、規則性を崩したいときはジッターを使います。</td></tr>
-<tr><td>筆圧</td><td>Strength、Radius、Both から、筆圧で変える項目を選べます。最低限の筆圧も設定できます。</td><td>強さを徐々に変えるなら Strength、強く押すほどブラシを広げるなら Radius を選びます。</td></tr>
+<tr><td>ブラシ形状</td><td>円、四角形、ひし形、ノイズジッター でストロークの形を変えます。</td><td>最初は円形が扱いやすいです。直線的な輪郭には四角など、規則性を崩したいときはジッターを使います。</td></tr>
+<tr><td>筆圧</td><td>強度、半径、両方 から、筆圧で変える項目を選べます。最低限の筆圧も設定できます。</td><td>強さを徐々に変えるなら 強度、強く押すほどブラシを広げるなら 半径 を選びます。</td></tr>
 <tr><td>プレビューの色</td><td>形状とペイントのブラシ範囲を区別する色です。アルファ値でプレビューの透明度を変えます。</td><td>地形上で見やすい色を選びます。この色は、実際に塗られるバイオームの色には影響しません。</td></tr>
-<tr><td>Worklight / Scene HUD</td><td>作業用の追加照明と、現在のツールを示す簡易表示です。</td><td>形を見やすくしたり、使用中のツールを確認したりするときに使います。最終結果はシーン本来の照明でも確認します。</td></tr>
+<tr><td>作業灯 / シーン HUD</td><td>作業用の追加照明と、現在のツールを示す簡易表示です。</td><td>形を見やすくしたり、使用中のツールを確認したりするときに使います。最終結果はシーン本来の照明でも確認します。</td></tr>
 </tbody></table></div>
-<p>パイプラインを変えると、地形のサーフェスデータの使い方が変わります。完成済みの地形を変換する前にコピーを保存し、変換後の見た目を比較してください。Terrain Atlas のテクスチャ細部が、Direct Vertex Color でも同じように見えるとは限りません。</p>
-<p>個別のプリセット、テクスチャ入力、ライブラリの操作は<a href="biomes.html">バイオームガイド</a>で説明しています。マテリアル全体に効く設定は<a href="terrain-material-settings.html">地形マテリアル設定</a>を参照してください。Terrain Atlas のバイオームデータを使って Grass、Flower、Mushroom、Pebble、Custom Mesh を配置する方法は<a href="scatter-system.html">3D Scatter ガイド</a>を参照してください。</p>
+<p>パイプラインを変えると、地形のサーフェスデータの使い方が変わります。完成済みの地形を変換する前にコピーを保存し、変換後の見た目を比較してください。地形アトラス のテクスチャ細部が、直接頂点カラー でも同じように見えるとは限りません。</p>
+<p>個別のプリセット、テクスチャ入力、ライブラリの操作は<a href="biomes.html">バイオームガイド</a>で説明しています。マテリアル全体に効く設定は<a href="terrain-material-settings.html">地形マテリアル設定</a>を参照してください。地形アトラス のバイオームデータを使って 草、Flower、Mushroom、Pebble、カスタムメッシュ を配置する方法は<a href="scatter-system.html">3D スキャッター ガイド</a>を参照してください。</p>
 <h2 id="generators">土台となる形を生成する</h2>
-<p><strong>Create Terrain</strong> を開き、<strong>Flat Terrain</strong>、<strong>Planet</strong>、<strong>Floating Island</strong> のいずれかを選びます。各ジェネレーターは地形マテリアル付きのメッシュを作成し、編集対象として登録します。スカルプトや細かなペイントを始める前に、目的に合う土台の形とバイオームを設定してください。</p>
+<p><strong>地形を作成</strong> を開き、<strong>平面地形</strong>、<strong>惑星</strong>、<strong>浮島</strong> のいずれかを選びます。各ジェネレーターは地形マテリアル付きのメッシュを作成し、編集対象として登録します。スカルプトや細かなペイントを始める前に、目的に合う土台の形とバイオームを設定してください。</p>
 <h3 id="generation-common">配置、プレビュー、バイオーム選択</h3>
-<p><strong>Live Preview</strong> は、Scene ビューに一時的な低解像度の灰色メッシュを表示します。位置、大きさ、輪郭の確認に使います。実際に生成される地形は選択したフル解像度を使用し、この灰色表示は完成したバイオームテクスチャのプレビューではありません。</p>
-<div class="table-wrap"><table><thead><tr><th>Spawn Position</th><th>配置</th></tr></thead><tbody>
-<tr><td>World Origin</td><td>(0, 0, 0) から開始します。</td></tr>
-<tr><td>Position Offset</td><td>ワールド原点を基準に、指定した絶対 XYZ 座標を使います。</td></tr>
-<tr><td>Scene View Center</td><td>Scene ビューカメラの回転中心を使います。</td></tr>
-<tr><td>Ground Snapped View</td><td>ビューの X/Z 座標を使い、Y = 0 に配置します。任意の地形表面へレイキャストして吸着する機能ではありません。</td></tr>
+<p><strong>ライブプレビュー</strong> は、Scene ビューに一時的な低解像度の灰色メッシュを表示します。位置、大きさ、輪郭の確認に使います。実際に生成される地形は選択したフル解像度を使用し、この灰色表示は完成したバイオームテクスチャのプレビューではありません。</p>
+<div class="table-wrap"><table><thead><tr><th>生成位置</th><th>配置</th></tr></thead><tbody>
+<tr><td>ワールド原点</td><td>(0, 0, 0) から開始します。</td></tr>
+<tr><td>位置オフセット</td><td>ワールド原点を基準に、指定した絶対 XYZ 座標を使います。</td></tr>
+<tr><td>Scene View 中心</td><td>Scene ビューカメラの回転中心を使います。</td></tr>
+<tr><td>地面に合わせた表示位置</td><td>ビューの X/Z 座標を使い、Y = 0 に配置します。任意の地形表面へレイキャストして吸着する機能ではありません。</td></tr>
 </tbody></table></div>
-<p><strong>Starting Biome</strong> は、Flat Terrain と Planet の初期地表を選びます。選択肢は現在のサーフェスパイプラインとライブラリに従います。Floating Island では、下で説明する Top Biome と Bottom Biome を別々に選びます。生成後は、すべての地表を自由に塗り直せます。</p>
-<h3 id="generation-flat">Flat Terrain</h3>
-<p><strong>Shape Preset</strong> から Flat Plane、Island Mountain、River Valley、Crater Basin を選びます。Flat Terrain はジェネレーターのカテゴリ名であり、高さプリセットによって丘やくぼみも作れます。</p>
+<p><strong>初期バイオーム</strong> は、平面地形 と 惑星 の初期地表を選びます。選択肢は現在のサーフェスパイプラインとライブラリに従います。浮島 では、下で説明する 上面のバイオーム と 下面のバイオーム を別々に選びます。生成後は、すべての地表を自由に塗り直せます。</p>
+<h3 id="generation-flat">平面地形</h3>
+<p><strong>形状プリセット</strong> から 平面、島の山、川の谷、クレーター盆地 を選びます。平面地形 はジェネレーターのカテゴリ名であり、高さプリセットによって丘やくぼみも作れます。</p>
 <div class="table-wrap"><table><thead><tr><th>Control</th><th>用途</th></tr></thead><tbody>
-<tr><td>Surface Name</td><td>生成する地形オブジェクトの名前を指定します。</td></tr>
+<tr><td>サーフェス名</td><td>生成する地形オブジェクトの名前を指定します。</td></tr>
 <tr><td>Quick Size / Tile Size (Square)</td><td>正方形タイルの幅と長さをメートル単位で指定します。Quick Size には 25、50、100、250、500、1000 m のプリセットがあります。</td></tr>
-<tr><td>Grid Subdivisions</td><td>X/Z 方向のグリッド密度を設定します。Density ボタンでは 32、64、128、256 を開始値として選べます。</td></tr>
-<tr><td>High Density Borders</td><td>内部は選択した解像度のまま、恒久的なタイル境界の密度を 2 倍にします。タイル全体を 2 倍の密度にせず、継ぎ目を支える頂点を増やせます。</td></tr>
-<tr><td>Mesh Complexity</td><td>頂点数・三角形数の概算と 1 クアッドあたりの間隔を表示します。大きく高密度な地形を作る前に確認してください。</td></tr>
+<tr><td>グリッドの分割数</td><td>X/Z 方向のグリッド密度を設定します。密度 ボタンでは 32、64、128、256 を開始値として選べます。</td></tr>
+<tr><td>高密度の境界</td><td>内部は選択した解像度のまま、恒久的なタイル境界の密度を 2 倍にします。タイル全体を 2 倍の密度にせず、継ぎ目を支える頂点を増やせます。</td></tr>
+<tr><td>メッシュ Complexity</td><td>頂点数・三角形数の概算と 1 クアッドあたりの間隔を表示します。大きく高密度な地形を作る前に確認してください。</td></tr>
 </tbody></table></div>
-<p>準備ができたら <strong>Generate Surface</strong> をクリックします。最初から全タイルを最大解像度にせず、必要な大きな特徴を表現できる程度の形状を用意し、細部は後から局所的に追加します。</p>
-<h3 id="generation-planet">Planet：連続メッシュまたはタイル</h3>
-<p><strong>Planetoid Name</strong>、<strong>Starting Biome</strong>、<strong>Radius</strong>、<strong>Mesh Structure</strong> を設定します。Single Mesh は一つの連続オブジェクトを作成し、Multi Tile は立方体の 6 面にタイルを配置します。</p>
+<p>準備ができたら <strong>サーフェスを生成</strong> をクリックします。最初から全タイルを最大解像度にせず、必要な大きな特徴を表現できる程度の形状を用意し、細部は後から局所的に追加します。</p>
+<h3 id="generation-planet">惑星：連続メッシュまたはタイル</h3>
+<p><strong>小惑星の名前</strong>、<strong>初期バイオーム</strong>、<strong>半径</strong>、<strong>メッシュ構造</strong> を設定します。単一メッシュ は一つの連続オブジェクトを作成し、複数タイル は立方体の 6 面にタイルを配置します。</p>
 <div class="table-wrap"><table><thead><tr><th>Structure</th><th>形状と密度の設定</th><th>用途</th></tr></thead><tbody>
-<tr><td>Single Mesh</td><td>Shape Preset：Sphere、Cube、Rounded Cube。Rounded Cube では Roundness を 0（立方体）から 1（球）まで設定できます。Cube 系の形状では Face Grid Density を使います。</td><td>連続した閉じた土台を作ります。箱型の世界を反転して室内にする用途にも使えます。</td></tr>
-<tr><td>Single Mesh Sphere</td><td>Sphere Topology：Cube Sphere、Icosphere、UV Sphere。Cube Sphere は Face Grid Density、Icosphere は再帰的な Subdivision Level、UV Sphere は Resolution を使います。</td><td>目的の形や編集に合う三角形の分布を選びます。異なるトポロジー方式の密度値は同じ意味ではありません。</td></tr>
-<tr><td>Multi Tile</td><td>Shape Preset：Planetoid または Cube。Tiles Per Face (N×N)、自動計算の Tile Size、Tile Grid Subdivisions、High Density Borders。</td><td>別々に編集できる地形タイルを作ります。総タイル数は 6 × N² で、2 なら 24 タイル、4 なら 96 タイルです。</td></tr>
+<tr><td>単一メッシュ</td><td>形状プリセット：球体、立方体、角丸キューブ。角丸キューブ では 丸み を 0（立方体）から 1（球）まで設定できます。立方体 系の形状では 面のグリッド密度 を使います。</td><td>連続した閉じた土台を作ります。箱型の世界を反転して室内にする用途にも使えます。</td></tr>
+<tr><td>単一メッシュ 球体</td><td>球のトポロジー：キューブ球、正二十面体球、UV Sphere。キューブ球 は 面のグリッド密度、正二十面体球 は再帰的な 細分化レベル、UV Sphere は 解像度 を使います。</td><td>目的の形や編集に合う三角形の分布を選びます。異なるトポロジー方式の密度値は同じ意味ではありません。</td></tr>
+<tr><td>複数タイル</td><td>形状プリセット：小惑星 または 立方体。Tiles Per Face (N×N)、自動計算の Tile Size、タイルのグリッド分割数、高密度の境界。</td><td>別々に編集できる地形タイルを作ります。総タイル数は 6 × N² で、2 なら 24 タイル、4 なら 96 タイルです。</td></tr>
 </tbody></table></div>
-<p>Multi Tile では、各面が合うよう Tile Size は (2 × Radius) / Tiles Per Face で計算されます。High Density Borders は、投影前に各タイル境界の密度を 2 倍にし、面をまたぐ継ぎ目や立方体の角も対象にします。<strong>Generate Planetoid</strong> をクリックしたら接続部を確認し、World Up が不適切な場所では表面方向に沿うブラシを使います。</p>
-<p>室内を作る場合は、Single Mesh の Cube または Rounded Cube を生成し、Mask モードで全ての面を選択して <a href="#invert-faces">Invert Faces</a> を使います。これは別のジェネレーターではなく編集操作です。</p>
-<h3 id="generation-island">Floating Island</h3>
+<p>複数タイル では、各面が合うよう Tile Size は (2 × 半径) / Tiles Per Face で計算されます。高密度の境界 は、投影前に各タイル境界の密度を 2 倍にし、面をまたぐ継ぎ目や立方体の角も対象にします。<strong>小惑星を生成</strong> をクリックしたら接続部を確認し、ワールドの上方向 が不適切な場所では表面方向に沿うブラシを使います。</p>
+<p>室内を作る場合は、単一メッシュ の 立方体 または 角丸キューブ を生成し、マスク モードで全ての面を選択して <a href="#invert-faces">面を反転</a> を使います。これは別のジェネレーターではなく編集操作です。</p>
+<h3 id="generation-island">浮島</h3>
 <p>浮島は、上面の台地と造形された下面を持つ閉じたメッシュです。名前、配置、二つのバイオームを設定し、上面と下面の輪郭を両方確認してください。</p>
 <div class="table-wrap"><table><thead><tr><th>Control</th><th>変更内容</th></tr></thead><tbody>
-<tr><td>Top Biome / Bottom Biome</td><td>上面の台地と下面に別々の地表を指定します。たとえば上を草、下を岩にできます。</td></tr>
-<tr><td>Edge Blend Width</td><td>縁の両側で二つのバイオームを混ぜる距離をメートル単位で指定します。共有する縁では均等に混ざります。両側に同じバイオームを選ぶと、この項目は無効になります。</td></tr>
-<tr><td>Width (X), Length (Z), Underside Depth (Y)</td><td>島の水平寸法と下面方向の深さを設定します。</td></tr>
-<tr><td>Plateau Shape</td><td>Circular、Rounded Square、Oval Long の輪郭を選びます。</td></tr>
-<tr><td>Bottom Keel Shape</td><td>Pointed Spire、Rounded Bowl、Stepped Crag、Flat Taper の下面形状を選びます。</td></tr>
-<tr><td>Top Surface Preset</td><td>上面に地形の高さプリセットを適用します。水平な台地から始める場合は Flat Plane を選びます。</td></tr>
-<tr><td>Rock Jaggedness</td><td>下面にプロシージャルな岩ノイズと凹凸を追加します。</td></tr>
-<tr><td>Round Plateau Edge / Edge Radius</td><td>既存の頂点列を曲げて縁を丸めます。新しいループを追加するのではないため、曲線を表現できるだけのグリッド解像度が必要です。</td></tr>
-<tr><td>Grid Subdivisions</td><td>浮島メッシュの密度を設定します。輪郭や予定している編集で必要な場合だけ増やしてください。</td></tr>
+<tr><td>上面のバイオーム / 下面のバイオーム</td><td>上面の台地と下面に別々の地表を指定します。たとえば上を草、下を岩にできます。</td></tr>
+<tr><td>縁のブレンド幅</td><td>縁の両側で二つのバイオームを混ぜる距離をメートル単位で指定します。共有する縁では均等に混ざります。両側に同じバイオームを選ぶと、この項目は無効になります。</td></tr>
+<tr><td>幅（X）, 長さ（Z）, 下面の深さ（Y）</td><td>島の水平寸法と下面方向の深さを設定します。</td></tr>
+<tr><td>台地の形状</td><td>円形、角丸四角形、長い楕円 の輪郭を選びます。</td></tr>
+<tr><td>底部の形状</td><td>尖った岩塔、丸い鉢形、段状の岩、平らなテーパー の下面形状を選びます。</td></tr>
+<tr><td>上面のプリセット</td><td>上面に地形の高さプリセットを適用します。水平な台地から始める場合は 平面 を選びます。</td></tr>
+<tr><td>岩の荒さ</td><td>下面にプロシージャルな岩ノイズと凹凸を追加します。</td></tr>
+<tr><td>台地のエッジを丸める / エッジ半径</td><td>既存の頂点列を曲げて縁を丸めます。新しいループを追加するのではないため、曲線を表現できるだけのグリッド解像度が必要です。</td></tr>
+<tr><td>グリッドの分割数</td><td>浮島メッシュの密度を設定します。輪郭や予定している編集で必要な場合だけ増やしてください。</td></tr>
 </tbody></table></div>
-<p><strong>Generate Floating Island</strong> をクリックします。Edge Radius は形状を変更し、Edge Blend Width はバイオームの遷移を変更します。別々に調整し、ペイントや Scatter 配置の前に下面も確認してください。</p>
-<h3 id="generation-variation">Surface Variation</h3>
-<p><strong>Surface Variation</strong> を有効にすると、生成する地形、Planetoid、Floating Island の上面に決定論的な高さ変化を加えられます。浮島下面の Rock Jaggedness とは別の機能です。</p>
+<p><strong>浮島を生成</strong> をクリックします。エッジ半径 は形状を変更し、縁のブレンド幅 はバイオームの遷移を変更します。別々に調整し、ペイントや Scatter 配置の前に下面も確認してください。</p>
+<h3 id="generation-variation">サーフェスの起伏</h3>
+<p><strong>サーフェスの起伏</strong> を有効にすると、生成する地形、小惑星、浮島 の上面に決定論的な高さ変化を加えられます。浮島下面の 岩の荒さ とは別の機能です。</p>
 <div class="table-wrap"><table><thead><tr><th>Control</th><th>意味</th></tr></thead><tbody>
-<tr><td>Strength</td><td>最大の高さ変位をメートル単位で指定します。選んだ基本形状を保つには低い値から始めます。</td></tr>
-<tr><td>Feature Size</td><td>ワールド空間での最大ノイズ特徴のおおよその大きさです。大きい値では、より広い丘状の変化になります。</td></tr>
-<tr><td>Detail</td><td>フラクタルノイズのレイヤー数で、1～6 を指定します。レイヤーを増やすと細かい変化が増えるため、それを表現できる形状密度も必要です。</td></tr>
-<tr><td>World Seed / Randomize</td><td>Seed を変更するか Randomize を選ぶまで、同じパターンを再現できます。同じ設定を再現したい場合は Seed を保持してください。</td></tr>
+<tr><td>強度</td><td>最大の高さ変位をメートル単位で指定します。選んだ基本形状を保つには低い値から始めます。</td></tr>
+<tr><td>起伏サイズ</td><td>ワールド空間での最大ノイズ特徴のおおよその大きさです。大きい値では、より広い丘状の変化になります。</td></tr>
+<tr><td>ディテール</td><td>フラクタルノイズのレイヤー数で、1～6 を指定します。レイヤーを増やすと細かい変化が増えるため、それを表現できる形状密度も必要です。</td></tr>
+<tr><td>World Seed / Randomize</td><td>シード を変更するか ランダム化 を選ぶまで、同じパターンを再現できます。同じ設定を再現したい場合は シード を保持してください。</td></tr>
 </tbody></table></div>
-<p>Live Preview で設定を比較し、最後はフル解像度の生成結果で判断します。粗いグリッドに強い Variation を加えても細かな形状は作れません。また、ノイズを加えることとサーフェステクスチャを塗ることは別の処理です。</p>
+<p>ライブプレビュー で設定を比較し、最後はフル解像度の生成結果で判断します。粗いグリッドに強い Variation を加えても細かな形状は作れません。また、ノイズを加えることとサーフェステクスチャを塗ることは別の処理です。</p>
 <h2 id="section-two">形状ツールとサーフェスツール</h2>
-<p>形状と地表には別々のツール選択があります。一部のブラシは組み合わせて、一度のストロークで形を変えながら塗ることができます。Path、Mask、Gradient は専用の操作手順を使います。ドラッグする前に、有効なボタンと Scene HUD を確認してください。</p>
+<p>形状と地表には別々のツール選択があります。一部のブラシは組み合わせて、一度のストロークで形を変えながら塗ることができます。パス、マスク、グラデーション は専用の操作手順を使います。ドラッグする前に、有効なボタンと シーン HUD を確認してください。</p>
 <h3>形状ツール：メッシュを変える</h3>
 <div class="table-wrap"><table><thead><tr><th>ツール</th><th>動作</th><th>使用例</th></tr></thead><tbody>
-<tr><td>Sculpt</td><td>Up、Surface Normal、View Direction の方向に頂点を上げ下げします。Ctrl で方向を反転します。</td><td>普通の丘には Up、惑星や壁には Surface Normal、特定の視点からの作業には View Direction を使います。</td></tr>
-<tr><td>Inflate</td><td>表面の局所的な向きに沿って外側へ押し出します。反転したストロークでは内側へ引き込みます。</td><td>岩の膨らみを厚くしたり、くぼみの形を調整したりします。</td></tr>
-<tr><td>Smooth</td><td>頂点の配置をなめらかにします。</td><td>スカルプト後の鋭い凹凸を整えます。繰り返し使うと、残したい細部まで弱くなることがあります。</td></tr>
-<tr><td>Grab</td><td>ブラシ範囲の形状をドラッグで移動します。</td><td>地形全体を作り直さずに、稜線を横へ引いたり輪郭を直したりします。</td></tr>
-<tr><td>Cave</td><td>動的トポロジーを使い、空洞、洞窟、張り出しを作るための形状編集を行います。</td><td>自然な開口部を作れます。経路と断面を指定したい場合は、トンネルパスを使います。</td></tr>
-<tr><td>Clean-Up</td><td>ブラシ範囲内の不要な、または不均一な形状を整理します。</td><td>トポロジー編集で密度が高くなった場所を整えます。実行後は輪郭と塗った地表の境界を確認します。</td></tr>
-<tr><td>Path</td><td>編集できるノードで曲線を作り、道、溝、階段、トンネル、橋を生成します。</td><td>幅を決めて経路を作ります。<a href="#paths">パスの説明</a>を参照してください。</td></tr>
-<tr><td>Mask</td><td>面を選び、選択範囲に操作を適用します。</td><td>台地、柱、平らな壁などに使います。<a href="#masks">面マスクの説明</a>を参照してください。</td></tr>
+<tr><td>スカルプト</td><td>Up、サーフェス法線、表示方向 の方向に頂点を上げ下げします。Ctrl で方向を反転します。</td><td>普通の丘には Up、惑星や壁には サーフェス法線、特定の視点からの作業には 表示方向 を使います。</td></tr>
+<tr><td>膨張</td><td>表面の局所的な向きに沿って外側へ押し出します。反転したストロークでは内側へ引き込みます。</td><td>岩の膨らみを厚くしたり、くぼみの形を調整したりします。</td></tr>
+<tr><td>平滑化</td><td>頂点の配置をなめらかにします。</td><td>スカルプト後の鋭い凹凸を整えます。繰り返し使うと、残したい細部まで弱くなることがあります。</td></tr>
+<tr><td>つかむ</td><td>ブラシ範囲の形状をドラッグで移動します。</td><td>地形全体を作り直さずに、稜線を横へ引いたり輪郭を直したりします。</td></tr>
+<tr><td>洞窟</td><td>動的トポロジーを使い、空洞、洞窟、張り出しを作るための形状編集を行います。</td><td>自然な開口部を作れます。経路と断面を指定したい場合は、トンネルパスを使います。</td></tr>
+<tr><td>整理</td><td>ブラシ範囲内の不要な、または不均一な形状を整理します。</td><td>トポロジー編集で密度が高くなった場所を整えます。実行後は輪郭と塗った地表の境界を確認します。</td></tr>
+<tr><td>パス</td><td>編集できるノードで曲線を作り、道、溝、階段、トンネル、橋を生成します。</td><td>幅を決めて経路を作ります。<a href="#paths">パスの説明</a>を参照してください。</td></tr>
+<tr><td>マスク</td><td>面を選び、選択範囲に操作を適用します。</td><td>台地、柱、平らな壁などに使います。<a href="#masks">面マスクの説明</a>を参照してください。</td></tr>
 </tbody></table></div>
 <h3>サーフェスツール：見た目を変える</h3>
 <div class="table-wrap"><table><thead><tr><th>ツール</th><th>動作</th><th>使用例</th></tr></thead><tbody>
-<tr><td>Paint</td><td>選択したバイオーム、または複数のバイオームの重み付きの組み合わせを塗ります。</td><td>道に土を塗ったり、草と岩を指定した割合で混ぜたりします。</td></tr>
-<tr><td>Fill</td><td>現在のバイオームでつながっている領域に、地表をまとめて適用します。</td><td>すべての面を手で塗らずに、連続した領域を置き換えます。</td></tr>
-<tr><td>Smear</td><td>既存の地表の重みを、ストロークの方向に引き伸ばします。</td><td>新しい地表を選ばずに、塗った領域を筋状に伸ばします。</td></tr>
-<tr><td>Blend / Biome Blend</td><td>既存のバイオームの境界をやわらげます。</td><td>塗った境界をぼかします。地表の重みをならす機能で、地形そのものは平滑化しません。</td></tr>
-<tr><td>Gradient</td><td>高さ、傾斜、空間内の方向に応じてバイオームを配置します。</td><td>山頂に雪、急斜面に岩を塗ります。<a href="#gradients">グラデーション</a>を参照してください。</td></tr>
-<tr><td>Eyedropper</td><td>カーソルの下にある地表を取得します。</td><td>すでに塗られたバイオームで、続きを塗りたいときに使います。</td></tr>
-<tr><td>Dusting</td><td>ダスティング効果用のマスクを、塗る、ならす、消す、埋める操作です。</td><td>雪やほこりを重ねてよい場所を指定します。見た目は<a href="terrain-material-settings.html#dusting">マテリアルのダスティング設定</a>で決めます。</td></tr>
+<tr><td>ペイント</td><td>選択したバイオーム、または複数のバイオームの重み付きの組み合わせを塗ります。</td><td>道に土を塗ったり、草と岩を指定した割合で混ぜたりします。</td></tr>
+<tr><td>塗りつぶし</td><td>現在のバイオームでつながっている領域に、地表をまとめて適用します。</td><td>すべての面を手で塗らずに、連続した領域を置き換えます。</td></tr>
+<tr><td>にじませる</td><td>既存の地表の重みを、ストロークの方向に引き伸ばします。</td><td>新しい地表を選ばずに、塗った領域を筋状に伸ばします。</td></tr>
+<tr><td>ブレンド / バイオーム ブレンド</td><td>既存のバイオームの境界をやわらげます。</td><td>塗った境界をぼかします。地表の重みをならす機能で、地形そのものは平滑化しません。</td></tr>
+<tr><td>グラデーション</td><td>高さ、傾斜、空間内の方向に応じてバイオームを配置します。</td><td>山頂に雪、急斜面に岩を塗ります。<a href="#gradients">グラデーション</a>を参照してください。</td></tr>
+<tr><td>スポイト</td><td>カーソルの下にある地表を取得します。</td><td>すでに塗られたバイオームで、続きを塗りたいときに使います。</td></tr>
+<tr><td>ダスティング</td><td>ダスティング効果用のマスクを、塗る、ならす、消す、埋める操作です。</td><td>雪やほこりを重ねてよい場所を指定します。見た目は<a href="terrain-material-settings.html#dusting">マテリアルのダスティング設定</a>で決めます。</td></tr>
 </tbody></table></div>
-<p>複数バイオームのブラシでは、塗る地表を選び、それぞれの相対的な重みを指定します。Equalize Weights は均等な重みにします。Noise を使うと分布の規則性を崩せます。複雑な組み合わせを全体に適用する前に、小さな範囲で試してください。</p>
+<p>複数バイオームのブラシでは、塗る地表を選び、それぞれの相対的な重みを指定します。ウェイトを均等化 は均等な重みにします。Noise を使うと分布の規則性を崩せます。複雑な組み合わせを全体に適用する前に、小さな範囲で試してください。</p>
 <h3>動的トポロジーと法線</h3>
-<p><strong>動的トポロジー（Dynamic Topology）</strong>は、小さな三角形が必要な場所に形状を追加します。<strong>最大辺長（Max Edge Length）</strong>は、どの長さの辺を分割するかの基準です。低い値にすると細かい形状になり、通常は処理やメモリの負担も増えます。洞窟・トンネルの処理で使われ、対応するスカルプトやペイントでも有効にできます。</p>
+<p><strong>動的トポロジー</strong>は、小さな三角形が必要な場所に形状を追加します。<strong>最大辺長（Max Edge Length）</strong>は、どの長さの辺を分割するかの基準です。低い値にすると細かい形状になり、通常は処理やメモリの負担も増えます。洞窟・トンネルの処理で使われ、対応するスカルプトやペイントでも有効にできます。</p>
 <p>大きな三角形が原因で目的の形を作れないときに使います。粗いメッシュ全体が、必ず均一な高密度グリッドになるわけではありません。大きな変更後はワイヤーフレームを確認し、シーンの大きさに合う基準値を使ってください。</p>
-<p>全体の <strong>Smooth / Sharp</strong> シェーディングボタンは <strong>Scene HUD</strong> の隣にあります。Sharp 法線は各ポリゴンを強調し、Smooth 法線は地形メッシュの面の間で照明をなめらかにつなぎます。頂点を実際に動かす Smooth ブラシや、Scatter Variant の <a href="scatter-system.html#variants">Smoothing Angle</a> とは別の設定です。</p>
+<p>全体の <strong>Smooth / Sharp</strong> シェーディングボタンは <strong>シーン HUD</strong> の隣にあります。シャープ 法線は各ポリゴンを強調し、平滑化 法線は地形メッシュの面の間で照明をなめらかにつなぎます。頂点を実際に動かす 平滑化 ブラシや、Scatter Variant の <a href="scatter-system.html#variants">スムージング角度</a> とは別の設定です。</p>
 <h2 id="masks">面を選択し、編集範囲を制限して形を作る</h2>
-<ol><li>Mask を有効にし、選択方法を決めます。Brush は範囲を塗って選択、Single Face は一面ずつ正確に選択、Flood Island はつながった領域を選択します。</li><li>作りたい形の土台になる面を選びます。Shift を押しながら操作すると選択から面を取り除けます。</li><li>Grow、Shrink、Invert で範囲を整えます。Select Slope は角度範囲、Select Biome Faces は指定したサーフェス ID を使います。</li><li>Move または Rotate の Scene ビューギズモで選択面を調整するか、操作または形状プリセットを選びます。実行前に対象範囲を確認します。</li><li>上からだけでなく横からも結果を確認します。必要なら Undo し、選択範囲や設定を調整します。</li></ol>
+<ol><li>マスク を有効にし、選択方法を決めます。ブラシ は範囲を塗って選択、単一面 は一面ずつ正確に選択、連続面 はつながった領域を選択します。</li><li>作りたい形の土台になる面を選びます。Shift を押しながら操作すると選択から面を取り除けます。</li><li>拡大、縮小、反転 で範囲を整えます。傾斜を選択 は角度範囲、バイオームの面を選択 は指定したサーフェス ID を使います。</li><li>移動 または 回転 の Scene ビューギズモで選択面を調整するか、操作または形状プリセットを選びます。実行前に対象範囲を確認します。</li><li>上からだけでなく横からも結果を確認します。必要なら 元に戻す し、選択範囲や設定を調整します。</li></ol>
 <h3>選択とペイント境界</h3>
-<p><strong>Brush Drag</strong> は Circle または Square の範囲で面を選び、<strong>Single Face</strong> は個別の三角形を選択し、<strong>Flood Island</strong> は連結した領域を選択します。Shift で面を除外できます。Grow と Shrink は選択を 1 面リングずつ広げたり縮めたりし、Invert は補集合を選び、Clear は現在の選択を消します。カウンターには複数タイルを含む選択面数が表示されます。</p>
-<p>条件で選択する場合は <strong>Slope Angles</strong> を設定して <strong>Select Slope</strong> を使うか、バイオーム ID を入力して <strong>Select Biome Faces</strong> を使います。<strong>Select All</strong> は面の反転など、メッシュ全体に対する操作に便利です。</p>
-<p><strong>Paint Edges</strong> は <strong>Paint</strong> 操作と、自動ペイントされる生成形状に適用されます。<strong>Sharp</strong> は面境界を明確に保ち、<strong>Blended</strong> は隣接面へ地表の遷移をやわらげます。この設定はペイント境界を制御し、保存した Editing Mask は編集できる場所を制御します。</p>
+<p><strong>ブラシでドラッグ</strong> は 円 または 四角形 の範囲で面を選び、<strong>単一面</strong> は個別の三角形を選択し、<strong>連続面</strong> は連結した領域を選択します。Shift で面を除外できます。拡大 と 縮小 は選択を 1 面リングずつ広げたり縮めたりし、反転 は補集合を選び、クリア は現在の選択を消します。カウンターには複数タイルを含む選択面数が表示されます。</p>
+<p>条件で選択する場合は <strong>傾斜 Angles</strong> を設定して <strong>傾斜を選択</strong> を使うか、バイオーム ID を入力して <strong>バイオームの面を選択</strong> を使います。<strong>すべて選択</strong> は面の反転など、メッシュ全体に対する操作に便利です。</p>
+<p><strong>ペイントのエッジ</strong> は <strong>ペイント</strong> 操作と、自動ペイントされる生成形状に適用されます。<strong>シャープ</strong> は面境界を明確に保ち、<strong>ブレンド</strong> は隣接面へ地表の遷移をやわらげます。この設定はペイント境界を制御し、保存した 編集マスク は編集できる場所を制御します。</p>
 <h3 id="mask-transform">マスクした面を移動・回転する</h3>
-<ol><li>Mask ツールで調整したい面を選択します。</li><li><strong>Surface Editing</strong> で <strong>Select</strong> から <strong>Move</strong> または <strong>Rotate</strong> に切り替えます。</li><li>Scene ビューのギズモをドラッグします。Move はワールド軸に沿って移動し、Rotate は選択範囲の中心を基準に回転します。</li><li>面の選択を変更・調整する場合は <strong>Select</strong> に戻します。</li></ol>
+<ol><li>マスク ツールで調整したい面を選択します。</li><li><strong>サーフェス編集</strong> で <strong>選択</strong> から <strong>移動</strong> または <strong>回転</strong> に切り替えます。</li><li>Scene ビューのギズモをドラッグします。移動 はワールド軸に沿って移動し、回転 は選択範囲の中心を基準に回転します。</li><li>面の選択を変更・調整する場合は <strong>選択</strong> に戻します。</li></ol>
 <p>共有する境界頂点が選択範囲と一緒に動き、隣接する面もそれに合わせて変形します。アクティブな地形タイル間でも溶接された頂点のコピーが一緒に動くため、周囲のジオメトリとの接続が保たれます。大きく移動・回転した後は横からも形を確認してください。</p>
-<p>ドラッグ中に <kbd>Escape</kbd> を押すと、そのドラッグを取り消せます。確定した編集は Undo と Redo に対応します。保存済みの <a href="#editing-mask">Editing Mask</a> がある場合、ロックされた境界は引き続き保護されます。</p>
+<p>ドラッグ中に <kbd>Escape</kbd> を押すと、そのドラッグを取り消せます。確定した編集は 元に戻す と やり直す に対応します。保存済みの <a href="#editing-mask">編集マスク</a> がある場合、ロックされた境界は引き続き保護されます。</p>
 <h3 id="mask-level">X・Y・Z 軸に沿ってそろえる</h3>
-<p><strong>Level</strong> の横でワールド軸を選び、選択面に適用します。<strong>Y</strong> は高さをそろえ、水平な台を作ります。水平軸の <strong>X</strong> または <strong>Z</strong> を選ぶと、壁や側面をそろえられます。各操作は選択頂点をその軸の平均座標へ移動し、隣接面も共有頂点に追従します。タイルの継ぎ目でも接続が保たれます。</p>
-<p>斜面や Planet の一部など、選択範囲の平均表面方向に合わせた平面にしたい場合は <strong>Flatten</strong> を使います。</p>
+<p><strong>水平化</strong> の横でワールド軸を選び、選択面に適用します。<strong>Y</strong> は高さをそろえ、水平な台を作ります。水平軸の <strong>X</strong> または <strong>Z</strong> を選ぶと、壁や側面をそろえられます。各操作は選択頂点をその軸の平均座標へ移動し、隣接面も共有頂点に追従します。タイルの継ぎ目でも接続が保たれます。</p>
+<p>斜面や 惑星 の一部など、選択範囲の平均表面方向に合わせた平面にしたい場合は <strong>平坦化</strong> を使います。</p>
 <h3>形状、サーフェス、トポロジーの操作</h3>
 <div class="table-wrap"><table><thead><tr><th>操作</th><th>意味</th><th>使い方の目安</th></tr></thead><tbody>
-<tr><td>Flat Plateau / extrusion</td><td>選択範囲を変位させます。正の高さは上げ、負の高さは下げます。Taper は側面が広がる・狭まる形を変えます。</td><td>Taper 1 はまっすぐ、1 未満は内側へ、1 より大きい値は外側へ広がります。直立した台地には World Up、斜面には表面方向への整列が適しています。</td></tr>
-<tr><td>Pillar</td><td>Classical、Cylindrical、Square Pedestal の柱を作ります。</td><td>Height は高さ、段やリングと Taper は輪郭を変えます。Bevel で縁をやわらげられます。</td></tr>
-<tr><td>Arch</td><td>選択した土台から Arch Apex Height、Vault Thickness、Curve Segments、Arch Profile を使ってアーチを作ります。</td><td>Semi-Circular は丸い形、Gothic Pointed は尖った頂点、Segmental は浅い弧です。Align to Surface はタイルをまたぐ場合も選択範囲の平均法線に沿います。ワールド上方向へ伸ばす場合は無効にします。Dynamic Topology では Curve Segments を増やせます。</td></tr>
-<tr><td>Boulder</td><td>選択範囲から Faceted Crag、Smooth Dome、Jagged Spire の岩を作ります。</td><td>Height は大きさ、Noise は規則性を崩します。最初はノイズを控え、基本形を確認します。</td></tr>
-<tr><td>Bevel</td><td>対応する生成形状の縁をやわらげます。</td><td>Bevel Extrude Edge は押し出した上側の縁を丸め、地形側の基部は変えません。短い押し出しや狭いマスクでは Width が制限されます。1 Segment は面取り、多い Segment はより丸い形になります。Pillar の Bevel は輪郭変化と四角い縦角をやわらげ、Arch の Bevel は足元まで続きます。</td></tr>
-<tr><td>Invert Faces</td><td>選択した三角形の頂点順序と表面方向を反転します。</td><td>Select All を使えば、閉じた立方体型 Planet を内向きの部屋にできます。これは選択範囲を反転する操作ではありません。</td></tr>
-<tr><td>Move / Rotate</td><td>選択面を移動・回転する Scene ビューギズモを表示します。</td><td>隣接面は共有頂点に追従し、アクティブな地形タイル間の溶接済み境界も接続を保ちます。選択範囲を変更するには Select に戻します。</td></tr>
-<tr><td>Level</td><td>選択頂点を、指定したワールド X・Y・Z 軸上の平均座標へそろえます。</td><td>水平な台には Y、壁や側面には X/Z を選びます。Flatten は選択範囲の平均表面方向を使います。</td></tr>
-<tr><td>Flatten</td><td>選択範囲の平均表面方向に合わせて平らにします。</td><td>斜面上に、強制的に水平へせず平面を作れます。</td></tr>
-<tr><td>Scale Mask</td><td>選択範囲の中心を基準に X、Y、Z の倍率で拡縮します。</td><td>1 はその軸を変更しません。正の倍率で小さな調整から始めます。</td></tr>
-<tr><td>Subdivide Mask</td><td>選択範囲に三角形を追加します。</td><td>細かな編集を行うには粗すぎる場所で先に使います。</td></tr>
-<tr><td>Fill Hole</td><td>選択が接している処理可能な穴を埋め、新しい面を選択状態にします。</td><td>Seam Ledger または保持された Flat Tile の境界頂点から欠けた縁を定義できる場合、破損したタイル境界を修復できます。正常な外周は開いたままです。実行前に有効な Editing Mask を解除してください。</td></tr>
-<tr><td>Delete Faces</td><td>選択した三角形を削除して開いた境界を残します。Undo に対応します。</td><td>まだ隣接タイルがない境界も含め、恒久的なタイル境界の面は保護されます。Tunnel Mouth のノードは削除できます。作成された開口部と Collider を確認してください。</td></tr>
-<tr><td>Paint</td><td>選択した面へ指定した地表を適用します。</td><td>フリーハンドで塗らずに、生成した台地や構造物へ専用のバイオームを設定できます。</td></tr>
+<tr><td>平らな台地 / extrusion</td><td>選択範囲を変位させます。正の高さは上げ、負の高さは下げます。Taper は側面が広がる・狭まる形を変えます。</td><td>Taper 1 はまっすぐ、1 未満は内側へ、1 より大きい値は外側へ広がります。直立した台地には ワールドの上方向、斜面には表面方向への整列が適しています。</td></tr>
+<tr><td>柱</td><td>古典様式、円柱、四角い台座 の柱を作ります。</td><td>Height は高さ、段やリングと Taper は輪郭を変えます。Bevel で縁をやわらげられます。</td></tr>
+<tr><td>アーチ</td><td>選択した土台から アーチ頂点の高さ、アーチの厚さ、曲線の分割数、アーチ形状 を使ってアーチを作ります。</td><td>Semi-円形 は丸い形、ゴシック尖頭 は尖った頂点、欠円 は浅い弧です。サーフェスに整列 はタイルをまたぐ場合も選択範囲の平均法線に沿います。ワールド上方向へ伸ばす場合は無効にします。動的トポロジー では 曲線の分割数 を増やせます。</td></tr>
+<tr><td>岩</td><td>選択範囲から 角張った岩、滑らかなドーム、荒い尖塔 の岩を作ります。</td><td>Height は大きさ、Noise は規則性を崩します。最初はノイズを控え、基本形を確認します。</td></tr>
+<tr><td>Bevel</td><td>対応する生成形状の縁をやわらげます。</td><td>押し出しエッジをベベル は押し出した上側の縁を丸め、地形側の基部は変えません。短い押し出しや狭いマスクでは Width が制限されます。1 Segment は面取り、多い Segment はより丸い形になります。柱 の Bevel は輪郭変化と四角い縦角をやわらげ、アーチ の Bevel は足元まで続きます。</td></tr>
+<tr><td>面を反転</td><td>選択した三角形の頂点順序と表面方向を反転します。</td><td>すべて選択 を使えば、閉じた立方体型 惑星 を内向きの部屋にできます。これは選択範囲を反転する操作ではありません。</td></tr>
+<tr><td>移動 / 回転</td><td>選択面を移動・回転する Scene ビューギズモを表示します。</td><td>隣接面は共有頂点に追従し、アクティブな地形タイル間の溶接済み境界も接続を保ちます。選択範囲を変更するには 選択 に戻します。</td></tr>
+<tr><td>水平化</td><td>選択頂点を、指定したワールド X・Y・Z 軸上の平均座標へそろえます。</td><td>水平な台には Y、壁や側面には X/Z を選びます。平坦化 は選択範囲の平均表面方向を使います。</td></tr>
+<tr><td>平坦化</td><td>選択範囲の平均表面方向に合わせて平らにします。</td><td>斜面上に、強制的に水平へせず平面を作れます。</td></tr>
+<tr><td>マスクを拡大縮小</td><td>選択範囲の中心を基準に X、Y、Z の倍率で拡縮します。</td><td>1 はその軸を変更しません。正の倍率で小さな調整から始めます。</td></tr>
+<tr><td>マスクを細分化</td><td>選択範囲に三角形を追加します。</td><td>細かな編集を行うには粗すぎる場所で先に使います。</td></tr>
+<tr><td>穴を埋める</td><td>選択が接している処理可能な穴を埋め、新しい面を選択状態にします。</td><td>Seam Ledger または保持された 平面 Tile の境界頂点から欠けた縁を定義できる場合、破損したタイル境界を修復できます。正常な外周は開いたままです。実行前に有効な 編集マスク を解除してください。</td></tr>
+<tr><td>面を削除</td><td>選択した三角形を削除して開いた境界を残します。元に戻す に対応します。</td><td>まだ隣接タイルがない境界も含め、恒久的なタイル境界の面は保護されます。トンネル Mouth のノードは削除できます。作成された開口部と Collider を確認してください。</td></tr>
+<tr><td>ペイント</td><td>選択した面へ指定した地表を適用します。</td><td>フリーハンドで塗らずに、生成した台地や構造物へ専用のバイオームを設定できます。</td></tr>
 </tbody></table></div>
 <h3 id="editing-mask">保存した範囲だけを編集する</h3>
-<ol><li>Mask ツールで、編集したい面を選択します。</li><li><strong>Set Mask</strong> をクリックし、その選択を編集範囲として保存します。</li><li><strong>Editing Mask</strong> を有効にすると、その範囲内だけをペイント・スカルプトできます。範囲外の面は保護されます。共有する境界頂点は固定されるため、隣接面や溶接済みタイル継ぎ目が引き離されません。</li><li>Editing Mask をオフにすると制限を一時停止し、再度オンにすると同じ範囲を再開できます。既定のショートカットは <kbd>Ctrl/Cmd + Shift + L</kbd> で、<a href="#custom-hotkeys">Hotkey Sheet</a> から変更できます。</li><li><strong>Clear Editing Mask</strong> で保存した範囲を削除します。現在の面選択はそのまま残ります。</li></ol>
-<p>保存した Editing Mask と現在の面選択は別のデータです。面選択を Grow、Clear、または置き換えても保存した範囲は変わりません。新しい境界に変更したい場合は Set Mask をもう一度使います。共有境界を固定する必要があるため、狭い選択では実際に動かせる内部頂点が少なくなることがあります。</p>
-<p>Extrusion や Fill Hole の前には、有効な Editing Mask を解除してください。マスクを一時停止している間に操作が面を再構築すると、ツールが保存済みマスクを消去し、通知を表示する場合があります。トポロジー変更後に新しい範囲を選び、Set Mask を再度使ってください。</p>
+<ol><li>マスク ツールで、編集したい面を選択します。</li><li><strong>マスクを設定</strong> をクリックし、その選択を編集範囲として保存します。</li><li><strong>編集マスク</strong> を有効にすると、その範囲内だけをペイント・スカルプトできます。範囲外の面は保護されます。共有する境界頂点は固定されるため、隣接面や溶接済みタイル継ぎ目が引き離されません。</li><li>編集マスク をオフにすると制限を一時停止し、再度オンにすると同じ範囲を再開できます。既定のショートカットは <kbd>Ctrl/Cmd + Shift + L</kbd> で、<a href="#custom-hotkeys">ショートカット一覧</a> から変更できます。</li><li><strong>編集マスクを解除</strong> で保存した範囲を削除します。現在の面選択はそのまま残ります。</li></ol>
+<p>保存した 編集マスク と現在の面選択は別のデータです。面選択を 拡大、クリア、または置き換えても保存した範囲は変わりません。新しい境界に変更したい場合は マスクを設定 をもう一度使います。共有境界を固定する必要があるため、狭い選択では実際に動かせる内部頂点が少なくなることがあります。</p>
+<p>Extrusion や 穴を埋める の前には、有効な 編集マスク を解除してください。マスクを一時停止している間に操作が面を再構築すると、ツールが保存済みマスクを消去し、通知を表示する場合があります。トポロジー変更後に新しい範囲を選び、マスクを設定 を再度使ってください。</p>
 <h3 id="invert-faces">閉じた形を室内へ変える</h3>
-<p><strong>Invert Faces</strong> は、選択した三角形とその表面方向を反転します。立方体型 Planet から部屋を作る場合は、Mask モードで <strong>Select All</strong> を使い、その後 Invert Faces を実行します。内側から見た結果を確認し、キャラクターが使う側から Collider も確認してください。Undo に対応します。</p>
-<p><strong>Invert</strong> は選択される面を反転し、<strong>Invert Faces</strong> はメッシュそのものを反転します。法線再計算や、対応する Subdivision、Cleanup、LOD のワークフローでは選択した面方向が維持されます。閉じた表面の一部だけを反転すると、隣り合う面が逆方向を向く場合があるため、局所的な反転後は接続部を確認してください。</p>
+<p><strong>面を反転</strong> は、選択した三角形とその表面方向を反転します。立方体型 惑星 から部屋を作る場合は、マスク モードで <strong>すべて選択</strong> を使い、その後 面を反転 を実行します。内側から見た結果を確認し、キャラクターが使う側から Collider も確認してください。元に戻す に対応します。</p>
+<p><strong>反転</strong> は選択される面を反転し、<strong>面を反転</strong> はメッシュそのものを反転します。法線再計算や、対応する Subdivision、Cleanup、LOD のワークフローでは選択した面方向が維持されます。閉じた表面の一部だけを反転すると、隣り合う面が逆方向を向く場合があるため、局所的な反転後は接続部を確認してください。</p>
 <h2 id="gradients">高さ・傾斜・方向で地表を配置する</h2>
-<p>グラデーションは、ルールに沿って地表を分布させる機能です。始点と終点のバイオームを選ぶか、ランプに複数の停止点を追加します。グラデーション内の位置が混ざり方を決め、Strength が適用の強さ、Sharpness が境界の鋭さを決めます。</p>
+<p>グラデーションは、ルールに沿って地表を分布させる機能です。始点と終点のバイオームを選ぶか、ランプに複数の停止点を追加します。グラデーション内の位置が混ざり方を決め、強度 が適用の強さ、鮮明さ が境界の鋭さを決めます。</p>
 <div class="table-wrap"><table><thead><tr><th>モード</th><th>用途</th><th>設定の進め方</th></tr></thead><tbody>
-<tr><td>Cone Volume</td><td>一つの山など、局所的な地形。</td><td>土台、頂点、半径、高さ範囲を指定します。Fit Mountain は対象地形に合う円錐を推定し、Snap to Peak は最高の頂点に移動します。傾きと向きで、斜めの地形にも合わせられます。</td></tr>
-<tr><td>Directional Line</td><td>指定した方向に沿う移り変わり。</td><td>線や矢印のハンドルを範囲に置きます。始点と終点によって、どちらの地表が強くなる場所かを決めます。</td></tr>
-<tr><td>Whole Altitude</td><td>低地の草、高地の雪など、全体の高さルール。</td><td>実際の地形を含む高さ範囲を指定します。範囲が地形より完全に上や下にあると、一種類だけで塗られることがあります。</td></tr>
-<tr><td>Whole Slope</td><td>平地の土、崖の岩など、傾斜のルール。</td><td>角度範囲を選び、適用前に水平な場所と急斜面の両方を確認します。</td></tr>
+<tr><td>円錐ボリューム</td><td>一つの山など、局所的な地形。</td><td>土台、頂点、半径、高さ範囲を指定します。山に合わせる は対象地形に合う円錐を推定し、頂上にスナップ は最高の頂点に移動します。傾きと向きで、斜めの地形にも合わせられます。</td></tr>
+<tr><td>方向付き Line</td><td>指定した方向に沿う移り変わり。</td><td>線や矢印のハンドルを範囲に置きます。始点と終点によって、どちらの地表が強くなる場所かを決めます。</td></tr>
+<tr><td>Whole 標高</td><td>低地の草、高地の雪など、全体の高さルール。</td><td>実際の地形を含む高さ範囲を指定します。範囲が地形より完全に上や下にあると、一種類だけで塗られることがあります。</td></tr>
+<tr><td>Whole 傾斜</td><td>平地の土、崖の岩など、傾斜のルール。</td><td>角度範囲を選び、適用前に水平な場所と急斜面の両方を確認します。</td></tr>
 </tbody></table></div>
-<div class="example"><p><strong>山の地表を作る例：</strong>まず高さで草から雪への大まかなグラデーションを適用します。次に傾斜で岩を追加し、最後に個別の場所を手で塗ります。前の分布を少し残すなら、後の処理の Strength を下げます。</p></div>
-<p>円錐の傾斜・崖フィルターで適用範囲を制限できます。Live Preview で配置を確認してから確定し、まったく別の地形では円錐をリセットします。バイオーム自身のカラーランプは別の設定です。その素材の細部に色を付けるもので、ワールド高度による雪の境界を作るものではありません。</p>
+<div class="example"><p><strong>山の地表を作る例：</strong>まず高さで草から雪への大まかなグラデーションを適用します。次に傾斜で岩を追加し、最後に個別の場所を手で塗ります。前の分布を少し残すなら、後の処理の 強度 を下げます。</p></div>
+<p>円錐の傾斜・崖フィルターで適用範囲を制限できます。ライブプレビュー で配置を確認してから確定し、まったく別の地形では円錐をリセットします。バイオーム自身のカラーランプは別の設定です。その素材の細部に色を付けるもので、ワールド高度による雪の境界を作るものではありません。</p>
 <h2 id="paths">道、川床、階段、トンネル、橋</h2>
 <h3>地表のパスから始める</h3>
-<ol><li>Path を有効にし、Surface を選びます。</li><li>Scene ビューで二つ以上のノードを追加します。ハンドルを動かして経路を決め、曲線を細かく調整したい場所にノードを追加します。</li><li>Width、ブレンド、スカルプトの操作を選びます。最初は短い経路で試します。</li><li>Single Biome、または経路に沿うグラデーションを選びます。地表だけを帯状に塗るなら Paint Path を使います。</li><li>形状だけなら Create Path、形状と地表の両方なら Create &amp; Paint を使います。</li></ol>
+<ol><li>パス を有効にし、サーフェス を選びます。</li><li>Scene ビューで二つ以上のノードを追加します。ハンドルを動かして経路を決め、曲線を細かく調整したい場所にノードを追加します。</li><li>Width、ブレンド、スカルプトの操作を選びます。最初は短い経路で試します。</li><li>単一バイオーム、または経路に沿うグラデーションを選びます。地表だけを帯状に塗るなら パスをペイント を使います。</li><li>形状だけなら パスを生成、形状と地表の両方なら 生成してペイント を使います。</li></ol>
 <div class="table-wrap"><table><thead><tr><th>設定</th><th>調整するもの</th><th>使用例</th></tr></thead><tbody>
 <tr><td>幅（Width）</td><td>路肩を含む通路全体の幅です。外側のブレンド範囲は、中心の通路の外に移行部分を追加します。</td><td>用途に必要な道幅を確保し、ブレンドで周囲の地形につなぎます。</td></tr>
 <tr><td>ノードの幅倍率</td><td>そのノードでのパス幅に掛ける倍率です。</td><td>1 は通常の幅です。広場や分岐の場所でノードの幅を大きくします。</td></tr>
 <tr><td>高さオフセット</td><td>配置した位置に対して、目標のパス高さをずらします。</td><td>小さな正の値で道を持ち上げ、負の値で浅い溝を作ります。</td></tr>
-<tr><td>強さ（Strength）</td><td>指定したパス断面へ形状を近づける強さです。</td><td>低い値で軽く調整し、確認してから必要に応じて繰り返します。</td></tr>
+<tr><td>強さ（強度）</td><td>指定したパス断面へ形状を近づける強さです。</td><td>低い値で軽く調整し、確認してから必要に応じて繰り返します。</td></tr>
 <tr><td>Max Height Gap</td><td>パスの元になる周辺の地表を探せる高さ差を制限します。</td><td>使いたい地形が遠すぎて取得されない場合に上げます。階段の一段の高さを決める設定ではありません。</td></tr>
 <tr><td>Grade and Level</td><td>高さを整えた道のような通路を作ります。</td><td>起伏のある場所に、通れる経路を作ります。</td></tr>
-<tr><td>Raise Embankment</td><td>通路を盛り上げます。</td><td>周囲より高い道や土手を作ります。</td></tr>
-<tr><td>Carve Trench / 川床</td><td>地形に水路状のくぼみを掘ります。</td><td>排水溝や、川の地表の下にある実際の川床を作ります。</td></tr>
-<tr><td>Smooth Corridor</td><td>経路の形状をなめらかにします。</td><td>盛り上げや掘削の新しい断面を選ばずに、荒れた道を整えます。</td></tr>
-<tr><td>断面（Cross-section）</td><td>Flat、Crowned、Curved Trench で、経路を横切る方向の形を変えます。</td><td>Crown Height は中央を上げ、Trench Depth は中央を下げます。どちらも形状の距離を指定します。</td></tr>
+<tr><td>盛土</td><td>通路を盛り上げます。</td><td>周囲より高い道や土手を作ります。</td></tr>
+<tr><td>溝を掘る / 川床</td><td>地形に水路状のくぼみを掘ります。</td><td>排水溝や、川の地表の下にある実際の川床を作ります。</td></tr>
+<tr><td>通路平滑化</td><td>経路の形状をなめらかにします。</td><td>盛り上げや掘削の新しい断面を選ばずに、荒れた道を整えます。</td></tr>
+<tr><td>断面（Cross-section）</td><td>平面、中央を膨らませる、曲面の溝 で、経路を横切る方向の形を変えます。</td><td>Crown Height は中央を上げ、Trench Depth は中央を下げます。どちらも形状の距離を指定します。</td></tr>
 <tr><td>縁の平滑化</td><td>周囲の地形との接続部分をやわらげます。</td><td>道の中心、階段の踏み面、川床を保ちながら、外側をなじませます。</td></tr>
 <tr><td>Closed Loop</td><td>経路の終わりを始まりにつなぎます。</td><td>環状の道に使います。最初のノードでのつながりを確認します。</td></tr>
 </tbody></table></div>
 <h3>階段を作る</h3>
-<p>スカルプト操作で Steps を選びます。<strong>Step Height</strong> は一段の垂直方向の高さです。<strong>Step Depth</strong> はパス方向の踏み面の長さで、高さとは独立して設定できます。<strong>Step Bevel</strong> は縁の丸みです。低い値では鋭い縁、高い値では摩耗したような丸い縁になります。</p>
+<p>スカルプト操作で 階段 を選びます。<strong>Step Height</strong> は一段の垂直方向の高さです。<strong>Step Depth</strong> はパス方向の踏み面の長さで、高さとは独立して設定できます。<strong>Step Bevel</strong> は縁の丸みです。低い値では鋭い縁、高い値では摩耗したような丸い縁になります。</p>
 <p>キャラクターの大きさに合わせて高さと奥行きを決め、横から確認します。面取りで縁をやわらげても、必要な平らな踏み面が失われないようにします。段の間隔を表現できる密度の形状を用意してください。粗い地形に長い階段を作る場合は、トポロジーを細かくする必要があります。</p>
 <h3>中央と側面を塗る</h3>
 <p>パスのグラデーションは、経路に沿ってバイオームを変えます。停止点の位置 0 は始点、1 は終点です。土、砂利、岩などの区間に停止点を追加できます。Bank の設定では両側に別のバイオームを配置します。Bank Width はメートルではなく、半幅に対する割合です。例えば 0.35 は、左右それぞれの半幅のうち外側 35% を使います。</p>
 <p>プレビューで隣り合う地表の影響が重なる場所を確認できます。塗る前に側面と境界を見てください。川のバイオームを塗ると川のような帯になりますが、実際の水路が必要なら川床の形状を別に作ります。</p>
 <h3>トンネルを作る</h3>
-<p>Tunnel に切り替え、地形内を通る経路を配置します。断面は Circle、Square、Flat Bottom Arch から選べます。歩ける床が欲しい場合には、底が平らな断面が便利です。</p>
+<p>トンネル に切り替え、地形内を通る経路を配置します。断面は 円、四角形、平らな底のアーチ から選べます。歩ける床が欲しい場合には、底が平らな断面が便利です。</p>
 <p><strong>最小被覆深さ（Minimum Cover Depth）</strong>は、トンネルの上に必要な地形の厚みです。中心が地中にあっても、幅や高さの端が外へ出ると無効になることがあります。赤い表示や無効な場所を確認し、経路を深くする、断面を小さくする、目的の開口に合わせて被覆条件を調整する、といった方法で直します。</p>
-<p>Create Tunnel は形状を変え、Paint Tunnel は壁の地表を変えます。生成後は入口、出口、タイルの境界を確認してください。</p>
+<p>トンネルを生成 は形状を変え、トンネルをペイント は壁の地表を変えます。生成後は入口、出口、タイルの境界を確認してください。</p>
 <h3>橋を作る</h3>
-<p>Bridge に切り替えます。両端をつなぎたい陸地に置き、中間ノードを空間に配置します。Flat Deck はシンプルな橋床、Deep Girder は深い構造、Arched Underside は平らな歩行面の下にアーチを作ります。</p>
+<p>橋 に切り替えます。両端をつなぎたい陸地に置き、中間ノードを空間に配置します。平らな橋床 はシンプルな橋床、深い桁 は深い構造、アーチ状の下面 は平らな歩行面の下にアーチを作ります。</p>
 <p>上からも下からも確認し、特に各陸地との接続を見てください。曲面の世界では、橋全体が地形に埋まらないことを確認します。ワールド上方向を基準とする配置が、惑星のどの側でも適しているとは限りません。</p>
 <h3>必要な場合だけ端点を細かく指定する</h3>
-<p>トンネルと橋の端点は、標準では自動配置です。入口や接続を正確に決めたい場合は Pick Start または Pick End で、一面またはつながった面の集まりを選びます。両端は独立しているので、始点だけ、終点だけ、または両方を固定できます。</p>
+<p>トンネルと橋の端点は、標準では自動配置です。入口や接続を正確に決めたい場合は Pick 始点 または Pick 終点 で、一面またはつながった面の集まりを選びます。両端は独立しているので、始点だけ、終点だけ、または両方を固定できます。</p>
 <p>対象の地形オブジェクト上で、作りたい開口部に合う輪郭の、つながった面を選びます。四角い入口には正方形や長方形の範囲が便利です。端点の選択を解除すると、その端は自動配置に戻ります。固定した端点の周辺で面を削除・再生成したら、選択を確認し、トポロジーが変わった場合は選び直してください。</p>
 <h2 id="section-three">複数の地形タイルを編集する</h2>
 <p>タイルは、大きな地形を別々のメッシュオブジェクトに分けたものです。隣接タイルと継ぎ目の処理により、対応する編集を共有境界にまたがって行えます。ただし、各オブジェクトを登録し、その操作を許可しておく必要があります。</p>
-<ol><li>生成されたタイル配置を使うか、つなぐ境界が接していることを確認します。</li><li>対象リストにタイルを登録し、Paint/Sculpt のスイッチを確認します。</li><li>一つの継ぎ目をまたぐ、小さなストロークを試します。形状と地表の境界の両方を確認します。</li><li>複数タイルをまたぐパス、トンネル、生成形状では、処理後にすべての接続部分を確認します。</li><li>現在の対象だけでなく、変更したすべてのタイルのメッシュを保存します。</li></ol>
-<p>マテリアルの Seam Blend はテクスチャの投影をなじませる設定です。メッシュの境界を溶接したり、穴をふさいだりはしません。継ぎ目が気になる場合は、形状の隙間、法線による明暗の差、テクスチャの境界のどれかを先に見分けます。それぞれ対処が異なります。任意に重ねたメッシュが、自動で一続きの地形になるとは考えないでください。</p>
+<ol><li>生成されたタイル配置を使うか、つなぐ境界が接していることを確認します。</li><li>対象リストにタイルを登録し、ペイント/スカルプト のスイッチを確認します。</li><li>一つの継ぎ目をまたぐ、小さなストロークを試します。形状と地表の境界の両方を確認します。</li><li>複数タイルをまたぐパス、トンネル、生成形状では、処理後にすべての接続部分を確認します。</li><li>現在の対象だけでなく、変更したすべてのタイルのメッシュを保存します。</li></ol>
+<p>マテリアルの 継ぎ目ブレンド はテクスチャの投影をなじませる設定です。メッシュの境界を溶接したり、穴をふさいだりはしません。継ぎ目が気になる場合は、形状の隙間、法線による明暗の差、テクスチャの境界のどれかを先に見分けます。それぞれ対処が異なります。任意に重ねたメッシュが、自動で一続きの地形になるとは考えないでください。</p>
 <h2 id="section-four">地形を保存・最適化する</h2>
 <h3>編集しやすい状態を保つ</h3>
-<p>細かいトポロジーを使う前に、大まかな形を作ります。細部には小さいブラシを使い、追加の三角形が必要でなければ、広い範囲に非常に小さな Max Edge Length を使わないようにします。形状の密度は編集の負荷、テクスチャ解像度は見た目とメモリに影響します。片方を下げても、もう片方の問題が自動的に解決するわけではありません。</p><p>対応する形状ツールとサーフェスツールは、同時ストローク中にブラシデータを共有します。頂点の移動では再利用可能なペイントバッファが維持され、トポロジー変更、Seam Data の変更、Undo/Redo では影響するキャッシュが更新されます。これは自動で行われ、追加設定は必要ありません。繰り返しの準備処理は減りますが、Sculpt、Topology、Scatter の再構築コストは地形とブラシの内容に応じて変わります。</p>
-<h3>Direct Vertex Color で AO をベイクする</h3>
-<p>レイキャスト AO ベイカーは、Direct Vertex Color の地形で、くぼみや接触部の陰影を追加します。ライトマップやシーン照明の代わりではありません。主要な形状が完成してからベイクしてください。後で形を変えると、保存した陰影が合わなくなることがあります。</p>
+<p>細かいトポロジーを使う前に、大まかな形を作ります。細部には小さいブラシを使い、追加の三角形が必要でなければ、広い範囲に非常に小さな Max Edge Length を使わないようにします。形状の密度は編集の負荷、テクスチャ解像度は見た目とメモリに影響します。片方を下げても、もう片方の問題が自動的に解決するわけではありません。</p><p>対応する形状ツールとサーフェスツールは、同時ストローク中にブラシデータを共有します。頂点の移動では再利用可能なペイントバッファが維持され、トポロジー変更、Seam Data の変更、元に戻す/やり直す では影響するキャッシュが更新されます。これは自動で行われ、追加設定は必要ありません。繰り返しの準備処理は減りますが、スカルプト、トポロジー、Scatter の再構築コストは地形とブラシの内容に応じて変わります。</p>
+<h3>直接頂点カラー で AO をベイクする</h3>
+<p>レイキャスト AO ベイカーは、直接頂点カラー の地形で、くぼみや接触部の陰影を追加します。ライトマップやシーン照明の代わりではありません。主要な形状が完成してからベイクしてください。後で形を変えると、保存した陰影が合わなくなることがあります。</p>
 <p>レイの品質を上げるとサンプリング品質が上がる一方、時間もかかります。最大遮蔽距離は、どの距離の形状まで陰影に影響するかを決めます。コントラストは陰影の強調度です。まず試しにベイクし、遮られた場所がすべて真っ黒にならないように調整します。</p>
 <h3>チャンク分割と LOD</h3>
 <p>チャンク分割では、地形を 1×1、2×2、4×4、8×8 などのグリッドに分けます。小さいチャンクは Unity が必要な部分を表示しやすくする一方、オブジェクトと描画グループを増やします。最大の分割数を常に使うのではなく、シーンに合う配置を選びます。</p>
 <p>LOD1 と LOD2 は簡略化したメッシュです。目標比率は、どれだけの形状を残すかを示します。小さい比率は三角形を減らしますが、小さな形を失いやすくなります。Unity の切り替えしきい値は、メートル単位の距離ではなく、画面上で占める相対的な高さです。最後のカリングしきい値で、描画をやめる大きさを決めます。</p>
 <p>生成したコライダーには LOD2 が使われます。階段、縁、開口部で想定どおりに衝突するかを確認します。三角形ベースの地表問い合わせでは、サーフェスデータがコライダーの実際のメッシュと三角形の順序に一致する必要があります。別のメッシュ向けのベイクでは、違う地表が返ることがあります。</p>
-<p>生成結果を使う場合は、必要に応じて Hide Original Mesh を有効にし、元と生成後の両方を重ねて表示していないか確認します。チャンクと LOD は仕上げの工程として扱ってください。元の地形のすべての編集が、自動的に軽くなるわけではありません。</p>
+<p>生成結果を使う場合は、必要に応じて 元のメッシュを非表示 を有効にし、元と生成後の両方を重ねて表示していないか確認します。チャンクと LOD は仕上げの工程として扱ってください。元の地形のすべての編集が、自動的に軽くなるわけではありません。</p>
 <h3>必要なアセットを保存する</h3>
 <div class="table-wrap"><table><thead><tr><th>操作</th><th>目的</th><th>実行後の確認</th></tr></thead><tbody>
 <tr><td>保存・プレハブ出力</td><td>メッシュと地表データを保ち、シーンで再利用できるようにします。</td><td>開き直して、マテリアル参照、見た目、衝突を確認します。</td></tr>
-<tr><td>Compile Terrain Textures</td><td>ライブラリのアトラスとテクスチャ配列を作成・更新します。</td><td>編集したバイオームを確認します。解像度、圧縮、ミップマップを対象機器に合わせます。</td></tr>
-<tr><td>Make Standalone Copy</td><td>共有ライブラリから分離するため、独立したマテリアル・テクスチャ構成を作ります。</td><td>共有ライブラリを後で編集しても、独立させた結果が意図せず変わらないことを確認します。</td></tr>
-<tr><td>Bake Surface Data</td><td>ゲームプレイの問い合わせ用に三角形とバイオームの対応を保存します。Scatter Profile が割り当てられている場合は、Read/Write が無効な地形メッシュでもランタイム Scatter を配置できるよう、配置用ジオメトリも含めます。</td><td>形状、ペイント、Biome ID、Topology の変更後は再 Bake します。ゲームプレイデータは Collider Mesh に、Scatter Data は描画される Terrain Mesh に一致させます。<a href="scatter-system.html#runtime-data">Runtime Scatter Data</a> も参照してください。</td></tr>
+<tr><td>地形テクスチャをコンパイル</td><td>ライブラリのアトラスとテクスチャ配列を作成・更新します。</td><td>編集したバイオームを確認します。解像度、圧縮、ミップマップを対象機器に合わせます。</td></tr>
+<tr><td>独立コピーを作成</td><td>共有ライブラリから分離するため、独立したマテリアル・テクスチャ構成を作ります。</td><td>共有ライブラリを後で編集しても、独立させた結果が意図せず変わらないことを確認します。</td></tr>
+<tr><td>サーフェスデータをベイク</td><td>ゲームプレイの問い合わせ用に三角形とバイオームの対応を保存します。Scatter Profile が割り当てられている場合は、Read/Write が無効な地形メッシュでもランタイム Scatter を配置できるよう、配置用ジオメトリも含めます。</td><td>形状、ペイント、バイオームID、トポロジー の変更後は再 Bake します。ゲームプレイデータは コライダーメッシュ に、Scatter Data は描画される Terrain メッシュ に一致させます。<a href="scatter-system.html#runtime-data">Runtime Scatter Data</a> も参照してください。</td></tr>
 </tbody></table></div>
 <p>マテリアルの変更は、それを共有するすべてのオブジェクトに影響します。GameObject を複製するだけでは、アセットが独立するとは限りません。地形ごとに異なる全体設定が必要なら、別のマテリアルを保存するか、独立コピーの機能を使います。</p>
 <h2 id="shortcuts">キーボード・マウス操作</h2>
-<p>以下のキーボード割り当ては<strong>既定値</strong>です。Scene ビューで作業中に使います。同じキーでも Mask、Path、Gradient、Dusting のモードによって動作が変わるため、現在のコンテキストが重要です。入力欄への文字入力が優先されます。macOS では Ctrl/Cmd の操作に Cmd を使います。</p>
-<ul><li><kbd>[</kbd> / <kbd>]</kbd> と <kbd>Shift + マウスホイール</kbd> でブラシ半径を変えます。<kbd>Ctrl/Cmd + Shift + PageUp</kbd> / <kbd>PageDown</kbd> は細かい半径調整です。</li><li><kbd>Ctrl/Cmd + Shift + Up</kbd> / <kbd>Down</kbd> で形状の速度、<kbd>Ctrl/Cmd + Shift + Left</kbd> / <kbd>Right</kbd> でサーフェスの不透明度を調整します。マイナス／イコールの割り当ては現在のツールコンテキストに応じて働きます。</li><li><kbd>Ctrl + ドラッグ</kbd> で対応する Sculpt/Inflate の方向を反転します。<kbd>Shift</kbd> は対応ブラシを一時的に Smooth/Blend へ切り替え、Mask 選択中は面を除外します。</li><li><kbd>Alt + Shift + 1…9, 0</kbd> で表示中のパレットグループ内のバイオームを選びます。<kbd>Tab</kbd> / <kbd>Shift + Tab</kbd> でバイオームページを切り替えます。</li><li><kbd>Escape</kbd> は現在の特別な操作を終了するかツールを解除します。Path モードを離れてもノードは残ります。経路そのものを消す場合は Clear Nodes を使います。</li></ul>
-<h3 id="custom-hotkeys">Hotkey Sheet でショートカットを変更する</h3>
-<ol><li>Terrain ウィンドウの <strong>Hotkey Sheet</strong> を開きます。操作名やキーで検索するか、Tools、Brush adjustments、Mask mode、Path mode などのグループを展開します。</li><li>操作のキーボタンをクリックしてから、新しいキーの組み合わせを押します。Modifier Key だけを押した場合は、メインキーの入力を待ちます。<kbd>Escape</kbd> で記録をキャンセルできます。</li><li><strong>×</strong> で割り当てを消去し、<strong>Reset</strong> で一つの操作を既定値へ戻し、<strong>Restore Defaults</strong> で一覧全体を初期状態へ戻します。</li></ol>
-<p>変更内容は現在の Unity Editor ユーザー用に自動保存され、プロジェクト間で共有されます。Tooltip と Scene HUD には現在設定されているキーが表示されます。重なるコンテキストで別の操作と競合するキーを指定すると、Hotkey Sheet は競合する操作名を表示して割り当てを拒否します。先にもう一方の割り当てを変更または消去してください。Mask、Path、Gradient はコンテキストが重ならない場合に同じキーを再利用できますが、General の操作は各モードで有効です。</p>
-<p>マウス操作と Unity の Undo/Redo は固定です。Shift + Mouse Wheel は半径調整、Shift + Drag は一時的な Smooth/Blend または選択面の除外、Ctrl + Drag は Lower/Deflate、Paint 中の Ctrl + Click はバイオームのサンプル、Shift + Click は Path Node を X/Z に制限します。Undo は Ctrl/Cmd + Z、Redo は Ctrl/Cmd + Shift + Z または Ctrl/Cmd + Y です。ショートカット記録中以外では、入力欄への文字入力が引き続き優先されます。</p>
-<details><summary>既定のキーボード割り当てをすべて表示</summary><p>以下は工場出荷時の既定値です。現在の割り当ては Hotkey Sheet で確認できます。General の割り当ては各モードで有効で、対応する Brush の割り当ては Dusting でも使用できます。</p><div class="table-wrap"><table><thead><tr><th>既定のショートカット</th><th>操作</th><th>コンテキスト</th></tr></thead><tbody><tr><td><kbd>Escape</kbd></td><td>ツールを解除／端点選択を終了</td><td>共通</td></tr><tr><td><kbd>[</kbd></td><td>ブラシ半径／パス幅を小さくする</td><td>共通</td></tr><tr><td><kbd>]</kbd></td><td>ブラシ半径／パス幅を大きくする</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + PageDown</kbd></td><td>半径／パス幅を細かく小さくする</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + PageUp</kbd></td><td>半径／パス幅を細かく大きくする</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Down</kbd></td><td>形状速度／Cleanup Strength を下げる</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Up</kbd></td><td>形状速度／Cleanup Strength を上げる</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Left</kbd></td><td>Paint Opacity／Dusting Strength を下げる</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Right</kbd></td><td>Paint Opacity／Dusting Strength を上げる</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + -</kbd></td><td>形状とサーフェスの Strength を下げる</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + =</kbd></td><td>形状とサーフェスの Strength を上げる</td><td>共通</td></tr><tr><td><kbd>Tab</kbd></td><td>次のバイオームページ</td><td>共通</td></tr><tr><td><kbd>Shift + Tab</kbd></td><td>前のバイオームページ</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 1</kbd></td><td>バイオームスロット 1 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 2</kbd></td><td>バイオームスロット 2 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 3</kbd></td><td>バイオームスロット 3 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 4</kbd></td><td>バイオームスロット 4 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 5</kbd></td><td>バイオームスロット 5 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 6</kbd></td><td>バイオームスロット 6 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 7</kbd></td><td>バイオームスロット 7 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 8</kbd></td><td>バイオームスロット 8 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 9</kbd></td><td>バイオームスロット 9 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 0</kbd></td><td>バイオームスロット 10 を選択</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + H</kbd></td><td>スカルプトを切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + I</kbd></td><td>膨張を切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + U</kbd></td><td>平滑化を切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + J</kbd></td><td>つかむツールを切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + K</kbd></td><td>洞窟を切り替え</td><td>共通</td></tr><tr><td><kbd>Shift + N</kbd></td><td>整理を切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + O</kbd></td><td>パスを切り替え</td><td>共通</td></tr><tr><td><kbd>Shift + M</kbd></td><td>面マスクを切り替え</td><td>共通</td></tr><tr><td><kbd>B</kbd></td><td>ペイントを切り替え</td><td>共通</td></tr><tr><td><kbd>Shift + B</kbd></td><td>ダスティングを切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F1</kbd></td><td>塗りつぶしを切り替え</td><td>共通</td></tr><tr><td><kbd>Shift + J</kbd></td><td>にじませるツールを切り替え</td><td>共通</td></tr><tr><td><kbd>J</kbd></td><td>バイオームブレンドを切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + E</kbd></td><td>グラデーションを切り替え</td><td>共通</td></tr><tr><td><kbd>I</kbd></td><td>スポイトを切り替え</td><td>共通</td></tr><tr><td><kbd>O</kbd></td><td>円ブラシ</td><td>ブラシ</td></tr><tr><td><kbd>U</kbd></td><td>四角形ブラシ</td><td>ブラシ</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F2</kbd></td><td>ひし形ブラシ</td><td>ブラシ</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F3</kbd></td><td>ジッターブラシ</td><td>ブラシ</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + M</kbd></td><td>複数バイオームブラシを切り替え</td><td>ブラシ</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + X</kbd></td><td>第1と第2バイオームを交換</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + T</kbd></td><td>動的トポロジーを切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + W</kbd></td><td>作業灯を切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Q</kbd></td><td>アクティブな地形をフレーム表示</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + L</kbd></td><td>Editing Mask を切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Y</kbd></td><td>シーンツール HUD を切り替え</td><td>共通</td></tr><tr><td><kbd>Backspace</kbd></td><td>面選択をクリア</td><td>マスク</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Delete</kbd></td><td>マスクした面を削除</td><td>マスク</td></tr><tr><td><kbd>Shift + =</kbd></td><td>マスクを面1周分拡大</td><td>マスク</td></tr><tr><td><kbd>Shift + -</kbd></td><td>マスクを面1周分縮小</td><td>マスク</td></tr><tr><td><kbd>Shift + U</kbd></td><td>面選択を反転</td><td>マスク</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F4</kbd></td><td>編集可能な全ての面を選択</td><td>マスク</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + D</kbd></td><td>面選択をクリア</td><td>マスク</td></tr><tr><td><kbd>Shift + W</kbd></td><td>傾斜範囲内の面を選択</td><td>マスク</td></tr><tr><td><kbd>Shift + X</kbd></td><td>設定したバイオームの面を選択</td><td>マスク</td></tr><tr><td><kbd>Enter</kbd></td><td>選択したマスク形状を生成</td><td>マスク</td></tr><tr><td><kbd>Shift + Enter</kbd></td><td>マスクした面をペイント</td><td>マスク</td></tr><tr><td><kbd>Shift + S</kbd></td><td>拡大縮小の倍率でマスクした面を変形</td><td>マスク</td></tr><tr><td><kbd>Shift + L</kbd></td><td>選択した X・Y・Z 軸に沿ってマスクした面をそろえる</td><td>マスク</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F8</kbd></td><td>マスクした面をサーフェスの向きに平坦化</td><td>マスク</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F5</kbd></td><td>マスクした面を細分化</td><td>マスク</td></tr><tr><td><kbd>Shift + Q</kbd></td><td>選択した穴の境界を埋める</td><td>マスク</td></tr><tr><td><kbd>Shift + F1</kbd></td><td>押し出し／台地プリセット</td><td>マスク</td></tr><tr><td><kbd>Shift + F2</kbd></td><td>柱のプリセット</td><td>マスク</td></tr><tr><td><kbd>Shift + F3</kbd></td><td>アーチのプリセット</td><td>マスク</td></tr><tr><td><kbd>Shift + F4</kbd></td><td>岩のプリセット</td><td>マスク</td></tr><tr><td><kbd>Shift + F5</kbd></td><td>ブラシで面を選択</td><td>マスク</td></tr><tr><td><kbd>Shift + F6</kbd></td><td>単一面の選択</td><td>マスク</td></tr><tr><td><kbd>Shift + F7</kbd></td><td>連続面をまとめて選択</td><td>マスク</td></tr><tr><td><kbd>O</kbd></td><td>円形の面選択ブラシ</td><td>マスク</td></tr><tr><td><kbd>U</kbd></td><td>四角形の面選択ブラシ</td><td>マスク</td></tr><tr><td><kbd>Backspace</kbd></td><td>全パスノードを消去</td><td>パス</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Delete</kbd></td><td>選択したパスノードを削除</td><td>パス</td></tr><tr><td><kbd>Shift + P</kbd></td><td>全パスノードを消去（別キー）</td><td>パス</td></tr><tr><td><kbd>Shift + F1</kbd></td><td>サーフェスパス</td><td>パス</td></tr><tr><td><kbd>Shift + F2</kbd></td><td>トンネルパス</td><td>パス</td></tr><tr><td><kbd>Shift + F3</kbd></td><td>橋のパス</td><td>パス</td></tr><tr><td><kbd>Shift + F4</kbd></td><td>サーフェスパス：整地</td><td>パス</td></tr><tr><td><kbd>Shift + F5</kbd></td><td>サーフェスパス：盛土</td><td>パス</td></tr><tr><td><kbd>Shift + F6</kbd></td><td>サーフェスパス：溝／川底を掘る</td><td>パス</td></tr><tr><td><kbd>Shift + F7</kbd></td><td>サーフェスパス：通路平滑化</td><td>パス</td></tr><tr><td><kbd>Shift + F8</kbd></td><td>サーフェスパス：階段</td><td>パス</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F6</kbd></td><td>閉じたパスループを切り替え</td><td>パス</td></tr><tr><td><kbd>Enter</kbd></td><td>パス／トンネルを生成してペイント、または橋を生成</td><td>パス</td></tr><tr><td><kbd>Shift + Enter</kbd></td><td>サーフェスパスまたはトンネル壁をペイント</td><td>パス</td></tr><tr><td><kbd>Ctrl/Cmd + Enter</kbd></td><td>パスのジオメトリ／トンネル／橋を生成</td><td>パス</td></tr><tr><td><kbd>Shift + S</kbd></td><td>始点の面を選択</td><td>パス</td></tr><tr><td><kbd>Shift + E</kbd></td><td>終点の面を選択</td><td>パス</td></tr><tr><td><kbd>O</kbd></td><td>端点選択：円ブラシ</td><td>パス</td></tr><tr><td><kbd>U</kbd></td><td>端点選択：四角形ブラシ</td><td>パス</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F7</kbd></td><td>端点選択：単一面</td><td>パス</td></tr><tr><td><kbd>Shift + F1</kbd></td><td>円錐ボリュームグラデーション</td><td>グラデーション</td></tr><tr><td><kbd>Shift + F2</kbd></td><td>方向付きグラデーション</td><td>グラデーション</td></tr><tr><td><kbd>Shift + F3</kbd></td><td>地形全体の標高グラデーション</td><td>グラデーション</td></tr><tr><td><kbd>Shift + F4</kbd></td><td>地形全体の傾斜グラデーション</td><td>グラデーション</td></tr><tr><td><kbd>Enter</kbd></td><td>円錐／標高／傾斜グラデーションを適用</td><td>グラデーション</td></tr><tr><td><kbd>Shift + W</kbd></td><td>円錐をアクティブな地形に合わせる</td><td>グラデーション</td></tr><tr><td><kbd>Shift + S</kbd></td><td>円錐を最高頂点にスナップ</td><td>グラデーション</td></tr><tr><td><kbd>Shift + F1</kbd></td><td>ダスティングをペイント</td><td>ダスティング</td></tr><tr><td><kbd>Shift + F2</kbd></td><td>ダスティングをぼかし／ブレンド</td><td>ダスティング</td></tr><tr><td><kbd>Shift + F3</kbd></td><td>ダスティングを消去</td><td>ダスティング</td></tr><tr><td><kbd>Shift + F4</kbd></td><td>バイオームをダスティングで塗りつぶす</td><td>ダスティング</td></tr></tbody></table></div></details>
-
+<p>以下のキーボード割り当ては<strong>既定値</strong>です。Scene ビューで作業中に使います。同じキーでも マスク、パス、グラデーション、ダスティング のモードによって動作が変わるため、現在のコンテキストが重要です。入力欄への文字入力が優先されます。macOS では Ctrl/Cmd の操作に Cmd を使います。</p>
+<ul><li><kbd>[</kbd> / <kbd>]</kbd> と <kbd>Shift + マウスホイール</kbd> でブラシ半径を変えます。<kbd>Ctrl/Cmd + Shift + PageUp</kbd> / <kbd>PageDown</kbd> は細かい半径調整です。</li><li><kbd>Ctrl/Cmd + Shift + Up</kbd> / <kbd>Down</kbd> で形状の速度、<kbd>Ctrl/Cmd + Shift + Left</kbd> / <kbd>Right</kbd> でサーフェスの不透明度を調整します。マイナス／イコールの割り当ては現在のツールコンテキストに応じて働きます。</li><li><kbd>Ctrl + ドラッグ</kbd> で対応する スカルプト/膨張 の方向を反転します。<kbd>Shift</kbd> は対応ブラシを一時的に 平滑化/ブレンド へ切り替え、マスク 選択中は面を除外します。</li><li><kbd>Alt + Shift + 1…9, 0</kbd> で表示中のパレットグループ内のバイオームを選びます。<kbd>Tab</kbd> / <kbd>Shift + Tab</kbd> でバイオームページを切り替えます。</li><li><kbd>Escape</kbd> は現在の特別な操作を終了するかツールを解除します。パス モードを離れてもノードは残ります。経路そのものを消す場合は ノードを消去 を使います。</li></ul>
+<h3 id="custom-hotkeys">ショートカット一覧 でショートカットを変更する</h3>
+<ol><li>Terrain ウィンドウの <strong>ショートカット一覧</strong> を開きます。操作名やキーで検索するか、ツール、ブラシ調整、マスク mode、パス mode などのグループを展開します。</li><li>操作のキーボタンをクリックしてから、新しいキーの組み合わせを押します。Modifier Key だけを押した場合は、メインキーの入力を待ちます。<kbd>Escape</kbd> で記録をキャンセルできます。</li><li><strong>×</strong> で割り当てを消去し、<strong>リセット</strong> で一つの操作を既定値へ戻し、<strong>初期設定に戻す</strong> で一覧全体を初期状態へ戻します。</li></ol>
+<p>変更内容は現在の Unity Editor ユーザー用に自動保存され、プロジェクト間で共有されます。Tooltip と シーン HUD には現在設定されているキーが表示されます。重なるコンテキストで別の操作と競合するキーを指定すると、ショートカット一覧 は競合する操作名を表示して割り当てを拒否します。先にもう一方の割り当てを変更または消去してください。マスク、パス、グラデーション はコンテキストが重ならない場合に同じキーを再利用できますが、共通 の操作は各モードで有効です。</p>
+<p>マウス操作と Unity の 元に戻す/やり直す は固定です。Shift + Mouse Wheel は半径調整、Shift + Drag は一時的な 平滑化/ブレンド または選択面の除外、Ctrl + Drag は Lower/Deflate、ペイント 中の Ctrl + Click はバイオームのサンプル、Shift + Click は パス Node を X/Z に制限します。元に戻す は Ctrl/Cmd + Z、やり直す は Ctrl/Cmd + Shift + Z または Ctrl/Cmd + Y です。ショートカット記録中以外では、入力欄への文字入力が引き続き優先されます。</p>
+<details><summary>既定のキーボード割り当てをすべて表示</summary><p>以下は工場出荷時の既定値です。現在の割り当ては ショートカット一覧 で確認できます。共通 の割り当ては各モードで有効で、対応する ブラシ の割り当ては ダスティング でも使用できます。</p><div class="table-wrap"><table><thead><tr><th>既定のショートカット</th><th>操作</th><th>コンテキスト</th></tr></thead><tbody><tr><td><kbd>Escape</kbd></td><td>ツールを解除／端点選択を終了</td><td>共通</td></tr><tr><td><kbd>[</kbd></td><td>ブラシ半径／パス幅を小さくする</td><td>共通</td></tr><tr><td><kbd>]</kbd></td><td>ブラシ半径／パス幅を大きくする</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + PageDown</kbd></td><td>半径／パス幅を細かく小さくする</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + PageUp</kbd></td><td>半径／パス幅を細かく大きくする</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Down</kbd></td><td>形状速度／整理の強度 を下げる</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Up</kbd></td><td>形状速度／整理の強度 を上げる</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Left</kbd></td><td>ペイントの不透明度／ダスティング強度 を下げる</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Right</kbd></td><td>ペイントの不透明度／ダスティング強度 を上げる</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + -</kbd></td><td>形状とサーフェスの 強度 を下げる</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + =</kbd></td><td>形状とサーフェスの 強度 を上げる</td><td>共通</td></tr><tr><td><kbd>Tab</kbd></td><td>次のバイオームページ</td><td>共通</td></tr><tr><td><kbd>Shift + Tab</kbd></td><td>前のバイオームページ</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 1</kbd></td><td>バイオームスロット 1 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 2</kbd></td><td>バイオームスロット 2 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 3</kbd></td><td>バイオームスロット 3 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 4</kbd></td><td>バイオームスロット 4 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 5</kbd></td><td>バイオームスロット 5 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 6</kbd></td><td>バイオームスロット 6 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 7</kbd></td><td>バイオームスロット 7 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 8</kbd></td><td>バイオームスロット 8 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 9</kbd></td><td>バイオームスロット 9 を選択</td><td>共通</td></tr><tr><td><kbd>Alt + Shift + 0</kbd></td><td>バイオームスロット 10 を選択</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + H</kbd></td><td>スカルプトを切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + I</kbd></td><td>膨張を切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + U</kbd></td><td>平滑化を切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + J</kbd></td><td>つかむツールを切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + K</kbd></td><td>洞窟を切り替え</td><td>共通</td></tr><tr><td><kbd>Shift + N</kbd></td><td>整理を切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + O</kbd></td><td>パスを切り替え</td><td>共通</td></tr><tr><td><kbd>Shift + M</kbd></td><td>面マスクを切り替え</td><td>共通</td></tr><tr><td><kbd>B</kbd></td><td>ペイントを切り替え</td><td>共通</td></tr><tr><td><kbd>Shift + B</kbd></td><td>ダスティングを切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F1</kbd></td><td>塗りつぶしを切り替え</td><td>共通</td></tr><tr><td><kbd>Shift + J</kbd></td><td>にじませるツールを切り替え</td><td>共通</td></tr><tr><td><kbd>J</kbd></td><td>バイオームブレンドを切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + E</kbd></td><td>グラデーションを切り替え</td><td>共通</td></tr><tr><td><kbd>I</kbd></td><td>スポイトを切り替え</td><td>共通</td></tr><tr><td><kbd>O</kbd></td><td>円ブラシ</td><td>ブラシ</td></tr><tr><td><kbd>U</kbd></td><td>四角形ブラシ</td><td>ブラシ</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F2</kbd></td><td>ひし形ブラシ</td><td>ブラシ</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F3</kbd></td><td>ジッターブラシ</td><td>ブラシ</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + M</kbd></td><td>複数バイオームブラシを切り替え</td><td>ブラシ</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + X</kbd></td><td>第1と第2バイオームを交換</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + T</kbd></td><td>動的トポロジーを切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + W</kbd></td><td>作業灯を切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Q</kbd></td><td>アクティブな地形をフレーム表示</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + L</kbd></td><td>編集マスク を切り替え</td><td>共通</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Y</kbd></td><td>シーンツール HUD を切り替え</td><td>共通</td></tr><tr><td><kbd>Backspace</kbd></td><td>面選択をクリア</td><td>マスク</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Delete</kbd></td><td>マスクした面を削除</td><td>マスク</td></tr><tr><td><kbd>Shift + =</kbd></td><td>マスクを面1周分拡大</td><td>マスク</td></tr><tr><td><kbd>Shift + -</kbd></td><td>マスクを面1周分縮小</td><td>マスク</td></tr><tr><td><kbd>Shift + U</kbd></td><td>面選択を反転</td><td>マスク</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F4</kbd></td><td>編集可能な全ての面を選択</td><td>マスク</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + D</kbd></td><td>面選択をクリア</td><td>マスク</td></tr><tr><td><kbd>Shift + W</kbd></td><td>傾斜範囲内の面を選択</td><td>マスク</td></tr><tr><td><kbd>Shift + X</kbd></td><td>設定したバイオームの面を選択</td><td>マスク</td></tr><tr><td><kbd>Enter</kbd></td><td>選択したマスク形状を生成</td><td>マスク</td></tr><tr><td><kbd>Shift + Enter</kbd></td><td>マスクした面をペイント</td><td>マスク</td></tr><tr><td><kbd>Shift + S</kbd></td><td>拡大縮小の倍率でマスクした面を変形</td><td>マスク</td></tr><tr><td><kbd>Shift + L</kbd></td><td>選択した X・Y・Z 軸に沿ってマスクした面をそろえる</td><td>マスク</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F8</kbd></td><td>マスクした面をサーフェスの向きに平坦化</td><td>マスク</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F5</kbd></td><td>マスクした面を細分化</td><td>マスク</td></tr><tr><td><kbd>Shift + Q</kbd></td><td>選択した穴の境界を埋める</td><td>マスク</td></tr><tr><td><kbd>Shift + F1</kbd></td><td>押し出し／台地プリセット</td><td>マスク</td></tr><tr><td><kbd>Shift + F2</kbd></td><td>柱のプリセット</td><td>マスク</td></tr><tr><td><kbd>Shift + F3</kbd></td><td>アーチのプリセット</td><td>マスク</td></tr><tr><td><kbd>Shift + F4</kbd></td><td>岩のプリセット</td><td>マスク</td></tr><tr><td><kbd>Shift + F5</kbd></td><td>ブラシで面を選択</td><td>マスク</td></tr><tr><td><kbd>Shift + F6</kbd></td><td>単一面の選択</td><td>マスク</td></tr><tr><td><kbd>Shift + F7</kbd></td><td>連続面をまとめて選択</td><td>マスク</td></tr><tr><td><kbd>O</kbd></td><td>円形の面選択ブラシ</td><td>マスク</td></tr><tr><td><kbd>U</kbd></td><td>四角形の面選択ブラシ</td><td>マスク</td></tr><tr><td><kbd>Backspace</kbd></td><td>全パスノードを消去</td><td>パス</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + Delete</kbd></td><td>選択したパスノードを削除</td><td>パス</td></tr><tr><td><kbd>Shift + P</kbd></td><td>全パスノードを消去（別キー）</td><td>パス</td></tr><tr><td><kbd>Shift + F1</kbd></td><td>サーフェスパス</td><td>パス</td></tr><tr><td><kbd>Shift + F2</kbd></td><td>トンネルパス</td><td>パス</td></tr><tr><td><kbd>Shift + F3</kbd></td><td>橋のパス</td><td>パス</td></tr><tr><td><kbd>Shift + F4</kbd></td><td>サーフェスパス：整地</td><td>パス</td></tr><tr><td><kbd>Shift + F5</kbd></td><td>サーフェスパス：盛土</td><td>パス</td></tr><tr><td><kbd>Shift + F6</kbd></td><td>サーフェスパス：溝／川底を掘る</td><td>パス</td></tr><tr><td><kbd>Shift + F7</kbd></td><td>サーフェスパス：通路平滑化</td><td>パス</td></tr><tr><td><kbd>Shift + F8</kbd></td><td>サーフェスパス：階段</td><td>パス</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F6</kbd></td><td>閉じたパスループを切り替え</td><td>パス</td></tr><tr><td><kbd>Enter</kbd></td><td>パス／トンネルを生成してペイント、または橋を生成</td><td>パス</td></tr><tr><td><kbd>Shift + Enter</kbd></td><td>サーフェスパスまたはトンネル壁をペイント</td><td>パス</td></tr><tr><td><kbd>Ctrl/Cmd + Enter</kbd></td><td>パスのジオメトリ／トンネル／橋を生成</td><td>パス</td></tr><tr><td><kbd>Shift + S</kbd></td><td>始点の面を選択</td><td>パス</td></tr><tr><td><kbd>Shift + E</kbd></td><td>終点の面を選択</td><td>パス</td></tr><tr><td><kbd>O</kbd></td><td>端点選択：円ブラシ</td><td>パス</td></tr><tr><td><kbd>U</kbd></td><td>端点選択：四角形ブラシ</td><td>パス</td></tr><tr><td><kbd>Ctrl/Cmd + Shift + F7</kbd></td><td>端点選択：単一面</td><td>パス</td></tr><tr><td><kbd>Shift + F1</kbd></td><td>円錐ボリュームグラデーション</td><td>グラデーション</td></tr><tr><td><kbd>Shift + F2</kbd></td><td>方向付きグラデーション</td><td>グラデーション</td></tr><tr><td><kbd>Shift + F3</kbd></td><td>地形全体の標高グラデーション</td><td>グラデーション</td></tr><tr><td><kbd>Shift + F4</kbd></td><td>地形全体の傾斜グラデーション</td><td>グラデーション</td></tr><tr><td><kbd>Enter</kbd></td><td>円錐／標高／傾斜グラデーションを適用</td><td>グラデーション</td></tr><tr><td><kbd>Shift + W</kbd></td><td>円錐をアクティブな地形に合わせる</td><td>グラデーション</td></tr><tr><td><kbd>Shift + S</kbd></td><td>円錐を最高頂点にスナップ</td><td>グラデーション</td></tr><tr><td><kbd>Shift + F1</kbd></td><td>ダスティングをペイント</td><td>ダスティング</td></tr><tr><td><kbd>Shift + F2</kbd></td><td>ダスティングをぼかし／ブレンド</td><td>ダスティング</td></tr><tr><td><kbd>Shift + F3</kbd></td><td>ダスティングを消去</td><td>ダスティング</td></tr><tr><td><kbd>Shift + F4</kbd></td><td>バイオームをダスティングで塗りつぶす</td><td>ダスティング</td></tr></tbody></table></div></details>
 <h2 id="glossary">このガイドで使う用語</h2>
 <div class="table-wrap"><table><thead><tr><th>用語</th><th>意味</th></tr></thead><tbody>
 <tr><td>メッシュ・頂点・面</td><td>地形の形・その形を作る点・点をつないだ三角形です。</td></tr>
@@ -266,23 +264,23 @@ code,kbd{font-family:Consolas,"Courier New",monospace;font-size:.92em;background
 <tr><td>アトラス・テクスチャ配列</td><td>地形マテリアルで使うためにまとめられた、ライブラリの地表テクスチャです。</td></tr>
 <tr><td>法線マップ・視差</td><td>細部の照明表現・奥行きの錯覚です。どちらも地形の衝突形状を動かしません。</td></tr>
 <tr><td>ベイク</td><td>あらかじめ計算し、結果を保存することです。元の情報が変わったら再ベイクします。</td></tr>
-<tr><td>LOD</td><td>画面上で小さく見えるときに使う、簡略化したメッシュです。</td></tr><tr><td>3D Scatter</td><td>Terrain Atlas のバイオームデータを基に、Grass、Flower、Mushroom、Pebble、Custom Mesh などを GPU Instancing で地表へ配置するシステムです。詳しくは<a href="scatter-system.html">3D Scatter ガイド</a>を参照してください。</td></tr>
+<tr><td>LOD</td><td>画面上で小さく見えるときに使う、簡略化したメッシュです。</td></tr><tr><td>3D スキャッター</td><td>地形アトラス のバイオームデータを基に、草、Flower、Mushroom、Pebble、カスタムメッシュ などを GPU Instancing で地表へ配置するシステムです。詳しくは<a href="scatter-system.html">3D スキャッター ガイド</a>を参照してください。</td></tr>
 </tbody></table></div>
 <h2 id="troubleshooting">思ったとおりの結果にならないとき</h2>
 <div class="table-wrap"><table><thead><tr><th>症状</th><th>最初に確認すること</th></tr></thead><tbody>
-<tr><td>ブラシが何も変えない</td><td>Active Target、その Paint/Sculpt スイッチ、現在のツール、Radius、Strength を確認します。Scene ビューにフォーカスがあり、入力欄がキー入力を受け取っていないことも確認してください。</td></tr>
-<tr><td>マスク境界付近をブラシで編集できない</td><td>Editing Mask と保存した範囲を確認します。共有する境界頂点は、隣接面と溶接済み継ぎ目を保護するため固定されます。制限を一時停止するにはマスクをオフにするか、より広い範囲を選択して Set Mask を再度使います。</td></tr>
-<tr><td>Extrusion または Fill Hole が使用できない</td><td>これらの操作前に有効な Editing Mask を解除してください。保存した Editing Mask を消すことと、現在の面選択を Clear することは別です。</td></tr>
-<tr><td>ショートカットがこのガイドと違って見える</td><td>表に記載しているのは既定値です。Hotkey Sheet を開いて現在の割り当てを確認し、操作名を検索して必要なら Reset してください。</td></tr>
-<tr><td>ペイントの境界が角張る</td><td>ペイント情報はメッシュ形状に結び付いています。頂点密度を確認し、局所的な Subdivision または対応する Dynamic Topology を検討します。Blend Sharpness は遷移を変えますが、三角形数は増やしません。</td></tr>
-<tr><td>丘がとがりすぎる</td><td>変位の速度を下げ、広いブラシを使い、トポロジーを確認します。形状を少しずつ Smooth してください。法線だけを変えても照明の見え方しか変わりません。</td></tr>
+<tr><td>ブラシが何も変えない</td><td>アクティブ 対象、その ペイント/スカルプト スイッチ、現在のツール、半径、強度 を確認します。Scene ビューにフォーカスがあり、入力欄がキー入力を受け取っていないことも確認してください。</td></tr>
+<tr><td>マスク境界付近をブラシで編集できない</td><td>編集マスク と保存した範囲を確認します。共有する境界頂点は、隣接面と溶接済み継ぎ目を保護するため固定されます。制限を一時停止するにはマスクをオフにするか、より広い範囲を選択して マスクを設定 を再度使います。</td></tr>
+<tr><td>Extrusion または 穴を埋める が使用できない</td><td>これらの操作前に有効な 編集マスク を解除してください。保存した 編集マスク を消すことと、現在の面選択を クリア することは別です。</td></tr>
+<tr><td>ショートカットがこのガイドと違って見える</td><td>表に記載しているのは既定値です。ショートカット一覧 を開いて現在の割り当てを確認し、操作名を検索して必要なら リセット してください。</td></tr>
+<tr><td>ペイントの境界が角張る</td><td>ペイント情報はメッシュ形状に結び付いています。頂点密度を確認し、局所的な Subdivision または対応する 動的トポロジー を検討します。ブレンドの鮮明さ は遷移を変えますが、三角形数は増やしません。</td></tr>
+<tr><td>丘がとがりすぎる</td><td>変位の速度を下げ、広いブラシを使い、トポロジーを確認します。形状を少しずつ 平滑化 してください。法線だけを変えても照明の見え方しか変わりません。</td></tr>
 <tr><td>トンネルが地表を突き抜ける</td><td>経路全体の幅、高さ、Minimum Cover Depth を確認します。必要な場所で経路を深くするか、断面を小さくしてください。</td></tr>
-<tr><td>グラデーションで全面が一つの地表になる</td><td>高さ・傾斜範囲が地形を含むか、Cone が地形と重なるか、Ramp Stop が意図した Biome ID を使っているか確認します。</td></tr>
-<tr><td>タイルの間に継ぎ目が出る</td><td>最初に物理的な隙間を確認し、その後で登録状態、隣接タイルの有効化、法線、Material 設定を確認します。Projection Seam Blend では形状の隙間を閉じられません。</td></tr>
-<tr><td>別の地形の見た目も変わる</td><td>両方が同じ Library、Material、Texture Asset を共有していないか確認します。設定を分けたい場合は独立したコピーを作ります。</td></tr>
+<tr><td>グラデーションで全面が一つの地表になる</td><td>高さ・傾斜範囲が地形を含むか、Cone が地形と重なるか、Ramp Stop が意図した バイオームID を使っているか確認します。</td></tr>
+<tr><td>タイルの間に継ぎ目が出る</td><td>最初に物理的な隙間を確認し、その後で登録状態、隣接タイルの有効化、法線、マテリアル 設定を確認します。Projection 継ぎ目ブレンド では形状の隙間を閉じられません。</td></tr>
+<tr><td>別の地形の見た目も変わる</td><td>両方が同じ Library、マテリアル、Texture Asset を共有していないか確認します。設定を分けたい場合は独立したコピーを作ります。</td></tr>
 <tr><td>キャラクターが形状を通り抜ける、または上に浮く</td><td>Collider と編集後メッシュが一致しているか確認します。Chunk Collider を生成した場合は LOD2 の簡略化も確認してください。</td></tr>
-<tr><td>ゲーム中に違うバイオームが返る</td><td>変更後に Surface Data を再 Bake し、当たった Collider の三角形順序に一致させます。三角形ベースの検索には有効な Mesh Triangle が必要で、Mesh 以外の Collider に当たっても自動的に Biome 0 を返すわけではありません。制約は<a href="demo-components.html#surface-raycast-tester">Raycast Tester のガイド</a>を参照してください。</td></tr>
-<tr><td>編集が重くなる</td><td>三角形数、ブラシ範囲、Dynamic Topology 設定を確認します。コピーで不要な密度を減らして再測定し、Texture Resolution は別に確認してください。</td></tr>
-<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "8e179a1cf8eb4d4abe8a988a18e4a97b"}'></script><!-- End Cloudflare Web Analytics -->
+<tr><td>ゲーム中に違うバイオームが返る</td><td>変更後に サーフェス Data を再 Bake し、当たった Collider の三角形順序に一致させます。三角形ベースの検索には有効な メッシュ Triangle が必要で、メッシュ 以外の Collider に当たっても自動的に バイオーム 0 を返すわけではありません。制約は<a href="demo-components.html#surface-raycast-tester">Raycast Tester のガイド</a>を参照してください。</td></tr>
+<tr><td>編集が重くなる</td><td>三角形数、ブラシ範囲、動的トポロジー 設定を確認します。コピーで不要な密度を減らして再測定し、Texture 解像度 は別に確認してください。</td></tr>
+<!-- Cloudflare Web Analytics --><script data-cf-beacon='{"token": "8e179a1cf8eb4d4abe8a988a18e4a97b"}' src="https://static.cloudflareinsights.com/beacon.min.js" type="module"></script> 終点 Cloudflare Web Analytics 
 </tbody></table></div>
 <h2 id="support">サポート</h2><p>相談するときは、期待した結果、使った項目、実際に起きたことを説明してください。Unity のバージョン、選択したパイプライン、関連する設定のスクリーンショットも添えます。実行時の問い合わせの問題では、コライダーの種類と、最後にサーフェスデータをベイクした時期も記載してください。</p><p><a href="https://dptgames.github.io/#contact">DPT Games お問い合わせフォーム</a>、または <a href="https://discord.gg/EkQykfzP5X">DPT Games Discord</a> をご利用ください。</p><p class="back-top"><a href="#top">ページの先頭へ</a></p><footer class="footer">2026年10月20日に更新。</footer></main></body></html>
