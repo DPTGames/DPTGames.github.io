@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DPT Firearm Projectile - DPT Games</title>
+<style>
+        *, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0; padding: 40px;
+            font-size: 11pt; line-height: 1.5;
+        }
+        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        td code { font-size: 9.5pt; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .perf { background-color: #0c1f12; border-left: 4px solid #4ade80; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .tip { background-color: #1a1a2e; border-left: 4px solid #a78bfa; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        pre { padding: 12px; margin: 10px 0; overflow-x: auto; line-height: 1.6; }
+        .badge {
+            display: inline-block;
+            background-color: #166534;
+            color: #4ade80;
+            font-size: 8.5pt;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 3px;
+            letter-spacing: 0.05em;
+            vertical-align: middle;
+            margin-left: 6px;
+        }
+        .badge-blue { background-color: #1e3a5f; color: #7dd3fc; }
+        .badge-orange { background-color: #431407; color: #fb923c; }
+        .badge-purple { background-color: #2e1065; color: #c4b5fd; }
+        .state-arrow { color: #38bdf8; font-weight: bold; margin: 0 4px; }
+        .state-label {
+            display: inline-block;
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            color: #bae6fd;
+            font-family: 'Consolas', monospace;
+            font-size: 9.5pt;
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+        .divider { border: none; border-top: 1px solid #1e293b; margin: 30px 0; }
+         .note a {
+        color: #38bdf8;
+        text-decoration: none; 
+        transition: color 0.2s ease-in-out;
+    }
+
+    .note a:hover {
+        color: #7dd3fc;
+        text-decoration: underline; 
+    }
+    
+        html { scroll-behavior: smooth; }
+        body { max-width: 1180px; margin: 0 auto; }
+        a { color: #38bdf8; }
+        .site-nav { display:flex; gap:14px; flex-wrap:wrap; align-items:center; background:#1e293b; padding:12px 15px; border-bottom:2px solid #38bdf8; margin-bottom:20px; border-radius:5px; }
+        .site-nav a { color:#e2e8f0; text-decoration:none; padding:4px 3px; }
+        .site-nav a:hover, .site-nav a.active { color:#7dd3fc; text-decoration:underline; }
+        .site-nav .brand { color:#38bdf8; margin-right:auto; }
+        .quicknav { background:#1e293b; padding:15px; border-radius:6px; margin-bottom:30px; border:1px solid #334155; line-height:2.25; }
+        .quicknav strong { color:#38bdf8; display:block; margin-bottom:5px; }
+        .quicknav a { color:#a5f3fc; text-decoration:none; margin-right:16px; white-space:nowrap; }
+        .quicknav a:hover { text-decoration:underline; }
+        .small { color:#94a3b8; font-size:9.5pt; }
+        .panel { background:#1e293b; border:1px solid #334155; border-radius:5px; padding:15px; margin:14px 0; }
+        kbd { border:1px solid #475569; padding:2px 6px; border-radius:4px; background:#1e293b; font-family:Consolas, monospace; }
+        .footer { border-top:1px solid #334155; margin-top:35px; padding-top:15px; color:#94a3b8; font-size:9.5pt; }
+        @media (max-width:720px) { body { padding:20px 14px; font-size:10pt; } h1 { font-size:21pt; } table { font-size:9pt; } td, th { padding:7px; } .quicknav a { display:inline-block; } pre { white-space:pre-wrap; overflow-wrap:anywhere; } }
+        @media print { body { padding:0; max-width:none; } .site-nav { display:none; } .quicknav { display:none; } a { text-decoration:none; } }
+</style>
+</head>
+<body>
+<nav class="site-nav"><a class="brand" href="https://dptgames.github.io/">&larr; DPT Games Homepage</a><a href="index.html">Firearm Controller</a><a href="projectiles.html" class="active">Projectiles</a><a href="damage.html">Damage Integration</a><a href="screen_shake.html">Screen Shake</a><a href="demo_input.html">Demo Input</a></nav><h1>DPT Firearm Projectile</h1>
+<div class="subtitle">Moving Bullet &amp; Impact Guide<br><span style="font-size:11pt;font-style:normal">The <code>DPT_FirearmProjectile</code> component moves fast projectiles using swept raycasts, applies damage on the first solid impact and optionally swaps an intact bullet mesh for a crushed or deformed variant.</span></div>
+
+<div class="quicknav"><strong>Quick Navigation Reference:</strong><a href="#setup">Quick Setup</a><a href="#modes">Hitscan vs Swept</a><a href="#lifecycle">Impact Lifecycle</a><a href="#inspector">Inspector Reference</a><a href="#api">Public API</a><a href="#perf">Performance &amp; Limitations</a><a href="#troubleshoot">Troubleshooting</a></div>
+<h2 id="setup">Quick Setup</h2>
+<ol>
+<li>Create a new bullet prefab. Add <code>DPT_FirearmProjectile</code> to its <strong>root GameObject</strong>.</li>
+<li>Under that root, create a child GameObject for the normal projectile mesh and optionally a second child for the crushed or deformed mesh.</li>
+<li>Assign both visual GameObjects to <strong>Normal Bullet Visual</strong> and <strong>Deformed Bullet Visual</strong> respectively.</li>
+<li>Configure the projectile's <strong>Collision Layers</strong>, gravity, drag, impact effect, impact sound and remnant lifetime.</li>
+<li>Assign this prefab to <strong>Projectile Prefab</strong> on <code>DPT_Firearm</code> and set <strong>Shot Type</strong> to <code>SweptProjectile</code>.</li>
+<li>For impact shake, optionally attach <code>DPT_FirearmProjectileScreenShake</code> to the same prefab.</li>
+</ol>
+<pre>303_British_Projectile [DPT_FirearmProjectile]
+├── Bullet_Regular
+└── Bullet_Crushed (inactive)</pre>
+<div class="note"><strong>No flight Rigidbody required:</strong> The projectile uses a swept raycast in <code>FixedUpdate()</code> to detect collision between its previous and next positions. If the root has a Rigidbody, the script makes it kinematic in <code>Awake()</code>. It also does not require a Collider for the flight raycasts.</div>
+<h2 id="modes">Hitscan vs Swept Projectiles</h2>
+<table><thead><tr><th style="width:28%">Mode</th><th style="width:72%">Behaviour</th></tr></thead><tbody><tr><td><strong>Hitscan</strong></td><td>The firearm&#39;s <code>PerformHitscan()</code> checks for an immediate impact. No projectile prefab is spawned. Hitscan effects, damage and impulse are controlled by <code>DPT_Firearm</code>.</td></tr><tr><td><strong>Swept Projectile</strong></td><td>The firearm instantiates <code>DPT_FirearmProjectile</code> at the muzzle, calls <code>Initialize()</code>, then the projectile advances using gravity/drag and raycasts along each movement segment.</td></tr><tr><td><strong>What happens at 780 m/s?</strong></td><td>A conventional Rigidbody collision can tunnel through thin objects between physics steps. The swept path uses a raycast from the previous position across the full step distance, which mitigates that problem.</td></tr></tbody></table>
+<h2 id="lifecycle">Projectile Lifecycle &amp; Deformed Bullet</h2>
+<div class="panel"><span class="state-label">Instantiate</span> <span class="state-arrow">&rarr;</span> <span class="state-label">Initialize</span> <span class="state-arrow">&rarr;</span> <span class="state-label">Swept Flight</span> <span class="state-arrow">&rarr;</span> <span class="state-label">First Hit</span> <span class="state-arrow">&rarr;</span> <span class="state-label">Impact Visual</span> <span class="state-arrow">&rarr;</span> <span class="state-label">Destroy</span></div>
+<ol>
+<li><code>Initialize(source, velocity, damage, maxDistance)</code> sets the source firearm, initial velocity, damage and allowed range. The normal bullet visual becomes active and the deformed one is hidden.</li>
+<li>Every physics step, the projectile applies optional gravity and a simple linear drag approximation, then raycasts along the traveled segment.</li>
+<li>The closest eligible hit is selected. The projectile stops at the first hit, applies damage via <code>IDPT_FirearmDamageable</code> and optional force to a non-kinematic Rigidbody.</li>
+<li>It spawns the impact effect, plays one randomly selected impact clip and optionally switches from the intact bullet to the crushed bullet.</li>
+<li>The projectile disables its child Colliders, optionally attaches to the struck transform and destroys itself after <strong>Lifetime After Impact</strong>.</li>
+</ol>
+<div class="tip"><strong>Impact offset:</strong> In this implementation, <strong>Embed Depth</strong> shifts the stopped bullet <em>backwards</em> along its incoming direction, away from the surface hit point. Increasing this number makes the visible remnant sit further outside the target rather than penetrate farther into it.</div>
+<h2 id="inspector">Inspector Reference</h2>
+<h3>Motion</h3><table><thead><tr><th style="width:32%">Property</th><th style="width:68%">Description</th></tr></thead><tbody><tr><td><strong>Use Gravity</strong><br><code>useGravity</code></td><td>Applies scene gravity to the projectile trajectory during swept movement.</td></tr><tr><td><strong>Gravity Multiplier</strong><br><code>gravityMultiplier</code></td><td>Multiplies scene gravity for this projectile. 1 is normal gravity; 0 removes gravitational acceleration.</td></tr><tr><td><strong>Linear Drag</strong><br><code>linearDrag</code></td><td>Velocity damping applied each physics step using a linear drag approximation. Zero disables it.</td></tr><tr><td><strong>Collision Layers</strong><br><code>collisionLayers</code></td><td>Layers checked when raycasting along the projectile&#x27;s path. Trigger colliders are ignored.</td></tr><tr><td><strong>Fallback Lifetime</strong><br><code>fallbackLifetime</code></td><td>Maximum flight time in seconds before the projectile is destroyed if it has not hit anything.</td></tr></tbody></table><h3>Impact</h3><table><thead><tr><th style="width:32%">Property</th><th style="width:68%">Description</th></tr></thead><tbody><tr><td><strong>Show Deformed Bullet On Impact</strong><br><code>showDeformedBulletOnImpact</code></td><td>Switches from Normal Bullet Visual to Deformed Bullet Visual when a valid impact occurs.</td></tr><tr><td><strong>Normal Bullet Visual</strong><br><code>normalBulletVisual</code></td><td>Child GameObject displaying the intact bullet in flight. Hidden on impact.</td></tr><tr><td><strong>Deformed Bullet Visual</strong><br><code>deformedBulletVisual</code></td><td>Child GameObject displaying the crushed or deformed bullet after impact. Hidden during flight.</td></tr><tr><td><strong>Embed Depth</strong><br><code>embedDepth</code></td><td>Distance in metres to offset the stopped bullet back along its incoming path from the hit point. Larger values keep it further outside the surface.</td></tr><tr><td><strong>Attach To Hit Transform</strong><br><code>attachToHitTransform</code></td><td>Parents the projectile to the struck collider transform after impact so the bullet remnant follows moving targets.</td></tr><tr><td><strong>Lifetime After Impact</strong><br><code>lifetimeAfterImpact</code></td><td>Seconds the stopped projectile remains in the scene after impact. Zero destroys it immediately.</td></tr><tr><td><strong>Impact Effect Prefab</strong><br><code>impactEffectPrefab</code></td><td>Effect prefab spawned at the hit point, facing the surface normal, and removed after five seconds.</td></tr><tr><td><strong>Impact Sounds</strong><br><code>impactSounds</code></td><td>Sound clips selected randomly and played at the projectile&#x27;s impact point.</td></tr><tr><td><strong>Physics Impact Impulse</strong><br><code>physicsImpactImpulse</code></td><td>Impulse applied along the incoming projectile direction to a non-kinematic hit Rigidbody, in N-s.</td></tr><tr><td><strong>Impact Volume</strong><br><code>impactVolume</code></td><td>Playback volume used for the projectile&#x27;s impact sound (0 silent, 1 full volume).</td></tr></tbody></table><h3>Events</h3><table><thead><tr><th style="width:32%">Property</th><th style="width:68%">Description</th></tr></thead><tbody><tr><td><strong>On Impact</strong><br><code>onImpact</code></td><td>Invoked once when the projectile hits a valid surface, after impact effects and damage processing.</td></tr></tbody></table>
+<h2 id="api">Scripting API &amp; Events</h2>
+<table><thead><tr><th style="width:43%">Method / Member</th><th style="width:57%">Purpose</th></tr></thead><tbody><tr><td><code>Initialize(DPT_Firearm source, Vector3 velocity, float damage, float maxDistance)</code></td><td>Called by the firearm after instantiation. Resets flight state and sets source, velocity, damage and distance limit.</td></tr><tr><td><code>Velocity</code></td><td>Read-only current simulated velocity as a <code>Vector3</code>. Set during each physics step; becomes zero after impact.</td></tr><tr><td><code>HasImpacted</code></td><td>Read-only flag set true after the first valid impact.</td></tr><tr><td><code>onImpact</code></td><td>Inspector UnityEvent invoked after impact processing.</td></tr><tr><td><code>Impacted</code></td><td>C# event <code>Action&lt;Vector3&gt;</code> broadcasting the hit position. Used by the optional projectile screen shake module.</td></tr></tbody></table>
+<h2 id="perf">Performance &amp; Known Limitations</h2>
+<ul>
+<li>The moving projectile performs one non-allocating physics raycast operation per <code>FixedUpdate</code>, checking up to 64 returned hits to choose a valid nearest collision.</li>
+<li>The projectile ignores trigger colliders, its own children and colliders in the launching firearm's hierarchy.</li>
+<li>Motion simulation uses a simple linear drag approximation. It is not a full ballistic coefficient or aerodynamic spin model.</li>
+<li>The projectile stops at the first solid surface. No penetration, ricochet or continuation through destructible meshes is implemented.</li>
+<li>Impact effects and audio use instantiation/playback rather than pooling. High-volume automatic weapons may benefit from pooling added by the consuming project.</li>
+<li>With <strong>Attach To Hit Transform</strong> enabled, the remnant follows a moving target while it exists. If that target is removed or replaced by a mesh-destruction system, additional handling may be needed.</li>
+</ul>
+<h2 id="troubleshoot">Troubleshooting</h2>
+<table><thead><tr><th style="width:35%">Symptom</th><th style="width:65%">Check</th></tr></thead><tbody><tr><td>Projectile is invisible</td><td>Confirm the prefab has a normal bullet visual assigned, the mesh renderer is active and the projectile is travelling in the camera view.</td></tr><tr><td>Crushed bullet never shows</td><td>Enable Show Deformed Bullet On Impact, assign the deformed child and verify a hit was registered.</td></tr><tr><td>Bullet flies through everything</td><td>Check the Collision Layers mask, whether the colliders are triggers and whether objects are excluded as part of the firearm’s hierarchy.</td></tr><tr><td>Projectile disappears before hitting</td><td>Increase Maximum Range on the firearm or Fallback Lifetime on the projectile.</td></tr><tr><td>Impact audio not audible</td><td>Assign Impact Sounds; remember the default Impact Volume is 0.5.</td></tr><tr><td>Projectile stays attached after target breaks</td><td>Turn off Attach To Hit Transform or provide an integration that detaches the remnant before the target collider is replaced.</td></tr></tbody></table>
+
+<div class="footer">DPT Games &bull; Functional Firearms Documentation &bull; Based on the supplied <code>DPT.Firearms</code> runtime scripts. Check the installed script version if the API changes.</div>
+</body>
+</html>

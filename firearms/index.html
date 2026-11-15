@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DPT Games Functional Firearms - DPT Games</title>
+<style>
+        *, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0; padding: 40px;
+            font-size: 11pt; line-height: 1.5;
+        }
+        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        td code { font-size: 9.5pt; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .perf { background-color: #0c1f12; border-left: 4px solid #4ade80; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .tip { background-color: #1a1a2e; border-left: 4px solid #a78bfa; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        pre { padding: 12px; margin: 10px 0; overflow-x: auto; line-height: 1.6; }
+        .badge {
+            display: inline-block;
+            background-color: #166534;
+            color: #4ade80;
+            font-size: 8.5pt;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 3px;
+            letter-spacing: 0.05em;
+            vertical-align: middle;
+            margin-left: 6px;
+        }
+        .badge-blue { background-color: #1e3a5f; color: #7dd3fc; }
+        .badge-orange { background-color: #431407; color: #fb923c; }
+        .badge-purple { background-color: #2e1065; color: #c4b5fd; }
+        .state-arrow { color: #38bdf8; font-weight: bold; margin: 0 4px; }
+        .state-label {
+            display: inline-block;
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            color: #bae6fd;
+            font-family: 'Consolas', monospace;
+            font-size: 9.5pt;
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+        .divider { border: none; border-top: 1px solid #1e293b; margin: 30px 0; }
+         .note a {
+        color: #38bdf8;
+        text-decoration: none; 
+        transition: color 0.2s ease-in-out;
+    }
+
+    .note a:hover {
+        color: #7dd3fc;
+        text-decoration: underline; 
+    }
+    
+        html { scroll-behavior: smooth; }
+        body { max-width: 1180px; margin: 0 auto; }
+        a { color: #38bdf8; }
+        .site-nav { display:flex; gap:14px; flex-wrap:wrap; align-items:center; background:#1e293b; padding:12px 15px; border-bottom:2px solid #38bdf8; margin-bottom:20px; border-radius:5px; }
+        .site-nav a { color:#e2e8f0; text-decoration:none; padding:4px 3px; }
+        .site-nav a:hover, .site-nav a.active { color:#7dd3fc; text-decoration:underline; }
+        .site-nav .brand { color:#38bdf8; margin-right:auto; }
+        .quicknav { background:#1e293b; padding:15px; border-radius:6px; margin-bottom:30px; border:1px solid #334155; line-height:2.25; }
+        .quicknav strong { color:#38bdf8; display:block; margin-bottom:5px; }
+        .quicknav a { color:#a5f3fc; text-decoration:none; margin-right:16px; white-space:nowrap; }
+        .quicknav a:hover { text-decoration:underline; }
+        .small { color:#94a3b8; font-size:9.5pt; }
+        .panel { background:#1e293b; border:1px solid #334155; border-radius:5px; padding:15px; margin:14px 0; }
+        kbd { border:1px solid #475569; padding:2px 6px; border-radius:4px; background:#1e293b; font-family:Consolas, monospace; }
+        .footer { border-top:1px solid #334155; margin-top:35px; padding-top:15px; color:#94a3b8; font-size:9.5pt; }
+        @media (max-width:720px) { body { padding:20px 14px; font-size:10pt; } h1 { font-size:21pt; } table { font-size:9pt; } td, th { padding:7px; } .quicknav a { display:inline-block; } pre { white-space:pre-wrap; overflow-wrap:anywhere; } }
+        @media print { body { padding:0; max-width:none; } .site-nav { display:none; } .quicknav { display:none; } a { text-decoration:none; } }
+</style>
+</head>
+<body>
+<nav class="site-nav"><a class="brand" href="https://dptgames.github.io/">&larr; DPT Games Homepage</a><a href="index.html" class="active">Firearm Controller</a><a href="projectiles.html">Projectiles</a><a href="damage.html">Damage Integration</a><a href="screen_shake.html">Screen Shake</a><a href="demo_input.html">Demo Input</a></nav><h1>DPT Games Functional Firearms</h1>
+<div class="subtitle">Component User Guide<br><span style="font-size:11pt;font-style:normal">The <code>DPT_Firearm</code> component provides a configurable firearm controller for bolt-action, self-loading, automatic and burst-fire weapons. It includes magazine/chamber accounting, optional swept projectiles, casing ejection, audio, UnityEvents and an animation-friendly manual action.</span></div>
+
+<div class="quicknav"><strong>Quick Navigation Reference:</strong><a href="#setup">Quick Setup Checklist</a><a href="#operation">Operation &amp; Fire Modes</a><a href="#smle">SMLE Mk III Setup</a><a href="#mechanical">Bolt &amp; Reload Animation</a><a href="#inspector">Inspector Reference</a><a href="#events">UnityEvents &amp; Animator</a><a href="#api">Scripting API</a><a href="#audio">Audio &amp; VFX</a><a href="#troubleshooting">Troubleshooting</a><a href="#compatibility">Compatibility</a></div>
+<h2 id="setup">Quick Setup Checklist</h2>
+<ol>
+<li>Add <code>DPT_Firearm</code> to the root of the rifle or firearm prefab. No siege weapon components are required.</li>
+<li>Create a child Empty named <code>Muzzle_Point</code> at the muzzle and orient its local <strong>+Z</strong> axis along the bullet's firing direction. Assign it to <strong>Muzzle Point</strong>.</li>
+<li>Create a child Empty named <code>Ejection_Point</code> beside the receiver. Assign it to <strong>Ejection Point</strong> and adjust <strong>Ejection Local Direction</strong>.</li>
+<li>Choose <strong>Shot Type</strong>: <code>Hitscan</code> for immediate raycast hits or <code>Swept Projectile</code> for a moving bullet prefab.</li>
+<li>For swept shots, create a prefab with <code>DPT_FirearmProjectile</code> on its root and assign it to <strong>Projectile Prefab</strong>. See the <a href="projectiles.html">Projectile Guide</a>.</li>
+<li>Create separate spent casing and optional unfired-round prefabs with a root Rigidbody and suitable Collider. Assign them to <strong>Spent Casing Prefab</strong> and <strong>Live Round Prefab</strong>.</li>
+<li>Configure magazine capacity, starting rounds, chamber state and reserve ammunition. <strong>Magazine Rounds</strong> never includes the round in the chamber.</li>
+<li>Assign optional <strong>Chambered Round Visual</strong> and <strong>Chambered Casing Visual</strong> child objects to show the current chamber state.</li>
+<li>Assign a root or explicit <code>AudioSource</code>, fire sounds, bolt sounds, reload sounds and optional muzzle flash prefab.</li>
+<li>If using an Animator, assign it and enable <strong>Use Animator Triggers</strong> only after creating the expected triggers <code>Fire</code>, <code>DryFire</code>, <code>Cycle</code> and <code>Reload</code>.</li>
+<li>Optionally add <code>DPT_FirearmDemoInput</code> for testing. The included sample only handles fire, bolt cycle and reload keys.</li>
+<li>Add a <code>DPT_FirearmDamageRelay</code> to a target, or implement <code>IDPT_FirearmDamageable</code> for code-driven damage handling.</li>
+</ol>
+<div class="note"><strong>No destruction dependencies:</strong> This firearm package uses the <code>DPT.Firearms</code> namespace. It does not require <code>DPT_SiegeWeapon</code>, <code>DPT_Projectile</code>, <code>DPT_BreakableProp</code> or a debris hierarchy.</div>
+<h2 id="operation">Operation &amp; Fire Modes</h2>
+<p>The current component tracks its chamber, magazine, spare rounds, trigger state and action cycle separately. Unlike the siege weapon controller, it does not expose a formal <code>WeaponState</code> enum. Use its state properties to inspect readiness.</p>
+<div class="panel"><span class="state-label">Chambered</span> <span class="state-arrow">&rarr;</span> <span class="state-label">Fire</span> <span class="state-arrow">&rarr;</span> <span class="state-label">Spent Case</span> <span class="state-arrow">&rarr;</span> <span class="state-label">Eject</span> <span class="state-arrow">&rarr;</span> <span class="state-label">Feed Next Round</span> <span class="state-arrow">&rarr;</span> <span class="state-label">Chambered</span></div>
+<table><thead><tr><th style="width:30%">Mode / Behaviour</th><th style="width:70%">What Happens</th></tr></thead><tbody><tr><td><strong>Semi Automatic</strong></td><td>One shot per trigger press. <code>Fire()</code> can also be called directly for one shot.</td></tr><tr><td><strong>Automatic</strong></td><td><code>TriggerDown()</code> starts repeated fire while held, governed by <strong>Rounds Per Minute</strong>; <code>TriggerUp()</code> stops it.</td></tr><tr><td><strong>Burst</strong></td><td><code>TriggerDown()</code> fires up to <strong>Burst Size</strong> shots, subject to ammunition and the RPM interval.</td></tr><tr><td><strong>Manual Action</strong></td><td>After firing, the spent casing stays in the chamber until the user cycles the action. Intended for bolt-action rifles.</td></tr><tr><td><strong>Self-loading Action</strong></td><td>With Manual Action disabled, a successful shot ejects the spent case and feeds the next magazine round immediately. This is simplified and is not frame-synchronised to a slide or bolt animation.</td></tr></tbody></table>
+<div class="warning"><strong>Manual action does not cycle automatically.</strong> If the SMLE fires once and will not fire again, check <code>SpentCaseInChamber</code>, then call <code>CycleAction()</code> or perform an animated cycle. This is intentional.</div>
+<h2 id="smle">SMLE Mk III Recommended Configuration</h2>
+<table><thead><tr><th style="width:36%">Field</th><th style="width:64%">Suggested Value</th></tr></thead><tbody><tr><td>Fire Mode</td><td><code>SemiAutomatic</code></td></tr><tr><td>Manual Action</td><td>Enabled</td></tr><tr><td>Shot Type</td><td><code>SweptProjectile</code> for visible bullet travel or <code>Hitscan</code> for an immediate hit</td></tr><tr><td>Magazine Capacity</td><td><strong>10</strong></td></tr><tr><td>Starting Magazine Rounds</td><td><strong>9</strong> for ten cartridges total when starting chambered</td></tr><tr><td>Start Chambered</td><td>Enabled</td></tr><tr><td>Chamber On Reload</td><td>Disabled if the bolt must be operated manually</td></tr><tr><td>Muzzle Velocity</td><td><strong>780 m/s</strong> is the script default and an illustrative starting point; tune for the intended ammunition</td></tr><tr><td>Use Animator Triggers</td><td>Enable only if the Animator implements the named triggers</td></tr></tbody></table>
+<p>With <strong>Starting Magazine Rounds = 9</strong> and <strong>Start Chambered = true</strong>, the rifle begins with nine in the magazine and one in the chamber. You can instead start with ten in the magazine and one chambered for a 10+1 configuration.</p>
+<h3>Typical Rifle Hierarchy</h3>
+<pre>SMLE_MkIII [DPT_Firearm]
+├── Body
+├── Bolt_Pivot
+│   └── Bolt_Visual
+├── Trigger_Pivot
+│   └── Trigger_Visual
+├── Magazine_Visual
+├── Chambered_Round_Visual
+├── Chambered_Casing_Visual
+├── Muzzle_Point [+Z = shot direction]
+└── Ejection_Point</pre>
+<p>The visual objects do not need Rigidbody components while they remain attached to the rifle. Give dropped or ejected ammunition its own separate prefab with one Rigidbody at the root.</p>
+<h2 id="mechanical">Manual Bolt Cycling &amp; Reload Animation</h2>
+<h3>Instant Cycle</h3>
+<p>Call <code>CycleAction()</code> to execute one complete cycle immediately. It starts the cycle, sends the optional <code>Cycle</code> Animator trigger, ejects a spent case or unfired cartridge, feeds the next round and finishes the cycle.</p>
+<h3>Animation-Driven Cycle</h3>
+<ol>
+<li>Assign an Animator and enable <strong>Use Animator Triggers</strong>.</li>
+<li>Create a trigger parameter named exactly <code>Cycle</code>.</li>
+<li>Call <code>RequestCycleAnimation()</code> when the player cycles the bolt. This begins the cycle and raises the Animator trigger.</li>
+<li>At the extractor/ejection animation frame, add an Animation Event calling <code>EjectChamber()</code>.</li>
+<li>When the bolt pushes the next round forward, add an Animation Event calling <code>ChamberNextRound()</code>.</li>
+<li>At the end of the bolt-closing animation, add an Animation Event calling <code>EndCycle()</code>.</li>
+</ol>
+<div class="warning"><strong>Important:</strong> The code does not automatically call <code>EndCycle()</code> when using <code>RequestCycleAnimation()</code> with a valid Animator. If the animation omits that event, <code>IsCycling</code> remains true and the rifle cannot fire or reload. Do not call both <code>CycleAction()</code> and <code>RequestCycleAnimation()</code> for the same action.</div>
+<h3>Timed Magazine Reload</h3>
+<p><code>Reload()</code> runs a timer and replenishes the magazine at its completion. It does not animate inserting individual cartridges, removing the magazine or operating the bolt. The Animator and external gameplay code own those visuals. It respects magazine capacity and reserve ammunition.</p>
+<div class="tip"><strong>SMLE loading:</strong> The actual Lee-Enfield is usually loaded using five-round chargers with the magazine fitted. You can animate charger loading while the firearm component's timed reload replenishes its magazine count, but the script does not currently model charger objects or five-round batches.</div>
+<h2 id="inspector">Inspector Reference</h2>
+<p>The sections below correspond to serialized fields in the supplied tooltip-enabled <code>DPT_Firearm.cs</code> script. Names shown in <code>monospace</code> are the actual C# fields.</p>
+<h3>Action</h3><table><thead><tr><th style="width:32%">Property</th><th style="width:68%">Description</th></tr></thead><tbody><tr><td><strong>Fire Mode</strong><br><code>fireMode</code></td><td>Selects semi-automatic (one shot per press), automatic (fires while held) or burst fire.</td></tr><tr><td><strong>Shot Type</strong><br><code>shotType</code></td><td>Hitscan checks for a hit instantly. Swept Projectile spawns a moving bullet and raycasts each physics step to reduce tunnelling.</td></tr><tr><td><strong>Manual Action</strong><br><code>manualAction</code></td><td>Requires the action to be cycled between shots. Enable for bolt-action rifles such as the SMLE; disable for self-loading firearms.</td></tr><tr><td><strong>Safety On</strong><br><code>safetyOn</code></td><td>When enabled, prevents firing until the safety is disengaged.</td></tr><tr><td><strong>Rounds Per Minute</strong><br><code>roundsPerMinute</code></td><td>Maximum firing rate in rounds per minute (RPM). Governs the minimum time between shots.</td></tr><tr><td><strong>Burst Size</strong><br><code>burstSize</code></td><td>Number of shots fired for each burst trigger press. Only used when Fire Mode is Burst.</td></tr><tr><td><strong>Automatic Reload</strong><br><code>automaticReload</code></td><td>Automatically starts reloading when ammunition runs out after automatic action cycling or completion of a manual cycle.</td></tr></tbody></table><h3>Ammunition</h3><table><thead><tr><th style="width:32%">Property</th><th style="width:68%">Description</th></tr></thead><tbody><tr><td><strong>Magazine Capacity</strong><br><code>magazineCapacity</code></td><td>Maximum number of cartridges held in the magazine, excluding any separately chambered round.</td></tr><tr><td><strong>Starting Magazine Rounds</strong><br><code>startingMagazineRounds</code></td><td>Cartridges initially in the magazine, excluding the chamber. Clamped to Magazine Capacity.</td></tr><tr><td><strong>Start Chambered</strong><br><code>startChambered</code></td><td>Begins play with a live round already in the chamber, separate from Starting Magazine Rounds.</td></tr><tr><td><strong>Starting Reserve Rounds</strong><br><code>startingReserveRounds</code></td><td>Spare cartridges available to refill the magazine. Ignored for depletion when Unlimited Reserve is enabled.</td></tr><tr><td><strong>Unlimited Reserve</strong><br><code>unlimitedReserve</code></td><td>Allows reloading without consuming spare ammunition. Does not change magazine capacity.</td></tr><tr><td><strong>Chamber On Reload</strong><br><code>chamberOnReload</code></td><td>Automatically chambers a cartridge after reloading if the chamber is empty and contains no spent case. Disable for a manually cycled SMLE.</td></tr><tr><td><strong>Reload Duration</strong><br><code>reloadDuration</code></td><td>Seconds between starting a reload and refilling the magazine. ReloadComplete occurs after this delay.</td></tr></tbody></table><h3>Projectile</h3><table><thead><tr><th style="width:32%">Property</th><th style="width:68%">Description</th></tr></thead><tbody><tr><td><strong>Muzzle Point</strong><br><code>muzzlePoint</code></td><td>Transform at the muzzle. Its position is the shot origin and its forward axis defines the firing direction.</td></tr><tr><td><strong>Projectile Prefab</strong><br><code>projectilePrefab</code></td><td>Prefab with DPT_FirearmProjectile on its root, spawned for Swept Projectile shots. Not used in Hitscan mode.</td></tr><tr><td><strong>Muzzle Velocity</strong><br><code>muzzleVelocity</code></td><td>Initial Swept Projectile speed in metres per second (m/s). Does not affect Hitscan shots.</td></tr><tr><td><strong>Maximum Range</strong><br><code>maximumRange</code></td><td>Maximum shot travel distance in metres. Limits Hitscan raycasts and Swept Projectile flight.</td></tr><tr><td><strong>Damage</strong><br><code>damage</code></td><td>Damage passed to an IDPT_FirearmDamageable component on a hit target.</td></tr><tr><td><strong>Spread Degrees</strong><br><code>spreadDegrees</code></td><td>Maximum random horizontal and vertical angular deviation from the muzzle forward axis, in degrees.</td></tr><tr><td><strong>Hit Layers</strong><br><code>hitLayers</code></td><td>Layers checked by Hitscan raycasts. Moving projectiles use their own Collision Layers setting instead.</td></tr><tr><td><strong>Hit Effect Prefab</strong><br><code>hitEffectPrefab</code></td><td>Effect prefab spawned at a Hitscan impact point and removed after five seconds. Swept Projectiles use their own impact effect.</td></tr><tr><td><strong>Hitscan Impact Impulse</strong><br><code>hitscanImpactImpulse</code></td><td>Physics impulse applied at a Hitscan impact to a non-kinematic Rigidbody, in N-s. Zero disables it.</td></tr></tbody></table><h3>Casing Ejection</h3><table><thead><tr><th style="width:32%">Property</th><th style="width:68%">Description</th></tr></thead><tbody><tr><td><strong>Ejection Point</strong><br><code>ejectionPoint</code></td><td>Transform where spent casings or unfired rounds are spawned when ejected.</td></tr><tr><td><strong>Spent Casing Prefab</strong><br><code>spentCasingPrefab</code></td><td>Prefab spawned when a fired case is ejected during bolt cycling or automatic action operation.</td></tr><tr><td><strong>Live Round Prefab</strong><br><code>liveRoundPrefab</code></td><td>Prefab spawned if an unfired chambered cartridge is extracted from the firearm.</td></tr><tr><td><strong>Ejected Object Lifetime</strong><br><code>ejectedObjectLifetime</code></td><td>Seconds an ejected casing or unfired cartridge remains before being destroyed. Zero disables timed destruction.</td></tr><tr><td><strong>Ejection Speed</strong><br><code>ejectionSpeed</code></td><td>Initial speed in metres per second (m/s) assigned to an ejected prefab with a root Rigidbody.</td></tr><tr><td><strong>Ejection Local Direction</strong><br><code>ejectionLocalDirection</code></td><td>Ejection direction expressed in the Ejection Point transform&#x27;s local coordinates. The vector is normalised before use.</td></tr><tr><td><strong>Ignore Own Colliders</strong><br><code>ignoreOwnColliders</code></td><td>Ignores collisions between spawned projectiles or ejected objects and colliders belonging to this firearm.</td></tr></tbody></table><h3>Visuals and Effects</h3><table><thead><tr><th style="width:32%">Property</th><th style="width:68%">Description</th></tr></thead><tbody><tr><td><strong>Chambered Round Visual</strong><br><code>chamberedRoundVisual</code></td><td>Scene GameObject shown only when a live round is chambered. Intended as a visual child of the weapon, not a spawned projectile.</td></tr><tr><td><strong>Chambered Casing Visual</strong><br><code>chamberedCasingVisual</code></td><td>Scene GameObject shown while a fired case remains in the chamber awaiting extraction.</td></tr><tr><td><strong>Muzzle Flash Prefab</strong><br><code>muzzleFlashPrefab</code></td><td>Effect prefab spawned at the muzzle whenever a shot is fired.</td></tr><tr><td><strong>Muzzle Flash Lifetime</strong><br><code>muzzleFlashLifetime</code></td><td>Seconds a spawned muzzle-flash instance remains before destruction.</td></tr><tr><td><strong>Animator</strong><br><code>animator</code></td><td>Animator receiving optional Fire, DryFire, Reload and Cycle triggers. Auto-finds a child Animator if unassigned.</td></tr><tr><td><strong>Use Animator Triggers</strong><br><code>useAnimatorTriggers</code></td><td>Sends Fire, DryFire, Reload and Cycle triggers to the assigned Animator. For animated manual cycling, call the action methods with Animation Events.</td></tr><tr><td><strong>Audio Source</strong><br><code>audioSource</code></td><td>AudioSource used for firearm sound effects. Falls back to an AudioSource on the same GameObject.</td></tr><tr><td><strong>Shot Sounds</strong><br><code>shotSounds</code></td><td>Sound clips selected randomly when the firearm successfully fires.</td></tr><tr><td><strong>Reload Sounds</strong><br><code>reloadSounds</code></td><td>Sound clips selected randomly when reloading begins.</td></tr><tr><td><strong>Bolt Sounds</strong><br><code>boltSounds</code></td><td>Sound clips selected randomly when the action cycle finishes.</td></tr><tr><td><strong>Empty Sounds</strong><br><code>emptySounds</code></td><td>Sound clips selected randomly when attempting to fire with an empty chamber.</td></tr><tr><td><strong>Pitch Variance</strong><br><code>pitchVariance</code></td><td>Maximum random pitch offset either side of 1.0 for firearm sound effects (for example 0.05 gives 0.95 to 1.05).</td></tr></tbody></table><h3>Events</h3><table><thead><tr><th style="width:32%">Property</th><th style="width:68%">Description</th></tr></thead><tbody><tr><td><strong>On Fire</strong><br><code>onFire</code></td><td>Invoked after a successful shot has been fired and its projectile or raycast processed.</td></tr><tr><td><strong>On Dry Fire</strong><br><code>onDryFire</code></td><td>Invoked when firing is attempted with an empty chamber, provided the weapon is otherwise able to attempt a shot.</td></tr><tr><td><strong>On Reload Start</strong><br><code>onReloadStart</code></td><td>Invoked when a timed reload begins.</td></tr><tr><td><strong>On Reload Complete</strong><br><code>onReloadComplete</code></td><td>Invoked when magazine ammunition is replenished at the end of a reload.</td></tr><tr><td><strong>On Cycle</strong><br><code>onCycle</code></td><td>Invoked when a manual action cycle finishes.</td></tr><tr><td><strong>On Eject</strong><br><code>onEject</code></td><td>Invoked when a spent case or live cartridge is removed from the chamber.</td></tr><tr><td><strong>On Chamber</strong><br><code>onChamber</code></td><td>Invoked when a cartridge moves from the magazine into the empty chamber.</td></tr></tbody></table>
+<h2 id="events">UnityEvents &amp; Animator Integration</h2>
+<p>These events are exposed in the Inspector. The component can optionally send the four named Animator triggers independently of UnityEvent wiring.</p>
+<table><thead><tr><th style="width:28%">UnityEvent</th><th style="width:72%">When It Fires</th></tr></thead><tbody><tr><td><code>onFire</code></td><td>After a successful shot and the raycast or projectile spawn has been processed.</td></tr><tr><td><code>onDryFire</code></td><td>When firing is attempted with an empty chamber and the action is otherwise permitted.</td></tr><tr><td><code>onReloadStart</code></td><td>At the beginning of the timed magazine reload.</td></tr><tr><td><code>onReloadComplete</code></td><td>After the magazine is refilled at the end of the reload timer.</td></tr><tr><td><code>onCycle</code></td><td>When <code>EndCycle()</code> finishes a manual cycle.</td></tr><tr><td><code>onEject</code></td><td>When a spent case or live cartridge is extracted from the chamber.</td></tr><tr><td><code>onChamber</code></td><td>When <code>ChamberNextRound()</code> moves a cartridge from the magazine into an empty chamber.</td></tr></tbody></table>
+<h3>Built-in Animator Trigger Names</h3>
+<table><thead><tr><th style="width:30%">Trigger</th><th style="width:70%">Purpose</th></tr></thead><tbody><tr><td>Fire</td><td>Successful shot</td></tr><tr><td>DryFire</td><td>An allowed firing attempt with an empty chamber</td></tr><tr><td>Cycle</td><td>When <code>CycleAction()</code> or <code>RequestCycleAnimation()</code> initiates the bolt cycle</td></tr><tr><td>Reload</td><td>At the start of <code>Reload()</code></td></tr></tbody></table>
+<div class="note"><strong>C# events:</strong> <code>ShotFired(Vector3 muzzlePosition)</code> fires with the successful shot position. <code>HitOccurred(Vector3 point)</code> is raised by firearm <em>hitscan</em> impacts. Swept projectile impacts instead expose <code>DPT_FirearmProjectile.Impacted</code>.</div>
+<h2 id="api">Scripting API</h2>
+<table><thead><tr><th style="width:38%">Public Method</th><th style="width:62%">Behaviour</th></tr></thead><tbody><tr><td><code>bool Fire()</code></td><td>Attempts one shot immediately. Returns true when a shot is fired; respects safety, chamber state, cycling/reloading and RPM.</td></tr><tr><td><code>void TriggerDown()</code> / <code>TriggerUp()</code></td><td>Start and stop trigger-driven firing. Required for automatic and burst behaviour in the sample input pattern.</td></tr><tr><td><code>void SetSafety(bool engaged)</code></td><td>Sets the safety state. Enabling the safety releases the held trigger.</td></tr><tr><td><code>void InitializeAmmunition()</code></td><td>Resets magazine, reserve and chamber to their configured starting values.</td></tr><tr><td><code>bool BeginCycle()</code></td><td>Locks the action into cycling mode unless already reloading or cycling.</td></tr><tr><td><code>void EjectChamberedCase()</code></td><td>Ejects a fired casing only when one exists.</td></tr><tr><td><code>void EjectChamber()</code></td><td>Ejects whichever item is in the chamber: spent case or unfired cartridge.</td></tr><tr><td><code>bool ChamberNextRound()</code></td><td>Moves one magazine round into an empty chamber; returns true if successful.</td></tr><tr><td><code>void EndCycle()</code></td><td>Completes the action cycle, plays bolt audio and sends <code>onCycle</code>.</td></tr><tr><td><code>void CycleAction()</code></td><td>Performs the full ejection and chambering cycle immediately.</td></tr><tr><td><code>bool RequestCycleAnimation()</code></td><td>Requests an Animator-driven cycle; requires Animation Events when Animator triggers are enabled.</td></tr><tr><td><code>bool Reload()</code></td><td>Starts a timed magazine reload if there is room and reserve ammunition.</td></tr><tr><td><code>void CompleteReload()</code></td><td>Refills the magazine only while reloading; designed for completion of the timed sequence.</td></tr><tr><td><code>void AddReserveAmmo(int amount)</code></td><td>Adjusts the reserve count, clamped to zero or above.</td></tr></tbody></table>
+<h3>Read-Only State Properties</h3>
+<table><thead><tr><th style="width:35%">Property</th><th style="width:65%">Meaning</th></tr></thead><tbody><tr><td><code>MagazineRounds</code></td><td>Remaining rounds in the magazine only.</td></tr><tr><td><code>ReserveRounds</code></td><td>Remaining spare rounds.</td></tr><tr><td><code>ChamberLoaded</code></td><td>True if the chamber contains a live round.</td></tr><tr><td><code>SpentCaseInChamber</code></td><td>True if an unextracted spent casing is present.</td></tr><tr><td><code>IsReloading</code> / <code>IsCycling</code></td><td>Whether the respective operation is currently in progress.</td></tr><tr><td><code>NeedsCycle</code></td><td>True if manual action is enabled and a fired case remains in the chamber.</td></tr><tr><td><code>CanFire</code></td><td>True when the safety is off, chamber loaded, RPM timer elapsed and the weapon is not cycling or reloading.</td></tr><tr><td><code>SafetyOn</code></td><td>Current safety state.</td></tr></tbody></table>
+<h3>Example: Manual Bolt Controller</h3>
+<pre>using UnityEngine;
+using DPT.Firearms;
+
+public class RifleControls : MonoBehaviour
+{
+    [SerializeField] private DPT_Firearm rifle;
+
+    public void Shoot() => rifle.Fire();
+    public void CycleBolt() => rifle.RequestCycleAnimation();
+    public void ReloadMagazine() => rifle.Reload();
+}</pre>
+<p>For an animation-driven bolt, the Animator's animation events must call <code>EjectChamber()</code>, <code>ChamberNextRound()</code> and <code>EndCycle()</code> on the object containing <code>DPT_Firearm</code>.</p>
+<h2 id="audio">Audio, VFX &amp; Casing Ejection</h2>
+<p>Fire, reload, bolt and dry-fire clips are randomised from their respective arrays. The component uses the assigned <code>AudioSource</code> or a source on the same object; <strong>it does not create an AudioSource automatically</strong>. Sound playback uses <code>PlayOneShot</code> and a random pitch offset.</p>
+<p>The muzzle flash is instantiated at the muzzle transform. A hit effect can be assigned for Hitscan mode; moving projectiles have their own effect and sound settings in <a href="projectiles.html">the Projectile Guide</a>.</p>
+<div class="note"><strong>Ejection physics:</strong> An ejected prefab needs a root <code>Rigidbody</code> if it should receive velocity. The <code>Ejection Local Direction</code> vector is converted from the ejection transform's local space to world space. With <strong>Ignore Own Colliders</strong> enabled, collisions between spawned casing colliders and cached firearm colliders are ignored.</div>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table><thead><tr><th style="width:32%">Symptom</th><th style="width:68%">Check</th></tr></thead><tbody><tr><td>First shot works but the rifle stops</td><td>For a bolt-action SMLE this is expected: call <code>CycleAction()</code> or complete the animation-driven cycle.</td></tr><tr><td>Fire returns false</td><td>Check <code>SafetyOn</code>, <code>IsReloading</code>, <code>IsCycling</code>, the RPM cooldown and whether the chamber is loaded. Swept shots also require a valid projectile prefab.</td></tr><tr><td>Bolt animation blocks further firing</td><td>Ensure your final Animation Event invokes <code>EndCycle()</code>.</td></tr><tr><td>Projectile flies in the wrong direction</td><td>Check the muzzle point’s local <strong>+Z</strong> axis and its hierarchy scale/rotation.</td></tr><tr><td>No firing sound</td><td>Assign an <code>AudioSource</code> and populate Shot Sounds. The component does not auto-create a source.</td></tr><tr><td>Reload seems to do nothing</td><td>The reload only refills the magazine. A spent case must still be extracted when manual action is enabled.</td></tr><tr><td>Projectile misses thin geometry</td><td>Swept projectiles raycast along traveled segments, but layer masks, triggers and first-hit rules still apply.</td></tr><tr><td>Hits do not deal damage</td><td>Attach a component implementing <code>IDPT_FirearmDamageable</code> to the struck object or a parent; check collision layers.</td></tr></tbody></table>
+<h2 id="compatibility">Compatibility &amp; Scope</h2>
+<ul>
+<li>Built for Unity 6.x and standalone from the Siege Weapons runtime.</li>
+<li>Uses UnityEngine Physics and UnityEvents; the optional demo input supports Input System and legacy Input Manager defines.</li>
+<li>Ballistic swept projectiles are simulated with raycasts, not Rigidbody flight collisions.</li>
+<li>There is no included first-person controller, aiming/recoil implementation, magazine mesh animation, full Animator Controller, penetration, ricochet or projectile pooling.</li>
+<li>Direct integration with <code>DPT_Cuttable</code> requires an adapter using the destruction package's actual API. See <a href="damage.html">Damage Integration</a>.</li>
+</ul>
+<div class="warning"><strong>Validation note:</strong> This guide describes the attached source code. The scripts have not been compiled or exercised in a Unity project as part of producing this documentation.</div>
+
+<div class="footer">DPT Games &bull; Functional Firearms Documentation &bull; Based on the supplied <code>DPT.Firearms</code> runtime scripts. Check the installed script version if the API changes.</div>
+</body>
+</html>
