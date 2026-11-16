@@ -1,10 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DPT Firearm Damage Integration - DPT Games</title>
-<style>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Damage Integration | DPT Games Functional Firearms</title><style>
         *, *::before, *::after { box-sizing: border-box; }
         @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
         body {
@@ -77,10 +72,10 @@
         html { scroll-behavior: smooth; }
         body { max-width: 1180px; margin: 0 auto; }
         a { color: #38bdf8; }
-        .site-nav { display:flex; gap:14px; flex-wrap:wrap; align-items:center; background:#1e293b; padding:12px 15px; border-bottom:2px solid #38bdf8; margin-bottom:20px; border-radius:5px; }
+        .site-nav { display:flex; gap:14px; flex-wrap:wrap; align-items:center; background:#1e293b; padding:12px 15px; border-bottom:2px solid #38bdf8; margin-bottom:20px; border-radius:5px; justify-content:flex-start; }
         .site-nav a { color:#e2e8f0; text-decoration:none; padding:4px 3px; }
         .site-nav a:hover, .site-nav a.active { color:#7dd3fc; text-decoration:underline; }
-        .site-nav .brand { color:#38bdf8; margin-right:auto; }
+        .site-nav .brand { color:#38bdf8; margin-right:0; }
         .quicknav { background:#1e293b; padding:15px; border-radius:6px; margin-bottom:30px; border:1px solid #334155; line-height:2.25; }
         .quicknav strong { color:#38bdf8; display:block; margin-bottom:5px; }
         .quicknav a { color:#a5f3fc; text-decoration:none; margin-right:16px; white-space:nowrap; }
@@ -91,39 +86,33 @@
         .footer { border-top:1px solid #334155; margin-top:35px; padding-top:15px; color:#94a3b8; font-size:9.5pt; }
         @media (max-width:720px) { body { padding:20px 14px; font-size:10pt; } h1 { font-size:21pt; } table { font-size:9pt; } td, th { padding:7px; } .quicknav a { display:inline-block; } pre { white-space:pre-wrap; overflow-wrap:anywhere; } }
         @media print { body { padding:0; max-width:none; } .site-nav { display:none; } .quicknav { display:none; } a { text-decoration:none; } }
-</style>
-</head>
-<body>
-<nav class="site-nav"><a class="brand" href="https://dptgames.github.io/">&larr; DPT Games Homepage</a><a href="index.html">Firearm Controller</a><a href="projectiles.html">Projectiles</a><a href="damage.html" class="active">Damage Integration</a><a href="screen_shake.html">Screen Shake</a><a href="demo_input.html">Demo Input</a></nav><h1>DPT Firearm Damage Integration</h1>
-<div class="subtitle">Interface &amp; Relay Guide<br><span style="font-size:11pt;font-style:normal">The <code>IDPT_FirearmDamageable</code> interface and <code>DPT_FirearmDamageRelay</code> provide hit events for health systems, custom gameplay and external destruction tools without requiring the siege weapon framework.</span></div>
 
-<div class="quicknav"><strong>Quick Navigation Reference:</strong><a href="#overview">Damage Architecture</a><a href="#relay">Damage Relay</a><a href="#inspector">Inspector Reference</a><a href="#integration">Custom Integration</a><a href="#destruction">Destruction Tools</a><a href="#troubleshoot">Troubleshooting</a></div>
-<h2 id="overview">Damage Architecture</h2>
-<p>Both hitscan and swept projectile hits look for <code>IDPT_FirearmDamageable</code> on the struck Collider's GameObject or one of its parents. The weapon passes the damage amount, hit point, incoming direction and source GameObject to <code>ReceiveFirearmHit()</code>.</p>
-<pre>namespace DPT.Firearms
+.hero{background:linear-gradient(120deg,#12304b,#142135);border:1px solid #285278;border-radius:8px;padding:22px 24px;margin:16px 0 23px;}
+.hero h2{margin:0 0 8px;background:none;border:0;padding:0;color:#bae6fd;font-size:18pt;}
+.hero p{margin:0 0 8px;color:#dbeafe;}
+.gridcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:16px 0 24px;}
+.gridcards .card{background:#18263b;border:1px solid #334155;border-radius:6px;padding:16px;}
+.gridcards .card h3{margin:0 0 7px;font-size:12pt;}
+.gridcards .card p{font-size:10.5pt;margin:0;color:#cbd5e1;}
+.gridcards .card a{text-decoration:none;}
+.kicker{color:#7dd3fc;font-size:9pt;letter-spacing:.1em;text-transform:uppercase;font-weight:700;}
+.lede{color:#cbd5e1;font-size:12pt;}
+code{overflow-wrap:anywhere;}
+nav.site-nav{position:relative}
+@media print{.hero{background:#1e293b !important}.gridcards{grid-template-columns:1fr 1fr;}}
+</style></head>
+<body><nav class="site-nav"><a class="brand" href="https://dptgames.github.io/">DPT Games</a><a href="index.html">Firearm System</a><a href="smle_setup.html">SMLE Example</a><a href="bolt_reload.html">Bolt &amp; Reload</a><a href="bayonet.html">Bayonet</a><a href="projectiles.html">Projectiles</a><a href="damage.html" class="active">Damage</a><a href="screen_shake.html">Screen Shake</a><a href="demo_input.html">Demo Controller</a></nav><p class="kicker">DPT Games / Functional Firearms / User Documentation</p><h1>Damage Integration</h1><p class="subtitle">Reusable hit interface · Health, UnityEvents, physics responses and optional destruction integrations</p>
+<div class="hero"><h2>Connect firearms to any health or hit-response system</h2><p>Damage delivery is separated from the SMLE model and from the optional demo controllers. Both bullet hit modes and the bayonet can call the common <code>IDPT_FirearmDamageable</code> interface.</p></div><div class="quicknav"><strong>On this page</strong><a href="#interface">Interface</a> <a href="#relay">Damage Relay</a> <a href="#custom">Custom Receiver</a> <a href="#physics">Physics Targets</a> <a href="#troubleshoot">Troubleshooting</a></div><h2 id="interface">Shared Damage Contract</h2><pre>using UnityEngine;
+
+namespace DPT.Firearms.Runtime
 {
     public interface IDPT_FirearmDamageable
     {
         void ReceiveFirearmHit(float damage, Vector3 point,
             Vector3 direction, GameObject source);
     }
-}</pre>
-<div class="note"><strong>Decoupled by design:</strong> The firearm does not assume a particular health component, character controller or destruction package. It sends hit information through a small interface and lets the receiving system decide what to do.</div>
-<h2 id="relay">DPT_FirearmDamageRelay</h2>
-<ol>
-<li>On a target with a Collider, add <code>DPT_FirearmDamageRelay</code> to the same object or a parent.</li>
-<li>In the Inspector, connect <strong>On Damage</strong> to a UnityEvent listener accepting a float if the target has a compatible damage method.</li>
-<li>Use <strong>On Hit</strong> for simple parameterless reactions such as sound, particle effects or animation triggers.</li>
-<li>For more detailed hit logic, subscribe to the C# <code>Hit</code> event or read <code>LastHitPoint</code>, <code>LastHitDirection</code> and <code>LastSource</code>.</li>
-</ol>
-<h2 id="inspector">Inspector Reference</h2>
-<h3>Fields</h3><table><thead><tr><th style="width:32%">Property</th><th style="width:68%">Description</th></tr></thead><tbody><tr><td><strong>On Damage</strong><br><code>onDamage</code></td><td>Invoked on every firearm hit and passes the damage amount (float) to connected listeners.</td></tr><tr><td><strong>On Hit</strong><br><code>onHit</code></td><td>Invoked on every firearm hit without parameters. Use Last Damage and Last Hit Point properties for hit details.</td></tr></tbody></table>
-<h3>Runtime Properties and Events</h3>
-<table><thead><tr><th style="width:35%">Member</th><th style="width:65%">Description</th></tr></thead><tbody><tr><td><code>LastDamage</code></td><td>Last received damage amount.</td></tr><tr><td><code>LastHitPoint</code></td><td>World-space position of the last impact.</td></tr><tr><td><code>LastHitDirection</code></td><td>Incoming projectile or ray direction.</td></tr><tr><td><code>LastSource</code></td><td>Source GameObject supplied by the firearm.</td></tr><tr><td><code>Hit</code></td><td>C# event with signature <code>Action&lt;float, Vector3, Vector3, GameObject&gt;</code>.</td></tr><tr><td><code>ReceiveFirearmHit(...)</code></td><td>Receives a hit, updates the properties, then invokes the Inspector and C# events.</td></tr></tbody></table>
-<h2 id="integration">Implementing a Custom Damage Receiver</h2>
-<p>You can implement the interface directly on your own health or hit-reaction component. The firearm will find it through the hit Collider's parent hierarchy.</p>
-<pre>using UnityEngine;
-using DPT.Firearms;
+}</pre><div class="note">The firearm and projectile resolve this interface from the struck Collider’s parent hierarchy. <code>point</code> is a world-space impact position and <code>direction</code> is the incoming attack direction.</div><h2 id="relay">DPT_FirearmDamageRelay</h2><ol><li>Add <code>DPT_FirearmDamageRelay</code> to the target or a parent of its Collider.</li><li>Connect <strong>On Damage</strong> to a UnityEvent listener that accepts a float, or use <strong>On Hit</strong> for parameterless reactions.</li><li>For more information, read <code>LastDamage</code>, <code>LastHitPoint</code>, <code>LastHitDirection</code> and <code>LastSource</code>, or subscribe to the <code>Hit</code> C# event.</li></ol><h2 id="custom">Implementing a Custom Health Receiver</h2><pre>using DPT.Firearms.Runtime;
+using UnityEngine;
 
 public class ExampleFirearmHealth : MonoBehaviour, IDPT_FirearmDamageable
 {
@@ -133,14 +122,10 @@ public class ExampleFirearmHealth : MonoBehaviour, IDPT_FirearmDamageable
         Vector3 direction, GameObject source)
     {
         health = Mathf.Max(0f, health - damage);
+        if (health == 0f)
+        {
+            gameObject.SetActive(false);
+        }
     }
-}</pre>
-<div class="tip"><strong>Damaging child Colliders:</strong> When a character has multiple hitboxes, keep the interface on a shared parent if all hits should reduce the same health pool. Use separate receivers on children only when you intentionally require distinct hit handling.</div>
-<h2 id="destruction">Runtime Mesh Destruction Integration</h2>
-<p>The scripts don't directly call <code>DPT_Cuttable</code>. To use them with a runtime mesh destruction system, add an adapter implementing <code>IDPT_FirearmDamageable</code> and translate <code>point</code>, <code>direction</code> and <code>damage</code> into that system's actual hit method.</p>
-<p>This design keeps the firearm package usable without additional dependencies. It also means the demonstration must include a specific adapter before bullet hits can cut geometry. A direct adapter cannot be documented accurately without the destruction API version in use.</p>
-<h2 id="troubleshoot">Troubleshooting</h2>
-<table><thead><tr><th style="width:38%">Symptom</th><th style="width:62%">Check</th></tr></thead><tbody><tr><td>Projectile hits but no damage event fires</td><td>Check that the hit Collider or a parent has an enabled component implementing <code>IDPT_FirearmDamageable</code>.</td></tr><tr><td>UnityEvent receives a value but no mesh damage occurs</td><td>The relay merely broadcasts hits. Wire it to damage logic or supply an adapter for the mesh destruction component.</td></tr><tr><td>Only some hitboxes register damage</td><td>Check object hierarchies, Collider layers and whether another Collider intercepts the raycast.</td></tr><tr><td>Hit object is unaffected physically</td><td>The impulse settings are separate from the damage interface, and require a non-kinematic Rigidbody for force application.</td></tr></tbody></table>
-<div class="footer">DPT Games &bull; Functional Firearms Documentation &bull; Based on the supplied <code>DPT.Firearms</code> runtime scripts. Check the installed script version if the API changes.</div>
-</body>
-</html>
+}</pre><h2 id="physics">Example: Shoot a Moving Primitive Out of the Air</h2><ul><li>Add a Collider, Rigidbody and a demo target component that implements <code>IDPT_FirearmDamageable</code>.</li><li>Before impact, use a kinematic Rigidbody with gravity disabled and drive its position using <code>MovePosition()</code> from <code>FixedUpdate()</code>.</li><li>When hit, stop scripted movement, set the Rigidbody non-kinematic, enable gravity and apply an impulse at the hit point.</li><li>If that receiver applies its own impulse, set the firearm’s Hitscan Impact Impulse, the projectile’s Physics Impact Impulse and the bayonet’s Impact Impulse to zero to avoid stacking forces.</li></ul><h2 id="troubleshoot">Damage Troubleshooting</h2><table><thead><tr><th>Issue</th><th>Check</th></tr></thead><tbody><tr><td>Bullet passes through target</td><td>Projectile Collision Layers, collider enabled state, raycast direction and trigger settings.</td></tr><tr><td>Hit effect plays but health unchanged</td><td>Check that the Collider or one of its parents implements <code>IDPT_FirearmDamageable</code>.</td></tr><tr><td>Target is launched unrealistically far</td><td>Look for multiple impulse sources: target receiver, firearm hitscan, projectile or bayonet.</td></tr><tr><td>Damage script cannot see the interface</td><td>Add a reference to <code>DPT.Firearms.Runtime</code> assembly and import <code>DPT.Firearms.Runtime</code> namespace.</td></tr><tr><td>Bayonet hit event fires without damage</td><td>Hit collider may not have a damage receiver; an eligible collision can still produce the hit event.</td></tr></tbody></table>
+<footer class="footer"><strong>DPT Games Functional Firearms</strong> · <a href="index.html">System guide</a> · The SMLE Mk III is an example implementation. Check the package source for version-specific differences.</footer></body></html>

@@ -1,10 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DPT Firearm Camera &amp; Screen Shake - DPT Games</title>
-<style>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Camera &amp; Screen Shake | DPT Games Functional Firearms</title><style>
         *, *::before, *::after { box-sizing: border-box; }
         @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
         body {
@@ -77,10 +72,10 @@
         html { scroll-behavior: smooth; }
         body { max-width: 1180px; margin: 0 auto; }
         a { color: #38bdf8; }
-        .site-nav { display:flex; gap:14px; flex-wrap:wrap; align-items:center; background:#1e293b; padding:12px 15px; border-bottom:2px solid #38bdf8; margin-bottom:20px; border-radius:5px; }
+        .site-nav { display:flex; gap:14px; flex-wrap:wrap; align-items:center; background:#1e293b; padding:12px 15px; border-bottom:2px solid #38bdf8; margin-bottom:20px; border-radius:5px; justify-content:flex-start; }
         .site-nav a { color:#e2e8f0; text-decoration:none; padding:4px 3px; }
         .site-nav a:hover, .site-nav a.active { color:#7dd3fc; text-decoration:underline; }
-        .site-nav .brand { color:#38bdf8; margin-right:auto; }
+        .site-nav .brand { color:#38bdf8; margin-right:0; }
         .quicknav { background:#1e293b; padding:15px; border-radius:6px; margin-bottom:30px; border:1px solid #334155; line-height:2.25; }
         .quicknav strong { color:#38bdf8; display:block; margin-bottom:5px; }
         .quicknav a { color:#a5f3fc; text-decoration:none; margin-right:16px; white-space:nowrap; }
@@ -91,38 +86,21 @@
         .footer { border-top:1px solid #334155; margin-top:35px; padding-top:15px; color:#94a3b8; font-size:9.5pt; }
         @media (max-width:720px) { body { padding:20px 14px; font-size:10pt; } h1 { font-size:21pt; } table { font-size:9pt; } td, th { padding:7px; } .quicknav a { display:inline-block; } pre { white-space:pre-wrap; overflow-wrap:anywhere; } }
         @media print { body { padding:0; max-width:none; } .site-nav { display:none; } .quicknav { display:none; } a { text-decoration:none; } }
-</style>
-</head>
-<body>
-<nav class="site-nav"><a class="brand" href="https://dptgames.github.io/">&larr; DPT Games Homepage</a><a href="index.html">Firearm Controller</a><a href="projectiles.html">Projectiles</a><a href="damage.html">Damage Integration</a><a href="screen_shake.html" class="active">Screen Shake</a><a href="demo_input.html">Demo Input</a></nav><h1>DPT Firearm Camera &amp; Screen Shake</h1>
-<div class="subtitle">Modular Camera Effects Guide<br><span style="font-size:11pt;font-style:normal">Three optional components transmit shot and impact shake through static events and apply distance-attenuated positional offsets to a camera or camera pivot.</span></div>
 
-<div class="quicknav"><strong>Quick Navigation Reference:</strong><a href="#setup">Quick Setup</a><a href="#architecture">Event Flow</a><a href="#firing">Fire Shake Settings</a><a href="#projectile">Projectile Shake Settings</a><a href="#receiver">Camera Receiver</a><a href="#troubleshoot">Troubleshooting</a></div>
-<h2 id="setup">Quick Setup</h2>
-<ol>
-<li>Add <code>DPT_FirearmFireScreenShake</code> to the same GameObject as the <code>DPT_Firearm</code> component.</li>
-<li>Add <code>DPT_FirearmProjectileScreenShake</code> to the bullet prefab if you want moving-projectile impacts to trigger shake.</li>
-<li>Add <code>DPT_FirearmCameraShakeReceiver</code> to the player camera or a dedicated child pivot that moves the camera.</li>
-<li>Set the fire/impact magnitudes, durations and radii. These are positional offsets in Unity units, not degrees of camera rotation.</li>
-<li>Ensure the GameObjects carrying the components are active and the impact layer masks allow the projectile or hitscan shot to detect surfaces.</li>
-</ol>
-<div class="warning"><strong>Avoid duplicate receivers:</strong> Using the original siege weapon camera-shake receiver alongside the firearm receiver can stack two independently applied offsets. Prefer a single deliberate shake system per camera.</div>
-<h2 id="architecture">How The Screen Shake Modules Communicate</h2>
-<div class="panel"><span class="state-label">Firearm Shot</span> <span class="state-arrow">&rarr;</span> <span class="state-label">ShotFired</span> <span class="state-arrow">&rarr;</span> <span class="state-label">Fire Shake Broadcast</span> <span class="state-arrow">&rarr;</span> <span class="state-label">Camera Receiver</span><br><span class="state-label">Projectile Hit</span> <span class="state-arrow">&rarr;</span> <span class="state-label">Impacted</span> <span class="state-arrow">&rarr;</span> <span class="state-label">Impact Shake Broadcast</span> <span class="state-arrow">&rarr;</span> <span class="state-label">Camera Receiver</span></div>
-<p>The shake sender broadcasts an impact position, magnitude, duration and radius via static C# events. Each receiver computes a distance-based attenuation. The receiver favours a stronger incoming shake over its current remaining shake rather than summing every source into an ever-growing offset.</p>
-<h2 id="firing">DPT_FirearmFireScreenShake</h2>
-<p>Requires <code>DPT_Firearm</code> on the same GameObject. It subscribes to <code>ShotFired</code> and <code>HitOccurred</code>.</p>
-<h3>Firing</h3><table><thead><tr><th style="width:32%">Property</th><th style="width:68%">Description</th></tr></thead><tbody><tr><td><strong>Fire Magnitude</strong><br><code>fireMagnitude</code></td><td>Maximum camera-position shake offset caused by firing, in local Unity distance units before distance attenuation.</td></tr><tr><td><strong>Fire Duration</strong><br><code>fireDuration</code></td><td>Duration of the firing camera shake, in seconds.</td></tr><tr><td><strong>Fire Radius</strong><br><code>fireRadius</code></td><td>Maximum distance in metres from the muzzle at which a camera can receive firing shake.</td></tr></tbody></table><h3>Hitscan Impact</h3><table><thead><tr><th style="width:32%">Property</th><th style="width:68%">Description</th></tr></thead><tbody><tr><td><strong>Shake On Hitscan Impact</strong><br><code>shakeOnHitscanImpact</code></td><td>Also broadcasts camera shake when this firearm&#x27;s Hitscan shot hits a surface.</td></tr><tr><td><strong>Impact Magnitude</strong><br><code>impactMagnitude</code></td><td>Maximum camera-position shake offset at a Hitscan impact, before distance attenuation.</td></tr><tr><td><strong>Impact Duration</strong><br><code>impactDuration</code></td><td>Duration of Hitscan impact shake, in seconds.</td></tr><tr><td><strong>Impact Radius</strong><br><code>impactRadius</code></td><td>Maximum distance in metres from a Hitscan impact at which cameras receive shake.</td></tr></tbody></table>
-<div class="note"><strong>Hitscan only:</strong> The optional <strong>Shake On Hitscan Impact</strong> uses <code>DPT_Firearm.HitOccurred</code>. Swept projectile impacts require the separate projectile impact shake component.</div>
-<h2 id="projectile">DPT_FirearmProjectileScreenShake</h2>
-<p>Requires <code>DPT_FirearmProjectile</code> on the same GameObject. It subscribes to the projectile's <code>Impacted</code> event and emits impact shake with its own magnitude, duration and distance radius.</p>
-<h3>Fields</h3><table><thead><tr><th style="width:32%">Property</th><th style="width:68%">Description</th></tr></thead><tbody><tr><td><strong>Magnitude</strong><br><code>magnitude</code></td><td>Maximum camera-position shake offset caused by this projectile&#x27;s impact, before distance attenuation.</td></tr><tr><td><strong>Duration</strong><br><code>duration</code></td><td>Duration of the projectile impact shake, in seconds.</td></tr><tr><td><strong>Radius</strong><br><code>radius</code></td><td>Maximum distance in metres from the impact at which cameras receive shake.</td></tr></tbody></table>
-<h2 id="receiver">DPT_FirearmCameraShakeReceiver</h2>
-<p>The receiver listens to both shake broadcast events while enabled and offsets its own <code>Transform.localPosition</code> in <code>LateUpdate()</code>. It retains a base position and attempts to avoid cumulative positional drift as other scripts move the camera.</p>
-<h3>Fields</h3><table><thead><tr><th style="width:32%">Property</th><th style="width:68%">Description</th></tr></thead><tbody><tr><td><strong>Magnitude Multiplier</strong><br><code>magnitudeMultiplier</code></td><td>Scales all firearm firing and projectile impact shake received by this camera. Set to zero to disable positional shake.</td></tr></tbody></table>
-<div class="tip"><strong>Suggested camera setup:</strong> Use a dedicated <code>Shake_Pivot</code> child of your normal camera controller if another script continually writes the camera's local position or you already use recoil and head-bob. This keeps those systems easier to isolate.</div>
-<h2 id="troubleshoot">Troubleshooting</h2>
-<table><thead><tr><th style="width:36%">Symptom</th><th style="width:64%">Check</th></tr></thead><tbody><tr><td>No shake when firing</td><td>Check that both the firearm fire shake sender and camera receiver are enabled. Verify the camera is inside Fire Radius.</td></tr><tr><td>No shake when a moving bullet impacts</td><td>Add <code>DPT_FirearmProjectileScreenShake</code> to the same prefab as the projectile component.</td></tr><tr><td>Too much camera movement</td><td>Reduce magnitudes, especially if you have another recoil, head-bob or siege shake receiver.</td></tr><tr><td>Shake not visible on distant shots</td><td>Shake is distance-attenuated and is zero outside the assigned radius.</td></tr><tr><td>Shake unexpectedly offsets scripted camera movement</td><td>Put the receiver on a child Shake Pivot that is not overwritten by your camera controller.</td></tr></tbody></table>
-<div class="footer">DPT Games &bull; Functional Firearms Documentation &bull; Based on the supplied <code>DPT.Firearms</code> runtime scripts. Check the installed script version if the API changes.</div>
-</body>
-</html>
+.hero{background:linear-gradient(120deg,#12304b,#142135);border:1px solid #285278;border-radius:8px;padding:22px 24px;margin:16px 0 23px;}
+.hero h2{margin:0 0 8px;background:none;border:0;padding:0;color:#bae6fd;font-size:18pt;}
+.hero p{margin:0 0 8px;color:#dbeafe;}
+.gridcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:16px 0 24px;}
+.gridcards .card{background:#18263b;border:1px solid #334155;border-radius:6px;padding:16px;}
+.gridcards .card h3{margin:0 0 7px;font-size:12pt;}
+.gridcards .card p{font-size:10.5pt;margin:0;color:#cbd5e1;}
+.gridcards .card a{text-decoration:none;}
+.kicker{color:#7dd3fc;font-size:9pt;letter-spacing:.1em;text-transform:uppercase;font-weight:700;}
+.lede{color:#cbd5e1;font-size:12pt;}
+code{overflow-wrap:anywhere;}
+nav.site-nav{position:relative}
+@media print{.hero{background:#1e293b !important}.gridcards{grid-template-columns:1fr 1fr;}}
+</style></head>
+<body><nav class="site-nav"><a class="brand" href="https://dptgames.github.io/">DPT Games</a><a href="index.html">Firearm System</a><a href="smle_setup.html">SMLE Example</a><a href="bolt_reload.html">Bolt &amp; Reload</a><a href="bayonet.html">Bayonet</a><a href="projectiles.html">Projectiles</a><a href="damage.html">Damage</a><a href="screen_shake.html" class="active">Screen Shake</a><a href="demo_input.html">Demo Controller</a></nav><p class="kicker">DPT Games / Functional Firearms / User Documentation</p><h1>Camera &amp; Screen Shake</h1><p class="subtitle">Optional effects guide · Firearm impulses, impact broadcasts and distance-attenuated camera reactions</p>
+<div class="hero"><h2>Optional camera shake for shots and impacts</h2><p>Three lightweight scripts broadcast firearm firing and projectile impact events and apply local camera-position offsets with distance attenuation. They can be omitted entirely if your project uses its own camera effects.</p></div><div class="quicknav"><strong>On this page</strong><a href="#setup">Quick Setup</a> <a href="#flow">Event Flow</a> <a href="#senders">Sender Settings</a> <a href="#receiver">Receiver</a> <a href="#integration">Demo Integration</a></div><h2 id="setup">Quick Setup</h2><ol><li>Add <code>DPT_FirearmFireScreenShake</code> to the firearm GameObject.</li><li>Optionally add <code>DPT_FirearmProjectileScreenShake</code> to the bullet prefab for projectile-impact shake.</li><li>Attach <code>DPT_FirearmCameraShakeReceiver</code> to the Main Camera or a dedicated camera pivot.</li><li>Tune the magnitudes, durations and radii in the Inspector. Use one receiver per camera.</li></ol><h2 id="flow">How Events Are Routed</h2><div class="panel"><span class="state-label">ShotFired</span><span class="state-arrow">→</span><span class="state-label">Fire sender</span><span class="state-arrow">→</span><span class="state-label">OnFireShake</span><span class="state-arrow">→</span><span class="state-label">Camera receiver</span><br><span class="state-label">Impacted</span><span class="state-arrow">→</span><span class="state-label">Projectile sender</span><span class="state-arrow">→</span><span class="state-label">OnImpactShake</span><span class="state-arrow">→</span><span class="state-label">Camera receiver</span></div><h2 id="senders">Sender Components</h2><table><thead><tr><th>Component</th><th>Fields / purpose</th></tr></thead><tbody><tr><td><code>DPT_FirearmFireScreenShake</code></td><td>Fire Magnitude, Fire Duration and Fire Radius. Can optionally shake on Hitscan impact using Shake On Hitscan Impact plus Impact Magnitude/Duration/Radius.</td></tr><tr><td><code>DPT_FirearmProjectileScreenShake</code></td><td>Magnitude, Duration and Radius for individual swept projectile hits.</td></tr><tr><td>Broadcasts</td><td>The C# events carry world impact position, magnitude, duration and radius to the receiver.</td></tr></tbody></table><h2 id="receiver">DPT_FirearmCameraShakeReceiver</h2><ul><li>Magnitude Multiplier scales incoming shake for that camera.</li><li>Shake strength falls with distance. When a new stronger shake arrives, it replaces the remaining weaker one rather than adding unlimited offsets.</li><li>The receiver uses positional movement, not rotational recoil; the demo controller handles its own camera recoil separately.</li><li>The receiver is marked with a late execution order so it can apply shake after other camera scripts. Test with custom cinematic camera systems before release.</li></ul><h2 id="integration">Camera-only Demo Integration</h2><div class="warning">The demo camera is not parented to the rifle; keep it that way. Attach the shake receiver directly to Main Camera or a camera-effects pivot. Do not attach two receivers to the same camera, as their offsets can stack.</div><table><thead><tr><th>Symptom</th><th>Likely cause</th></tr></thead><tbody><tr><td>No shake</td><td>Receiver is missing or disabled, radius is too small or the sender is not attached.</td></tr><tr><td>Excessive shake</td><td>Multiple receivers, a high Magnitude Multiplier or overlapping camera effects.</td></tr><tr><td>Camera flickers during shake</td><td>Two scripts may be writing camera position in an incompatible order.</td></tr><tr><td>Hit shake plays twice</td><td>Both firearm hitscan shake and another gameplay effect may be active.</td></tr></tbody></table>
+<footer class="footer"><strong>DPT Games Functional Firearms</strong> · <a href="index.html">System guide</a> · The SMLE Mk III is an example implementation. Check the package source for version-specific differences.</footer></body></html>
