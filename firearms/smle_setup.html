@@ -101,18 +101,65 @@ code{overflow-wrap:anywhere;}
 nav.site-nav{position:relative}
 @media print{.hero{background:#1e293b !important}.gridcards{grid-template-columns:1fr 1fr;}}
 </style></head>
-<body><nav class="site-nav"><a class="brand" href="https://dptgames.github.io/">DPT Games</a><a href="index.html">Firearm System</a><a href="smle_setup.html" class="active">SMLE Example</a><a href="bolt_reload.html">Bolt &amp; Reload</a><a href="bayonet.html">Bayonet</a><a href="projectiles.html">Projectiles</a><a href="damage.html">Damage</a><a href="screen_shake.html">Screen Shake</a><a href="demo_input.html">Demo Controller</a></nav><p class="kicker">DPT Games / Functional Firearms / User Documentation</p><h1>SMLE Mk III Example Setup</h1><p class="subtitle">Worked example · Building and calibrating the included rifle with the general-purpose components</p>
-<div class="hero"><h2>The SMLE is a worked example</h2><p>This page shows one possible configuration of the reusable firearm system. The same core component supports other bolt actions, semi-automatic firearms and automatic weapons by changing the inspector settings and companion action implementation.</p></div><div class="quicknav"><strong>On this page</strong><a href="#hierarchy">Hierarchy</a> <a href="#basic">Firearm Inspector</a> <a href="#markers">Marker Placement</a> <a href="#models">Model Orientation</a> <a href="#test">Acceptance Test</a></div><h2 id="hierarchy">Recommended Scene Hierarchy</h2><pre>SMLE_MkIII_Complete  [DPT_Firearm, DPT_FirearmProceduralBolt, AudioSource]
+<body><nav class="site-nav"><a class="brand" href="https://dptgames.github.io/">DPT Games</a><a href="index.html">Firearm System</a><a href="smle_setup.html" class="active">SMLE Example</a><a href="bolt_reload.html">Bolt &amp; Reload</a><a href="bayonet.html">Bayonet</a><a href="projectiles.html">Projectiles</a><a href="damage.html">Damage</a><a href="screen_shake.html">Screen Shake</a><a href="demo_input.html">Demo Controller</a></nav>
+<p class="kicker">DPT Games / Functional Firearms / User Documentation</p>
+<h1>SMLE Mk III Example Setup</h1>
+<p class="subtitle">Worked example · Ten-round magazine, two five-round chargers and correct contents-only loading</p>
+<div class="hero"><h2>The SMLE is an example of a reusable firearms system</h2><p><code>DPT_Firearm</code> manages firing, ammunition, reload types and shared visual references for other firearms too. The optional <code>DPT_FirearmProceduralBolt</code> supplies the moving bolt and charger-loading animation for this particular rifle.</p></div>
+<div class="quicknav"><strong>On this page</strong><a href="#hierarchy">Hierarchy</a><a href="#basic">Firearm Inspector</a><a href="#charger">Charger Prefab</a><a href="#markers">Marker Placement</a><a href="#models">Axes</a><a href="#test">Acceptance Test</a></div>
+<h2 id="hierarchy">Recommended Scene Hierarchy</h2>
+<pre>SMLE_MkIII_Complete  [DPT_Firearm, DPT_FirearmProceduralBolt, AudioSource]
 ├── Rifle_Model
-├── Bolt_Transform  [procedural animation target]
-├── Muzzle_Point   [empty +Z towards muzzle direction]
-├── Ejection_Point [empty fixed to receiver]
-├── Charger_Spawn  [empty near receiver charger bridge]
-├── ADS_Camera_Pose [empty behind rear iron sights]
-├── Hip_Camera_Pose [optional empty]
-├── Bayonet_Visual  [optional child mesh]
-│   └── Bayonet_Tip [empty +Z towards blade tip]
-└── Muzzle_Flash_Light [optional Point Light, initially off]
+├── Bolt_Transform       [procedural animation target]
+├── Muzzle_Point         [empty +Z towards muzzle]
+├── Ejection_Point       [fixed to receiver]
+├── Loading_Spawn_Point  [at the charger bridge]
+├── ADS_Camera_Pose      [empty behind rear sights]
+├── Hip_Camera_Pose      [optional]
+├── Bayonet_Visual       [optional]
+│   └── Bayonet_Tip      [empty +Z towards blade tip]
+└── Muzzle_Flash_Light   [optional Point Light]
 
-Main Camera [separate scene root, not a child of the rifle]</pre><div class="warning">The procedural bolt moves only the assigned <code>Bolt_Transform</code>. The muzzle, ejection point and camera pose markers should remain stationary relative to the rifle root. Do not parent the Main Camera under the rifle.</div><h2 id="basic">SMLE Firearm Settings</h2><table><thead><tr><th>Field</th><th>Example value</th><th>Reason</th></tr></thead><tbody><tr><td>Fire Mode</td><td>SemiAutomatic</td><td>One shot per trigger press.</td></tr><tr><td>Manual Action</td><td>Enabled</td><td>Requires bolt cycling between rounds.</td></tr><tr><td>Magazine Capacity</td><td>10</td><td>SMLE detachable box magazine holds ten rounds.</td></tr><tr><td>Starting Magazine Rounds</td><td>9</td><td>With a separately chambered initial round, gives ten total ready rounds.</td></tr><tr><td>Start Chambered</td><td>Enabled</td><td>Initial round ready to fire.</td></tr><tr><td>Chamber On Reload</td><td>Disabled</td><td>Procedural bolt handles chambering while closing.</td></tr><tr><td>Shot Type</td><td>Swept Projectile</td><td>Demonstrates simulated .303 bullet flight and impact.</td></tr><tr><td>Muzzle Velocity</td><td>780 m/s (illustrative)</td><td>Adjust for your chosen ammunition and gameplay, not a universal firearm default.</td></tr><tr><td>Auto Reload</td><td>Optional</td><td>Enable for a demo that reloads when the chamber and magazine are exhausted.</td></tr><tr><td>Spread Degrees</td><td>0 while calibrating</td><td>Restore desired shot dispersion after sight alignment.</td></tr><tr><td>Use Animator Triggers</td><td>Disabled</td><td>The sample procedural bolt does not need an Animator.</td></tr></tbody></table><h2 id="markers">Placing Muzzle, Ejection and ADS Markers</h2><ol><li><strong>Muzzle Point:</strong> put the empty exactly at the muzzle. The blue +Z arrow must point downrange, as bullets are launched along <code>MuzzlePoint.forward</code>.</li><li><strong>Ejection Point:</strong> put the empty beside the right-hand receiver opening, not below the trigger, and assign the scene Transform to the firearm.</li><li><strong>Charger Spawn:</strong> put a separate empty near the top of the receiver. Assign it on the bolt component; falling back to Ejection Point works but is harder to align.</li><li><strong>ADS Camera Pose:</strong> put an empty just behind the rear notch, align its +Z arrow along the front sight and assign it on the demo controller.</li><li><strong>Bayonet Tip:</strong> put the empty at the end of the mounted bayonet with +Z pointing in the stabbing direction.</li></ol><h2 id="models">FBX / Local Axis Notes</h2><ul><li>The firearm root should have a predictable forward orientation. Unity convention is <strong>+Z forward</strong>, <strong>+Y up</strong> and <strong>+X right</strong>.</li><li>FBX import axis correction can create intermediate rotations. Check the <strong>actual child Transform axes</strong> in Unity rather than blindly reversing every Z value.</li><li>The procedural bolt has separate <strong>Invert Bolt Travel Z</strong> and <strong>Invert Bolt Rotation Z</strong> switches to correct imported bolt axes without changing projectile direction.</li><li>The ejection velocity uses <strong>Ejection Local Direction</strong> in the <em>Ejection Point</em> local space. To eject right, orient that marker accordingly.</li></ul><h2 id="test">Basic Verification</h2><ol><li>Fire with a chambered round; the muzzle flash and shot sound should play and a round should be consumed.</li><li>The bolt should unlock, retract, eject a casing at the receiver, feed a round and close.</li><li>Fire all rounds, reload with one or two charger visuals and verify that the bolt closes after the final one.</li><li>Hold right mouse to align ADS and check the sight picture with spread set to zero.</li><li>Enable Bayonet Equipped, press F in the optional demo and verify the selected target receives a damage event.</li></ol><div class="tip"><strong>Product positioning:</strong> These steps illustrate the included SMLE prefab. Customers can create a different weapon by configuring the same runtime APIs and supplying their own meshes, ammo, attachment transforms and input logic.</div>
+Main Camera              [separate scene root, not parented to rifle]</pre>
+<div class="warning">Only <strong>Bolt Transform</strong> moves during the procedural cycle. Keep the muzzle, ejection, loading and camera markers attached to the stationary firearm hierarchy, not to its moving bolt.</div>
+<h2 id="basic">SMLE Firearm Inspector Settings</h2>
+<table><thead><tr><th>Field</th><th>Example value</th><th>Reason</th></tr></thead><tbody>
+<tr><td>Fire Mode</td><td>SemiAutomatic</td><td>One shot per trigger press.</td></tr>
+<tr><td>Manual Action</td><td>Enabled</td><td>Requires the action to cycle to chamber another round.</td></tr>
+<tr><td>Magazine Capacity</td><td>10</td><td>The magazine holds ten .303 cartridges.</td></tr>
+<tr><td>Starting Magazine Rounds</td><td>9</td><td>With a separately chambered round, gives ten ready rounds at startup.</td></tr>
+<tr><td>Start Chambered</td><td>Enabled</td><td>A live round begins in the chamber.</td></tr>
+<tr><td>Reload Type</td><td><strong>Stripper Clips</strong></td><td>Refills the magazine in groups from chargers, rather than as a single instantaneous magazine refill.</td></tr>
+<tr><td>Rounds Per Load</td><td><strong>5</strong></td><td>The standard SMLE charger holds five rounds.</td></tr>
+<tr><td>Loading Prefab</td><td>Five-round charger prefab</td><td>Shared visual source configured on the firearm, not on the bolt.</td></tr>
+<tr><td>Loading Spawn Point</td><td>Loading_Spawn_Point</td><td>Entry position for the charger at the receiver bridge.</td></tr>
+<tr><td>Ejected Loading Prefab</td><td>Optional empty charger prefab</td><td>Appears when a used loading device is ejected; separate from the loaded version.</td></tr>
+<tr><td>Chamber On Reload</td><td>Disabled</td><td>The procedural bolt handles chambering as it closes.</td></tr>
+<tr><td>Reload Uses Animation Events</td><td>Disabled</td><td>The procedural bolt drives reloading; do not run a second animation-event reload controller.</td></tr>
+<tr><td>Shot Type</td><td>Swept Projectile</td><td>Demonstrates moving .303 projectile flight.</td></tr>
+<tr><td>Muzzle Velocity</td><td>780 m/s (illustrative)</td><td>Gameplay example rather than a universal ammunition default.</td></tr>
+<tr><td>Spread Degrees</td><td>0 while calibrating</td><td>Remove spread while aligning sights.</td></tr>
+<tr><td>Use Animator Triggers</td><td>Disabled</td><td>The procedural bolt is used instead of an Animator.</td></tr>
+</tbody></table>
+<h3>Procedural Bolt Settings</h3>
+<p>Assign <strong>Bolt Transform</strong>, enable <strong>Animate Reload</strong>, set <strong>Loading Visual Mode = Contents Only</strong> and assign <strong>Loading Contents</strong> to the cartridge group from the source loading prefab. Use <strong>Auto Cycle After Shot</strong> only if you want the action to cycle on its own following each shot.</p>
+<h2 id="charger">Preparing the Five-Round Charger Prefab</h2>
+<pre>SMLE_Loaded_Charger  [assigned as DPT_Firearm / Loading Prefab]
+├── Charger_Body
+└── Cartridges        [assign this Transform to Procedural Bolt / Loading Contents]
+    ├── Cartridge_01
+    ├── Cartridge_02
+    ├── Cartridge_03
+    ├── Cartridge_04
+    └── Cartridge_05</pre>
+<ol><li>Make the charger body and its cartridges separate hierarchy children. Do not put the metal body under the <strong>Cartridges</strong> group.</li><li>Assign the <strong>SMLE_Loaded_Charger</strong> prefab asset to <strong>DPT_Firearm → Loading Prefab</strong>.</li><li>Assign the <strong>Cartridges</strong> <code>Transform</code> from that prefab asset to <strong>DPT_FirearmProceduralBolt → Loading Contents</strong>. This is an object field, not a child-name string; the script locates the equivalent Transform inside spawned copies.</li><li>With <strong>Hide Unused Contents</strong> enabled, keep one direct child per cartridge. This allows a partly empty magazine to be replenished without displaying all five rounds in the visual.</li><li>Adjust <strong>Loading Spawn Offset</strong>, <strong>Loading Guide Travel</strong> and <strong>Loading Insert Travel</strong> on the bolt component. The first stage seats the charger into the guide; the second moves only the cartridges down into the magazine.</li></ol>
+<div class="note"><strong>Correct mechanical behaviour:</strong> The loaded charger is fitted into the bridge, its cartridges are pressed down into the magazine and the empty metal charger is removed or ejected. The charger itself does not enter the magazine. Reloading from empty can require two five-round chargers.</div>
+<p>No <code>DPT_FirearmLoadingVisual</code> script is required. Loading prefab ownership remains in <code>DPT_Firearm</code>; the procedural bolt contains only visual-animation settings and the reference to the contents group.</p>
+<h2 id="markers">Placing Muzzle, Ejection and Loading Markers</h2>
+<ol><li><strong>Muzzle Point:</strong> put its blue +Z axis downrange, precisely at the barrel exit.</li><li><strong>Ejection Point:</strong> position it beside the receiver opening, away from moving parts.</li><li><strong>Loading Spawn Point:</strong> place it near the charger bridge, then assign it to the <strong>firearm's</strong> Loading Spawn Point field. Do not assign a second spawn point to the bolt.</li><li><strong>ADS Camera Pose:</strong> place an empty behind the rear sight, aligned down the barrel.</li><li><strong>Bayonet Tip:</strong> position at the blade tip with +Z in the intended stabbing direction.</li></ol>
+<h2 id="models">FBX and Local Axis Notes</h2>
+<ul><li>For predictable behaviour, use <strong>+Z forward</strong>, <strong>+Y up</strong> and <strong>+X right</strong> on the firearm root.</li><li>Use the actual Unity Transform axes after FBX import. A mesh may not inherit the expected orientation.</li><li>The procedural bolt provides separate <strong>Invert Bolt Travel Z</strong> and <strong>Invert Bolt Rotation Z</strong> settings.</li><li>Use <strong>Loading Travel Direction</strong> in the loading spawn point's local orientation. In Contents Only mode, the script converts that direction for the contents group's parent.</li></ul>
+<h2 id="test">Acceptance Test</h2>
+<ol><li>Fire a live round. Check that the projectile appears, ammunition decreases and the bolt cycles according to your control settings.</li><li>Reload with an empty magazine. The bolt should open, the first loaded charger should enter the guide, the cartridges should descend while the charger body stays put and the empty charger should be removed.</li><li>Verify that a second five-round load appears when ten rounds are missing, and that the bolt closes only after loading completes.</li><li>Test a partial reload with fewer than five rounds missing; ensure the contents visual shows only the number being inserted.</li><li>Check muzzle alignment, casing ejection, sound and ADS with spread temporarily set to zero.</li></ol>
+<div class="tip"><strong>Using another weapon:</strong> The same core firearm can animate a whole magazine or one round at a time by changing its reload type, supplying another loading prefab and using a suitable action controller. The procedural bolt component is specific to bolt-action motion.</div>
 <footer class="footer"><strong>DPT Games Functional Firearms</strong> · <a href="index.html">System guide</a> · The SMLE Mk III is an example implementation. Check the package source for version-specific differences.</footer></body></html>
