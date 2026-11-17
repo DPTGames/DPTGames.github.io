@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Procedural Bolt &amp; Charger Reload | DPT Games Functional Firearms</title><style>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Procedural Bolt &amp; Charger Reload | DPT Games Functional Firearms</title><style>
         *, *::before, *::after { box-sizing: border-box; }
         @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
         body {
@@ -101,70 +102,74 @@ code{overflow-wrap:anywhere;}
 nav.site-nav{position:relative}
 @media print{.hero{background:#1e293b !important}.gridcards{grid-template-columns:1fr 1fr;}}
 </style></head>
-<body><nav class="site-nav"><a class="brand" href="https://dptgames.github.io/">DPT Games</a><a href="index.html">Firearm System</a><a href="smle_setup.html">SMLE Example</a><a href="bolt_reload.html" class="active">Bolt &amp; Reload</a><a href="bayonet.html">Bayonet</a><a href="projectiles.html">Projectiles</a><a href="damage.html">Damage</a><a href="screen_shake.html">Screen Shake</a><a href="demo_input.html">Demo Controller</a></nav>
+<body><nav class="site-nav"><a class="brand" href="https://dptgames.github.io/">DPT Games</a><a href="index.html">Firearm System</a><a href="smle_setup.html">SMLE Example</a><a class="active" href="bolt_reload.html">Bolt &amp; Reload</a><a href="bayonet.html">Bayonet</a><a href="projectiles.html">Projectiles</a><a href="damage.html">Damage</a><a href="screen_shake.html">Screen Shake</a><a href="demo_input.html">Demo Controller</a></nav>
 <p class="kicker">DPT Games / Functional Firearms / User Documentation</p>
 <h1>Procedural Bolt &amp; Loading Animations</h1>
-<p class="subtitle">Optional manual-action animation · Shared loading prefab, three visual modes and SMLE charger example</p>
-<div class="hero"><h2>One ammunition system, optional weapon-specific animation</h2><p><code>DPT_Firearm</code> owns the reload type, ammo counts, loading prefab and spawn point. <code>DPT_FirearmProceduralBolt</code> is an optional bolt-action controller that animates the bolt and the contents of the configured loading prefab. Other firearms can use the same core without adding a procedural bolt.</p></div>
-<div class="quicknav"><strong>On this page</strong><a href="#config">Quick Setup</a><a href="#sequence">Reload Sequence</a><a href="#modes">Visual Modes</a><a href="#fields">Inspector Fields</a><a href="#timing">Timing and Audio</a><a href="#axes">Troubleshooting</a></div>
-<h2 id="config">Quick Setup</h2>
-<ol><li>Add <code>DPT_FirearmProceduralBolt</code> alongside <code>DPT_Firearm</code> on a bolt-action weapon and assign <strong>Bolt Transform</strong> to the moving bolt mesh or pivot.</li><li>On <code>DPT_Firearm</code>, choose <strong>Reload Type</strong>, assign the <strong>Loading Prefab</strong> and set the <strong>Loading Spawn Point</strong>. These references belong on the firearm, not on the procedural bolt.</li><li>For the SMLE, select <strong>Stripper Clips</strong>, set <strong>Rounds Per Load = 5</strong>, enable <strong>Manual Action</strong> and disable <strong>Chamber On Reload</strong>. The procedural bolt advances the next cartridge as it closes.</li><li>Disable <strong>Reload Uses Animation Events</strong> if the procedural controller will manage reloading. Disable <strong>Use Animator Triggers</strong> if no Animator is used.</li><li>On <code>DPT_FirearmProceduralBolt</code>, enable <strong>Animate Reload</strong> and choose a <strong>Loading Visual Mode</strong>. For a historical charger feeding loose cartridges, select <strong>Contents Only</strong> and assign <strong>Loading Contents</strong>.</li><li>Adjust the local spawn, guide and insertion travel values to match the weapon's model. Use <strong>Auto Cycle After Shot</strong> only if you want the procedural action to cycle automatically after each shot.</li></ol>
-<h2 id="sequence">Sequence and Ammunition State</h2>
-<div class="panel"><span class="state-label">Shot</span> <span class="state-arrow">→</span> <span class="state-label">Unlock</span> <span class="state-arrow">→</span> <span class="state-label">Retract / eject</span> <span class="state-arrow">→</span> <span class="state-label">Feed / advance</span> <span class="state-arrow">→</span> <span class="state-label">Lock</span></div>
-<p>For a procedural reload, the controller opens the bolt, calls the firearm's reload APIs and waits for loading before closing. Ammunition counts and reload events are still controlled by <code>DPT_Firearm</code>; moving the visual alone does not change ammunition.</p>
-<ul><li><strong>Stripper Clips:</strong> opening the action is required. The bolt animator displays a group of up to <strong>Rounds Per Load</strong> cartridges, inserts that group using <code>TryInsertReloadCharger(int)</code> and ejects the used charger before continuing if more rounds are needed.</li><li><strong>Individual Rounds:</strong> the procedural controller shows one loading operation per round and calls <code>TryInsertReloadRound()</code> after each insertion.</li><li><strong>Full Magazine:</strong> the visual can represent a magazine insertion. The core firearm refills the magazine when <code>CompleteReload()</code> runs.</li><li>Reloading is not available while an action cycle is already in progress. The procedural controller can queue a reload request until cycling finishes.</li></ul>
-<h2 id="modes">Loading Visual Modes</h2>
-<table><thead><tr><th>Mode</th><th>What moves</th><th>Suggested use</th></tr></thead><tbody>
-<tr><td><strong>Whole Object</strong></td><td>Moves the entire instantiated loading prefab through the guide and insertion phases.</td><td>Detachable magazines or a simplified whole-object animation.</td></tr>
-<tr><td><strong>Contents Only</strong></td><td>Moves the loaded device into the guide, leaves its body in place and moves only the selected <strong>Loading Contents</strong> group down during insertion.</td><td>SMLE five-round charger / stripper clip, where only cartridges enter the magazine.</td></tr>
-<tr><td><strong>Individual Rounds</strong></td><td>Spawns and animates a separate copy of the loading prefab for each round, rather than moving a multi-round group.</td><td>Weapons loaded one cartridge at a time.</td></tr>
-</tbody></table>
-<h3>Contents Only: prefab hierarchy</h3>
-<pre>Loading_Prefab
-├── Charger_Body
-└── Cartridges             [assign this Transform to Loading Contents]
+<p class="subtitle">Manual bolt motion · Scene-based charger visuals, individual top-offs and ejection timing</p>
+<div class="hero"><h2>Ammunition is managed by the firearm, animation by the optional bolt</h2><p><code>DPT_Firearm</code> owns the magazine, chamber, reload type and visual references. <code>DPT_FirearmProceduralBolt</code> animates a chosen bolt Transform and reuses an existing, usually inactive, loading hierarchy. Full five-round chargers and single-round top-offs have distinct visual paths. An optional cartridge feed animation now moves the highest visible magazine round towards the chamber during the bolt forward stroke.</p></div>
+<div class="quicknav"><strong>On this page</strong><a href="#config">Quick Setup</a><a href="#sequence">Reload Sequence</a><a href="#modes">Visual Modes</a> <a href="#feeding">Cartridge Feeding</a><a href="#fields">Inspector Fields</a><a href="#timing">Timing and Audio</a><a href="#axes">Troubleshooting</a></div>
+<h2 id="config">Quick Setup</h2><ol>
+<li>Add <code>DPT_FirearmProceduralBolt</code> beside <code>DPT_Firearm</code> and assign <strong>Bolt Transform</strong>. Enable <strong>Manual Action</strong> on the firearm.</li>
+<li>For the SMLE choose <strong>Reload Type = Stripper Clips</strong>, <strong>Rounds Per Load = 5</strong> and disable <strong>Chamber On Reload</strong> when the procedural bolt handles chambering.</li>
+<li>Create an <strong>existing scene object</strong> under the rifle for the loaded charger. Assign its root to <strong>Loading Visual Root</strong> on the firearm. It should be initially inactive, positioned at the start of the loading animation and must not be the firearm root or one of its parents.</li>
+<li>For <strong>Contents Only</strong>, assign <strong>Loading Device</strong> to the charger's metal body and <strong>Loading Contents</strong> to its cartridge group. Both must be children of Loading Visual Root.</li>
+<li>On the bolt, enable <strong>Animate Reload</strong> and select <strong>Loading Visual Mode = Contents Only</strong>. Adjust Loading Travel Direction, Guide Travel, Insert Travel and stage durations.</li>
+<li>Disable <strong>Reload Uses Animation Events</strong> if the procedural controller owns the sequence. Only enable <strong>Auto Cycle After Shot</strong> if you want automatic bolt cycling.</li>
+</ol><div class="warning">The earlier <strong>Loading Prefab</strong>, <strong>Loading Spawn Point</strong>, <strong>Loading Spawn Offset</strong> and <strong>Loading Rotation Offset</strong> instructions no longer apply. The current version reuses an assigned scene object.</div><h2 id="sequence">Sequence and Ammunition State</h2><div class="panel">Fire → Lift / unlock → Pull back → Eject at configured extraction fraction → Feed next round → Push forward → Lock</div><p><strong>Spent Case Ejection Point</strong> is a progress fraction of the rearward extraction stage, defaulting to <strong>0.85 (85%)</strong>. It affects normal cycling and procedural reload extraction. On a normal cycle, <code>ChamberNextRound()</code> runs after extraction, before the forward stroke.</p><ul>
+<li><strong>Stripper Clips:</strong> Opening the action is required. A charger transfers up to <strong>Rounds Per Load</strong> cartridges. An optional empty charger can be ejected after each successful load.</li>
+<li><strong>Mixed charger + individual loading:</strong> Enable <strong>Allow Single Round Top Off With Clips</strong>. Complete chargers are used when at least one full charger's worth of space and ammunition remain. Remaining one-to-four-round top-offs use a single cartridge visual and <code>TryInsertReloadRound()</code>.</li>
+<li><strong>Full charger preference:</strong> When mixed loading is disabled, <strong>Eject Magazine Rounds For Full Loads</strong> can eject surplus live rounds to make space for a full charger. This option is ignored when mixed loading is enabled.</li>
+<li><strong>Individual Rounds:</strong> Reuses the loading visual for each inserted cartridge. <strong>Full Magazine:</strong> Refills the magazine when <code>CompleteReload()</code> runs.</li>
+<li><strong>Chamber-only operation:</strong> With no reserve ammunition, an empty chamber and rounds remaining in the magazine, a Reload request can instead initiate a bolt cycle. It does not manufacture reserve ammunition.</li>
+</ul><h2 id="modes">Loading Visual Modes</h2><table><thead><tr><th>Mode</th><th>What animates</th><th>Use</th></tr></thead><tbody>
+<tr><td><strong>Whole Object</strong></td><td>The existing Loading Visual Root travels through both guide and insertion stages.</td><td>Simple detachable-magazine animations.</td></tr>
+<tr><td><strong>Contents Only</strong></td><td>Loading Visual Root moves into the guide, then the Loading Contents group moves down while Loading Device remains in place.</td><td>SMLE five-round charger.</td></tr>
+<tr><td><strong>Individual Rounds</strong></td><td>Reuses the assigned Loading Visual Root as a single round, moving it through both stages per cartridge.</td><td>Individual-round reload type.</td></tr>
+<tr><td><strong>Single-round top-off</strong></td><td>A separate <strong>Single Round Loading Visual</strong> is animated for one-at-a-time top-offs while Reload Type remains Stripper Clips.</td><td>One to four rounds after complete chargers.</td></tr>
+</tbody></table><h3>Contents Only: scene hierarchy</h3><pre>Loading_Visual_Root          [inactive scene object]
+├── Charger_Body            [Loading Device]
+└── Cartridges              [Loading Contents]
     ├── Cartridge_01
     ├── Cartridge_02
     ├── Cartridge_03
     ├── Cartridge_04
-    └── Cartridge_05</pre>
-<p>On the procedural bolt, <strong>Loading Contents</strong> is a <code>Transform</code> object reference, not a child-name string. It must point to a child of the <strong>same prefab asset</strong> assigned to the firearm's <strong>Loading Prefab</strong>. The controller maps the source child to its corresponding child in each instantiated copy using the hierarchy. Do not assign an unrelated scene copy of the charger.</p>
-<p>Keep the metal charger and the cartridge group as siblings. For partial reloads, <strong>Hide Unused Contents</strong> can hide extra rounds when the assigned group contains exactly <strong>Rounds Per Load</strong> direct child objects. The earliest child objects are kept active first.</p>
-<div class="note"><strong>Historical behaviour:</strong> On an SMLE, the charger stays at the guide as its rounds are pressed into the internal magazine. The metal charger does not descend with the ammunition. It is removed or ejected after loading.</div>
-<h2 id="fields">Loading Animation Inspector Fields</h2>
-<table><thead><tr><th>Component / field</th><th>Purpose</th></tr></thead><tbody>
-<tr><td><strong>Firearm</strong> · Loading Prefab</td><td>The source prefab for the animated loading object. Can represent a cartridge, charger or detachable magazine.</td></tr>
-<tr><td><strong>Firearm</strong> · Loading Spawn Point</td><td>Spawn orientation and position reference; falls back to Ejection Point and then the firearm Transform.</td></tr>
-<tr><td><strong>Firearm</strong> · Rounds Per Load</td><td>Number of cartridges transferred per multi-round load; set to 5 for the SMLE charger.</td></tr>
-<tr><td><strong>Firearm</strong> · Ejected Loading Prefab / Loading Ejection Point</td><td>Optional ejected empty device and its ejection marker. Separate from the initially loaded prefab.</td></tr>
-<tr><td><strong>Bolt</strong> · Loading Visual Mode</td><td>Chooses Whole Object, Contents Only or Individual Rounds.</td></tr>
-<tr><td><strong>Bolt</strong> · Loading Contents</td><td>Source child Transform for moving the cartridges independently in Contents Only mode.</td></tr>
-<tr><td><strong>Bolt</strong> · Hide Unused Contents</td><td>Hides surplus cartridge children during a partial multi-round load.</td></tr>
-<tr><td><strong>Bolt</strong> · Loading Spawn Offset / Loading Rotation Offset</td><td>Initial local pose of the instantiated loading object relative to the spawn point.</td></tr>
-<tr><td><strong>Bolt</strong> · Loading Travel Direction</td><td>Local movement direction for guide insertion and contents transfer.</td></tr>
-<tr><td><strong>Bolt</strong> · Loading Guide Travel / Loading Guide Duration</td><td>Initial movement into the guide.</td></tr>
-<tr><td><strong>Bolt</strong> · Loading Insert Travel / Loading Insert Duration</td><td>Subsequent movement. In Contents Only mode, the selected contents move while the device body remains at the guide.</td></tr>
-<tr><td><strong>Bolt</strong> · Between Loads Delay</td><td>Pause between consecutive loading operations.</td></tr>
-<tr><td><strong>Bolt</strong> · Complete Reload After Last Load / Post Load Close Delay</td><td>Determines whether to wait for additional reload time and how long to pause before bolt closure.</td></tr>
-<tr><td><strong>Bolt</strong> · Disable Loading Physics</td><td>Disables physics simulation and colliders on the temporary loading visual.</td></tr>
-</tbody></table>
-<h2 id="timing">Closing Timing and Sound</h2>
-<table><thead><tr><th>Control</th><th>Use</th></tr></thead><tbody>
-<tr><td>Reload Closing Speed Multiplier</td><td>Speeds up the bolt's forward slide and lock rotation after a reload, without changing a normal firing cycle.</td></tr>
-<tr><td>Reload Bolt Close Sounds</td><td>Randomly selects a sound as the bolt starts closing.</td></tr>
-<tr><td>Reload Bolt Close Source</td><td>Optional AudioSource override; otherwise uses the available firearm or local source.</td></tr>
-<tr><td>Bolt Sounds on firearm</td><td>Play when a normal manual action cycle begins.</td></tr>
-<tr><td>Reload Duration on firearm</td><td>Timing for a reload without a loading visual or when the extra-duration option is enabled.</td></tr>
-</tbody></table>
-<h2 id="axes">Troubleshooting Motion and Reloading</h2>
-<table><thead><tr><th>Issue</th><th>Resolution</th></tr></thead><tbody>
-<tr><td>Contents Only shows the device but the cartridges do not descend</td><td>Assign <strong>Loading Contents</strong> to the cartridge group Transform inside the prefab asset. Verify the field references a descendant of the assigned Loading Prefab, not a scene instance.</td></tr>
-<tr><td>Loading prefab does not appear</td><td>Assign <strong>Loading Prefab</strong> on the firearm, choose the correct Reload Type and check Loading Spawn Point and offsets. For an SMLE use Stripper Clips, not Full Magazine, to display one or two five-round loads.</td></tr>
-<tr><td>Extra cartridges appear on a partial load</td><td>Enable Hide Unused Contents and ensure the contents group has exactly one direct child per cartridge, matching Rounds Per Load.</td></tr>
-<tr><td>Bolt retracts towards the muzzle</td><td>Toggle Invert Bolt Travel Z, or reverse the extraction and closing slides, but not both.</td></tr>
-<tr><td>Bolt rotates the wrong way</td><td>Toggle Invert Bolt Rotation Z or change the Open Angle sign.</td></tr>
-<tr><td>Reload never finishes</td><td>Ensure Reload Uses Animation Events is disabled when using procedural reload, and avoid running two independent reload controllers.</td></tr>
-<tr><td>Closing feels slow</td><td>Raise Reload Closing Speed Multiplier, or lower Post Load Close Delay.</td></tr>
-<tr><td>Loading object enters the magazine incorrectly</td><td>Select Contents Only for a charger rather than Whole Object. Adjust Loading Guide Travel and Loading Insert Travel separately.</td></tr>
-</tbody></table>
-<footer class="footer"><strong>DPT Games Functional Firearms</strong> · <a href="index.html">System guide</a> · The SMLE Mk III is an example implementation. Check the package source for version-specific differences.</footer></body></html>
+    └── Cartridge_05</pre><p>Assign both child Transforms from the <em>scene hierarchy</em> on the firearm. In Contents Only mode, <strong>Hide Unused Contents</strong> hides surplus direct cartridge children for partial charger loads. When <strong>Eject Magazine Rounds For Full Loads</strong> is active, the visual intentionally shows a full charger.</p><div class="note"><strong>Separate visual:</strong> Single Round Loading Visual accepts an existing scene object or a prefab asset. If an asset is assigned, the procedural bolt instantiates it once at the Loading Visual Root position and reuses it for subsequent top-offs. If unassigned, it falls back to <strong>Live Round Prefab</strong>. Position the Loading Visual Root carefully because it supplies the prefab starting pose.</div>
+<h2 id="feeding">Visual Magazine-to-Chamber Feeding</h2>
+<p>The optional <strong>Animate Cartridge Feeding</strong> setting is found under <strong>Action &amp; Procedural Bolt → Cartridge Feeding</strong>. It uses an existing top visible cartridge from the firearm's <strong>Magazine Round Visuals</strong> array and the <strong>Chambered Round Visual</strong> as its destination. No additional cartridge prefab is spawned.</p>
+<ol>
+<li>On <code>DPT_Firearm</code>, assign <strong>Magazine Round Visuals</strong> bottom-to-top and assign <strong>Chambered Round Visual</strong> at the cartridge's final seated position.</li>
+<li>On <code>DPT_FirearmProceduralBolt</code>, enable <strong>Animate Cartridge Feeding</strong> under Cartridge Feeding (enabled by default in the new script).</li>
+<li>Cycle the bolt with an available magazine round. During the forward stroke, the selected magazine cartridge moves and rotates towards the chambered visual's Transform.</li>
+<li>At the end of feeding, the source visual returns to its original local pose, magazine visibility refreshes and the chambered-round visual represents the newly chambered cartridge.</li>
+</ol>
+<div class="note"><strong>Ammunition state:</strong> This is a presentation-only animation. <code>ChamberNextRound()</code> still handles the ammunition transfer. The feed animation coordinates visual visibility so the chambered round does not appear fully seated before the forward stroke finishes.</div>
+<div class="tip"><strong>Fallback:</strong> Without visible magazine cartridges or a chambered-round visual, existing chambering behaviour continues without this additional animation. If the procedural bolt component is interrupted or disabled, the feeding visual is restored to its original pose.</div>
+<h2 id="fields">Loading Animation Inspector Fields</h2><table><thead><tr><th>Component / field</th><th>Purpose</th></tr></thead><tbody>
+<tr><td>Firearm · <strong>Loading Visual Root</strong></td><td>Existing scene GameObject reused during loading. Normally an inactive charger hierarchy.</td></tr>
+<tr><td>Firearm · <strong>Loading Device / Loading Contents</strong></td><td>Two descendants of Loading Visual Root, required in Contents Only mode.</td></tr>
+<tr><td>Firearm · <strong>Allow Single Round Top Off With Clips</strong></td><td>Use complete chargers first and individual rounds for the remainder. Disables the full-charger round-ejection policy.</td></tr>
+<tr><td>Firearm · <strong>Single Round Loading Visual</strong></td><td>Optional scene object or prefab asset for top-off animation. Falls back to Live Round Prefab if empty.</td></tr>
+<tr><td>Firearm · <strong>Ejected Loading Prefab / Loading Ejection Point</strong></td><td>Optional spent charger prefab and ejection marker. Not the same as the loading visual root.</td></tr>
+<tr><td>Firearm · <strong>Rounds Per Load / Individual Round Duration</strong></td><td>Batch size for a charger and timing for an individual round without procedural visual animation.</td></tr>
+<tr><td>Bolt · <strong>Loading Visual Mode / Hide Unused Contents</strong></td><td>Movement mode and partial-charger child visibility.</td></tr>
+<tr><td>Bolt · <strong>Loading Travel Direction, Guide Travel and Insert Travel</strong></td><td>Local movement direction and distances, starting from the scene object's rest pose.</td></tr>
+<tr><td>Bolt · <strong>Loading Guide Duration / Loading Insert Duration</strong></td><td>Time spent in each visual stage.</td></tr>
+<tr><td>Bolt · <strong>Between Loads Delay / Post Load Close Delay</strong></td><td>Pause between loads and before bolt closure.</td></tr>
+<tr><td>Bolt · <strong>Disable Loading Physics</strong></td><td>Temporarily disables colliders and Rigidbody simulation on reused visuals, restoring their previous states.</td></tr>
+<tr><td>Bolt · <strong>Spent Case Ejection Point</strong></td><td>Fraction of the rearward extraction stroke at which chamber ejection occurs, default 0.85.</td></tr>
+<tr><td><strong>Bolt · Animate Cartridge Feeding</strong></td><td>Moves an existing magazine visual towards the chamber during the forward stroke. Requires Magazine Round Visuals and Chambered Round Visual on the firearm.</td></tr></tbody></table><h2 id="timing">Closing Timing and Sound</h2><table><thead><tr><th>Setting</th><th>Behaviour</th></tr></thead><tbody>
+<tr><td><strong>Reload Closing Speed Multiplier</strong></td><td>Scales the forward and locking stages of the bolt when closing after a reload.</td></tr>
+<tr><td><strong>Reload Bolt Close Sounds / Source</strong></td><td>Optional closing audio from the procedural bolt. Normal Bolt Sounds are managed by the firearm.</td></tr>
+<tr><td><strong>Open / Extraction / Final Slide / Close Rotation Duration</strong></td><td>Independent timing for the bolt cycle stages.</td></tr>
+<tr><td><strong>Spent Case Ejection Point</strong></td><td>Adjusts where within the rearward extraction stage ejection happens, not during bolt closure.</td></tr>
+<tr><td><strong>Spent Casing Tumble Speed</strong> (firearm)</td><td>Angular velocity in radians per second applied only to spent casing prefabs with a Rigidbody.</td></tr>
+</tbody></table><h2 id="axes">Troubleshooting Motion and Reloading</h2><table><thead><tr><th>Issue</th><th>Check</th></tr></thead><tbody>
+<tr><td>Charger does not appear</td><td>Assign an existing inactive <strong>Loading Visual Root</strong> scene object and confirm <strong>Animate Reload</strong> is enabled. Do not drag only a Project-window prefab into this field.</td></tr>
+<tr><td>Contents Only moves the charger but not cartridges</td><td>Assign <strong>Loading Device</strong> and <strong>Loading Contents</strong> from the same scene hierarchy. Both must be under Loading Visual Root.</td></tr>
+<tr><td>Single round never appears with Stripper Clips</td><td>Enable <strong>Allow Single Round Top Off With Clips</strong> and assign <strong>Single Round Loading Visual</strong> or Live Round Prefab. This path only runs when fewer than <strong>Rounds Per Load</strong> rounds can be inserted.</td></tr>
+<tr><td>Single-round prefab spawns out of position</td><td>Place the inactive Loading Visual Root at the desired starting pose. A prefab asset used for top-off is instantiated at that root's position and rotation.</td></tr>
+<tr><td>Wrong bolt direction or rotation</td><td>Check <strong>Invert Bolt Travel Z</strong>, <strong>Invert Bolt Rotation Z</strong>, Extraction Slide and Open Angle. Do not invert twice.</td></tr>
+<tr><td>Casing ejects too late</td><td>Adjust <strong>Spent Case Ejection Point</strong> within the rearward extraction stage; try 0.85 as a starting value.</td></tr>
+<tr><td>Reload never completes</td><td>Disable Reload Uses Animation Events when the procedural controller owns reloading. Avoid independent controllers acting on the same firearm.</td></tr>
+<tr><td>Closing is slow</td><td>Raise Reload Closing Speed Multiplier or reduce Post Load Close Delay.</td></tr>
+<tr><td>Feed animation does not play</td><td>Enable Animate Cartridge Feeding under the bolt component. Assign the firearm Magazine Round Visuals in bottom-to-top order and the Chambered Round Visual, then cycle with ammunition in the magazine.</td></tr><tr><td>Cartridge animates from the wrong location</td><td>Adjust the source magazine cartridge Transform and the chambered-round visual pose. The animation interpolates their current world positions and rotations.</td></tr></tbody></table><footer class="footer"><strong>DPT Games Functional Firearms</strong> · <a href="index.html">System guide</a> · The SMLE Mk III is an example implementation. Check the package source for version-specific differences.</footer></body></html>
