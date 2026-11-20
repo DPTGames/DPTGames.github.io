@@ -125,7 +125,7 @@ nav.site-nav{position:relative}
 <div class="hero">
   <h2>Set up a firearm</h2>
   <p><code>DPT_Firearm</code> handles input requests, firing, ammunition and reload state. Add a procedural action to animate a bolt, hinge or cylinder. The projectile prefab handles the shot after it leaves the weapon.</p>
-  <p>The included SMLE Mk III and double-barrel shotgun prefabs show two working setups. Use the rifle for magazine and charger loading or the shotgun for separate chambers and shell insertion.</p>
+  <p>The included SMLE Mk III, double-barrel shotgun and Colt New Service revolver prefabs show three working setups. The rifle demonstrates magazine and charger loading, the shotgun demonstrates independent barrels and shell insertion and the revolver demonstrates a swing-out cylinder with six independently tracked chambers.</p>
 </div>
 
 <div class="gridcards">
@@ -155,12 +155,12 @@ nav.site-nav{position:relative}
 <h2 id="quick">Quick Start</h2>
 <ol>
   <li>For a working starting point, open the <a href="demo_input.html">range demo</a> or drag an included complete weapon prefab into your scene. For a new weapon, add <code>DPT_Firearm</code> to its root.</li>
-  <li>Assign <strong>Muzzle Point</strong> under <strong>Projectiles &amp; Impacts</strong>. Place it at the model’s muzzle and point its local <strong>+Z</strong> along the direction of fire. Assign a <strong>Projectile Prefab</strong> or an ammo profile with a projectile override.</li>
+  <li>Assign <strong>Muzzle Point</strong> under <strong>Projectiles &amp; Impacts</strong>. Place it at the model’s muzzle and point its local <strong>+Z</strong> along the direction of fire. For a multi-chamber weapon, assign the chamber-specific muzzle references under <strong>Multi Chamber Ammunition</strong>. The firearm-level <strong>Fallback Muzzle Point</strong> is used when a chamber has no muzzle assigned. Assign a <strong>Projectile Prefab</strong> or an ammo profile with a projectile override.</li>
   <li>Choose <strong>Reload Type</strong>, set the starting ammunition and assign the ejection point for casing effects. For a multi-chamber weapon, add <strong>Multi Chamber Ammunition</strong> and configure its slots.</li>
   <li>To animate moving parts, add <strong>Procedural Action</strong> in the firearm Inspector. Select the action that matches the reload type and assign its pivots.</li>
   <li>Check <strong>Setup Diagnostics</strong>. Try <strong>Fire</strong> and <strong>Reload</strong> in the Inspector during Play Mode or connect your controller through <a href="#integration">Player Binding</a>.</li>
 </ol>
-<div class="note"><strong>Which setup should I copy?</strong> Start with <code>SMLE.MKIII_Complete</code> for a magazine-fed action or <code>Double_Barrell_Shotgun_Complete</code> for two independently loaded barrels. Revolver action settings are available for your own rig.</div>
+<div class="note"><strong>Which setup should I copy?</strong> Start with <code>SMLE.MKIII_01_Complete</code> for a magazine-fed bolt action, <code>Double_Barrell_Shotgun_Complete</code> for two independently loaded barrels or <code>Revolver_01_Complete</code> for a six-chamber swing-out cylinder.</div>
 </section>
 
 <section aria-labelledby="configuration">
@@ -275,7 +275,8 @@ nav.site-nav{position:relative}
 
 <h3 id="revolver">Revolver</h3>
 <p>Choose <strong>Swing Out</strong>, <strong>Top Break</strong> or <strong>Loading Gate</strong> under <strong>Revolver Action</strong>. Assign <strong>Action Pivot</strong> for opening and <strong>Cylinder Pivot</strong> for indexing. Tune the local opening and indexing axes independently. <strong>Reverse Indexing</strong> flips the animation direction.</p>
-<p>Use <strong>Extractor Rod</strong> for visible extraction. Set per-slot loading markers where the chambers need different paths. <strong>Use Speedloader</strong> applies to swing-out or top-break reloads when the cylinder is empty. Loading Gate reloads index the cylinder and insert rounds one at a time.</p>
+<p>Use <strong>Extractor Rod</strong> for visible extraction. Set per-slot loading markers where the chambers need different paths. <strong>Use Speedloader</strong> applies to swing-out or top-break reloads when no live rounds remain in the cylinder. Loading Gate reloads index the cylinder and insert rounds one at a time. Set <strong>Post Ejection Load Delay</strong> to add a pause after cases eject during reload.</p>
+<p>For a <strong>Swing Out</strong> action, turn on <strong>Enable Cylinder Spin</strong> to allow a manual spin while the cylinder is open. Set <strong>Cylinder Spin Duration</strong> and <strong>Cylinder Spin Turns</strong> under <strong>Cylinder Rotation</strong>. The <a href="demo_input.html#controls">range demo</a> binds cylinder spin to <kbd>C</kbd>.</p>
 
 <div class="note">The mechanism captures its closed pose at startup. <strong>Capture Current Closed Pose</strong> is available in Play Mode for testing. Close and align the action before capturing.</div>
 </section>

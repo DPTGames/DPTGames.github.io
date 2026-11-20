@@ -202,7 +202,7 @@ nav.site-nav{position:relative}
 
 <section aria-labelledby="surfaces">
 <h2 id="surfaces">Surface Rules</h2>
-<p>Add <code>DPT_FirearmSurfaceImpact</code> to the projectile prefab. <strong>Layer Rules</strong> are checked in order. Put specific layers before general rules. A rule can apply to <strong>Any</strong>, <strong>Horizontal Only</strong> or <strong>Vertical Only</strong> surfaces, using <strong>Horizontal Dot Threshold</strong> to test the hit normal. A contact with no matching rule uses the default Stop reaction.</p>
+<p>Open <strong>Surface Interaction</strong> on the projectile prefab’s <code>DPT_FirearmProjectile</code> component. <strong>Layer Rules</strong> are checked in order. Put specific layers before general rules. A rule can apply to <strong>Any</strong>, <strong>Horizontal Only</strong> or <strong>Vertical Only</strong> surfaces, using <strong>Horizontal Dot Threshold</strong> to test the hit normal. A contact with no matching rule uses the default Stop reaction.</p>
 <table>
   <thead><tr><th scope="col">Reaction</th><th scope="col">Behaviour</th></tr></thead>
   <tbody>
@@ -228,6 +228,7 @@ nav.site-nav{position:relative}
   <li><strong>Override Impact Effect</strong> on a surface rule selects a replacement effect for that surface. Enable it with an empty reference to suppress the default effect.</li>
   <li><strong>Spalling Effect Prefab</strong> adds a separate debris, dust or spark effect. <strong>Spalling Scale</strong> multiplies the prefab’s scale.</li>
   <li><strong>Impact Sounds</strong> and <strong>Impact Volume</strong> control the default audio. A surface rule can replace or mute the clips and apply a volume multiplier.</li>
+  <li>Under <strong>Impact</strong> on <code>DPT_FirearmProjectile</code>, assign an optional <strong>Impact Audio Source</strong> to use its mixer routing, pitch and spatial settings for playback at the hit point. Leave the field empty for default 3D playback. Choose the clips in <strong>Impact Sounds</strong> or in a <strong>Layer Rules</strong> entry.</li>
 </ul>
 <p>The pack includes <code>VFX_Impact_Dust</code> and <code>VFX_Impact_Sparks</code> under <code>VFX</code>. The supplied projectiles use dust by default. The range uses sparks on a moving target’s first hit.</p>
 </section>
@@ -252,7 +253,7 @@ public sealed class ExampleDamageReceiver : MonoBehaviour, IDPT_FirearmDamageabl
 
 <section aria-labelledby="shake">
 <h2 id="shake">Projectile Impact Shake</h2>
-<p>Add <code>DPT_FirearmProjectileScreenShake</code> to the projectile prefab and <code>DPT_FirearmCameraShakeReceiver</code> to the camera. Set its strength and coverage with <strong>Magnitude</strong>, <strong>Duration</strong> and <strong>Radius</strong>. For shake when the weapon fires, configure <a href="index.html#recoil">Recoil &amp; Firing Shake</a> on the firearm.</p>
+<p>On the projectile prefab, open <strong>Impact Shake</strong> on <code>DPT_FirearmProjectile</code>. Set <strong>Impact Shake Magnitude</strong>, <strong>Impact Shake Duration</strong> and <strong>Impact Shake Radius</strong>. A magnitude of zero disables impact shake. Add <code>DPT_FirearmCameraShakeReceiver</code> to each camera that should receive it. For shake when the weapon fires, configure <a href="index.html#recoil">Recoil &amp; Firing Shake</a> on the firearm.</p>
 </section>
 
 <section aria-labelledby="api">

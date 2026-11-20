@@ -124,7 +124,7 @@ nav.site-nav{position:relative}
 
 <div class="hero">
   <h2>Run the range</h2>
-  <p>Open <code>Firearms_DemoScene/Firearms_DemoScene.unity</code> and enter Play Mode. The scene starts with the SMLE Mk III. Switch to the double-barrel shotgun to try shell insertion and ammo replacement.</p>
+  <p>Open <code>Firearms_DemoScene/Firearms_DemoScene.unity</code> and enter Play Mode. The scene starts with the SMLE Mk III. Switch to the double-barrel shotgun to try shell insertion and ammo replacement, or to the Colt New Service revolver to try the swing-out cylinder.</p>
   <p>The sample is a camera-only range. For a project with its own movement and input, see <a href="index.html#integration">Connect a Player Controller</a>.</p>
 </div>
 
@@ -147,10 +147,11 @@ nav.site-nav{position:relative}
     <tr><td><kbd>Left click</kbd></td><td>Fire. If the cursor is released, the first click recaptures it.</td></tr>
     <tr><td><kbd>Right click</kbd></td><td>Hold to aim down sights.</td></tr>
     <tr><td><kbd>R</kbd></td><td>Reload the equipped weapon.</td></tr>
-    <tr><td><kbd>B</kbd></td><td>Cycle the bolt or operate the equipped weapon’s action.</td></tr>
+    <tr><td><kbd>B</kbd></td><td>Cycle the bolt or open and close the equipped weapon’s hinged action or cylinder.</td></tr>
+    <tr><td><kbd>C</kbd></td><td>Spin the revolver cylinder while it is open, if <strong>Enable Cylinder Spin</strong> is enabled.</td></tr>
     <tr><td><kbd>G</kbd></td><td>Toggle safety. Try firing with it on to see the HUD warning.</td></tr>
     <tr><td><kbd>T</kbd></td><td>Select the next available ammo profile. Enabled for weapons with ammo profiles.</td></tr>
-    <tr><td><kbd>1</kbd>–<kbd>9</kbd> / <kbd>Mouse wheel</kbd></td><td>Select a configured weapon slot or cycle between weapons. The supplied scene has two slots.</td></tr>
+    <tr><td><kbd>1</kbd>–<kbd>9</kbd> / <kbd>Mouse wheel</kbd></td><td>Select a configured weapon slot or cycle between weapons. In the supplied scene, <kbd>1</kbd> selects the SMLE Mk III, <kbd>2</kbd> selects the double-barrel shotgun and <kbd>3</kbd> selects the Colt New Service revolver.</td></tr>
     <tr><td><kbd>V</kbd> / <kbd>F</kbd></td><td>Attach or remove the bayonet, or stab. Available on the sample with the bayonet input component.</td></tr>
     <tr><td><kbd>Backspace</kbd></td><td>Reset the moving targets in the demo scene.</td></tr>
     <tr><td><kbd>H</kbd></td><td>Show or hide the controls overlay.</td></tr>
@@ -169,6 +170,10 @@ nav.site-nav{position:relative}
   <div class="card">
     <h3>Double-barrel shotgun</h3>
     <p>Press <kbd>2</kbd>. With both barrels loaded, press <kbd>T</kbd> to select the other ammo type and <kbd>R</kbd> to swap shells. The supplied setup uses <strong>Replace Loaded Ammo On Reload</strong>. The reload needs shells of the selected type in reserve.</p>
+  </div>
+  <div class="card">
+    <h3>Colt New Service revolver</h3>
+    <p>Press <kbd>3</kbd> to equip the revolver. Press <kbd>B</kbd> to swing the cylinder open, then <kbd>C</kbd> to spin it. Press <kbd>B</kbd> again to close it. Fire and press <kbd>R</kbd> to see the reload sequence and watch the individual chamber states in the HUD.</p>
   </div>
 </div>
 <p>Press <kbd>T</kbd> before reloading to see the distinction between <strong>Selected</strong> and the chamber readout. Selection controls the next load. Chamber state shows what is already in the weapon.</p>
@@ -211,7 +216,7 @@ nav.site-nav{position:relative}
 
 <section aria-labelledby="input">
 <h2 id="input">Input Compatibility</h2>
-<p>The demo assembly references Unity’s Input System. When the new backend is active, it reads mouse and keyboard input from that backend. The script also has a legacy Input Manager path for projects using the old backend. That path reads <code>Mouse X</code> and <code>Mouse Y</code> for look input.</p>
+<p>The demo assembly requires the <strong>Unity Input System</strong> package to compile. The demo uses the Input System when that backend is enabled. With only the legacy Input Manager enabled, it reads legacy keyboard and mouse input, including the <code>Mouse X</code> and <code>Mouse Y</code> axes for look input.</p>
 <div class="tip">For gameplay integration, route your own input to <code>DPT_FirearmPlayerBinding</code> or <code>DPT_Firearm</code>. Keep the demo input components on sample scenes.</div>
 </section>
 
