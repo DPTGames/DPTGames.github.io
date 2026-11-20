@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Weapon setup, ammunition, procedural actions and player integration for the DPT Games Functional Firearms system.">
+  <title>DPT Games Functional Firearms</title>
+  <style>
+*, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0; padding: 40px;
+            font-size: 11pt; line-height: 1.5;
+        }
+        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        td code { font-size: 9.5pt; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .perf { background-color: #0c1f12; border-left: 4px solid #4ade80; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .tip { background-color: #1a1a2e; border-left: 4px solid #a78bfa; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        pre { padding: 12px; margin: 10px 0; overflow-x: auto; line-height: 1.6; }
+        .badge {
+            display: inline-block;
+            background-color: #166534;
+            color: #4ade80;
+            font-size: 8.5pt;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 3px;
+            letter-spacing: 0.05em;
+            vertical-align: middle;
+            margin-left: 6px;
+        }
+        .badge-blue { background-color: #1e3a5f; color: #7dd3fc; }
+        .badge-orange { background-color: #431407; color: #fb923c; }
+        .badge-purple { background-color: #2e1065; color: #c4b5fd; }
+        .state-arrow { color: #38bdf8; font-weight: bold; margin: 0 4px; }
+        .state-label {
+            display: inline-block;
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            color: #bae6fd;
+            font-family: 'Consolas', monospace;
+            font-size: 9.5pt;
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+        .divider { border: none; border-top: 1px solid #1e293b; margin: 30px 0; }
+         .note a {
+        color: #38bdf8;
+        text-decoration: none; 
+        transition: color 0.2s ease-in-out;
+    }
+
+    .note a:hover {
+        color: #7dd3fc;
+        text-decoration: underline; 
+    }
+    
+        html { scroll-behavior: smooth; }
+        body { max-width: 1180px; margin: 0 auto; }
+        a { color: #38bdf8; }
+        .site-nav { display:flex; gap:14px; flex-wrap:wrap; align-items:center; background:#1e293b; padding:12px 15px; border-bottom:2px solid #38bdf8; margin-bottom:20px; border-radius:5px; justify-content:flex-start; }
+        .site-nav a { color:#e2e8f0; text-decoration:none; padding:4px 3px; }
+        .site-nav a:hover, .site-nav a.active { color:#7dd3fc; text-decoration:underline; }
+        .site-nav .brand { color:#38bdf8; margin-right:0; }
+        .quicknav { background:#1e293b; padding:15px; border-radius:6px; margin-bottom:30px; border:1px solid #334155; line-height:2.25; }
+        .quicknav strong { color:#38bdf8; display:block; margin-bottom:5px; }
+        .quicknav a { color:#a5f3fc; text-decoration:none; margin-right:16px; white-space:nowrap; }
+        .quicknav a:hover { text-decoration:underline; }
+        .small { color:#94a3b8; font-size:9.5pt; }
+        .panel { background:#1e293b; border:1px solid #334155; border-radius:5px; padding:15px; margin:14px 0; }
+        kbd { border:1px solid #475569; padding:2px 6px; border-radius:4px; background:#1e293b; font-family:Consolas, monospace; }
+        .footer { border-top:1px solid #334155; margin-top:35px; padding-top:15px; color:#94a3b8; font-size:9.5pt; }
+        @media (max-width:720px) { body { padding:20px 14px; font-size:10pt; } h1 { font-size:21pt; } table { font-size:9pt; } td, th { padding:7px; } .quicknav a { display:inline-block; } pre { white-space:pre-wrap; overflow-wrap:anywhere; } }
+        @media print { body { padding:0; max-width:none; } .site-nav { display:none; } .quicknav { display:none; } a { text-decoration:none; } }
+
+.hero{background:linear-gradient(120deg,#12304b,#142135);border:1px solid #285278;border-radius:8px;padding:22px 24px;margin:16px 0 23px;}
+.hero h2{margin:0 0 8px;background:none;border:0;padding:0;color:#bae6fd;font-size:18pt;}
+.hero p{margin:0 0 8px;color:#dbeafe;}
+.gridcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:16px 0 24px;}
+.gridcards .card{background:#18263b;border:1px solid #334155;border-radius:6px;padding:16px;}
+.gridcards .card h3{margin:0 0 7px;font-size:12pt;}
+.gridcards .card p{font-size:10.5pt;margin:0;color:#cbd5e1;}
+.gridcards .card a{text-decoration:none;}
+.kicker{color:#7dd3fc;font-size:9pt;letter-spacing:.1em;text-transform:uppercase;font-weight:700;}
+.lede{color:#cbd5e1;font-size:12pt;}
+code{overflow-wrap:anywhere;}
+nav.site-nav{position:relative}
+@media print{.hero{background:#1e293b !important}.gridcards{grid-template-columns:1fr 1fr;}}
+    .site-nav a:focus-visible, .quicknav a:focus-visible { outline: 2px solid #7dd3fc; outline-offset: 3px; }
+    td, th { overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+  <nav class="site-nav" aria-label="Documentation">
+    <a class="brand" href="https://dptgames.github.io/">DPT Games</a>
+    <a href="index.html" class="active" aria-current="page">Firearm System</a>
+    <a href="demo_input.html">Range Demo</a>
+    <a href="projectiles.html">Projectiles</a>
+  </nav>
+  <main>
+<p class="kicker">DPT Games / Functional Firearms / User Documentation</p>
+<h1 id="top">DPT Games Functional Firearms</h1>
+<p class="subtitle">Weapon setup, ammunition, procedural actions and player integration</p>
+
+<div class="hero">
+  <h2>Set up a firearm</h2>
+  <p><code>DPT_Firearm</code> handles input requests, firing, ammunition and reload state. Add a procedural action to animate a bolt, hinge or cylinder. The projectile prefab handles the shot after it leaves the weapon.</p>
+  <p>The included SMLE Mk III and double-barrel shotgun prefabs show two working setups. Use the rifle for magazine and charger loading or the shotgun for separate chambers and shell insertion.</p>
+</div>
+
+<div class="gridcards">
+  <div class="card"><h3><a href="demo_input.html">Range demo</a></h3><p>Controls, weapon switching, ammo changes and target reset.</p></div>
+  <div class="card"><h3><a href="projectiles.html">Projectiles</a></h3><p>Hitscan, swept movement, surface rules, damage and impact effects.</p></div>
+</div>
+
+<nav class="quicknav" aria-label="On this page"><strong>On this page</strong>
+  <a href="#quick">Quick Start</a>
+  <a href="#configuration">Prefab Setup</a>
+  <a href="#ammunition">Ammunition</a>
+  <a href="#loading">Reloading</a>
+  <a href="#advanced">Procedural Actions</a>
+  <a href="#controls-animation">Safety &amp; Trigger</a>
+  <a href="#bayonet">Bayonet</a>
+  <a href="#aim">Aim &amp; Gizmos</a>
+  <a href="#recoil">Recoil &amp; Shake</a>
+  <a href="#effects">Audio &amp; VFX</a>
+  <a href="#integration">Player Binding &amp; HUD</a>
+  <a href="#events">Events &amp; API</a>
+  <a href="#architecture">Assemblies</a>
+  <a href="#diagnostics">Diagnostics</a>
+  <a href="#troubleshoot">Troubleshooting</a>
+</nav>
+
+<section aria-labelledby="quick">
+<h2 id="quick">Quick Start</h2>
+<ol>
+  <li>For a working starting point, open the <a href="demo_input.html">range demo</a> or drag an included complete weapon prefab into your scene. For a new weapon, add <code>DPT_Firearm</code> to its root.</li>
+  <li>Assign <strong>Muzzle Point</strong> under <strong>Projectiles &amp; Impacts</strong>. Place it at the model’s muzzle and point its local <strong>+Z</strong> along the direction of fire. Assign a <strong>Projectile Prefab</strong> or an ammo profile with a projectile override.</li>
+  <li>Choose <strong>Reload Type</strong>, set the starting ammunition and assign the ejection point for casing effects. For a multi-chamber weapon, add <strong>Multi Chamber Ammunition</strong> and configure its slots.</li>
+  <li>To animate moving parts, add <strong>Procedural Action</strong> in the firearm Inspector. Select the action that matches the reload type and assign its pivots.</li>
+  <li>Check <strong>Setup Diagnostics</strong>. Try <strong>Fire</strong> and <strong>Reload</strong> in the Inspector during Play Mode or connect your controller through <a href="#integration">Player Binding</a>.</li>
+</ol>
+<div class="note"><strong>Which setup should I copy?</strong> Start with <code>SMLE.MKIII_Complete</code> for a magazine-fed action or <code>Double_Barrell_Shotgun_Complete</code> for two independently loaded barrels. Revolver action settings are available for your own rig.</div>
+</section>
+
+<section aria-labelledby="configuration">
+<h2 id="configuration">Prefab Setup &amp; Firing</h2>
+<p>Open a prefab in <strong>Prefab Mode</strong> or select its scene instance. Under <strong>Prefab Setup</strong>, <strong>Auto Setup Parts</strong> fills empty part fields from names such as <code>Muzzle_Point</code>, <code>EjectionPoint</code>, <code>BoltPivot</code> and <code>Trigger_AudioSource</code>. Add the action and chamber components first if you want the tool to find their parts. Check the result, especially the two barrels’ references. Ambiguous names are skipped. Use Unity’s Undo to revert an assignment.</p>
+<table>
+  <thead><tr><th scope="col">Setting</th><th scope="col">What it changes</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Fire Mode</strong></td><td><strong>Semi Automatic</strong> fires once per press. <strong>Automatic</strong> keeps firing while held. <strong>Burst</strong> stops after <strong>Burst Size</strong> or when the trigger is released.</td></tr>
+    <tr><td><strong>Manual Action</strong></td><td>Fires one shot per press and leaves the chamber spent until the action cycles. A procedural bolt can cycle on its own if <strong>Auto Cycle After Shot</strong> is enabled.</td></tr>
+    <tr><td><strong>Rounds Per Minute</strong></td><td>Controls the interval between shots in modes that use the rate limit. Double-barrel firing uses independent chamber states.</td></tr>
+    <tr><td><strong>Automatic Reload</strong></td><td>Requests a reload when the weapon runs out and is ready. <strong>Automatic Reload Delay</strong> lets the last action finish before the reload request.</td></tr>
+    <tr><td><strong>Magazine Display</strong></td><td>List live round visuals from bottom to top. The lowest rounds disappear first. The magazine follower starts in its full pose and moves towards <strong>Magazine Follower Empty Offset</strong> as the magazine empties.</td></tr>
+  </tbody>
+</table>
+</section>
+
+<section aria-labelledby="ammunition">
+<h2 id="ammunition">Ammunition &amp; Chambers</h2>
+<h3>Magazine and reserve</h3>
+<p><strong>Starting Magazine Rounds</strong> fills the magazine up to <strong>Magazine Capacity</strong>. <strong>Start Chambered</strong> starts with a separate live round. Leave it off and enable <strong>Auto Chamber From Magazine On Start</strong> to move a round out of the starting magazine and into the chamber. With ammo profiles off, <strong>Starting Reserve Rounds</strong> supplies the spare ammo.</p>
+
+<h3>Ammo profiles</h3>
+<p>Enable <strong>Use Ammo Types</strong> to track each cartridge or shell’s profile in the magazine, chamber and reserve. Set <strong>Default Ammo Type</strong> and add <strong>Ammo Reserves</strong> entries with their starting round counts. If the default is empty, the first assigned reserve is used. <strong>Unlimited Reserve</strong> allows reloads without spending the reserve.</p>
+<ul>
+  <li><strong>Create Ammo Profile</strong> under <strong>Prefab Setup</strong> saves a separate asset using the weapon’s settings or its starting profile. <strong>Create and Assign</strong> makes the asset the default and adds it to the reserves. When converting to profiles it copies the old starting reserve count. For a weapon already using profiles, set <strong>Starting Rounds for Copy</strong>.</li>
+  <li>Use <strong>Next Reload Ammo Type</strong> in Play Mode or call <code>SelectAmmoType</code> or <code>CycleAmmoType</code> through your controller. The selection applies as rounds are loaded. Already loaded rounds keep their own profile.</li>
+  <li><strong>Replace Loaded Ammo On Reload</strong> allows a reload to eject mismatched live rounds and load the requested type, even when full. Keep enough of the requested ammo in reserve. On a double barrel, a chamber’s preferred profile takes precedence over the current selection.</li>
+</ul>
+<p>See <a href="projectiles.html#ammo-profiles">Ammo Profile Settings</a> for projectile overrides, spread and pellet counts.</p>
+
+<h3>Multi Chamber Ammunition</h3>
+<p>Use <strong>Reload Type</strong> = <strong>Multi Chamber</strong> for independently tracked barrels or cylinder chambers. In <strong>Multi Chamber Ammunition</strong>, select <strong>Action Kind</strong> and add one <strong>Chambers</strong> entry per slot. <strong>Starting Live Rounds</strong> fills slots from the beginning of the list. <strong>Starting Index</strong> chooses the initial slot, starting at zero.</p>
+<table>
+  <thead><tr><th scope="col">Per-chamber setup</th><th scope="col">Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Muzzle Point / Ejection Point</strong></td><td>Shot origin and casing direction for the slot. An empty reference uses the firearm’s assigned point.</td></tr>
+    <tr><td><strong>Live Round Visual / Spent Case Visual</strong></td><td>Objects under the weapon hierarchy for live and spent rounds. If there is no separate spent visual, the live visual can stay visible until ejection.</td></tr>
+    <tr><td><strong>Loading Start Point / Loading End Point</strong></td><td>Optional poses for procedural insertion. Put the end pose where the round should sit in the open action. A fixed marker under the moving assembly is easy to inspect.</td></tr>
+    <tr><td><strong>Starting Ammo Type / Preferred Reload Ammo Type</strong></td><td>Optional overrides for the initially loaded round and for subsequent reloads. Leave them empty to use the firearm’s starting and selected ammo.</td></tr>
+  </tbody>
+</table>
+<p><strong>Automatically Index After Shot</strong>, <strong>Index After Dry Fire</strong> and <strong>Skip Empty Chambers</strong> control how selection advances. <strong>Fire Both Barrels</strong> can discharge both live slots on one press. <strong>Projectiles Per Barrel</strong> is the fallback pellet count when no profile supplies one.</p>
+</section>
+
+<section aria-labelledby="loading">
+<h2 id="loading">Reload Modes</h2>
+<table>
+  <thead><tr><th scope="col">Reload Type</th><th scope="col">What it does</th><th scope="col">Typical presentation</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Full Magazine</strong></td><td>Fills the available magazine space in one operation, up to the available reserve ammunition.</td><td>Timed reload, Animator events or a compatible procedural bolt.</td></tr>
+    <tr><td><strong>Individual Rounds</strong></td><td>Loads one cartridge at a time.</td><td>Timed or animated insertion, optionally with a procedural bolt.</td></tr>
+    <tr><td><strong>Stripper Clips</strong></td><td>Loads a group up to <strong>Rounds Per Load</strong>. The SMLE example uses a charger.</td><td>Procedural bolt and an inactive loading hierarchy, or timed and Animator-driven loading.</td></tr>
+    <tr><td><strong>Single Chamber</strong></td><td>Loads the breech directly from reserve.</td><td>Procedural break action or a basic reload.</td></tr>
+    <tr><td><strong>Multi Chamber</strong></td><td>Loads eligible individual chambers from reserve.</td><td>Double-barrel break action, revolver action or a basic chamber reload.</td></tr>
+  </tbody>
+</table>
+<ul>
+  <li><strong>Open Action On Reload</strong> opens the action and ejects a spent case when appropriate. <strong>Chamber On Reload</strong> can fill an empty magazine-fed chamber when reloading finishes.</li>
+  <li>For clips, <strong>Allow Single Round Top Off With Clips</strong> uses full clips followed by individual cartridges for a small remainder. <strong>Eject Magazine Rounds For Full Loads</strong> can instead make room for a full clip. Mixed loading takes priority over full-load ejection.</li>
+  <li><strong>Operate Action When Fully Loaded</strong> lets Reload play an inspection cycle when the weapon has nothing to load. Use <strong>Fully Loaded Inspection Hold Duration</strong> to adjust the procedural hold.</li>
+</ul>
+<h3 id="animator">Animator-driven reloads</h3>
+<p>Use <strong>Animator</strong> and <strong>Use Animator Triggers</strong> under <strong>Animation &amp; Audio</strong> to send <code>Fire</code>, <code>DryFire</code>, <code>Reload</code> and <code>Cycle</code>. For an animation-event reload, enable <strong>Reload Uses Animation Events</strong> in a compatible reload mode. Put <code>DPT_FirearmReloadAnimationRelay</code> beside the Animator if the clips play on a child.</p>
+<table>
+  <thead><tr><th scope="col">Animation event</th><th scope="col">When to call it</th></tr></thead>
+  <tbody>
+    <tr><td><code>OpenReloadAction</code></td><td>At the action-open point when your reload needs this stage.</td></tr>
+    <tr><td><code>InsertReloadRoundAnimationEvent</code></td><td>At each individual cartridge insertion.</td></tr>
+    <tr><td><code>BeginReloadChargerAnimationEvent</code>, <code>InsertReloadChargerAnimationEvent</code>, <code>EjectReloadCharger</code></td><td>At the relevant clip animation stages.</td></tr>
+    <tr><td><code>CompleteReload</code> / <code>CancelReload</code></td><td>Finish the reload or exit an interrupted animation.</td></tr>
+  </tbody>
+</table>
+<div class="tip"><strong>Choose one reload driver.</strong> Turn off <strong>Reload Uses Animation Events</strong> when the procedural action drives the reload. For Multi Chamber, set up the chamber bank and procedural action directly.</div>
+</section>
+
+<section aria-labelledby="advanced">
+<h2 id="advanced">Procedural Actions</h2>
+<p>Add <code>DPT_FirearmProceduralAction</code> through <strong>Firearm &gt; Procedural Action</strong>. Configure the mechanism in that section of the firearm Inspector. The component chooses the active mechanism from the <strong>Action Type</strong> and reload configuration.</p>
+<table>
+  <thead><tr><th scope="col">Action Type</th><th scope="col">Compatible setup</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Bolt Action</strong></td><td><strong>Full Magazine</strong>, <strong>Individual Rounds</strong> or <strong>Stripper Clips</strong>.</td></tr>
+    <tr><td><strong>Break Action</strong></td><td><strong>Single Chamber</strong>, or <strong>Multi Chamber</strong> with <strong>Action Kind</strong> set to <strong>Double Barrel</strong>.</td></tr>
+    <tr><td><strong>Revolver</strong></td><td><strong>Multi Chamber</strong> with <strong>Action Kind</strong> set to <strong>Revolver</strong>.</td></tr>
+  </tbody>
+</table>
+
+<h3 id="bolt">Bolt Action</h3>
+<ol>
+  <li>Assign the moving <strong>Bolt Transform</strong> in its closed pose. Enable <strong>Manual Action</strong> for the SMLE-style firing cycle. Set <strong>Auto Cycle After Shot</strong> if the animation should start without another input.</li>
+  <li>In <strong>Bolt Movement</strong>, tune <strong>Initial Slide</strong>, <strong>Open Angle</strong>, <strong>Extraction Slide</strong> and <strong>Closing Slide</strong>. These are offsets from the rest pose. <strong>Invert Bolt Travel Z</strong> and <strong>Invert Bolt Rotation Z</strong> correct imported axes independently.</li>
+  <li>Set the stage durations and <strong>Spent Case Ejection Point</strong>. This value is the fraction of the rearward extraction stage when the case is ejected.</li>
+  <li>Use <strong>Animate Cartridge Extraction</strong> or <strong>Animate Cartridge Feeding</strong> with assigned cartridge visuals. Put the chambered round and its casing in the weapon and list any magazine round visuals.</li>
+</ol>
+<h4>Charger and individual loading</h4>
+<p>Assign an existing inactive <strong>Loading Visual Root</strong> under <strong>Loading Visuals</strong>. Let the procedural bolt animate it using <strong>Animate Reload</strong>. Configure the guide and insertion travel, stage durations and delay between loads in <strong>Reload Animation</strong>.</p>
+<table>
+  <thead><tr><th scope="col">Loading Visual Mode</th><th scope="col">Hierarchy</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Whole Object</strong></td><td>Moves the full loading hierarchy together.</td></tr>
+    <tr><td><strong>Contents Only</strong></td><td>Assign <strong>Loading Device</strong> and <strong>Loading Contents</strong> below the root. Put one visible round per child under <strong>Loading Contents</strong>.</td></tr>
+    <tr><td><strong>Individual Rounds</strong></td><td>Uses a single cartridge visual. For a clip top-off, use <strong>Single Round Loading Visual</strong> or the live round prefab. An ammo profile can supply its own loading visual.</td></tr>
+  </tbody>
+</table>
+<p>Use <strong>Disable Loading Physics</strong> if the animated objects contain physics components. <strong>Reload Closing Speed Multiplier</strong> changes closing after reloading. <strong>Reload Closing Sound Override</strong> can give that stage its own clips and source.</p>
+
+<h3 id="break-action">Break Action</h3>
+<p>Assign <strong>Hinge Pivot</strong> and set its local <strong>Hinge Axis</strong>, opening angle and durations. Parent the moving barrels and chamber markers to the hinged assembly. For <strong>Single Chamber</strong>, assign <strong>Loading Cartridge Visual</strong> and its start and end poses if you want visible insertion.</p>
+<p>For a double barrel, configure the individual chamber references under <strong>Multi Chamber Ammunition</strong>. <strong>Opening Lever</strong> adds the lever movement before the barrels open. <strong>Extractor Pivot</strong> can move during extraction. <strong>Ejection Fraction</strong>, <strong>Post Ejection Load Delay</strong>, <strong>Per Cartridge Duration</strong> and <strong>Between Cartridges Delay</strong> control the shell sequence. <strong>Eject Existing Case Objects</strong> releases the visible case or round and recreates the hidden chamber visual for later loads.</p>
+<div class="tip">Check the end marker for each shell with the action open. Align it with the seated shell’s pose and keep it under the same moving assembly.</div>
+
+<h3 id="revolver">Revolver</h3>
+<p>Choose <strong>Swing Out</strong>, <strong>Top Break</strong> or <strong>Loading Gate</strong> under <strong>Revolver Action</strong>. Assign <strong>Action Pivot</strong> for opening and <strong>Cylinder Pivot</strong> for indexing. Tune the local opening and indexing axes independently. <strong>Reverse Indexing</strong> flips the animation direction.</p>
+<p>Use <strong>Extractor Rod</strong> for visible extraction. Set per-slot loading markers where the chambers need different paths. <strong>Use Speedloader</strong> applies to swing-out or top-break reloads when the cylinder is empty. Loading Gate reloads index the cylinder and insert rounds one at a time.</p>
+
+<div class="note">The mechanism captures its closed pose at startup. <strong>Capture Current Closed Pose</strong> is available in Play Mode for testing. Close and align the action before capturing.</div>
+</section>
+
+<section aria-labelledby="controls-animation">
+<h2 id="controls-animation">Safety &amp; Trigger Animation</h2>
+<p>Place the <strong>Safety Switch Transform</strong> at its Safety Off pose, then set the local position and rotation offsets for Safety On. <strong>Engage Safety</strong> and <strong>Disengage Safety</strong> preview the movement in Play Mode. Safety still blocks firing with the transform unassigned. Use <strong>Safety Engage Sounds</strong>, <strong>Safety Disengage Sounds</strong> and <strong>Safety Blocked Trigger Sounds</strong> for the three actions.</p>
+<p>Assign <strong>Trigger Transform</strong> and set its local pull position, rotation and release time. Enable <strong>Animate Trigger On Dry Fire</strong> if the trigger should move on an empty chamber. For two triggers, assign <strong>Trigger 1 Transform</strong> and <strong>Trigger 2 Transform</strong> to the corresponding barrels. If Trigger 2 is empty, both barrels use Trigger 1.</p>
+</section>
+
+<section aria-labelledby="bayonet">
+<h2 id="bayonet">Bayonet</h2>
+<p>Enable <strong>Enable Bayonet</strong> and set <strong>Bayonet Equipped</strong> for its initial state. Assign the <strong>Bayonet Visual</strong> and a <strong>Bayonet Collider</strong> around the blade. Use <strong>Bayonet Tip</strong> to help define thrust direction and, if needed, a <strong>Bayonet Motion Transform</strong> that moves with the blade.</p>
+<p>Tune stab and swipe motion, return time, cooldown, damage and <strong>Bayonet Hit Layers</strong>. The blade sweep looks for an <code>IDPT_FirearmDamageable</code> receiver on the hit object or its parents. <code>ToggleBayonet()</code> changes the equipped state. <code>AttackBayonet()</code> requests a stab and <code>AttackBayonetSwipe()</code> requests a swipe. The <code>TryBayonetAttack()</code> and <code>TryBayonetSwipe()</code> variants report whether the attack started.</p>
+</section>
+
+<section aria-labelledby="aim">
+<h2 id="aim">Aim, ADS Calibration &amp; Scene Gizmos</h2>
+<table>
+  <thead><tr><th scope="col">Camera Mode</th><th scope="col">Use it when</th></tr></thead>
+  <tbody>
+    <tr><td><strong>External Camera</strong></td><td>Your FPS controller moves the camera. Aim can still supply crosshair convergence, sensitivity and optional field-of-view blending.</td></tr>
+    <tr><td><strong>Follow Weapon</strong></td><td>The Aim component should position the camera between the weapon’s hip and ADS poses. Keep the aim root outside the camera hierarchy.</td></tr>
+  </tbody>
+</table>
+<ol>
+  <li>Open <strong>Aim Calibration</strong> on the firearm and add the <strong>Aim</strong> component if needed.</li>
+  <li>In Edit Mode, choose <strong>Scene View</strong> or <strong>Assigned View Camera</strong> from <strong>Capture From</strong>. Frame the weapon and click <strong>Capture Hip Pose</strong> or <strong>Capture ADS Pose</strong>. The captured transform stays editable under the weapon.</li>
+  <li>Set <strong>Calibration Distance (m)</strong> and click <strong>Align ADS to Muzzle Line</strong> to rotate the ADS pose towards the muzzle line at that distance.</li>
+  <li>Enable <strong>Converge Shots To Crosshair</strong> if you want shots to start at the muzzle and aim towards the camera’s target. Use <strong>Aiming Range</strong>, <strong>Aim Layers</strong> and <strong>Ignored Hierarchy</strong> to control what the camera can pick.</li>
+</ol>
+<p>Turn on <strong>Gizmos</strong> in the Scene view and select the firearm or Aim object. <strong>Scene Gizmos</strong> controls part markers, hip and ADS poses, the calibration target, spread, range, trajectory and damage falloff. Spread and range are on by default. Frame the muzzle to see the guides. Use <strong>Preview Distance</strong> to shorten them and <strong>Label Size</strong> to scale the text. The previews ignore scene obstructions.</p>
+</section>
+
+<section aria-labelledby="recoil">
+<h2 id="recoil">Recoil &amp; Firing Shake</h2>
+<p>In <strong>Recoil &amp; Firing Shake</strong>, add <code>DPT_FirearmRecoil</code> if you want procedural kick, camera shake or both. For kick, assign <strong>Recoil Target</strong>, then set the local position and rotation kick, maximum offsets and recovery speed. Use a pivot that your camera or weapon controller will leave free for the recoil offset.</p>
+<p>Enable <strong>Firing Screen Shake</strong> on the recoil module and set its magnitude, duration and radius. Add <code>DPT_FirearmCameraShakeReceiver</code> to the camera that should receive nearby shake. For a separate shake on projectile contact, see <a href="projectiles.html#shake">Impact Shake</a>.</p>
+</section>
+
+<section aria-labelledby="effects">
+<h2 id="effects">Audio, Casing Ejection &amp; Effects</h2>
+<table>
+  <thead><tr><th scope="col">Inspector section</th><th scope="col">Setup</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Animation &amp; Audio</strong></td><td>Assign the shared <strong>Audio Source</strong> or use dedicated <strong>Shot</strong>, <strong>Reload</strong>, <strong>Action</strong>, <strong>Trigger</strong> and <strong>Empty</strong> sources. Trigger clips fall back to the action source, then the shared source. Other dedicated sources fall back to the shared source.</td></tr>
+    <tr><td><strong>Shot Sounds / Trigger Pull Sounds / Empty Sounds</strong></td><td>Shot sounds play for a live shot. Trigger pull clips play once for an accepted press that fires or dry fires. Empty clips add the dry-fire sound. Safety-blocked feedback has its own clip and event.</td></tr>
+    <tr><td><strong>Action Audio</strong></td><td>Set distinct <strong>Action Opening Sounds</strong> and <strong>Action Closing Sounds</strong>. Either can fall back to <strong>Action Sounds</strong>. A procedural action can provide clips for its own stages.</td></tr>
+    <tr><td><strong>Casing Ejection</strong></td><td>Set the ejection point, spent case and live round prefabs. Give the ejected prefabs a Rigidbody and collider for physics. Use speed, local direction, tumble and lifetime to tune the effect.</td></tr>
+    <tr><td><strong>Visual Effects</strong></td><td>Assign chambered round and casing visuals. The included <code>VFX_Muzzle_Flash</code> adds a short flash and smoke puff. Use the independent muzzle flash light fields to set the light pulse.</td></tr>
+  </tbody>
+</table>
+<p>For casing sounds on contact, add <code>DPT_FirearmCasingImpactAudio</code> to the ejected casing prefab. Give it impact clips and tune the collision layers, minimum speed, volume and sound limit. For dust, sparks and decals, see <a href="projectiles.html#effects">Projectile Effects</a>.</p>
+</section>
+
+<section aria-labelledby="integration">
+<h2 id="integration">Connect a Player Controller</h2>
+<ol>
+  <li>Add <code>UI/Firearm_Player_Binding.prefab</code> to your player or scene and assign the player camera to <strong>View Camera</strong>. Its aim setup uses <strong>External Camera</strong>. Let your FPS controller handle camera position and rotation. Turn off <strong>Control Field Of View</strong> if it also handles zoom.</li>
+  <li>Add <code>UI/Firearm_HUD.prefab</code> and assign its <strong>Firearm HUD</strong> component to the binding’s <strong>Hud</strong> field. Assign <strong>Initial Firearm</strong> for a fixed weapon or call <code>EquipFirearm</code> with your active scene weapon when the player equips it.</li>
+  <li>Call <code>TriggerDown</code> on press and <code>TriggerUp</code> on release. Pass the ADS button state to <code>SetAiming</code>. Call <code>Unequip</code> when the player holsters the weapon.</li>
+</ol>
+<pre><code>using DPT.Firearms.Runtime;
+using DPT.Firearms.UI;
+using UnityEngine;
+
+public sealed class ExampleWeaponInput : MonoBehaviour
+{
+    [SerializeField] private DPT_FirearmPlayerBinding binding;
+
+    public void Equip(DPT_Firearm sceneWeapon) =&gt; binding.EquipFirearm(sceneWeapon);
+    public void PressFire() =&gt; binding.TriggerDown();
+    public void ReleaseFire() =&gt; binding.TriggerUp();
+    public void Aim(bool held) =&gt; binding.SetAiming(held);
+    public void Reload() =&gt; binding.Reload();
+    public void Cycle() =&gt; binding.CycleAction();
+    public void Safety() =&gt; binding.ToggleSafety();
+    public void NextAmmoType() =&gt; binding.CycleAmmoType();
+    public void Holster() =&gt; binding.Unequip();
+}</code></pre>
+
+<h3 id="hud">HUD feedback</h3>
+<p>The HUD shows weapon name, safety, ready ammunition, reserve, chamber and action state. The <strong>Selected</strong> line shows the next reload’s ammo type. For magazine-fed weapons, <code>10 / 10 +1</code> means ten in the magazine and one in the chamber. A multi-chamber weapon shows the live total and the individual chamber states.</p>
+<p><strong>Safety Flash Duration</strong> and <strong>Safety Flash Color</strong> tune the blocked-trigger warning. <strong>Enable Hit Feedback</strong> controls the hit marker and optional confirmation clip. Assign a <strong>Hit Marker</strong> graphic or a <strong>Hit Feedback Sound</strong> if you want to customise it. A projectile confirmation requires a positive hit delivered to a damage receiver.</p>
+<div class="note">If the HUD has missing fonts in a fresh project, import <strong>TMP Essential Resources</strong> from <strong>Window &gt; TextMeshPro</strong> where available. You can assign your own TMP font assets to the HUD labels.</div>
+</section>
+
+<section aria-labelledby="events">
+<h2 id="events">Events &amp; Scripting API</h2>
+<p>Use the binding for input and presentation or call the firearm directly from your controller. <code>RequestCycleAnimation()</code> routes the request to the active action and falls back to the available gameplay or Animator path.</p>
+<table>
+  <thead><tr><th scope="col">API or event</th><th scope="col">Use it for</th></tr></thead>
+  <tbody>
+    <tr><td><code>TriggerDown()</code> / <code>TriggerUp()</code> / <code>Fire()</code></td><td>Trigger press and release or a single shot attempt. <code>Fire()</code> returns whether a shot fired.</td></tr>
+    <tr><td><code>Reload()</code> / <code>RequestCycleAnimation()</code> / <code>ToggleSafety()</code></td><td>Request the next action from your player controller.</td></tr>
+    <tr><td><code>SelectAmmoType</code> / <code>CycleAmmoType()</code> / <code>AddReserveAmmo</code></td><td>Select the next reload type or add ammo through a pickup or inventory.</td></tr>
+    <tr><td><code>ShotFired</code> / <code>HitOccurred</code> / <code>DamageableHitOccurred</code></td><td>Receive the shot origin, the initial hitscan contact or the point of a positive damageable hit, respectively. For every projectile contact, use <code>DPT_FirearmProjectile.Impacted</code>.</td></tr>
+    <tr><td><code>TriggerBlockedBySafety</code> / <code>AmmoSelectionChanged</code> / <code>ChamberAmmoChanged</code></td><td>Update player feedback for the blocked trigger, reload selection or chamber ammo. <code>DPT_FirearmMultiChamber</code> also exposes its own chamber and index events.</td></tr>
+    <tr><td><code>ReloadRoundsInserted</code> / <code>ReloadChargerInserted</code> / <code>BayonetHitOccurred</code></td><td>Respond to load progress, a completed charger insertion or a bayonet contact.</td></tr>
+  </tbody>
+</table>
+<p>The <strong>Events</strong> section also exposes UnityEvents for firing, dry fire, reload stages, casing or live-round ejection, chambering and bayonet actions. See <a href="projectiles.html#damage">Damage Integration</a> for the damage interface and event relay.</p>
+</section>
+
+<section aria-labelledby="architecture">
+<h2 id="architecture">Assemblies &amp; Namespaces</h2>
+<table>
+  <thead><tr><th scope="col">Assembly</th><th scope="col">Namespace</th><th scope="col">Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>DPT.Firearms.Runtime</code></td><td><code>DPT.Firearms.Runtime</code></td><td>Weapon, aim, actions, projectiles, ammo, damage and effects hooks.</td></tr>
+    <tr><td><code>DPT.Firearms.UI</code></td><td><code>DPT.Firearms.UI</code></td><td>Player binding and uGUI/TMP HUD.</td></tr>
+    <tr><td><code>DPT.Firearms.Demo.Runtime</code></td><td><code>DPT.Firearms.Demo.Runtime</code> and <code>DPT.Firearms.Demo</code></td><td>Range input, targets and bayonet example.</td></tr>
+    <tr><td><code>DPT.Firearms.Editor</code></td><td><code>DPT.Firearms.Editor</code></td><td>Inspectors, diagnostics, calibration and gizmos. Uses the shared <code>DPT.Core.Editor</code> utilities.</td></tr>
+  </tbody>
+</table>
+<p>The supplied materials and sample effects use URP. The UI assembly references uGUI and TextMeshPro. See <a href="demo_input.html#input">Input Compatibility</a> for the demo.</p>
+</section>
+
+<section aria-labelledby="diagnostics">
+<h2 id="diagnostics">Setup Diagnostics</h2>
+<p>Select one firearm and open <strong>Setup Diagnostics</strong>. The Inspector checks required references and warns about mismatched reload and action settings, missing chamber data, reserve profiles and presentation references. Click an issue to open the relevant section and field.</p>
+</section>
+
+<section aria-labelledby="troubleshoot">
+<h2 id="troubleshoot">Troubleshooting</h2>
+<table>
+  <thead><tr><th scope="col">Symptom</th><th scope="col">Check</th></tr></thead>
+  <tbody>
+    <tr><td>The weapon clicks or refuses to fire.</td><td>Check the safety, live chamber state, projectile prefab and whether the action is open, cycling or still reloading.</td></tr>
+    <tr><td>Changing ammo has no immediate effect.</td><td>Chamber a round of the selected profile or reload with replacement enabled. Check any per-chamber preferred reload profile and the available reserve.</td></tr>
+    <tr><td>A shell loads in the wrong place.</td><td>Check the loading end pose and the chamber visual under the moving barrel or cylinder assembly. Verify the slot assignments on the loaded prefab or scene instance.</td></tr>
+    <tr><td>The bolt opens or rotates the wrong way.</td><td>Confirm the closed rest pose and check the model’s local axes. Use the separate travel and rotation inversion settings on the bolt action.</td></tr>
+    <tr><td>ADS moves the camera unexpectedly.</td><td>Check Camera Mode, the aim root and pose markers. If another script drives the camera, use External Camera and disable any overlapping field-of-view control.</td></tr>
+    <tr><td>Range and spread guides are hard to see.</td><td>Enable Scene view Gizmos, select the firearm and frame the muzzle. Check the individual toggles and shorten Preview Distance.</td></tr>
+  </tbody>
+</table>
+</section>
+  </main>
+  <footer class="footer">
+    <p>DPT Games &middot; Functional Firearms &middot; <a href="mailto:support.dptgames@gmail.com">Contact support</a> &middot; <a href="#top">Back to top</a></p>
+  </footer>
+</body>
+</html>
+

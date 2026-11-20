@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Open the Functional Firearms range, switch weapons and use the supplied camera, target and HUD setup.">
+  <title>Range Demo | DPT Games Functional Firearms</title>
+  <style>
+*, *::before, *::after { box-sizing: border-box; }
+        @page { size: A4; margin: 15mm 15mm; background-color: #0f172a; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f8fafc;
+            background-color: #0f172a;
+            margin: 0; padding: 40px;
+            font-size: 11pt; line-height: 1.5;
+        }
+        h1, h2, h3, h4 { color: #38bdf8; margin-bottom: 10px; }
+        h1 { font-size: 26pt; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-top: 0; color: #bae6fd; }
+        h2 { font-size: 16pt; background-color: #1e293b; padding: 8px 12px; border-left: 5px solid #38bdf8; page-break-after: avoid; margin-top: 25px; }
+        h3 { font-size: 13pt; page-break-after: avoid; color: #7dd3fc; margin-top: 20px; }
+        p { margin: 0 0 12px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: auto; }
+        tr { page-break-inside: avoid; }
+        th, td { border: 1px solid #334155; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #1e293b; color: #7dd3fc; font-weight: bold; font-size: 10.5pt; }
+        td { background-color: #0f172a; }
+        td strong { color: #bae6fd; }
+        td code { font-size: 9.5pt; }
+        ul, ol { margin: 10px 0 15px 0; padding-left: 25px; }
+        li { margin-bottom: 6px; }
+        .subtitle { font-size: 14pt; color: #94a3b8; margin-bottom: 25px; font-style: italic; }
+        .note { background-color: #1e293b; border-left: 4px solid #10b981; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .warning { background-color: #1e293b; border-left: 4px solid #ef4444; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .perf { background-color: #0c1f12; border-left: 4px solid #4ade80; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        .tip { background-color: #1a1a2e; border-left: 4px solid #a78bfa; padding: 12px; margin: 15px 0; page-break-inside: avoid; }
+        code, pre { font-family: 'Consolas', 'Courier New', monospace; background-color: #020617; color: #a5f3fc; border-radius: 4px; font-size: 10pt; }
+        code { padding: 2px 5px; }
+        pre { padding: 12px; margin: 10px 0; overflow-x: auto; line-height: 1.6; }
+        .badge {
+            display: inline-block;
+            background-color: #166534;
+            color: #4ade80;
+            font-size: 8.5pt;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 3px;
+            letter-spacing: 0.05em;
+            vertical-align: middle;
+            margin-left: 6px;
+        }
+        .badge-blue { background-color: #1e3a5f; color: #7dd3fc; }
+        .badge-orange { background-color: #431407; color: #fb923c; }
+        .badge-purple { background-color: #2e1065; color: #c4b5fd; }
+        .state-arrow { color: #38bdf8; font-weight: bold; margin: 0 4px; }
+        .state-label {
+            display: inline-block;
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            color: #bae6fd;
+            font-family: 'Consolas', monospace;
+            font-size: 9.5pt;
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+        .divider { border: none; border-top: 1px solid #1e293b; margin: 30px 0; }
+         .note a {
+        color: #38bdf8;
+        text-decoration: none; 
+        transition: color 0.2s ease-in-out;
+    }
+
+    .note a:hover {
+        color: #7dd3fc;
+        text-decoration: underline; 
+    }
+    
+        html { scroll-behavior: smooth; }
+        body { max-width: 1180px; margin: 0 auto; }
+        a { color: #38bdf8; }
+        .site-nav { display:flex; gap:14px; flex-wrap:wrap; align-items:center; background:#1e293b; padding:12px 15px; border-bottom:2px solid #38bdf8; margin-bottom:20px; border-radius:5px; justify-content:flex-start; }
+        .site-nav a { color:#e2e8f0; text-decoration:none; padding:4px 3px; }
+        .site-nav a:hover, .site-nav a.active { color:#7dd3fc; text-decoration:underline; }
+        .site-nav .brand { color:#38bdf8; margin-right:0; }
+        .quicknav { background:#1e293b; padding:15px; border-radius:6px; margin-bottom:30px; border:1px solid #334155; line-height:2.25; }
+        .quicknav strong { color:#38bdf8; display:block; margin-bottom:5px; }
+        .quicknav a { color:#a5f3fc; text-decoration:none; margin-right:16px; white-space:nowrap; }
+        .quicknav a:hover { text-decoration:underline; }
+        .small { color:#94a3b8; font-size:9.5pt; }
+        .panel { background:#1e293b; border:1px solid #334155; border-radius:5px; padding:15px; margin:14px 0; }
+        kbd { border:1px solid #475569; padding:2px 6px; border-radius:4px; background:#1e293b; font-family:Consolas, monospace; }
+        .footer { border-top:1px solid #334155; margin-top:35px; padding-top:15px; color:#94a3b8; font-size:9.5pt; }
+        @media (max-width:720px) { body { padding:20px 14px; font-size:10pt; } h1 { font-size:21pt; } table { font-size:9pt; } td, th { padding:7px; } .quicknav a { display:inline-block; } pre { white-space:pre-wrap; overflow-wrap:anywhere; } }
+        @media print { body { padding:0; max-width:none; } .site-nav { display:none; } .quicknav { display:none; } a { text-decoration:none; } }
+
+.hero{background:linear-gradient(120deg,#12304b,#142135);border:1px solid #285278;border-radius:8px;padding:22px 24px;margin:16px 0 23px;}
+.hero h2{margin:0 0 8px;background:none;border:0;padding:0;color:#bae6fd;font-size:18pt;}
+.hero p{margin:0 0 8px;color:#dbeafe;}
+.gridcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:16px 0 24px;}
+.gridcards .card{background:#18263b;border:1px solid #334155;border-radius:6px;padding:16px;}
+.gridcards .card h3{margin:0 0 7px;font-size:12pt;}
+.gridcards .card p{font-size:10.5pt;margin:0;color:#cbd5e1;}
+.gridcards .card a{text-decoration:none;}
+.kicker{color:#7dd3fc;font-size:9pt;letter-spacing:.1em;text-transform:uppercase;font-weight:700;}
+.lede{color:#cbd5e1;font-size:12pt;}
+code{overflow-wrap:anywhere;}
+nav.site-nav{position:relative}
+@media print{.hero{background:#1e293b !important}.gridcards{grid-template-columns:1fr 1fr;}}
+    .site-nav a:focus-visible, .quicknav a:focus-visible { outline: 2px solid #7dd3fc; outline-offset: 3px; }
+    td, th { overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+  <nav class="site-nav" aria-label="Documentation">
+    <a class="brand" href="https://dptgames.github.io/">DPT Games</a>
+    <a href="index.html">Firearm System</a>
+    <a href="demo_input.html" class="active" aria-current="page">Range Demo</a>
+    <a href="projectiles.html">Projectiles</a>
+  </nav>
+  <main>
+<p class="kicker">DPT Games / Functional Firearms / User Documentation</p>
+<h1 id="top">Range Demo</h1>
+<p class="subtitle">Try the included weapons, ammo profiles and moving targets</p>
+
+<div class="hero">
+  <h2>Run the range</h2>
+  <p>Open <code>Firearms_DemoScene/Firearms_DemoScene.unity</code> and enter Play Mode. The scene starts with the SMLE Mk III. Switch to the double-barrel shotgun to try shell insertion and ammo replacement.</p>
+  <p>The sample is a camera-only range. For a project with its own movement and input, see <a href="index.html#integration">Connect a Player Controller</a>.</p>
+</div>
+
+<nav class="quicknav" aria-label="On this page"><strong>On this page</strong>
+  <a href="#controls">Controls</a>
+  <a href="#examples">Try the Weapons</a>
+  <a href="#setup">Demo Setup</a>
+  <a href="#inspector">Camera &amp; HUD</a>
+  <a href="#targets">Targets</a>
+  <a href="#input">Input Compatibility</a>
+  <a href="#limits">Troubleshooting</a>
+</nav>
+
+<section aria-labelledby="controls">
+<h2 id="controls">Default Controls</h2>
+<table>
+  <thead><tr><th scope="col">Input</th><th scope="col">Action</th></tr></thead>
+  <tbody>
+    <tr><td><kbd>Mouse</kbd></td><td>Look around.</td></tr>
+    <tr><td><kbd>Left click</kbd></td><td>Fire. If the cursor is released, the first click recaptures it.</td></tr>
+    <tr><td><kbd>Right click</kbd></td><td>Hold to aim down sights.</td></tr>
+    <tr><td><kbd>R</kbd></td><td>Reload the equipped weapon.</td></tr>
+    <tr><td><kbd>B</kbd></td><td>Cycle the bolt or operate the equipped weapon’s action.</td></tr>
+    <tr><td><kbd>G</kbd></td><td>Toggle safety. Try firing with it on to see the HUD warning.</td></tr>
+    <tr><td><kbd>T</kbd></td><td>Select the next available ammo profile. Enabled for weapons with ammo profiles.</td></tr>
+    <tr><td><kbd>1</kbd>–<kbd>9</kbd> / <kbd>Mouse wheel</kbd></td><td>Select a configured weapon slot or cycle between weapons. The supplied scene has two slots.</td></tr>
+    <tr><td><kbd>V</kbd> / <kbd>F</kbd></td><td>Attach or remove the bayonet, or stab. Available on the sample with the bayonet input component.</td></tr>
+    <tr><td><kbd>Backspace</kbd></td><td>Reset the moving targets in the demo scene.</td></tr>
+    <tr><td><kbd>H</kbd></td><td>Show or hide the controls overlay.</td></tr>
+    <tr><td><kbd>Esc</kbd></td><td>Release the cursor.</td></tr>
+  </tbody>
+</table>
+</section>
+
+<section aria-labelledby="examples">
+<h2 id="examples">Try the Weapons</h2>
+<div class="gridcards">
+  <div class="card">
+    <h3>SMLE Mk III</h3>
+    <p>Fire the rifle and watch the bolt and magazine display. <kbd>B</kbd> requests a cycle if the action is ready. Reload after firing several shots to see the charger or single-round top-off animation.</p>
+  </div>
+  <div class="card">
+    <h3>Double-barrel shotgun</h3>
+    <p>Press <kbd>2</kbd>. With both barrels loaded, press <kbd>T</kbd> to select the other ammo type and <kbd>R</kbd> to swap shells. The supplied setup uses <strong>Replace Loaded Ammo On Reload</strong>. The reload needs shells of the selected type in reserve.</p>
+  </div>
+</div>
+<p>Press <kbd>T</kbd> before reloading to see the distinction between <strong>Selected</strong> and the chamber readout. Selection controls the next load. Chamber state shows what is already in the weapon.</p>
+</section>
+
+<section aria-labelledby="setup">
+<h2 id="setup">Set Up Another Demo Weapon</h2>
+<ol>
+  <li>Place the weapon in the scene. Add or reuse one <code>DPT_FirearmDemoInput</code> on a controller object that stays active while weapons switch.</li>
+  <li>Assign <strong>View Camera</strong>. Keep the camera outside the weapon hierarchies. It can be a separate scene object. The demo looks for the Main Camera when the reference is empty.</li>
+  <li>For one weapon, assign <strong>Firearm</strong>. For switching, add scene weapon instances to <strong>Weapon Slots</strong> and give them display names. Keep their hierarchies separate so the controller can activate them independently.</li>
+  <li>Set the zero-based <strong>Starting Weapon Index</strong>. Enable <strong>Mouse Wheel Weapon Switch</strong> if you want scrolling. <strong>Align Weapon Positions On Switch</strong> carries the previous aim-root position across a switch.</li>
+  <li>Link the <strong>Hud</strong> and optional <strong>Player Binding</strong> if you are rebuilding the scene. Keep the HUD outside the weapon hierarchies so it remains visible when switching.</li>
+</ol>
+<p>The same controller exposes <code>EquipWeapon(int index)</code>, <code>CycleWeapon(int direction)</code>, <code>CycleDemoAmmoType()</code> and <code>ResetTargets()</code> for demo UI or buttons.</p>
+</section>
+
+<section aria-labelledby="inspector">
+<h2 id="inspector">Camera, Crosshair &amp; HUD</h2>
+<p>The demo binds <code>DPT_FirearmAim</code> to the active weapon. For each weapon, assign hip and ADS pose markers or set camera offsets. Captured hip or ADS markers saved in the weapon’s Aim component take precedence over the demo markers for those poses.</p>
+<table>
+  <thead><tr><th scope="col">Setting</th><th scope="col">Use it for</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Aim Root / Muzzle Point / View Direction Reference</strong></td><td>Choose the rotating weapon root and the references used to establish its forward direction. Each slot can supply its own.</td></tr>
+    <tr><td><strong>View Forward Mode</strong></td><td><strong>Root To Muzzle</strong> uses the line from the root to the muzzle. <strong>Reference Forward</strong> uses a reference’s local +Z. <strong>Root Forward</strong> uses the root’s +Z. Use <strong>Reverse View Direction</strong> for a reversed model.</td></tr>
+    <tr><td><strong>Override Camera Offsets</strong></td><td>Give a slot custom hip and ADS offsets when it has no pose marker for that view.</td></tr>
+    <tr><td><strong>Mouse Sensitivity / Aim Sensitivity Multiplier</strong></td><td>Tune normal mouse look and the sensitivity while aiming.</td></tr>
+    <tr><td><strong>Show Crosshair / Show Aim Debug Rays</strong></td><td>Toggle the demo crosshair or inspect the camera ray and muzzle direction in the Scene view.</td></tr>
+    <tr><td><strong>Show Controls Overlay / Capture Cursor On Start</strong></td><td>Set the initial help and cursor states.</td></tr>
+  </tbody>
+</table>
+<p>Use <a href="index.html#aim">Aim Calibration</a> on a weapon to save hip and ADS poses in Prefab Mode. Use <a href="index.html#hud">HUD Feedback</a> for the hit marker, safety flash and ammunition readout.</p>
+</section>
+
+<section aria-labelledby="targets">
+<h2 id="targets">Moving Targets</h2>
+<p><code>DPT_FirearmMovingTarget</code> moves a target from its starting position and lets it react physically on the first hit. To add another target, give it a collider and Rigidbody, then set <strong>Move Speed</strong>, <strong>Move Distance</strong> and <strong>Impact Force</strong>. <strong>Release Constraints On Hit</strong> allows it to tumble.</p>
+<p>Assign <code>VFX_Impact_Sparks</code> to the target’s <strong>Hit Effect Prefab</strong> for a first-hit burst. <kbd>Backspace</kbd> restores the active targets in the same scene so they can react again.</p>
+</section>
+
+<section aria-labelledby="input">
+<h2 id="input">Input Compatibility</h2>
+<p>The demo assembly references Unity’s Input System. When the new backend is active, it reads mouse and keyboard input from that backend. The script also has a legacy Input Manager path for projects using the old backend. That path reads <code>Mouse X</code> and <code>Mouse Y</code> for look input.</p>
+<div class="tip">For gameplay integration, route your own input to <code>DPT_FirearmPlayerBinding</code> or <code>DPT_Firearm</code>. Keep the demo input components on sample scenes.</div>
+</section>
+
+<section aria-labelledby="limits">
+<h2 id="limits">Troubleshooting</h2>
+<table>
+  <thead><tr><th scope="col">Symptom</th><th scope="col">Check</th></tr></thead>
+  <tbody>
+    <tr><td>Mouse look or firing does nothing.</td><td>Click the Game view to capture the cursor. Verify the camera, weapon slot and input backend.</td></tr>
+    <tr><td>The shotgun reloads the same shells.</td><td>Check the selected profile, reserve count and each chamber’s preferred reload type. To swap a full load, enable replacement.</td></tr>
+    <tr><td>The weapon or camera faces backwards.</td><td>Check View Forward Mode and its reference. Inspect the muzzle and captured hip or ADS poses in the Scene view.</td></tr>
+    <tr><td>Only one weapon can be selected.</td><td>Check that each slot references an independent scene weapon and that the controller is outside the switched hierarchies.</td></tr>
+  </tbody>
+</table>
+</section>
+  </main>
+  <footer class="footer">
+    <p>DPT Games &middot; Functional Firearms &middot; <a href="mailto:support.dptgames@gmail.com">Contact support</a> &middot; <a href="#top">Back to top</a></p>
+  </footer>
+</body>
+</html>
+
